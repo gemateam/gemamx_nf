@@ -3,12 +3,11 @@
  *
  * API PDBe Molstar v3.x:
  *  - render(el, options) es fire-and-forget (no devuelve Promise).
- *    No se puede pasar moleculeId vacío; si no hay estructura inicial
- *    hay que omitir moleculeId y customData del objeto de opciones.
- *  - Para cargar/recargar una estructura se usa visual.update(), que sí
- *    devuelve Promise y se puede await.
- *  - render() dispara plugin.events.loadComplete cuando el canvas está listo.
- *    Hay que esperar ese evento antes de llamar visual.update por primera vez.
+ *  - plugin.events.loadComplete solo se dispara cuando hay una estructura
+ *    cargando en render(). Si se omite customData, el evento nunca llega.
+ *  - Solución: pasar la estructura directamente en render() usando customData,
+ *    de modo que loadComplete se dispara cuando esa carga termina.
+ *  - Para cargar/recargar usa visual.update() que sí es awaitable.
  */
 import { DATA, loadJSON, fmt, registerLoader, registerReloadFlag } from './app.js';
 
@@ -17,40 +16,40 @@ registerReloadFlag('structural', state);
 let pluginWT  = null;
 let pluginMUT = null;
 
-// ── Esperar a que el visor esté listo (render es fire-and-forget en v3) ────
-function waitForPlugin(plugin) {
-  return new Promise((resolve) => {
-    // loadComplete se dispara una vez que el canvas WebGL está inicializado.
-    plugin.events.loadComplete.subscribe(() => resolve(plugin));
-  });
-}
-
-// ── Inicializar un visor Molstar ───────────────────────────────────────────
-// Devuelve una Promise que resuelve cuando el plugin está listo para recibir
-// llamadas a visual.update().
-function createViewer(containerId) {
+// ── Inicializar visor y cargar estructura inicial ─────────────────────────
+// Devuelve Promise<plugin> que resuelve cuando loadComplete se dispara.
+// structPath es requerido: sin estructura inicial loadComplete no se emite.
+function createViewer(containerId, structPath) {
   const el = document.getElementById(containerId);
   if (!el) return Promise.resolve(null);
 
   const plugin = new PDBeMolstarPlugin();
-  const ready  = waitForPlugin(plugin);
+  const format = structPath?.endsWith('.cif') ? 'mmcif' : 'pdb';
 
-  // En v3 render() no acepta moleculeId vacío — si no hay estructura inicial
-  // simplemente se omiten ambos campos (moleculeId y customData).
-  plugin.render(el, {
-    bgColor:          { r: 10, g: 10, b: 20 },
-    hideControls:     false,
-    selectInteraction: false,
-    landscape:        false,
-    pdbeLink:         false,
-    sequencePanel:    false,
+  const ready = new Promise((resolve) => {
+    plugin.events.loadComplete.subscribe(() => resolve(plugin));
   });
+
+  plugin.render(el, {
+    customData:        structPath ? { url: structPath, format, binary: false } : undefined,
+    bgColor:           { r: 10, g: 10, b: 20 },
+    hideControls:      false,
+    selectInteraction: false,
+    landscape:         false,
+    pdbeLink:          false,
+    sequencePanel:     false,
+  });
+
+  // Fallback: si no hay structPath loadComplete no se dispara — resolvemos
+  // con un pequeño delay para que el canvas WebGL se inicialice.
+  if (!structPath) {
+    return new Promise(resolve => setTimeout(() => resolve(plugin), 400));
+  }
 
   return ready;
 }
 
-// ── Cargar estructura en un visor ─────────────────────────────────────────
-// plugin aquí ya es el objeto PDBeMolstarPlugin resuelto (post-render).
+// ── Cargar/recargar estructura en un visor ────────────────────────────────
 async function loadStructure(plugin, structPath, mutPos) {
   if (!plugin || !structPath) return;
   try {
@@ -59,7 +58,6 @@ async function loadStructure(plugin, structPath, mutPos) {
       customData: { url: structPath, format, binary: false },
       bgColor:    { r: 10, g: 10, b: 20 },
     });
-    // Resaltar residuo mutado si tenemos posición
     if (mutPos) {
       plugin.visual.select({
         data: [{ residue_number: mutPos, color: { r: 255, g: 100, b: 50 }, focus: true }],
@@ -150,13 +148,6 @@ async function loadStructural() {
     loadJSON(DATA.manifestStructures()),
   ]);
 
-  // Inicializar visores y esperar a que el canvas WebGL esté listo antes de
-  // intentar cargar estructuras (render() en v3 es fire-and-forget).
-  [pluginWT, pluginMUT] = await Promise.all([
-    createViewer('viewer-wt'),
-    createViewer('viewer-mut'),
-  ]);
-
   // Poblar selector: variantes que tienen estructura MUT disponible
   const sel = document.getElementById('sel-variant');
   const available = (variants ?? []).filter(v => {
@@ -174,11 +165,34 @@ async function loadStructural() {
       ${v.hugo_symbol} ${v.protein_change}
     </option>`).join('');
 
+  // Calcular paths de la primera variante para inicializar los visores
+  // con customData desde el primer render() — así loadComplete se dispara.
+  const firstVariantId = `${available[0].hugo_symbol}_${available[0].protein_change}`;
+  const firstWtKey     = available[0].hugo_symbol + '_WT';
+  const firstWtPath    = manifest?.[firstWtKey]       ?? null;
+  const firstMutPath   = manifest?.[firstVariantId]   ?? null;
+
+  // Inicializar visores con la estructura inicial para que loadComplete se dispare
+  [pluginWT, pluginMUT] = await Promise.all([
+    createViewer('viewer-wt',  firstWtPath),
+    createViewer('viewer-mut', firstMutPath),
+  ]);
+
   sel.addEventListener('change', () =>
     onVariantChange(sel.value, manifest, metrics));
 
-  // Cargar primera variante
-  onVariantChange(sel.value, manifest, metrics);
+  // Renderizar métricas de la primera variante (la estructura ya cargó en render)
+  renderMetrics(firstVariantId, metrics);
+  renderRMSD(firstVariantId, metrics);
+
+  // Resaltar residuo mutado en el visor MUT si aplica
+  const firstPos = mutationPos(firstVariantId);
+  if (firstPos && pluginMUT) {
+    pluginMUT.visual.select({
+      data: [{ residue_number: firstPos, color: { r: 255, g: 100, b: 50 }, focus: true }],
+      nonSelectedColor: null,
+    });
+  }
 }
 
 registerLoader('structural', loadStructural);

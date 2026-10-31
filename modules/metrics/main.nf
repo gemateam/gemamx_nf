@@ -64,8 +64,10 @@ process PUBLISH {
     tag "${run_name}"
     container "${params.image_cpu}"
 
-    // Publica run_manifest.json a la raíz del outdir
-    publishDir "${params.outdir}", mode: 'copy', overwrite: true, pattern: "run_manifest.json"
+    // Publica run_manifest.json tanto en la raíz del outdir como en data/
+    // para que la webapp lo encuentre en data/run_manifest.json
+    publishDir "${params.outdir}",        mode: 'copy', overwrite: true, pattern: "run_manifest.json"
+    publishDir "${params.outdir}/data",   mode: 'copy', overwrite: true, pattern: "run_manifest.json"
 
     input:
     // Solo los seis JSON del contrato — archivos planos, sin directorios
