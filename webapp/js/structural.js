@@ -132,9 +132,25 @@ async function onVariantChange(variantId, manifest, metrics) {
 }
 
 // ── Loader principal ──────────────────────────────────────────────────────
+// Guard contra ejecuciones concurrentes: una Promise compartida evita que
+// dos llamadas simultáneas entren antes de que la primera haga await.
+let _structuralLoading = null;
+
 async function loadStructural() {
   if (state.loaded) return;
+  // Si ya hay una ejecución en curso, esperarla en lugar de lanzar otra
+  if (_structuralLoading) return _structuralLoading;
+
   state.loaded = true;
+  _structuralLoading = _doLoadStructural();
+  try {
+    await _structuralLoading;
+  } finally {
+    _structuralLoading = null;
+  }
+}
+
+async function _doLoadStructural() {
 
   const [variants, metrics, manifest] = await Promise.all([
     loadJSON(DATA.topVariants()),
