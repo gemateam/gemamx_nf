@@ -1,25 +1,5 @@
-HEADER                                            18-OCT-22                     
-TITLE     ESMFOLD V1 PREDICTION FOR INPUT
-REMARK   1                                                                      
-REMARK   1 REFERENCE 1                                                          
-REMARK   1  AUTH   ZEMING LIN, HALIL AKIN, ROSHAN RAO, BRIAN HIE, ZHONGKAI ZHU,
-REMARK   1  AUTH 2 WENTING LU, NIKITA SMETANIN, ROBERT VERKUIL, ORI KABELI,
-REMARK   1  AUTH 3 YANIV SHMUELI, ALLAN DOS SANTOS COSTA,
-REMARK   1  AUTH 4 MARYAM FAZEL-ZARANDI, TOM SERCU, SALVATORE CANDIDO,
-REMARK   1  AUTH 5 ALEXANDER RIVES
-REMARK   1  TITL   EVOLUTIONARY-SCALE PREDICTION OF ATOMIC LEVEL PROTEIN
-REMARK   1  TITL 2 STRUCTURE WITH A LANGUAGE MODEL
-REMARK   1  REF                                                                 
-REMARK   1  REFN                                                                
-REMARK   1  PMID                                                                
-REMARK   1  DOI    10.1101/2022.07.20.500902                                    
-REMARK   1                                                                      
-REMARK   1 LICENSE AND DISCLAIMERS                
-REMARK   1 ESM METAGENOMIC ATLAS DATA IS AVAILABLE UNDER
-REMARK   1 A CC-BY-4.0 LICENSE FOR ACADEMIC AND COMMERCIAL USE.
-REMARK   1 COPYRIGHT (C) META PLATFORMS, INC. ALL RIGHTS RESERVED.
-REMARK   1 USE OF THE ESM METAGENOMIC ATLAS DATA IS SUBJECT
-REMARK   1 TO THE META OPEN SOURCE TERMS OF USE AND PRIVACY POLICY.
+HEADER    GEMAMX PIK3CA H1047R (renumbered fragment)  01-JAN-26   GEMX
+REMARK   1 GEMAMX pipeline — PIK3CA H1047R — residues renumbered 1..202
 ATOM      1  N   LYS A   1     -24.194   9.018  11.849  1.00  0.38           N  
 ATOM      2  CA  LYS A   1     -22.759   8.877  12.081  1.00  0.39           C  
 ATOM      3  C   LYS A   1     -21.959   9.771  11.137  1.00  0.39           C  
@@ -1682,3 +1662,4 @@ ATOM   1659  O   ASN A 202     -30.165   9.936   2.460  1.00  0.80           O
 ATOM   1660  CG  ASN A 202     -26.148   7.883   2.868  1.00  0.80           C  
 ATOM   1661  ND2 ASN A 202     -24.902   8.099   3.274  1.00  0.83           N  
 ATOM   1662  OD1 ASN A 202     -26.569   6.759   2.584  1.00  0.81           O  
+END

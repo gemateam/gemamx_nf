@@ -2,8 +2,8 @@
     "gene": "PIK3CA",
     "protein_change": "WT",
     "model_start": 1,
-    "model_resseq_start": 957,
-    "model_resseq_end": 1068,
+    "model_resseq_start": 1,
+    "model_resseq_end": 112,
     "mutation_resseq_model": null,
     "mean_plddt": 86.88,
     "plddt_source": "alphafold"

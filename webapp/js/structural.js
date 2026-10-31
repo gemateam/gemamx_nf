@@ -121,7 +121,8 @@ async function onVariantChange(variantId, manifest, metrics) {
 
   const wtPath  = manifest?.[wtKey]  ?? null;
   const mutPath = manifest?.[mutKey] ?? null;
-  const pos     = mutationPos(variantId);
+  // Usar mutation_resseq_model del contrato si existe; si no, omitir highlight
+  const pos = metrics?.[variantId]?.mutation_resseq_model ?? null;
 
   renderMetrics(variantId, metrics);
   renderRMSD(variantId, metrics);
@@ -193,13 +194,15 @@ async function _doLoadStructural() {
       createViewer('viewer-wt',  firstWtPath),
       createViewer('viewer-mut', firstMutPath),
     ]);
-    // El highlight del MUT (render() ya lo cargó)
-    const firstPos = mutationPos(firstVariantId);
+    // El highlight del MUT — usar mutation_resseq_model del contrato
+    const firstPos = metrics?.[firstVariantId]?.mutation_resseq_model ?? null;
     if (firstPos && pluginMUT) {
-      pluginMUT.visual.select({
-        data: [{ residue_number: firstPos, color: { r: 255, g: 100, b: 50 }, focus: true }],
-        nonSelectedColor: null,
-      });
+      try {
+        pluginMUT.visual.select({
+          data: [{ residue_number: firstPos, color: { r: 255, g: 100, b: 50 }, focus: true }],
+          nonSelectedColor: null,
+        });
+      } catch (e) { /* highlight es decorativo — no bloquear si falla */ }
     }
   }
 
