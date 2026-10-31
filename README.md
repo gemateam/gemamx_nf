@@ -23,7 +23,7 @@ contrato** que consume la app web estática de GEMXMXv1 (sin modificarla).
 | 1 | Estructura, `git init`, configuración de imágenes/MLflow, catálogo verificado, `LEGACY_MAP.md` y `ALMACENAMIENTO.md` | ✅ completada |
 | 2 | Scripts CLI (`bin/`) + imagen de docking + pruebas aisladas | ✅ completada |
 | 3 | Workflow con `-stub-run` y DAG | ✅ completada — 46 tareas ✔, 0 warnings |
-| 4 | Perfil `test` (1 variante, estructuras precomputadas) | ⏳ pendiente |
+| 4 | Perfil `test` (1 variante, estructuras precomputadas) | ✅ completada — `dreamy_caravaggio`, 52 archivos publicados, reportes en MLflow |
 | 5 | Validación contra GEMXMXv1 | ⏳ pendiente |
 | 6 | Resiliencia (`-resume`) | ⏳ pendiente |
 | 7 | MLflow (run padre + hijas + artefactos) | ✅ integrado en Fase 3 (módulo + scripts) |
