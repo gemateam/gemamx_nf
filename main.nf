@@ -153,12 +153,10 @@ workflow {
     )
 
     // ── PUBLISH ───────────────────────────────────────────────────────────────
-    def abs_outdir = file(params.outdir).toAbsolutePath().toString()
-
+    // outdir_path ya no se pasa: publishDir en el módulo usa params.outdir directamente.
     PUBLISH(
         BUILD_JSONS.out.contract_data,
         workflow.runName,
-        abs_outdir,
         commit_hash
     )
 
@@ -172,6 +170,6 @@ workflow {
         commit_hash,
         PUBLISH.out.run_manifest,
         PUBLISH.out.run_params,
-        BUILD_JSONS.out.contract_data
+        PUBLISH.out.data_dir
     )
 }

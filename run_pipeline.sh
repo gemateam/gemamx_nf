@@ -24,31 +24,16 @@ MLFLOW_URI="${MLFLOW_URI:-http://localhost:5000}"
 NF_OUTDIR="${NF_OUTDIR:-results}"
 NF_EXPERIMENT="${NF_EXPERIMENT:-GEMAMX-V1-NF}"
 
-# ---------------------------------------------------------------------------
-# Detectar el outdir efectivo ANTES de correr el pipeline para poder pasar
-# las rutas correctas a -with-report / -with-timeline / -with-dag.
-#
-# Prioridad:
-#   1. --outdir explícito en los args del usuario
-#   2. Perfil conocido (test → results/test)
-#   3. Valor por defecto (NF_OUTDIR)
-# ---------------------------------------------------------------------------
+# Detectar el outdir efectivo desde los args del usuario (--outdir <valor>).
+# Si no se especifica, usa NF_OUTDIR. El perfil 'test' ya apunta a 'results'
+# en nextflow.config, así que no hace falta caso especial aquí.
 EFFECTIVE_OUTDIR="${NF_OUTDIR}"
-
-# Buscar --outdir <valor> en los argumentos
 for i in "$@"; do
     if [[ "${PREV_ARG:-}" == "--outdir" ]]; then
         EFFECTIVE_OUTDIR="${i}"
     fi
     PREV_ARG="${i}"
 done
-
-# Si el perfil incluye "test" y no se especificó --outdir, usar results/test
-if echo "$*" | grep -qE "(^|,| )test($|,| )"; then
-    if [ "${EFFECTIVE_OUTDIR}" = "${NF_OUTDIR}" ]; then
-        EFFECTIVE_OUTDIR="results/test"
-    fi
-fi
 
 PIPELINE_INFO="${EFFECTIVE_OUTDIR}/pipeline_info"
 echo "▶ Outdir efectivo   : ${EFFECTIVE_OUTDIR}"
@@ -103,6 +88,72 @@ if [ -z "${RUN_NAME}" ]; then
 fi
 
 echo "▶ Run name detectado: ${RUN_NAME}"
+
+# ---------------------------------------------------------------------------
+# 3. Archivar corrida y actualizar índice de corridas históricas
+# ---------------------------------------------------------------------------
+# Nextflow publica <outdir>/data/ y <outdir>/run_manifest.json via publishDir.
+# Aquí:
+#   a) Copiamos data/ → runs/<runName>/data/  (archive inmutable)
+#   b) Copiamos run_manifest.json → runs/<runName>/run_manifest.json
+#   c) Actualizamos runs/index.json con la entrada de esta corrida
+# ---------------------------------------------------------------------------
+DATA_DIR="${EFFECTIVE_OUTDIR}/data"
+MANIFEST_PATH="${EFFECTIVE_OUTDIR}/run_manifest.json"
+RUN_ARCHIVE="${EFFECTIVE_OUTDIR}/runs/${RUN_NAME}"
+INDEX_PATH="${EFFECTIVE_OUTDIR}/runs/index.json"
+
+echo "▶ Archivando corrida en runs/${RUN_NAME}..."
+if [ -d "${DATA_DIR}" ] && [ -f "${MANIFEST_PATH}" ]; then
+    mkdir -p "${RUN_ARCHIVE}"
+    # Copiar contrato de datos (solo si el archive no existe ya)
+    if [ ! -d "${RUN_ARCHIVE}/data" ]; then
+        cp -r "${DATA_DIR}" "${RUN_ARCHIVE}/data"
+    fi
+    cp "${MANIFEST_PATH}" "${RUN_ARCHIVE}/run_manifest.json"
+    echo "  ✓ ${RUN_ARCHIVE}"
+else
+    echo "  WARN: data/ o run_manifest.json no encontrados en ${EFFECTIVE_OUTDIR}"
+fi
+
+echo "▶ Actualizando índice de corridas..."
+if [ -f "${MANIFEST_PATH}" ]; then
+    export EFFECTIVE_OUTDIR RUN_NAME
+    python3 - << 'PYEOF'
+import json, os, pathlib
+
+outdir      = os.environ.get("EFFECTIVE_OUTDIR", "results")
+run_name    = os.environ.get("RUN_NAME", "")
+index_path  = pathlib.Path(outdir) / "runs" / "index.json"
+manifest_p  = pathlib.Path(outdir) / "run_manifest.json"
+
+try:
+    manifest = json.loads(manifest_p.read_text())
+except Exception:
+    manifest = {}
+
+index = []
+if index_path.is_file():
+    try:
+        index = json.loads(index_path.read_text()) or []
+    except Exception:
+        index = []
+
+entry = {
+    "run_name":     run_name,
+    "published_at": manifest.get("published_at", ""),
+    "git_commit":   manifest.get("git_commit", "")[:7],
+    "path":         f"runs/{run_name}/data",
+}
+index = [e for e in index if e.get("run_name") != run_name]
+index.insert(0, entry)
+index_path.parent.mkdir(parents=True, exist_ok=True)
+index_path.write_text(json.dumps(index, indent=2))
+print(f"  índice actualizado: {len(index)} corrida(s)")
+PYEOF
+else
+    echo "  WARN: manifest no encontrado en ${MANIFEST_PATH} — índice no actualizado"
+fi
 
 # ---------------------------------------------------------------------------
 # 3. Subir reportes HTML al run padre en MLflow

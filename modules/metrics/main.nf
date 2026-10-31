@@ -52,49 +52,58 @@ process PUBLISH {
     tag "${run_name}"
     container "${params.image_cpu}"
 
+    // publishDir publica los outputs al host vía el mecanismo nativo de Nextflow.
+    // Los val inputs no están disponibles en publishDir; usamos params.outdir
+    // para la raíz y un saveAs closure para distribuir los archivos.
+    // 1. Contrato vigente → <outdir>/data/
+    publishDir "${params.outdir}", mode: 'copy', overwrite: true, saveAs: { fn ->
+        fn.startsWith("data/") || fn == "data" ? fn : null
+    }
+    // 2. run_manifest.json en la raíz del outdir
+    publishDir "${params.outdir}", mode: 'copy', overwrite: true, saveAs: { fn ->
+        fn == "run_manifest.json" ? fn : null
+    }
+
     input:
     path contract_data
-    val run_name
-    val outdir_path
-    val commit_hash
+    val  run_name
+    val  commit_hash
 
     output:
-    path "run_manifest.json", emit: run_manifest
-    path "params.json",       emit: run_params
+    path "run_manifest.json",   emit: run_manifest
+    path "params.json",         emit: run_params
+    path "data",                emit: data_dir
 
     script:
-    // Serializar params en Groovy (el bloque script corre en el contenedor y no
-    // tiene acceso a clases Groovy del orquestador).
-    // params en Nextflow DSL2 es un LinkedHashMap; se serializa directamente.
     def params_json = groovy.json.JsonOutput.prettyPrint(
         groovy.json.JsonOutput.toJson(params)
     )
     """
-    cat << 'EOF' > params.json
+    cat << 'PARAMS_EOF' > params.json
 ${params_json}
-EOF
+PARAMS_EOF
 
-    cat << EOF > images.json
+    cat << IMAGES_EOF > images.json
 {
   "image_cpu": "${params.image_cpu}",
   "image_docking": "${params.image_docking}",
   "image_gpu": "${params.image_gpu}",
   "image_mlflow": "${params.image_mlflow}"
 }
-EOF
+IMAGES_EOF
 
     publish_results.py \\
         --source "${contract_data}" \\
-        --target "${outdir_path}/data" \\
-        --manifest "run_manifest.json" \\
-        --params "params.json" \\
+        --outdir  . \\
         --run-name "${run_name}" \\
         --commit "${commit_hash}" \\
+        --params "params.json" \\
         --images "images.json"
     """
 
     stub:
     """
+    mkdir -p data
     echo '{"run_name":"${run_name}","commit":"${commit_hash}","files":{}}' > run_manifest.json
     echo '{}' > params.json
     """
