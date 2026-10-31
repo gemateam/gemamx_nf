@@ -13,9 +13,8 @@ process BUILD_JSONS {
     path complex_files, stageAs: "complex/*"
 
     output:
-    // Emitir todos los archivos individuales del árbol data/ para que
-    // PUBLISH los reciba correctamente sin depender del staging de directorios.
-    path "stage/data/**", emit: contract_files
+    // Emitir el directorio completo con su estructura interna preservada.
+    path "stage/data", emit: contract_data
 
     script:
     """
@@ -51,16 +50,16 @@ process BUILD_JSONS {
 
 process PUBLISH {
     tag "${run_name}"
-    container "${params.image_cpu}"
+    // Sin contenedor: corre en el host directamente para poder escribir al outdir.
+    // Python3 debe estar disponible en el host; si no, se puede instalar con:
+    //   apt install python3  (Ubuntu/WSL2)
+    container null
 
     // publishDir copia data/ y run_manifest.json al outdir del host.
-    // Nextflow maneja el staging y la copia al host de forma nativa.
     publishDir "${params.outdir}", mode: 'copy', overwrite: true
 
     input:
-    // Los archivos del contrato llegan como lista plana; los restageamos
-    // bajo staged/ para poder reconstruir el árbol con las rutas relativas.
-    path contract_files, stageAs: "staged/*"
+    path contract_data
     val  run_name
     val  commit_hash
 
@@ -88,7 +87,7 @@ PARAMS_EOF
 IMAGES_EOF
 
     publish_results.py \\
-        --source staged \\
+        --source "${contract_data}" \\
         --outdir  . \\
         --run-name "${run_name}" \\
         --commit "${commit_hash}" \\
