@@ -2,12 +2,11 @@
  * structural.js — visores PDBe Molstar WT/MUT, métricas, RMSD por región
  *
  * API PDBe Molstar v3.x:
- *  - render(el, options) es fire-and-forget (no devuelve Promise).
- *  - plugin.events.loadComplete solo se dispara cuando hay una estructura
- *    cargando en render(). Si se omite customData, el evento nunca llega.
- *  - Solución: pasar la estructura directamente en render() usando customData,
- *    de modo que loadComplete se dispara cuando esa carga termina.
- *  - Para cargar/recargar usa visual.update() que sí es awaitable.
+ *  - render() es fire-and-forget; loadComplete se dispara solo si hay
+ *    customData en render(). Se pasa la estructura inicial directamente.
+ *  - Los plugins se crean una sola vez y se reutilizan en recargas
+ *    (cambio de corrida) para evitar la doble inicialización de Molstar
+ *    que produce "Symbol already added".
  */
 import { DATA, loadJSON, fmt, registerLoader, registerReloadFlag } from './app.js';
 
@@ -17,14 +16,12 @@ let pluginWT  = null;
 let pluginMUT = null;
 
 // ── Inicializar visor y cargar estructura inicial ─────────────────────────
-// Devuelve Promise<plugin> que resuelve cuando loadComplete se dispara.
-// structPath es requerido: sin estructura inicial loadComplete no se emite.
 function createViewer(containerId, structPath) {
   const el = document.getElementById(containerId);
   if (!el) return Promise.resolve(null);
 
   const plugin = new PDBeMolstarPlugin();
-  const format = structPath?.endsWith('.cif') ? 'mmcif' : 'pdb';
+  const format = (structPath ?? '').endsWith('.cif') ? 'mmcif' : 'pdb';
 
   const ready = new Promise((resolve) => {
     plugin.events.loadComplete.subscribe(() => resolve(plugin));
@@ -40,16 +37,13 @@ function createViewer(containerId, structPath) {
     sequencePanel:     false,
   });
 
-  // Fallback: si no hay structPath loadComplete no se dispara — resolvemos
-  // con un pequeño delay para que el canvas WebGL se inicialice.
   if (!structPath) {
     return new Promise(resolve => setTimeout(() => resolve(plugin), 400));
   }
-
   return ready;
 }
 
-// ── Cargar/recargar estructura en un visor ────────────────────────────────
+// ── Cargar/recargar estructura en un visor ya inicializado ────────────────
 async function loadStructure(plugin, structPath, mutPos) {
   if (!plugin || !structPath) return;
   try {
@@ -165,34 +159,43 @@ async function loadStructural() {
       ${v.hugo_symbol} ${v.protein_change}
     </option>`).join('');
 
-  // Calcular paths de la primera variante para inicializar los visores
-  // con customData desde el primer render() — así loadComplete se dispara.
+  // Paths de la primera variante
   const firstVariantId = `${available[0].hugo_symbol}_${available[0].protein_change}`;
   const firstWtKey     = available[0].hugo_symbol + '_WT';
-  const firstWtPath    = manifest?.[firstWtKey]       ?? null;
-  const firstMutPath   = manifest?.[firstVariantId]   ?? null;
+  const firstWtPath    = manifest?.[firstWtKey]     ?? null;
+  const firstMutPath   = manifest?.[firstVariantId] ?? null;
 
-  // Inicializar visores con la estructura inicial para que loadComplete se dispare
-  [pluginWT, pluginMUT] = await Promise.all([
-    createViewer('viewer-wt',  firstWtPath),
-    createViewer('viewer-mut', firstMutPath),
-  ]);
+  if (pluginWT && pluginMUT) {
+    // ── Recarga (cambio de corrida): plugins ya existen, solo actualizar datos
+    await Promise.all([
+      loadStructure(pluginWT,  firstWtPath,  null),
+      loadStructure(pluginMUT, firstMutPath, mutationPos(firstVariantId)),
+    ]);
+  } else {
+    // ── Primera carga: crear los visores con la estructura inicial en render()
+    [pluginWT, pluginMUT] = await Promise.all([
+      createViewer('viewer-wt',  firstWtPath),
+      createViewer('viewer-mut', firstMutPath),
+    ]);
+    // El highlight del MUT (render() ya lo cargó)
+    const firstPos = mutationPos(firstVariantId);
+    if (firstPos && pluginMUT) {
+      pluginMUT.visual.select({
+        data: [{ residue_number: firstPos, color: { r: 255, g: 100, b: 50 }, focus: true }],
+        nonSelectedColor: null,
+      });
+    }
+  }
 
-  sel.addEventListener('change', () =>
-    onVariantChange(sel.value, manifest, metrics));
-
-  // Renderizar métricas de la primera variante (la estructura ya cargó en render)
   renderMetrics(firstVariantId, metrics);
   renderRMSD(firstVariantId, metrics);
 
-  // Resaltar residuo mutado en el visor MUT si aplica
-  const firstPos = mutationPos(firstVariantId);
-  if (firstPos && pluginMUT) {
-    pluginMUT.visual.select({
-      data: [{ residue_number: firstPos, color: { r: 255, g: 100, b: 50 }, focus: true }],
-      nonSelectedColor: null,
-    });
+  // Registrar listener del selector solo la primera vez
+  if (!sel.dataset.listenerAttached) {
+    sel.addEventListener('change', () => onVariantChange(sel.value, manifest, metrics));
+    sel.dataset.listenerAttached = 'true';
   }
+}
 }
 
 registerLoader('structural', loadStructural);

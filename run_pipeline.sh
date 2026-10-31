@@ -111,6 +111,9 @@ if [ -d "${DATA_DIR}" ] && [ -f "${MANIFEST_PATH}" ]; then
         cp -r "${DATA_DIR}" "${RUN_ARCHIVE}/data"
     fi
     cp "${MANIFEST_PATH}" "${RUN_ARCHIVE}/run_manifest.json"
+    # run_manifest también dentro de data/ para que la webapp lo encuentre
+    # cuando BASE_PATH = "runs/<name>/data"
+    cp "${MANIFEST_PATH}" "${RUN_ARCHIVE}/data/run_manifest.json"
     echo "  ✓ ${RUN_ARCHIVE}"
 else
     echo "  WARN: data/ o run_manifest.json no encontrados en ${EFFECTIVE_OUTDIR}"
