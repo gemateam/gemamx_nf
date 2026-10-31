@@ -21,7 +21,7 @@ contrato** que consume la app web estática de GEMXMXv1 (sin modificarla).
 |---|---|---|
 | 0 | Auditoría del legado y del entorno | ✅ completada y aprobada |
 | 1 | Estructura, `git init`, configuración de imágenes/MLflow, catálogo verificado, `LEGACY_MAP.md` y `ALMACENAMIENTO.md` | ✅ completada |
-| 2 | Scripts CLI (`bin/`) + imagen de docking + pruebas aisladas | ⏳ pendiente |
+| 2 | Scripts CLI (`bin/`) + imagen de docking + pruebas aisladas | ✅ completada |
 | 3 | Workflow con `-stub-run` y DAG | ⏳ pendiente |
 | 4 | Perfil `test` (3 variantes, estructuras precomputadas) | ⏳ pendiente |
 | 5 | Validación contra GEMXMXv1 | ⏳ pendiente |
@@ -66,6 +66,7 @@ gemamx_nf/
 ├── assets/
 │   └── drug_catalog.csv     # 11 fármacos (ChEMBL ID verificado, SMILES canónico)
 ├── tests/reference/         # fixtures: contratos legados, snapshot, estructuras
+├── tests/                   # run_phase2_data.sh, run_phase2_docking.sh
 ├── docs/{LEGACY_MAP.md,ALMACENAMIENTO.md,PROPUESTAS_PLATAFORMA.md}
 └── .gitignore
 ```
@@ -83,6 +84,11 @@ gemamx_nf/
 
 `gemamx-cpu:1.0.0` ya incluye **Vina 1.2.7, OpenBabel 3.2.1, RDKit 2026.03.1,
 Biopython 1.88 y MLflow 2.19.0** (verificado en el Paso 0).
+
+Reproducibilidad del receptor: OpenBabel 3.2.1 con `-p 7.4` coloca algunos
+hidrógenos de forma aleatoria. `PREP_RECEPTOR` fija `OB_RANDOM_SEED` y ejecuta
+Obabel dos veces; si los bytes no coinciden, el proceso falla. Los hidrógenos
+unidos a N/O/S se tipan como `H` (polares) y los unidos a carbono como `HD`.
 
 La única imagen propia se construye así:
 
@@ -187,6 +193,19 @@ nextflow run . -profile docker,gpu --structures_mode boltz # requiere GPU (no di
 
 `workDir` se coloca por defecto en `~/gemamx-work` (filesystem Linux) porque
 ejecutar Nextflow desde `/mnt/d` es muy lento (9p).
+
+---
+
+## Pruebas de los scripts
+
+```bash
+bash tests/run_phase2_data.sh                    # ingesta, FASTA y estructuras (red)
+RECEPTOR=/ruta/receptor.pdb bash tests/run_phase2_docking.sh
+```
+
+Detalle en [`tests/README.md`](tests/README.md). La prueba de docking verifica
+determinismo byte a byte de ligando y receptor, y afinidades/poses idénticas de
+Vina con la misma semilla.
 
 ---
 

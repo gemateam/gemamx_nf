@@ -18,15 +18,18 @@ esos directorios. Todo lo reutilizado se copió y adaptó aquí dentro.
 |---|---|---|
 | `GEMXMXv1/ingest_data.py` | `bin/ingest_cbioportal.py` | Única fuente real de TCGA-BRCA (cBioPortal). Se elimina MongoDB; salidas y parámetros explícitos; se conserva el mapeo de campos, el ranking por frecuencia y `classify()`. |
 | `GEMXMXv1/fetch_fasta.py` | `bin/fetch_fasta.py` | UniProt + aplicación de mutación. Se elimina MongoDB; una variante (o un WT) por invocación; valida el aminoácido esperado. |
-| `GEMXMXv1/generate_structures.py` | `bin/predict_esmfold.py` | Lógica `mutate()` y `get_domain_fragment()`. Una secuencia por invocación; escribe sidecar con `start/end/offset`; pLDDT desde el factor B; elimina la lista hardcodeada de 13 variantes. |
-| `GEMXMXv1/prepare_docking.py` → `structure_to_pdbqt_receptor` | `bin/prep_receptor.py` | Misma idea (OpenBabel `-xr --addh -p 7.4`) sin `OBABEL_EXE` ni rutas Windows. |
+| `GEMXMXv1/generate_structures.py` | `bin/predict_structure.py` | Lógica `mutate()` y `get_domain_fragment()`. Una secuencia por invocación; escribe sidecar con `start/end/offset`; pLDDT desde el factor B; elimina la lista hardcodeada de 13 variantes. |
+| `GEMXMXv1/prepare_docking.py` → `structure_to_pdbqt_receptor` | `bin/prep_receptor.py` | Misma idea (OpenBabel `--addh -p 7.4`) sin `OBABEL_EXE` ni rutas Windows. Añade semilla de OpenBabel y verificación de determinismo. |
 | `GEMXMXv1/prepare_docking.py` → `get_mutation_center` | `bin/dock_center.py` | **Corrige el bug de offset de fragmento** y verifica el residuo; falla explícito en vez de caer al centro de masa. |
+| `GEMXMXv1/prepare_docking.py` → SDF/OpenBabel | `bin/prep_ligand.py` | Sustituye los SDF heredados: RDKit ETKDGv3 + MMFF94 + Meeko 0.8 desde el SMILES del catálogo, con `randomSeed=vina_seed`. |
 | `GEMXMXv1/prepare_docking.py` → `run_vina` | `bin/run_vina.py` | Un par receptor×fármaco por invocación; añade `--seed`; sin backend de escritura. |
 | `GEMXMXv1/prepare_docking.py` → `parse_vina_log` | `bin/parse_vina.py` | Mismos regex (Vina 1.1.x y 1.2.x), reutilizados por RUN_VINA y BUILD_JSONS. |
-| `GEMXMXv1/run_docking.py` | `bin/build_jsons.py` | Actualización de `structural_metrics.json` y `vina_affinities.json`, ahora como paso determinista desde archivos. |
+| `GEMXMXv1/run_docking.py` | `bin/build_jsons.py` | Actualización de `structural_metrics.json` y `vina_affinities.json`, ahora como paso determinista desde archivos. Copia además estructuras, poses y complejos al contrato. |
 | `GEMXMXv1/rebuild_stats.py` | `bin/build_stats.py` | Idéntico, con `--in/--out` explícitos. |
 | `GEMXMXv1/merge_poses.py` | `bin/merge_pose.py` | **Necesario**: la app pide `data/docking/complex/<var>_<drug>_complex.pdb` (comprobación `HEAD`). |
 | `GEMXMXv1/scan_boltz.py` | `bin/build_manifest.py` | Indexado de estructuras para `structures_mode=precomputed`; ya no reescribe rutas absolutas. |
+| — (no existía) | `bin/align_wt_mut.py` | RMSD real WT/MUT con SVD sobre CA emparejados y radio de sitio activo. |
+| — (no existía) | `bin/publish_results.py` | Archivo inmutable por corrida + promoción atómica del contrato vigente. |
 | `GEMXMXv1/prepare_docking.py` → `DRUG_CATALOG` | `assets/drug_catalog.csv` | 11 fármacos con ChEMBL ID, target, estado y SMILES canónico. **Los IDs del legado estaban cruzados** (p. ej. `CHEMBL3301610` era Abemaciclib, no Alpelisib); el catálogo se reconstruyó y verificó 11/11 contra la API de ChEMBL (ID + `pref_name` + SMILES). |
 | `Gemacont/v2/scripts/gemamx/docking.py` | — (solo referencia) | Se descarta la lógica (caja en `0,0,0`, `prepare_receptor` inexistente, MLflow dentro del job). |
 
@@ -84,3 +87,12 @@ Motivos: dependencia de MongoDB, rutas Windows, artefactos fabricados (PDBs
    que una corrida fallida podía dejar el contrato a medias. Ahora se publica un
    archivo inmutable por corrida y `data/` se reemplaza de forma atómica
    (ver `docs/ALMACENAMIENTO.md`).
+10. **Protonación no reproducible**: OpenBabel 3.2.1 con `-p 7.4` colocaba dos
+    hidrógenos de amida en posiciones aleatorias (se detectó comparando
+    ejecuciones). PREP_RECEPTOR fija `OB_RANDOM_SEED` y ejecuta Obabel dos veces:
+    si los bytes difieren, el proceso falla.
+11. **Todos los H como `HD`**: el legado asignaba el tipo AD4 `HD` a cualquier
+    hidrógeno, perdiendo los donadores polares. Ahora los H unidos a N/O/S se
+    escriben como `H` y los unidos a carbono como `HD`.
+12. **pLDDT sin escala**: la API de ESMFold escribe pLDDT en 0..1; el legado lo
+    trataba como 0..100. `PREDICT_STRUCTURE` detecta el rango y escala ×100.
