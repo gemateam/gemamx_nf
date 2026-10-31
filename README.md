@@ -22,11 +22,11 @@ contrato** que consume la app web estática de GEMXMXv1 (sin modificarla).
 | 0 | Auditoría del legado y del entorno | ✅ completada y aprobada |
 | 1 | Estructura, `git init`, configuración de imágenes/MLflow, catálogo verificado, `LEGACY_MAP.md` y `ALMACENAMIENTO.md` | ✅ completada |
 | 2 | Scripts CLI (`bin/`) + imagen de docking + pruebas aisladas | ✅ completada |
-| 3 | Workflow con `-stub-run` y DAG | ⏳ pendiente |
-| 4 | Perfil `test` (3 variantes, estructuras precomputadas) | ⏳ pendiente |
+| 3 | Workflow con `-stub-run` y DAG | ✅ completada — 46 tareas ✔, 0 warnings |
+| 4 | Perfil `test` (1 variante, estructuras precomputadas) | ⏳ pendiente |
 | 5 | Validación contra GEMXMXv1 | ⏳ pendiente |
 | 6 | Resiliencia (`-resume`) | ⏳ pendiente |
-| 7 | MLflow (run padre + hijas + artefactos) | ⏳ pendiente |
+| 7 | MLflow (run padre + hijas + artefactos) | ✅ integrado en Fase 3 (módulo + scripts) |
 | 8 | Verificación de independencia | ⏳ pendiente |
 | 9 | `structures_mode=boltz` (solo configuración: no hay GPU) | ⏳ pendiente |
 

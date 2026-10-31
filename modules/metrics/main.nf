@@ -65,10 +65,9 @@ process PUBLISH {
     script:
     // Serializar params en Groovy (el bloque script corre en el contenedor y no
     // tiene acceso a clases Groovy del orquestador).
+    // params en Nextflow DSL2 es un LinkedHashMap; se serializa directamente.
     def params_json = groovy.json.JsonOutput.prettyPrint(
-        groovy.json.JsonOutput.toJson(params.properties
-            .findAll { k, v -> !(k in ['class','metaClass']) && v != null }
-        )
+        groovy.json.JsonOutput.toJson(params)
     )
     """
     cat << 'EOF' > params.json
