@@ -1,0 +1,262 @@
+[
+    {
+        "hugo_symbol": "PIK3CA",
+        "protein_change": "H1047R",
+        "chromosome": "3",
+        "start_position": 178952085,
+        "frequency": 128,
+        "cohort_percentage": 11.808118081180812,
+        "classification": "Patog\u00e9nica",
+        "rank": 1
+    },
+    {
+        "hugo_symbol": "ERBB2",
+        "protein_change": "V777L",
+        "chromosome": "17",
+        "start_position": 37881000,
+        "frequency": 2,
+        "cohort_percentage": 0.18450184501845018,
+        "classification": "Hotspot",
+        "rank": 2
+    },
+    {
+        "hugo_symbol": "TP53",
+        "protein_change": "R248Q",
+        "chromosome": "?",
+        "start_position": 0,
+        "frequency": 1,
+        "cohort_percentage": 0.09225092250922509,
+        "classification": "Hotspot",
+        "rank": 3
+    },
+    {
+        "hugo_symbol": "BRCA1",
+        "protein_change": "C61G",
+        "chromosome": "?",
+        "start_position": 0,
+        "frequency": 1,
+        "cohort_percentage": 0.09225092250922509,
+        "classification": "Hotspot",
+        "rank": 4
+    },
+    {
+        "hugo_symbol": "AARS1",
+        "protein_change": "S645C",
+        "chromosome": "16",
+        "start_position": 70292941,
+        "frequency": 1,
+        "cohort_percentage": 0.09225092250922509,
+        "classification": "Hotspot",
+        "rank": 5
+    },
+    {
+        "hugo_symbol": "ZXDB",
+        "protein_change": "R528H",
+        "chromosome": "?",
+        "start_position": 0,
+        "frequency": 1,
+        "cohort_percentage": 0.09225092250922509,
+        "classification": "Hotspot",
+        "rank": 6
+    },
+    {
+        "hugo_symbol": "ARID1A",
+        "protein_change": "A855T",
+        "chromosome": "1",
+        "start_position": 26772987,
+        "frequency": 1,
+        "cohort_percentage": 0.03,
+        "classification": "Baja Frecuencia",
+        "rank": 7
+    },
+    {
+        "hugo_symbol": "ARID1A",
+        "protein_change": "M890I",
+        "chromosome": "1",
+        "start_position": 26773449,
+        "frequency": 1,
+        "cohort_percentage": 0.03,
+        "classification": "Baja Frecuencia",
+        "rank": 8
+    },
+    {
+        "hugo_symbol": "ARID1A",
+        "protein_change": "R1127K",
+        "chromosome": "1",
+        "start_position": 26774759,
+        "frequency": 1,
+        "cohort_percentage": 0.03,
+        "classification": "Baja Frecuencia",
+        "rank": 9
+    },
+    {
+        "hugo_symbol": "BRCA2",
+        "protein_change": "D1355Y",
+        "chromosome": "13",
+        "start_position": 32338418,
+        "frequency": 1,
+        "cohort_percentage": 0.03,
+        "classification": "Baja Frecuencia",
+        "rank": 10
+    },
+    {
+        "hugo_symbol": "CBFB",
+        "protein_change": "G123C",
+        "chromosome": "16",
+        "start_position": 67066766,
+        "frequency": 1,
+        "cohort_percentage": 0.03,
+        "classification": "Baja Frecuencia",
+        "rank": 11
+    },
+    {
+        "hugo_symbol": "CBFB",
+        "protein_change": "N104S",
+        "chromosome": "16",
+        "start_position": 67066710,
+        "frequency": 1,
+        "cohort_percentage": 0.03,
+        "classification": "Baja Frecuencia",
+        "rank": 12
+    },
+    {
+        "hugo_symbol": "GATA3",
+        "protein_change": "R364S",
+        "chromosome": "10",
+        "start_position": 8073783,
+        "frequency": 1,
+        "cohort_percentage": 0.03,
+        "classification": "Baja Frecuencia",
+        "rank": 13
+    },
+    {
+        "hugo_symbol": "KMT2C",
+        "protein_change": "E1230K",
+        "chromosome": "7",
+        "start_position": 152162407,
+        "frequency": 1,
+        "cohort_percentage": 0.03,
+        "classification": "Baja Frecuencia",
+        "rank": 14
+    },
+    {
+        "hugo_symbol": "MAP3K1",
+        "protein_change": "A801T",
+        "chromosome": "5",
+        "start_position": 56881601,
+        "frequency": 1,
+        "cohort_percentage": 0.03,
+        "classification": "Baja Frecuencia",
+        "rank": 15
+    },
+    {
+        "hugo_symbol": "MAP3K1",
+        "protein_change": "N325K",
+        "chromosome": "5",
+        "start_position": 56864874,
+        "frequency": 1,
+        "cohort_percentage": 0.03,
+        "classification": "Baja Frecuencia",
+        "rank": 16
+    },
+    {
+        "hugo_symbol": "MAP3K1",
+        "protein_change": "R283T",
+        "chromosome": "5",
+        "start_position": 56864747,
+        "frequency": 1,
+        "cohort_percentage": 0.03,
+        "classification": "Baja Frecuencia",
+        "rank": 17
+    },
+    {
+        "hugo_symbol": "MAP3K1",
+        "protein_change": "R790M",
+        "chromosome": "5",
+        "start_position": 56881272,
+        "frequency": 1,
+        "cohort_percentage": 0.03,
+        "classification": "Baja Frecuencia",
+        "rank": 18
+    },
+    {
+        "hugo_symbol": "PIK3CA",
+        "protein_change": "D350N",
+        "chromosome": "3",
+        "start_position": 179203778,
+        "frequency": 1,
+        "cohort_percentage": 0.03,
+        "classification": "Baja Frecuencia",
+        "rank": 19
+    },
+    {
+        "hugo_symbol": "PIK3CA",
+        "protein_change": "R108H",
+        "chromosome": "3",
+        "start_position": 179199148,
+        "frequency": 1,
+        "cohort_percentage": 0.03,
+        "classification": "Baja Frecuencia",
+        "rank": 20
+    },
+    {
+        "hugo_symbol": "PTEN",
+        "protein_change": "N48I",
+        "chromosome": "10",
+        "start_position": 87894088,
+        "frequency": 1,
+        "cohort_percentage": 0.03,
+        "classification": "Baja Frecuencia",
+        "rank": 21
+    },
+    {
+        "hugo_symbol": "SF3B1",
+        "protein_change": "E802Q",
+        "chromosome": "2",
+        "start_position": 197401492,
+        "frequency": 1,
+        "cohort_percentage": 0.03,
+        "classification": "Baja Frecuencia",
+        "rank": 22
+    },
+    {
+        "hugo_symbol": "TP53",
+        "protein_change": "C145F",
+        "chromosome": "17",
+        "start_position": 7674250,
+        "frequency": 1,
+        "cohort_percentage": 0.03,
+        "classification": "Baja Frecuencia",
+        "rank": 23
+    },
+    {
+        "hugo_symbol": "TP53",
+        "protein_change": "H20Y",
+        "chromosome": "17",
+        "start_position": 7675077,
+        "frequency": 1,
+        "cohort_percentage": 0.03,
+        "classification": "Baja Frecuencia",
+        "rank": 24
+    },
+    {
+        "hugo_symbol": "TP53",
+        "protein_change": "I193S",
+        "chromosome": "17",
+        "start_position": 7674268,
+        "frequency": 1,
+        "cohort_percentage": 0.03,
+        "classification": "Baja Frecuencia",
+        "rank": 25
+    },
+    {
+        "hugo_symbol": "TP53",
+        "protein_change": "P146S",
+        "chromosome": "17",
+        "start_position": 7673788,
+        "frequency": 1,
+        "cohort_percentage": 0.03,
+        "classification": "Baja Frecuencia",
+        "rank": 26
+    }
+]

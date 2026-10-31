@@ -1,0 +1,202 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/gemateam/gemamx_nf/main/nextflow_schema.json",
+  "title": "gemamx_nf — parámetros del pipeline",
+  "description": "GEMA MX · Pipeline V1 (TCGA-BRCA): ingesta de variantes, FASTA WT/MUT, estructuras 3D, docking con AutoDock Vina y contratos JSON.",
+  "type": "object",
+  "$defs": {
+    "study_options": {
+      "title": "Estudio e ingesta",
+      "type": "object",
+      "fa_icon": "fas fa-database",
+      "properties": {
+        "study_id": {
+          "type": "string",
+          "default": "brca_tcga",
+          "pattern": "^[a-z0-9_]+$",
+          "description": "Identificador del estudio en cBioPortal.",
+          "help_text": "Perfil molecular usado por INGEST: `<study_id>_mutations`."
+        },
+        "genes": {
+          "type": "string",
+          "default": "PIK3CA,TP53,ERBB2,BRCA1,BRCA2,CDH1,GATA3,MAP3K1,KMT2C,PTEN,RB1,ARID1A,SF3B1,AKT1,CBFB",
+          "pattern": "^[A-Z0-9]+(,[A-Z0-9]+)*$",
+          "description": "Lista de genes (símbolos HUGO) separados por coma."
+        },
+        "mutations_json": {
+          "type": "string",
+          "description": "Snapshot de mutaciones crudas (JSON). Si se indica, INGEST no consulta cBioPortal.",
+          "help_text": "Formato: lista de objetos con hugo_symbol, variant_classification, protein_change, sample_id, chromosome y start_position."
+        },
+        "max_variants": {
+          "type": "integer",
+          "default": 20,
+          "minimum": 1,
+          "maximum": 500,
+          "description": "Número máximo de variantes priorizadas a procesar."
+        }
+      }
+    },
+    "structure_options": {
+      "title": "Predicción estructural",
+      "type": "object",
+      "fa_icon": "fas fa-cube",
+      "properties": {
+        "structures_mode": {
+          "type": "string",
+          "default": "precomputed",
+          "enum": ["precomputed", "esmfold", "boltz"],
+          "description": "Origen de las estructuras 3D.",
+          "help_text": "precomputed: reutiliza archivos existentes en structures_dir. esmfold: API pública de ESMFold (sin GPU). boltz: Boltz-1 local (requiere --profile gpu)."
+        },
+        "structures_dir": {
+          "type": "string",
+          "description": "Directorio con estructuras precomputadas (obligatorio si structures_mode=precomputed).",
+          "help_text": "Se esperan `<GEN>_WT.cif|pdb` y `<GEN>_<CAMBIO>.cif|pdb`, o un manifest_structures.json que las indexe."
+        },
+        "domain_window": {
+          "type": "integer",
+          "default": 180,
+          "minimum": 40,
+          "maximum": 400,
+          "description": "Ventana (± residuos) del fragmento de dominio para proteínas largas."
+        }
+      },
+      "required": ["structures_mode"]
+    },
+    "docking_options": {
+      "title": "Docking (AutoDock Vina)",
+      "type": "object",
+      "fa_icon": "fas fa-atom",
+      "properties": {
+        "drug_catalog": {
+          "type": "string",
+          "default": "assets/drug_catalog.csv",
+          "description": "Catálogo de fármacos (CSV con name, chembl_id, target, status, smiles)."
+        },
+        "exhaustiveness": {
+          "type": "integer",
+          "default": 8,
+          "minimum": 1,
+          "maximum": 64,
+          "description": "Exhaustividad de AutoDock Vina."
+        },
+        "num_modes": {
+          "type": "integer",
+          "default": 5,
+          "minimum": 1,
+          "maximum": 20,
+          "description": "Número máximo de poses por docking."
+        },
+        "box_size": {
+          "type": "number",
+          "default": 25,
+          "minimum": 10,
+          "maximum": 60,
+          "description": "Tamaño de la caja de búsqueda (Å, cúbica)."
+        },
+        "box_center_mode": {
+          "type": "string",
+          "default": "mutation",
+          "enum": ["mutation", "binding_site", "centroid"],
+          "description": "Criterio para centrar la caja de docking.",
+          "help_text": "mutation: residuo mutado (aplica offset de fragmento). binding_site: centro del sitio de unión si está anotado. centroid: centro de masa del receptor."
+        },
+        "vina_seed": {
+          "type": "integer",
+          "default": 42,
+          "minimum": 0,
+          "description": "Semilla explícita de AutoDock Vina (reproducibilidad)."
+        },
+        "vina_timeout_sec": {
+          "type": "integer",
+          "default": 900,
+          "minimum": 60,
+          "description": "Timeout por docking (segundos)."
+        }
+      }
+    },
+    "mlflow_options": {
+      "title": "MLflow",
+      "type": "object",
+      "fa_icon": "fas fa-chart-line",
+      "properties": {
+        "mlflow_tracking_uri": {
+          "type": "string",
+          "default": "http://host.docker.internal:5000",
+          "description": "URI del servidor MLflow de la plataforma.",
+          "help_text": "Con --profile platform-net se usa http://mlflow:5000 (red Docker compartida)."
+        },
+        "mlflow_experiment": {
+          "type": "string",
+          "default": "GEMAMX-V1-NF",
+          "pattern": "^[A-Za-z0-9._-]+$",
+          "description": "Experimento MLflow donde se registra la corrida."
+        }
+      }
+    },
+    "output_options": {
+      "title": "Salidas y ejecución",
+      "type": "object",
+      "fa_icon": "fas fa-folder-open",
+      "properties": {
+        "outdir": {
+          "type": "string",
+          "default": "results",
+          "description": "Directorio de salida (contiene el árbol `data/` que consume la app web)."
+        },
+        "work_dir": {
+          "type": "string",
+          "default": "~/gemamx-work",
+          "description": "Directorio de trabajo de Nextflow (debe estar en filesystem Linux)."
+        },
+        "publish_run_archive": {
+          "type": "boolean",
+          "default": true,
+          "description": "Guardar una copia inmutable de la corrida en <outdir>/runs/<runName>/.",
+          "help_text": "El contrato vigente <outdir>/data/ se promueve de forma atómica al final de la corrida. Ver docs/ALMACENAMIENTO.md."
+        }
+      }
+    },
+    "image_options": {
+      "title": "Imágenes Docker",
+      "type": "object",
+      "fa_icon": "fab fa-docker",
+      "description": "Tags fijos. Se prohíbe `latest` mediante patrón.",
+      "properties": {
+        "image_cpu": {
+          "type": "string",
+          "default": "gemamx-cpu:1.0.0",
+          "pattern": "^[a-z0-9._/-]+:[0-9][A-Za-z0-9._-]*$",
+          "description": "Imagen base (Python 3.12, Vina 1.2.7, OpenBabel 3.2.1, RDKit, Biopython, MLflow)."
+        },
+        "image_docking": {
+          "type": "string",
+          "default": "gemamx-nf-docking:1.0.0",
+          "pattern": "^[a-z0-9._/-]+:[0-9][A-Za-z0-9._-]*$",
+          "description": "Imagen para PREP_LIGAND (Meeko 0.8 + gemmi sobre image_cpu). Se construye desde containers/docking/."
+        },
+        "image_gpu": {
+          "type": "string",
+          "default": "gemamx-gpu:1.0.0",
+          "pattern": "^[a-z0-9._/-]+:[0-9][A-Za-z0-9._-]*$",
+          "description": "Imagen GPU de la plataforma (CUDA + Boltz-1), usada solo con structures_mode=boltz."
+        },
+        "image_mlflow": {
+          "type": "string",
+          "default": "gemamx-cpu:1.0.0",
+          "pattern": "^[a-z0-9._/-]+:[0-9][A-Za-z0-9._-]*$",
+          "description": "Imagen para LOG_MLFLOW (cliente mlflow 2.19)."
+        }
+      }
+    }
+  },
+  "allOf": [
+    { "$ref": "#/$defs/study_options" },
+    { "$ref": "#/$defs/structure_options" },
+    { "$ref": "#/$defs/docking_options" },
+    { "$ref": "#/$defs/mlflow_options" },
+    { "$ref": "#/$defs/output_options" },
+    { "$ref": "#/$defs/image_options" }
+  ]
+}

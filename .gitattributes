@@ -1,0 +1,15 @@
+# Normalización de finales de línea: el pipeline corre en Linux (WSL2) y
+# se edita en Windows. Los scripts deben conservar LF para que los shebangs
+# funcionen dentro de los contenedores.
+* text=auto eol=lf
+
+*.sh    text eol=lf
+*.py    text eol=lf
+*.nf    text eol=lf
+*.config text eol=lf
+*.json  text eol=lf
+*.csv   text eol=lf
+*.md    text eol=lf
+*.pdb   text eol=lf
+*.cif   text eol=lf
+*.fasta text eol=lf

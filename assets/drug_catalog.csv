@@ -1,0 +1,12 @@
+name,chembl_id,target,status,smiles
+Alpelisib,CHEMBL2396661,PI3Ka,FDA,Cc1nc(NC(=O)N2CCC[C@H]2C(N)=O)sc1-c1ccnc(C(C)(C)C(F)(F)F)c1
+Abemaciclib,CHEMBL3301610,CDK4/6,FDA,CCN1CCN(Cc2ccc(Nc3ncc(F)c(-c4cc(F)c5nc(C)n(C(C)C)c5c4)n3)nc2)CC1
+Palbociclib,CHEMBL189963,CDK4/6,FDA,CC(=O)c1c(C)c2cnc(Nc3ccc(N4CCNCC4)cn3)nc2n(C2CCCC2)c1=O
+Ribociclib,CHEMBL3545110,CDK4/6,FDA,CN(C)C(=O)c1cc2cnc(Nc3ccc(N4CCNCC4)cn3)nc2n1C1CCCC1
+Copanlisib,CHEMBL3218576,Pan-PI3K,FDA,COc1c(OCCCN2CCOCC2)ccc2c1N=C(NC(=O)c1cnc(N)nc1)N1CCN=C21
+Capivasertib,CHEMBL2325741,AKT1/2/3,FDA,NC1(C(=O)N[C@@H](CCO)c2ccc(Cl)cc2)CCN(c2nc[nH]c3nccc2-3)CC1
+Everolimus,CHEMBL1908360,mTOR,FDA,CO[C@H]1C[C@@H]2CC[C@@H](C)[C@@](O)(O2)C(=O)C(=O)N2CCCC[C@H]2C(=O)O[C@H]([C@H](C)C[C@@H]2CC[C@@H](OCCO)[C@H](OC)C2)CC(=O)[C@H](C)/C=C(\C)[C@@H](O)[C@@H](OC)C(=O)[C@H](C)C[C@H](C)/C=C/C=C/C=C/1C
+Gedatolisib,CHEMBL592445,PI3K/mTOR,Trial,CN(C)C1CCN(C(=O)c2ccc(NC(=O)Nc3ccc(-c4nc(N5CCOCC5)nc(N5CCOCC5)n4)cc3)cc2)CC1
+Taselisib,CHEMBL2387080,PI3Ka,Trial,Cc1nc(-c2cn3c(n2)-c2ccc(-c4cnn(C(C)(C)C(N)=O)c4)cc2OCC3)n(C(C)C)n1
+Pictilisib,CHEMBL521851,PI3K,Trial,CS(=O)(=O)N1CCN(Cc2cc3nc(-c4cccc5[nH]ncc45)nc(N4CCOCC4)c3s2)CC1
+Buparlisib,CHEMBL2017974,Pan-PI3K,Trial,Nc1cc(C(F)(F)F)c(-c2cc(N3CCOCC3)nc(N3CCOCC3)n2)cn1

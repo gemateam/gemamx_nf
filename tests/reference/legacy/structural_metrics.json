@@ -1,0 +1,149 @@
+{
+    "ZXDB_R528H": {
+        "wt_plddt": 72.4,
+        "mut_plddt": 71.8,
+        "rmsd_global": 0.45,
+        "rmsd_active": -7.5,
+        "rmsd_regions": [{"region": "Hotspot R528H", "value": 7.5, "color": "#f87171"}],
+        "best_vina_drug": "Pictilisib",
+        "best_vina_score": -7.569,
+        "vina_scores": {"Alpelisib": -7.27, "Abemaciclib": -6.918, "Palbociclib": -5.834, "Ribociclib": -5.712, "Copanlisib": -6.291, "Capivasertib": -6.631, "Everolimus": -5.354, "Gedatolisib": -4.075, "Taselisib": -6.255, "Pictilisib": -7.569, "Buparlisib": -5.25}
+    },
+    "AARS1_S645C": {
+        "wt_plddt": 92.1,
+        "mut_plddt": 91.5,
+        "rmsd_global": 0.84,
+        "rmsd_active": 1.12,
+        "rmsd_regions": [{"region": "Synthetase Domain", "value": 1.12, "color": "#7F77DD"}, {"region": "C-term Domain", "value": 0.54, "color": "#10b981"}],
+        "best_vina_drug": "Pictilisib",
+        "best_vina_score": -8.556,
+        "vina_scores": {"Alpelisib": -6.752, "Abemaciclib": -6.382, "Palbociclib": -7.179, "Ribociclib": -5.205, "Copanlisib": -6.053, "Capivasertib": -6.436, "Everolimus": -5.779, "Gedatolisib": -5.202, "Taselisib": -6.981, "Pictilisib": -8.556, "Buparlisib": -5.995}
+    },
+    "ABCA13_A3414T": {
+        "wt_plddt": 88.5,
+        "mut_plddt": 87.2,
+        "rmsd_global": 1.56,
+        "rmsd_active": 2.15,
+        "rmsd_regions": [{"region": "Transmembrane 1", "value": 2.15, "color": "#f87171"}, {"region": "ABC Domain", "value": 0.98, "color": "#3b82f6"}]
+    },
+    "PIK3CA_H1047R": {
+        "wt_plddt": 87.4,
+        "mut_plddt": 84.1,
+        "rmsd_global": 1.84,
+        "rmsd_active": 3.21,
+        "rmsd_regions": [{"region": "Kinase Domain", "value": 3.21, "color": "#7F77DD"}, {"region": "C2 Domain", "value": 0.92, "color": "#3b82f6"}],
+        "best_vina_drug": "Pictilisib",
+        "best_vina_score": -9.72,
+        "vina_scores": {"Alpelisib": -8.903, "Abemaciclib": -8.339, "Palbociclib": -7.402, "Ribociclib": -7.614, "Copanlisib": -8.649, "Capivasertib": -7.858, "Everolimus": -6.331, "Gedatolisib": -5.278, "Taselisib": -7.976, "Pictilisib": -9.72, "Buparlisib": -6.402}
+    },
+    "PIK3CA_D350N": {
+        "wt_plddt": 87.4,
+        "mut_plddt": 85.8,
+        "rmsd_global": 1.12,
+        "rmsd_active": 1.87,
+        "rmsd_regions": [{"region": "Helical Domain", "value": 1.87, "color": "#f59e0b"}],
+        "best_vina_drug": "Pictilisib",
+        "best_vina_score": -7.122,
+        "vina_scores": {"Alpelisib": -6.925, "Abemaciclib": -6.569, "Palbociclib": -6.643, "Ribociclib": -5.288, "Copanlisib": -6.117, "Capivasertib": -5.395, "Everolimus": -4.886, "Gedatolisib": -4.199, "Taselisib": -6.471, "Pictilisib": -7.122, "Buparlisib": -5.453}
+    },
+    "PIK3CA_R108H": {
+        "wt_plddt": 87.4,
+        "mut_plddt": 86.1,
+        "rmsd_global": 0.78,
+        "rmsd_active": 1.34,
+        "rmsd_regions": [{"region": "RBD Domain", "value": 1.34, "color": "#f59e0b"}],
+        "best_vina_drug": "Pictilisib",
+        "best_vina_score": -5.353,
+        "vina_scores": {"Alpelisib": -5.242, "Abemaciclib": -4.553, "Palbociclib": -4.872, "Ribociclib": -4.249, "Copanlisib": -4.07, "Capivasertib": -4.069, "Everolimus": -3.425, "Gedatolisib": -2.851, "Taselisib": -4.427, "Pictilisib": -5.353, "Buparlisib": -2.7}
+    },
+    "ERBB2_V777L": {
+        "wt_plddt": 88.2,
+        "mut_plddt": 85.7,
+        "rmsd_global": 1.23,
+        "rmsd_active": 2.45,
+        "rmsd_regions": [{"region": "Kinase Domain", "value": 2.45, "color": "#7F77DD"}],
+        "best_vina_drug": "Pictilisib",
+        "best_vina_score": -7.995,
+        "vina_scores": {"Alpelisib": -7.416, "Abemaciclib": -6.605, "Palbociclib": -6.094, "Ribociclib": -5.897, "Copanlisib": -6.322, "Capivasertib": -6.59, "Everolimus": -5.279, "Gedatolisib": -4.39, "Taselisib": -6.171, "Pictilisib": -7.995, "Buparlisib": -4.775}
+    },
+    "TP53_R248Q": {
+        "wt_plddt": 76.1,
+        "mut_plddt": 71.3,
+        "rmsd_global": 2.18,
+        "rmsd_active": 4.92,
+        "rmsd_regions": [{"region": "DNA-binding Domain", "value": 4.92, "color": "#f87171"}, {"region": "Loop L3", "value": 2.31, "color": "#f59e0b"}],
+        "best_vina_drug": "Abemaciclib",
+        "best_vina_score": -7.447,
+        "vina_scores": {"Alpelisib": -6.23, "Abemaciclib": -7.447, "Palbociclib": -6.171, "Ribociclib": -6.156, "Copanlisib": -5.528, "Capivasertib": -5.822, "Everolimus": -4.567, "Gedatolisib": -4.673, "Taselisib": -6.129, "Pictilisib": -6.666, "Buparlisib": -4.436}
+    },
+    "BRCA1_C61G": {
+        "wt_plddt": 65.3,
+        "mut_plddt": 58.9,
+        "rmsd_global": 3.41,
+        "rmsd_active": 5.67,
+        "rmsd_regions": [{"region": "RING Domain", "value": 5.67, "color": "#f87171"}],
+        "best_vina_drug": "Pictilisib",
+        "best_vina_score": -6.471,
+        "vina_scores": {"Alpelisib": -5.958, "Abemaciclib": -5.528, "Palbociclib": -5.95, "Ribociclib": -5.513, "Copanlisib": -5.62, "Capivasertib": -5.242, "Everolimus": -4.531, "Gedatolisib": -3.745, "Taselisib": -5.544, "Pictilisib": -6.471, "Buparlisib": -3.999}
+    },
+    "CBFB_G123C": {
+        "wt_plddt": 89.9,
+        "mut_plddt": 87.3,
+        "rmsd_global": 0.93,
+        "rmsd_active": 1.45,
+        "rmsd_regions": [{"region": "Runt-binding Domain", "value": 1.45, "color": "#7F77DD"}],
+        "best_vina_drug": "Pictilisib",
+        "best_vina_score": -8.795,
+        "vina_scores": {"Alpelisib": -6.964, "Abemaciclib": -7.257, "Palbociclib": -7.306, "Ribociclib": -6.479, "Copanlisib": -6.805, "Capivasertib": -6.652, "Everolimus": -5.839, "Gedatolisib": -6.253, "Taselisib": -7.253, "Pictilisib": -8.795, "Buparlisib": -5.324}
+    },
+    "CBFB_N104S": {
+        "wt_plddt": 89.9,
+        "mut_plddt": 88.1,
+        "rmsd_global": 0.71,
+        "rmsd_active": 1.18,
+        "rmsd_regions": [{"region": "Runt-binding Domain", "value": 1.18, "color": "#3b82f6"}],
+        "best_vina_drug": "Pictilisib",
+        "best_vina_score": -7.415,
+        "vina_scores": {"Alpelisib": -6.462, "Abemaciclib": -5.911, "Palbociclib": -6.633, "Ribociclib": -5.663, "Copanlisib": -6.251, "Capivasertib": -6.119, "Everolimus": -5.055, "Gedatolisib": -4.186, "Taselisib": -6.144, "Pictilisib": -7.415, "Buparlisib": -5.25}
+    },
+    "GATA3_R364S": {
+        "wt_plddt": 37.0,
+        "mut_plddt": 34.2,
+        "rmsd_global": 1.88,
+        "rmsd_active": 2.94,
+        "rmsd_regions": [{"region": "Zinc Finger ZnF2", "value": 2.94, "color": "#f87171"}]
+    },
+    "PTEN_N48I": {
+        "wt_plddt": 85.6,
+        "mut_plddt": 82.1,
+        "rmsd_global": 1.05,
+        "rmsd_active": 1.73,
+        "rmsd_regions": [{"region": "Phosphatase Domain", "value": 1.73, "color": "#f59e0b"}],
+        "best_vina_drug": "Pictilisib",
+        "best_vina_score": -7.194,
+        "vina_scores": {"Alpelisib": -5.951, "Abemaciclib": -5.842, "Palbociclib": -5.743, "Ribociclib": -5.495, "Copanlisib": -5.609, "Capivasertib": -5.653, "Everolimus": -4.784, "Gedatolisib": -3.681, "Taselisib": -5.304, "Pictilisib": -7.194, "Buparlisib": -4.895}
+    },
+    "SF3B1_E802Q": {
+        "wt_plddt": 78.4,
+        "mut_plddt": 75.9,
+        "rmsd_global": 0.88,
+        "rmsd_active": 1.56,
+        "rmsd_regions": [{"region": "HEAT Domain", "value": 1.56, "color": "#7F77DD"}],
+        "best_vina_drug": "Copanlisib",
+        "best_vina_score": -6.8,
+        "vina_scores": {"Alpelisib": -6.175, "Abemaciclib": -6.284, "Palbociclib": -6.064, "Ribociclib": -5.913, "Copanlisib": -6.8, "Capivasertib": -5.606, "Everolimus": -4.712, "Gedatolisib": -3.908, "Taselisib": -5.853, "Pictilisib": -6.457, "Buparlisib": -4.647}
+    },
+    "ARID1A_A855T": {"wt_plddt": "--", "mut_plddt": "--", "rmsd_global": "--", "rmsd_active": "--", "rmsd_regions": []},
+    "ARID1A_M890I": {"wt_plddt": "--", "mut_plddt": "--", "rmsd_global": "--", "rmsd_active": "--", "rmsd_regions": []},
+    "ARID1A_R1127K": {"wt_plddt": "--", "mut_plddt": "--", "rmsd_global": "--", "rmsd_active": "--", "rmsd_regions": []},
+    "BRCA2_D1355Y": {"wt_plddt": "--", "mut_plddt": "--", "rmsd_global": "--", "rmsd_active": "--", "rmsd_regions": []},
+    "KMT2C_E1230K": {"wt_plddt": "--", "mut_plddt": "--", "rmsd_global": "--", "rmsd_active": "--", "rmsd_regions": []},
+    "MAP3K1_A801T": {"wt_plddt": "--", "mut_plddt": "--", "rmsd_global": "--", "rmsd_active": "--", "rmsd_regions": []},
+    "MAP3K1_N325K": {"wt_plddt": "--", "mut_plddt": "--", "rmsd_global": "--", "rmsd_active": "--", "rmsd_regions": []},
+    "MAP3K1_R283T": {"wt_plddt": "--", "mut_plddt": "--", "rmsd_global": "--", "rmsd_active": "--", "rmsd_regions": []},
+    "MAP3K1_R790M": {"wt_plddt": "--", "mut_plddt": "--", "rmsd_global": "--", "rmsd_active": "--", "rmsd_regions": []},
+    "TP53_C145F": {"wt_plddt": "--", "mut_plddt": "--", "rmsd_global": "--", "rmsd_active": "--", "rmsd_regions": []},
+    "TP53_H20Y": {"wt_plddt": "--", "mut_plddt": "--", "rmsd_global": "--", "rmsd_active": "--", "rmsd_regions": []},
+    "TP53_I193S": {"wt_plddt": "--", "mut_plddt": "--", "rmsd_global": "--", "rmsd_active": "--", "rmsd_regions": []},
+    "TP53_P146S": {"wt_plddt": "--", "mut_plddt": "--", "rmsd_global": "--", "rmsd_active": "--", "rmsd_regions": []}
+}

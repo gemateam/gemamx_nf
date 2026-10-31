@@ -1,0 +1,106 @@
+[
+    {
+        "hugo_symbol": "PIK3CA",
+        "variant_classification": "Missense_Mutation",
+        "protein_change": "H1047R",
+        "sample_id": "TCGA-A1-A0SI-01",
+        "chromosome": "3",
+        "start_position": 178952085
+    },
+    {
+        "hugo_symbol": "PIK3CA",
+        "variant_classification": "Missense_Mutation",
+        "protein_change": "H1047R",
+        "sample_id": "TCGA-A2-A1FZ-01",
+        "chromosome": "3",
+        "start_position": 178952085
+    },
+    {
+        "hugo_symbol": "PIK3CA",
+        "variant_classification": "Missense_Mutation",
+        "protein_change": "H1047R",
+        "sample_id": "TCGA-A2-A25C-01",
+        "chromosome": "3",
+        "start_position": 178952085
+    },
+    {
+        "hugo_symbol": "PIK3CA",
+        "variant_classification": "Missense_Mutation",
+        "protein_change": "H1047R",
+        "sample_id": "TCGA-A2-A3KC-01",
+        "chromosome": "3",
+        "start_position": 178952085
+    },
+    {
+        "hugo_symbol": "TP53",
+        "variant_classification": "Missense_Mutation",
+        "protein_change": "R248Q",
+        "sample_id": "TCGA-A1-A0SN-01",
+        "chromosome": "?",
+        "start_position": 0,
+        "source": "fixture"
+    },
+    {
+        "hugo_symbol": "TP53",
+        "variant_classification": "Missense_Mutation",
+        "protein_change": "R248Q",
+        "sample_id": "TCGA-A1-A0SQ-01",
+        "chromosome": "?",
+        "start_position": 0,
+        "source": "fixture"
+    },
+    {
+        "hugo_symbol": "TP53",
+        "variant_classification": "Missense_Mutation",
+        "protein_change": "R248Q",
+        "sample_id": "TCGA-A2-A0CK-01",
+        "chromosome": "?",
+        "start_position": 0,
+        "source": "fixture"
+    },
+    {
+        "hugo_symbol": "TP53",
+        "variant_classification": "Missense_Mutation",
+        "protein_change": "R248Q",
+        "sample_id": "TCGA-A2-A0CO-01",
+        "chromosome": "?",
+        "start_position": 0,
+        "source": "fixture"
+    },
+    {
+        "hugo_symbol": "AKT1",
+        "variant_classification": "Missense_Mutation",
+        "protein_change": "E17K",
+        "sample_id": "TCGA-A2-A0CR-01",
+        "chromosome": "?",
+        "start_position": 0,
+        "source": "fixture"
+    },
+    {
+        "hugo_symbol": "AKT1",
+        "variant_classification": "Missense_Mutation",
+        "protein_change": "E17K",
+        "sample_id": "TCGA-A2-A0EP-01",
+        "chromosome": "?",
+        "start_position": 0,
+        "source": "fixture"
+    },
+    {
+        "hugo_symbol": "AKT1",
+        "variant_classification": "Missense_Mutation",
+        "protein_change": "E17K",
+        "sample_id": "TCGA-A2-A1FV-01",
+        "chromosome": "?",
+        "start_position": 0,
+        "source": "fixture"
+    },
+    {
+        "hugo_symbol": "AKT1",
+        "variant_classification": "Missense_Mutation",
+        "protein_change": "E17K",
+        "sample_id": "TCGA-A2-A1FW-01",
+        "chromosome": "?",
+        "start_position": 0,
+        "source": "fixture"
+    }
+]

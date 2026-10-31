@@ -1,0 +1,31 @@
+# Nextflow / ejecución
+work/
+.nextflow/
+.nextflow.log*
+.nf/
+
+# Resultados publicados (se regeneran con el pipeline)
+results/
+data/
+
+# Entornos locales
+venv/
+.venv/
+*.egg-info/
+__pycache__/
+*.pyc
+
+# Sistema
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Secretos (nunca se versionan)
+.env
+secrets.env
+*.pem
+
+# Artefactos temporales de build
+*.tar
+*.tar.gz
+!tests/reference/**/*.gz

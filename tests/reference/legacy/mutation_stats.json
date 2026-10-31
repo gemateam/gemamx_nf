@@ -1,0 +1,38 @@
+{
+    "gene_distribution": {
+        "PIK3CA": 355,
+        "TP53": 304,
+        "TTN": 261,
+        "CDH1": 114,
+        "MUC16": 105,
+        "GATA3": 101,
+        "MAP3K1": 98,
+        "KMT2C": 83,
+        "MUC12": 80,
+        "MUC4": 62,
+        "SYNE1": 55,
+        "RYR2": 54,
+        "FLG": 51,
+        "DMD": 49,
+        "SYNE2": 49,
+        "HMCN1": 49,
+        "USH2A": 46,
+        "SPEN": 44,
+        "RYR3": 43,
+        "NCOR1": 42
+    },
+    "type_distribution": {
+        "Missense_Mutation": 48904,
+        "Nonsense_Mutation": 4040,
+        "Frame_Shift_Del": 2843,
+        "Frame_Shift_Ins": 2320,
+        "Splice_Site": 1317,
+        "Splice_Region": 593,
+        "In_Frame_Del": 574,
+        "In_Frame_Ins": 143,
+        "Nonstop_Mutation": 66,
+        "Translation_Start_Site": 64
+    },
+    "total_samples": 982,
+    "total_mutations": 60864
+}
