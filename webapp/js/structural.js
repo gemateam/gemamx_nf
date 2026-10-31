@@ -196,6 +196,5 @@ async function loadStructural() {
     sel.dataset.listenerAttached = 'true';
   }
 }
-}
 
 registerLoader('structural', loadStructural);
