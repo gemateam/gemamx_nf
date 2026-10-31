@@ -1,26 +1,50 @@
 # =============================================================================
-# GEMA MX — Stack de plataforma
+# GEMA MX — Stack local del pipeline gemamx_nf
 #
 # Servicios:
-#   mlflow   → servidor de tracking (ya existente en gemacont_default)
 #   webapp   → app web estática servida por Nginx
 #
-# La webapp monta results/data/ del host en modo read-only.
-# Cada corrida del pipeline actualiza results/data/ y la app
-# refleja los nuevos resultados sin reiniciar el contenedor.
+# El servidor MLflow NO se define aquí: se asume que ya corre en la red
+# gemacont_default (gemacont-mlflow-1 / gemamx-mlflow:1.0.0).
+# Si se necesita un MLflow local independiente, usar el perfil "standalone":
+#   docker compose --profile standalone up -d
 #
-# Uso:
-#   docker compose up -d              # arrancar ambos servicios
-#   docker compose up -d webapp       # solo la webapp
+# La webapp monta results/data/ (contrato vigente) y results/runs/
+# (historial de corridas) en modo read-only.
+#
+# Uso habitual:
+#   docker compose up -d webapp       # levantar/recargar solo la webapp
 #   docker compose logs -f webapp     # ver logs
 #   docker compose down               # parar
 # =============================================================================
 
 services:
 
-  # ── MLflow tracking server ─────────────────────────────────────────────
-  # Comentar si ya corre en gemacont_default y se usa --profile platform-net.
+  # ── Web App estática ───────────────────────────────────────────────────
+  webapp:
+    build:
+      context: ./webapp
+      dockerfile: Dockerfile
+    image: gemamx-webapp:1.0.0
+    container_name: gemamx_webapp
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    volumes:
+      # Contrato vigente → accesible como /data/top_variants.json etc.
+      - ./results/data:/usr/share/nginx/html/data:ro
+      # Historial de corridas → ruta separada para evitar conflicto de mounts
+      - ./results/runs:/usr/share/nginx/html/runs:ro
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+  # ── MLflow standalone (opcional, solo si no hay gemacont corriendo) ────
   mlflow:
+    profiles: ["standalone"]
     image: ghcr.io/mlflow/mlflow:v2.19.0
     container_name: gemamx_mlflow
     restart: unless-stopped
@@ -35,45 +59,12 @@ services:
         --backend-store-uri sqlite:////mlflow/mlflow.db
         --artifacts-destination /mlflow/artifacts
         --serve-artifacts
-    networks:
-      - gemamx_net
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:5000/health"]
       interval: 30s
       timeout: 10s
       retries: 3
       start_period: 20s
-
-  # ── Web App estática ───────────────────────────────────────────────────
-  webapp:
-    build:
-      context: ./webapp
-      dockerfile: Dockerfile
-    image: gemamx-webapp:1.0.0
-    container_name: gemamx_webapp
-    restart: unless-stopped
-    ports:
-      - "8080:80"
-    volumes:
-      # Montar todo results/ para acceder al contrato vigente (data/)
-      # y al historial de corridas (runs/) desde la webapp.
-      - ./results:/usr/share/nginx/html/data:ro
-    depends_on:
-      mlflow:
-        condition: service_healthy
-    networks:
-      - gemamx_net
-    healthcheck:
-      test: ["CMD", "wget", "-qO-", "http://localhost/health"]
-      interval: 30s
-      timeout: 5s
-      retries: 3
-      start_period: 10s
-
-networks:
-  gemamx_net:
-    name: gemamx_net
-    driver: bridge
 
 volumes:
   mlflow_data:

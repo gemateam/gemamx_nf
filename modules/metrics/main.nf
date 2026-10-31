@@ -13,14 +13,14 @@ process BUILD_JSONS {
     path complex_files, stageAs: "complex/*"
 
     output:
-    path "stage/data", emit: contract_data
+    // Emitir todos los archivos individuales del árbol data/ para que
+    // PUBLISH los reciba correctamente sin depender del staging de directorios.
+    path "stage/data/**", emit: contract_files
 
     script:
     """
     mkdir -p stage/data
 
-    # Copiar poses PDBQT referenciadas por los resúmenes de Vina al directorio de ejecución
-    # para que build_jsons.py pueda resolverlas junto al summary.json
     find vina -type l -o -type f -name "*_out.pdbqt" -exec cp {} vina/ \\; 2>/dev/null || true
 
     build_jsons.py \\
@@ -37,14 +37,15 @@ process BUILD_JSONS {
 
     stub:
     """
-    mkdir -p stage/data/docking/results stage/data/docking/complex stage/data/structures stage/data/raw_pages
-    echo '[]' > stage/data/top_variants.json
-    echo '[]' > stage/data/raw_mutations.json
-    echo '{}' > stage/data/mutation_stats.json
-    echo '{}' > stage/data/structural_metrics.json
-    echo '{}' > stage/data/manifest_structures.json
-    echo '[]' > stage/data/docking/vina_affinities.json
-    echo '{"pages":[]}' > stage/data/raw_pages/index.json
+    mkdir -p stage/data/docking/results stage/data/docking/complex stage/data/structures
+    echo '[]'  > stage/data/top_variants.json
+    echo '[]'  > stage/data/raw_mutations.json
+    echo '{}'  > stage/data/mutation_stats.json
+    echo '{}'  > stage/data/structural_metrics.json
+    echo '{}'  > stage/data/manifest_structures.json
+    echo '[]'  > stage/data/docking/vina_affinities.json
+    echo 'PDB' > stage/data/structures/PIK3CA_WT.pdb
+    echo 'PDB' > stage/data/structures/PIK3CA_H1047R.pdb
     """
 }
 
@@ -52,27 +53,21 @@ process PUBLISH {
     tag "${run_name}"
     container "${params.image_cpu}"
 
-    // publishDir publica los outputs al host vía el mecanismo nativo de Nextflow.
-    // Los val inputs no están disponibles en publishDir; usamos params.outdir
-    // para la raíz y un saveAs closure para distribuir los archivos.
-    // 1. Contrato vigente → <outdir>/data/
-    publishDir "${params.outdir}", mode: 'copy', overwrite: true, saveAs: { fn ->
-        fn.startsWith("data/") || fn == "data" ? fn : null
-    }
-    // 2. run_manifest.json en la raíz del outdir
-    publishDir "${params.outdir}", mode: 'copy', overwrite: true, saveAs: { fn ->
-        fn == "run_manifest.json" ? fn : null
-    }
+    // publishDir copia data/ y run_manifest.json al outdir del host.
+    // Nextflow maneja el staging y la copia al host de forma nativa.
+    publishDir "${params.outdir}", mode: 'copy', overwrite: true
 
     input:
-    path contract_data
+    // Los archivos del contrato llegan como lista plana; los restageamos
+    // bajo staged/ para poder reconstruir el árbol con las rutas relativas.
+    path contract_files, stageAs: "staged/*"
     val  run_name
     val  commit_hash
 
     output:
-    path "run_manifest.json",   emit: run_manifest
-    path "params.json",         emit: run_params
-    path "data",                emit: data_dir
+    path "run_manifest.json", emit: run_manifest
+    path "params.json",       emit: run_params
+    path "data/**",           emit: data_files
 
     script:
     def params_json = groovy.json.JsonOutput.prettyPrint(
@@ -93,7 +88,7 @@ PARAMS_EOF
 IMAGES_EOF
 
     publish_results.py \\
-        --source "${contract_data}" \\
+        --source staged \\
         --outdir  . \\
         --run-name "${run_name}" \\
         --commit "${commit_hash}" \\
@@ -106,6 +101,6 @@ IMAGES_EOF
     mkdir -p data
     echo '{"run_name":"${run_name}","commit":"${commit_hash}","files":{}}' > run_manifest.json
     echo '{}' > params.json
+    touch data/top_variants.json
     """
 }
-

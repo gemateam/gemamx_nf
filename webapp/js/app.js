@@ -106,7 +106,7 @@ const reloadFlags = {};
 export function registerReloadFlag(view, flagObj) { reloadFlags[view] = flagObj; }
 
 async function loadRunIndex() {
-  const index = await loadJSON('data/runs/index.json');
+  const index = await loadJSON('runs/index.json');
   return Array.isArray(index) ? index : [];
 }
 

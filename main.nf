@@ -155,7 +155,7 @@ workflow {
     // ── PUBLISH ───────────────────────────────────────────────────────────────
     // outdir_path ya no se pasa: publishDir en el módulo usa params.outdir directamente.
     PUBLISH(
-        BUILD_JSONS.out.contract_data,
+        BUILD_JSONS.out.contract_files.collect(),
         workflow.runName,
         commit_hash
     )
@@ -170,6 +170,6 @@ workflow {
         commit_hash,
         PUBLISH.out.run_manifest,
         PUBLISH.out.run_params,
-        PUBLISH.out.data_dir
+        PUBLISH.out.data_files.collect()
     )
 }

@@ -3,13 +3,13 @@ process LOG_MLFLOW {
     container "${params.image_mlflow}"
 
     input:
-    val run_name
-    val tracking_uri
-    val experiment_name
-    val commit_hash
+    val  run_name
+    val  tracking_uri
+    val  experiment_name
+    val  commit_hash
     path run_manifest
     path run_params
-    path contract_data
+    path data_files, stageAs: "data/*"
 
     output:
     path "mlflow_runs.json", emit: mlflow_ids
@@ -22,9 +22,9 @@ process LOG_MLFLOW {
         --run-name "${run_name}" \\
         --params "${run_params}" \\
         --run-manifest "${run_manifest}" \\
-        --data-dir "${contract_data}" \\
-        --structural-metrics "${contract_data}/structural_metrics.json" \\
-        --vina-affinities "${contract_data}/docking/vina_affinities.json" \\
+        --data-dir data \\
+        --structural-metrics data/structural_metrics.json \\
+        --vina-affinities data/docking/vina_affinities.json \\
         --git-commit "${commit_hash}" \\
         --out "mlflow_runs.json"
     """
