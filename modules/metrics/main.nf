@@ -50,12 +50,11 @@ process BUILD_JSONS {
 
 process PUBLISH {
     tag "${run_name}"
-    // Sin contenedor: corre en el host directamente para poder escribir al outdir.
-    // Python3 debe estar disponible en el host; si no, se puede instalar con:
-    //   apt install python3  (Ubuntu/WSL2)
-    container null
+    container "${params.image_cpu}"
 
     // publishDir copia data/ y run_manifest.json al outdir del host.
+    // Nextflow ejecuta el copy desde el orquestador (no desde dentro del contenedor),
+    // por lo que tiene acceso al filesystem del host sin importar el contenedor usado.
     publishDir "${params.outdir}", mode: 'copy', overwrite: true
 
     input:
