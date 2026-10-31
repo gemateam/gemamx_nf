@@ -9,7 +9,7 @@ process LOG_MLFLOW {
     val  commit_hash
     path run_manifest
     path run_params
-    path data_files, stageAs: "data/*"
+    path key_files, stageAs: "contracts/*"
 
     output:
     path "mlflow_runs.json", emit: mlflow_ids
@@ -22,9 +22,9 @@ process LOG_MLFLOW {
         --run-name "${run_name}" \\
         --params "${run_params}" \\
         --run-manifest "${run_manifest}" \\
-        --data-dir data \\
-        --structural-metrics data/structural_metrics.json \\
-        --vina-affinities data/docking/vina_affinities.json \\
+        --data-dir contracts \\
+        --structural-metrics contracts/structural_metrics.json \\
+        --vina-affinities contracts/vina_affinities.json \\
         --git-commit "${commit_hash}" \\
         --out "mlflow_runs.json"
     """

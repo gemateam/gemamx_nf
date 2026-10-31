@@ -153,16 +153,18 @@ workflow {
     )
 
     // ── PUBLISH ───────────────────────────────────────────────────────────────
-    // outdir_path ya no se pasa: publishDir en el módulo usa params.outdir directamente.
     PUBLISH(
-        BUILD_JSONS.out.contract_data,
+        BUILD_JSONS.out.top_variants_out,
+        BUILD_JSONS.out.structural_metrics,
+        BUILD_JSONS.out.manifest_structures,
+        BUILD_JSONS.out.raw_mutations_out,
+        BUILD_JSONS.out.mutation_stats_out,
+        BUILD_JSONS.out.vina_affinities,
         workflow.runName,
         commit_hash
     )
 
     // ── LOG MLFLOW ────────────────────────────────────────────────────────────
-    // Los reportes HTML (report, timeline, dag) los genera Nextflow al terminar;
-    // bin/upload_nf_reports.py los sube vía run_pipeline.sh post-ejecución.
     LOG_MLFLOW(
         workflow.runName,
         params.mlflow_tracking_uri,
@@ -170,6 +172,9 @@ workflow {
         commit_hash,
         PUBLISH.out.run_manifest,
         PUBLISH.out.run_params,
-        PUBLISH.out.data_files.collect()
+        BUILD_JSONS.out.top_variants_out
+            .mix(BUILD_JSONS.out.structural_metrics)
+            .mix(BUILD_JSONS.out.vina_affinities)
+            .collect()
     )
 }
