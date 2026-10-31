@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GEMA MX — Genomic Analysis of Mammary Cancer</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <!-- PDBe Molstar v3.2 -->
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/pdbe-molstar@3.2.0/build/pdbe-molstar.css" />
+  <script src="https://cdn.jsdelivr.net/npm/pdbe-molstar@3.2.0/build/pdbe-molstar-plugin.js"></script>
+  <!-- Plotly.js -->
+  <script src="https://cdn.jsdelivr.net/npm/plotly.js-dist@2.32.0/plotly.min.js"></script>
+</head>
+<body>
+
+<!-- ═══════════════════════════ NAVBAR ═══════════════════════════ -->
+<nav class="navbar">
+  <div class="navbar-brand">
+    <span class="brand-gema">GEMA</span><span class="brand-mx">MX</span>
+    <span class="brand-sub">Genomic Analysis of Mammary Cancer · TCGA-BRCA</span>
+  </div>
+  <ul class="nav-links">
+    <li><a href="#" data-view="dashboard"  class="nav-link active">Dashboard</a></li>
+    <li><a href="#" data-view="analysis"   class="nav-link">Análisis</a></li>
+    <li><a href="#" data-view="structural" class="nav-link">Estructuras 3D</a></li>
+    <li><a href="#" data-view="docking"    class="nav-link">Docking</a></li>
+    <li><a href="#" data-view="report"     class="nav-link">Reporte</a></li>
+  </ul>
+  <div class="run-selector">
+    <label for="sel-run" class="run-selector-label">Corrida</label>
+    <select id="sel-run" title="Seleccionar corrida del pipeline">
+      <option value="data">⬤ Corrida vigente</option>
+    </select>
+  </div>
+</nav>
+
+<!-- ═══════════════════════════ MAIN ═══════════════════════════ -->
+<main id="app">
+
+  <!-- ── DASHBOARD ────────────────────────────────────────────── -->
+  <section id="view-dashboard" class="view active">
+    <div class="section-header">
+      <h1>Dashboard General</h1>
+      <p class="subtitle">Resumen de variantes, estructuras y afinidades de docking — TCGA-BRCA</p>
+    </div>
+
+    <div class="kpi-grid" id="kpi-grid">
+      <div class="kpi-card"><div class="kpi-value" id="kpi-total">—</div><div class="kpi-label">Variantes analizadas</div></div>
+      <div class="kpi-card"><div class="kpi-value" id="kpi-hotspot">—</div><div class="kpi-label">Hotspot #1</div></div>
+      <div class="kpi-card"><div class="kpi-value" id="kpi-structs">—</div><div class="kpi-label">Estructuras 3D</div></div>
+      <div class="kpi-card"><div class="kpi-value" id="kpi-affinity">—</div><div class="kpi-label">Mejor afinidad (kcal/mol)</div></div>
+    </div>
+
+    <div class="card-grid">
+      <div class="card">
+        <h2>Top Variantes por Frecuencia</h2>
+        <div id="chart-top-variants"></div>
+      </div>
+      <div class="card">
+        <h2>Distribución por Clasificación</h2>
+        <div id="chart-classification"></div>
+      </div>
+    </div>
+
+    <div class="card full-width">
+      <h2>Tabla de Variantes Priorizadas</h2>
+      <div class="table-controls">
+        <input type="text" id="filter-variants" placeholder="Filtrar por gen o variante…" />
+      </div>
+      <div class="table-wrapper">
+        <table id="table-variants">
+          <thead>
+            <tr>
+              <th>#</th><th>Gen</th><th>Variante</th><th>Frecuencia</th>
+              <th>Cohorte %</th><th>Cromosoma</th><th>Clasificación</th>
+            </tr>
+          </thead>
+          <tbody id="tbody-variants"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── ANÁLISIS ──────────────────────────────────────────────── -->
+  <section id="view-analysis" class="view">
+    <div class="section-header">
+      <h1>Análisis Mutacional</h1>
+      <p class="subtitle">Distribuciones y estadísticas del cohorte TCGA-BRCA</p>
+    </div>
+    <div class="card-grid">
+      <div class="card">
+        <h2>Frecuencia por Gen (Top 20)</h2>
+        <div id="chart-gene-dist"></div>
+      </div>
+      <div class="card">
+        <h2>Tipos de Mutación</h2>
+        <div id="chart-type-dist"></div>
+      </div>
+    </div>
+    <div class="card full-width">
+      <h2>Estadísticas del Cohorte</h2>
+      <div class="stats-grid" id="stats-cohort"></div>
+    </div>
+  </section>
+
+  <!-- ── ESTRUCTURAS 3D ────────────────────────────────────────── -->
+  <section id="view-structural" class="view">
+    <div class="section-header">
+      <h1>Estructuras Proteicas 3D</h1>
+      <p class="subtitle">Comparación WT vs MUT · pLDDT · RMSD</p>
+    </div>
+
+    <div class="structural-controls card">
+      <label>Variante:
+        <select id="sel-variant"></select>
+      </label>
+      <div class="metrics-inline" id="metrics-inline"></div>
+    </div>
+
+    <div class="card-grid">
+      <div class="card viewer-card">
+        <h2>Wild-Type (WT)</h2>
+        <div id="viewer-wt" class="molstar-viewer"></div>
+      </div>
+      <div class="card viewer-card">
+        <h2>Mutado (MUT)</h2>
+        <div id="viewer-mut" class="molstar-viewer"></div>
+      </div>
+    </div>
+
+    <div class="card full-width">
+      <h2>RMSD por Región</h2>
+      <div id="rmsd-regions"></div>
+    </div>
+  </section>
+
+  <!-- ── DOCKING ───────────────────────────────────────────────── -->
+  <section id="view-docking" class="view">
+    <div class="section-header">
+      <h1>Docking Molecular — AutoDock Vina</h1>
+      <p class="subtitle">Afinidades de unión WT vs MUT (kcal/mol · más negativo = mayor afinidad)</p>
+    </div>
+
+    <div class="docking-controls card">
+      <label>Variante:
+        <select id="sel-docking-variant"></select>
+      </label>
+    </div>
+
+    <div class="card full-width">
+      <h2>Ranking de Fármacos</h2>
+      <div id="chart-docking-ranking"></div>
+    </div>
+
+    <div class="card full-width">
+      <h2>Tabla de Afinidades</h2>
+      <div class="table-wrapper">
+        <table id="table-docking">
+          <thead>
+            <tr><th>Fármaco</th><th>Target</th><th>Estado</th><th>Afinidad WT (kcal/mol)</th><th>Afinidad MUT (kcal/mol)</th><th>Δ (MUT - WT)</th></tr>
+          </thead>
+          <tbody id="tbody-docking"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── REPORTE ───────────────────────────────────────────────── -->
+  <section id="view-report" class="view">
+    <div class="section-header">
+      <h1>Reporte por Variante</h1>
+      <p class="subtitle">Perfil genómico · métricas estructurales · candidatos farmacológicos</p>
+    </div>
+
+    <div class="report-controls card">
+      <label>Variante:
+        <select id="sel-report-variant"></select>
+      </label>
+    </div>
+
+    <div id="report-content"></div>
+  </section>
+
+</main>
+
+<!-- ═════════════════════════ FOOTER ═════════════════════════ -->
+<footer class="footer">
+  <span>GEMA MX · Pipeline V1 · TCGA-BRCA · Universidad de Sonora</span>
+  <span id="footer-run"></span>
+</footer>
+
+<script src="js/app.js"    type="module"></script>
+<script src="js/dashboard.js" type="module"></script>
+<script src="js/analysis.js"  type="module"></script>
+<script src="js/structural.js" type="module"></script>
+<script src="js/docking.js"   type="module"></script>
+<script src="js/report.js"    type="module"></script>
+</body>
+</html>

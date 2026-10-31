@@ -3,6 +3,14 @@
         "hugo_symbol": "PIK3CA",
         "variant_classification": "Missense_Mutation",
         "protein_change": "H1047R",
+        "sample_id": "TCGA-EXTRA-01",
+        "chromosome": "3",
+        "start_position": 178952085
+    },
+    {
+        "hugo_symbol": "PIK3CA",
+        "variant_classification": "Missense_Mutation",
+        "protein_change": "H1047R",
         "sample_id": "TCGA-A1-A0SI-01",
         "chromosome": "3",
         "start_position": 178952085

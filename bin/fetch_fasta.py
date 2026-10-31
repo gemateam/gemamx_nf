@@ -5,9 +5,18 @@ Una invocación = una variante (o el WT de un gen). La mutación se valida:
 si el residuo en la posición indicada no coincide con el aminoácido WT
 declarado, el proceso falla (el legado solo avisaba y continuaba).
 
-Salidas (en --outdir):
+`--role` separa las dos mitades del trabajo:
+
+  both  escribe WT y mutante (comportamiento histórico).
+  wt    escribe solo <GEN>_WT.*; se ejecuta una vez por gen.
+  mut   escribe solo <GEN>_<CAMBIO>.*; con `--wt-fasta` no consulta la red.
+
+El WT se descarga una sola vez por gen: FETCH_FASTA MUT recibe el FASTA WT ya
+obtenido (`--wt-fasta`) y aplica la mutación sin volver a UniProt.
+
+Salidas (en --outdir, según --role):
   <GEN>_WT.fasta      + <GEN>_WT.json
-  <GEN>_<CAMBIO>.fasta + <GEN>_<CAMBIO>.json   (si --protein-change != WT)
+  <GEN>_<CAMBIO>.fasta + <GEN>_<CAMBIO>.json
 """
 
 from __future__ import annotations
@@ -70,6 +79,8 @@ def main() -> int:
     parser.add_argument("--gene", required=True)
     parser.add_argument("--protein-change", default="WT",
                         help="WT o cambio tipo H1047R")
+    parser.add_argument("--role", choices=("both", "wt", "mut"), default="both",
+                        help="qué secuencias escribir (WT una vez por gen, mutante sin red)")
     parser.add_argument("--outdir", required=True)
     parser.add_argument("--uniprot", help="accesión UniProt (si se conoce)")
     parser.add_argument("--wt-fasta", help="FASTA WT ya descargado (evita la red)")
@@ -78,6 +89,10 @@ def main() -> int:
     gene = args.gene.strip().upper()
     if not gene:
         die("--gene vacío")
+
+    change = args.protein_change.strip().upper()
+    if args.role == "mut" and change == "WT":
+        die("--role mut requiere --protein-change distinto de WT")
 
     if args.wt_fasta:
         _, sequence = read_fasta(args.wt_fasta)
@@ -89,12 +104,11 @@ def main() -> int:
         source = f"UniProt:{accession}"
 
     outdir = Path(args.outdir)
-    specs = [
-        ("WT", sequence, None),
-    ]
+    specs = []
+    if args.role in ("both", "wt"):
+        specs.append(("WT", sequence, None))
 
-    change = args.protein_change.strip().upper()
-    if change != "WT":
+    if args.role in ("both", "mut") and change != "WT":
         wt_aa, position, mut_aa = parse_mutation(change)
         if position > len(sequence):
             die(f"{gene} {change}: posición {position} fuera de la secuencia ({len(sequence)} aa)")
@@ -108,6 +122,9 @@ def main() -> int:
         if mutant == sequence:
             die(f"{gene} {change}: la mutación no cambia la secuencia")
         specs.append((change, mutant, (wt_aa, position, mut_aa)))
+
+    if not specs:
+        die(f"--role {args.role} no produce ninguna secuencia para {gene} {change}")
 
     for label, seq, mutation in specs:
         base = f"{gene}_{label}"

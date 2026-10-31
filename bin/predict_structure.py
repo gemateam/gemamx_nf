@@ -5,21 +5,28 @@ Backends:
   - esmfold     : API pública de ESMFold (sin GPU). Secuencias > 390 aa se
                   recortan a una ventana alrededor de la mutación y el sidecar
                   registra start/end para aplicar el offset aguas abajo.
-  - precomputed : copia una estructura existente y calcula su pLDDT.
+  - precomputed : copia una estructura existente y calcula su pLDDT. Si la
+                  entrada es CIF/mmCIF se convierte a PDB: la salida de este
+                  proceso es siempre un `.pdb`.
 
 El sidecar JSON es obligatorio: sin `model_start` no se puede traducir la
-posición proteica al resSeq del modelo.
+posición proteica al resSeq del modelo. En `precomputed`, si no se pasa
+`--model-start`, se lee del sidecar hermano (`<estructura>.json`) y, si no
+existe, se asume que la estructura conserva la numeración de la proteína
+(`model_start = primer resSeq observado`).
 """
 
 from __future__ import annotations
 
 import argparse
+import json
+import shutil
 import sys
 import time
 from pathlib import Path
 
 import requests
-from Bio.PDB import MMCIFParser, PDBParser
+from Bio.PDB import MMCIFParser, PDBIO, PDBParser
 from Bio.PDB.Polypeptide import protein_letters_3to1
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
@@ -29,8 +36,38 @@ from gemamx_common import (  # noqa: E402
 
 ESMFOLD_URL = "https://api.esmatlas.com/foldSequence/v1/pdb/"
 ESMFOLD_LIMIT = 390
+CIF_SUFFIXES = {".cif", ".mmcif"}
 
 PARSERS = {".pdb": PDBParser, ".ent": PDBParser, ".cif": MMCIFParser, ".mmcif": MMCIFParser}
+
+
+def convert_to_pdb(source: Path, target: Path) -> None:
+    """Escribe `target` como PDB. Sólo convierte si la entrada es CIF/mmCIF."""
+    if source.suffix.lower() not in CIF_SUFFIXES:
+        if source.resolve() != target.resolve():
+            shutil.copyfile(source, target)
+        return
+    parser = MMCIFParser(QUIET=True)
+    structure = parser.get_structure("model", str(source))
+    writer = PDBIO()
+    writer.set_structure(structure)
+    writer.save(str(target))
+    if not target.is_file() or target.stat().st_size == 0:
+        die(f"la conversión CIF->PDB de {source.name} no produjo salida")
+
+
+def sidecar_model_start(source: Path) -> int | None:
+    """Lee `model_start` del sidecar hermano `<estructura>.json`, si existe."""
+    candidate = source.with_suffix(".json")
+    if not candidate.is_file():
+        return None
+    try:
+        data = json.loads(candidate.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return None
+    if isinstance(data, dict) and data.get("model_start") is not None:
+        return int(data["model_start"])
+    return None
 
 
 def load_ca(path: Path) -> list[dict]:
@@ -87,8 +124,9 @@ def main() -> int:
     parser.add_argument("--meta", required=True)
     parser.add_argument("--backend", choices=("esmfold", "precomputed"), default="esmfold")
     parser.add_argument("--structure", help="estructura de entrada (precomputed)")
-    parser.add_argument("--model-start", type=int, default=1,
-                        help="primer residuo proteico del modelo (precomputed)")
+    parser.add_argument("--model-start", type=int,
+                        help="primer residuo proteico del modelo (precomputed; "
+                             "por defecto, sidecar hermano o primer resSeq)")
     parser.add_argument("--window", type=int, default=180)
     parser.add_argument("--timeout", type=int, default=300)
     parser.add_argument("--retries", type=int, default=3)
@@ -101,6 +139,8 @@ def main() -> int:
 
     _, sequence = read_fasta(args.fasta)
     out = Path(args.out)
+    if out.suffix.lower() != ".pdb":
+        die(f"--out debe terminar en .pdb (estructura normalizada): {out}")
     out.parent.mkdir(parents=True, exist_ok=True)
 
     meta: dict = {
@@ -111,6 +151,7 @@ def main() -> int:
         "fasta_length": len(sequence),
         "fasta_sha256": sha256_text(sequence),
     }
+    model_start: int | None = None
 
     if args.backend == "esmfold":
         if len(sequence) <= ESMFOLD_LIMIT:
@@ -137,19 +178,25 @@ def main() -> int:
         source_path = Path(args.structure)
         if not source_path.exists():
             die(f"no existe la estructura: {source_path}")
-        out.write_bytes(source_path.read_bytes())
+        convert_to_pdb(source_path, out)
         model_start = args.model_start
         meta.update(
-            model_start=model_start,
-            model_end=None,
-            model_length=None,
             source=source_path.name,
+            source_format=source_path.suffix.lower().lstrip("."),
             source_sha256=sha256_file(source_path),
         )
 
     residues = load_ca(out)
     positions = [r["resseq"] for r in residues]
     observed_start, observed_end = min(positions), max(positions)
+
+    if model_start is None:
+        if args.backend == "precomputed":
+            model_start = sidecar_model_start(Path(args.structure)) or observed_start
+        else:
+            model_start = observed_start
+    if model_start < 1:
+        die(f"model_start inválido: {model_start}")
 
     raw_bfactors = [r["bfactor"] for r in residues]
     # ESMFold (API) escribe pLDDT en 0..1; AlphaFold/Boltz en 0..100.

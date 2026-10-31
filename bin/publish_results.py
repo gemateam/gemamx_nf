@@ -73,7 +73,39 @@ def main() -> int:
         "contracts": list(CONTRACTS),
     }
 
-    # Reemplazo atómico dentro del mismo filesystem
+    # ── 1. Archivar corrida en runs/<runName>/data/ (copia inmutable) ──────
+    run_archive = target.parent / "runs" / args.run_name / "data"
+    run_archive.parent.mkdir(parents=True, exist_ok=True)
+    if not run_archive.exists():
+        shutil.copytree(source, run_archive)
+        print(f"Archivado {args.run_name} en {run_archive}")
+
+    # Copiar el manifest al directorio del run para que sea autodescriptivo
+    manifest_in_run = run_archive.parent / "run_manifest.json"
+    write_json(str(manifest_in_run), manifest, sort_keys=True)
+
+    # ── 2. Actualizar índice de corridas (runs/index.json) ───────────────
+    index_path = target.parent / "runs" / "index.json"
+    index: list[dict] = []
+    if index_path.is_file():
+        try:
+            import json as _json
+            index = _json.loads(index_path.read_text()) or []
+        except Exception:
+            index = []
+
+    # Reemplazar entrada si el run ya existe, sino agregar al inicio
+    entry = {
+        "run_name":    args.run_name,
+        "published_at": manifest["published_at"],
+        "git_commit":   args.commit,
+        "path":         f"runs/{args.run_name}/data",
+    }
+    index = [e for e in index if e.get("run_name") != args.run_name]
+    index.insert(0, entry)
+    write_json(str(index_path), index, sort_keys=False)
+
+    # ── 3. Reemplazo atómico del contrato vigente en data/ ───────────────
     target.parent.mkdir(parents=True, exist_ok=True)
     tmp = target.parent / f".{target.name}.tmp-{os.getpid()}"
     backup = target.parent / f".{target.name}.old-{os.getpid()}"

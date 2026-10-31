@@ -77,7 +77,14 @@ def main() -> int:
     mut_aligned = (mut_coords @ rotation) + translation
 
     mut_resseq = int(mut_meta["mutation_resseq_model"])
-    wt_resseq = int(wt_meta["mutation_resseq_model"])
+    # Para WT, resseq_inicial + (pos - model_start)
+    wt_model_start = int(wt_meta.get("model_start", wt_meta.get("model_resseq_start", 1)))
+    wt_resseq_start = int(wt_meta.get("model_resseq_start", 1))
+    wt_resseq = wt_meta.get("mutation_resseq_model")
+    if wt_resseq is not None:
+        wt_resseq = int(wt_resseq)
+    else:
+        wt_resseq = wt_resseq_start + (mutation_pos - wt_model_start)
 
     for label, indexed, resseq, expected in (
         ("WT", wt_res, wt_resseq, wt_aa),

@@ -122,15 +122,20 @@ def main() -> int:
 
     # --- contratos ---------------------------------------------------------
     metrics: dict[str, dict] = {}
-    affinities: dict[str, dict[str, float]] = {}
 
-    for variant, rmsd in sorted(rmsd_by_variant.items()):
-        gene = rmsd["gene"]
-        scores = vina_by_variant.get(variant, {})
-        scores = dict(sorted(
+    # Afinidades de todas las corridas de Vina, incluidas las del WT (que se
+    # dockea una vez por gen para comparar). El WT no genera entrada en
+    # structural_metrics.json: sólo las variantes con RMSD lo hacen.
+    affinities: dict[str, dict[str, float]] = {}
+    for variant, scores in sorted(vina_by_variant.items()):
+        affinities[variant] = dict(sorted(
             scores.items(),
             key=lambda kv: (order_index.get(kv[0], len(order_index)), kv[0]),
         ))
+
+    for variant, rmsd in sorted(rmsd_by_variant.items()):
+        gene = rmsd["gene"]
+        scores = affinities.get(variant, {})
         entry = {
             "wt_plddt": plddt.get(f"{gene}_WT"),
             "mut_plddt": plddt.get(variant),
@@ -143,7 +148,6 @@ def main() -> int:
             entry["best_vina_drug"] = best_drug
             entry["best_vina_score"] = scores[best_drug]
             entry["vina_scores"] = scores
-            affinities[variant] = scores
         metrics[variant] = entry
 
     # Variantes priorizadas sin estructura -> null explícito en el manifest

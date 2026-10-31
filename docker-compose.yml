@@ -1,0 +1,80 @@
+# =============================================================================
+# GEMA MX — Stack de plataforma
+#
+# Servicios:
+#   mlflow   → servidor de tracking (ya existente en gemacont_default)
+#   webapp   → app web estática servida por Nginx
+#
+# La webapp monta results/data/ del host en modo read-only.
+# Cada corrida del pipeline actualiza results/data/ y la app
+# refleja los nuevos resultados sin reiniciar el contenedor.
+#
+# Uso:
+#   docker compose up -d              # arrancar ambos servicios
+#   docker compose up -d webapp       # solo la webapp
+#   docker compose logs -f webapp     # ver logs
+#   docker compose down               # parar
+# =============================================================================
+
+services:
+
+  # ── MLflow tracking server ─────────────────────────────────────────────
+  # Comentar si ya corre en gemacont_default y se usa --profile platform-net.
+  mlflow:
+    image: ghcr.io/mlflow/mlflow:v2.19.0
+    container_name: gemamx_mlflow
+    restart: unless-stopped
+    ports:
+      - "5000:5000"
+    volumes:
+      - mlflow_data:/mlflow
+    command: >
+      mlflow server
+        --host 0.0.0.0
+        --port 5000
+        --backend-store-uri sqlite:////mlflow/mlflow.db
+        --artifacts-destination /mlflow/artifacts
+        --serve-artifacts
+    networks:
+      - gemamx_net
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+
+  # ── Web App estática ───────────────────────────────────────────────────
+  webapp:
+    build:
+      context: ./webapp
+      dockerfile: Dockerfile
+    image: gemamx-webapp:1.0.0
+    container_name: gemamx_webapp
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    volumes:
+      # Montar todo results/ para acceder al contrato vigente (data/)
+      # y al historial de corridas (runs/) desde la webapp.
+      - ./results:/usr/share/nginx/html/data:ro
+    depends_on:
+      mlflow:
+        condition: service_healthy
+    networks:
+      - gemamx_net
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+networks:
+  gemamx_net:
+    name: gemamx_net
+    driver: bridge
+
+volumes:
+  mlflow_data:
+    name: gemamx_mlflow_data

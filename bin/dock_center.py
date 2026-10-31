@@ -5,11 +5,15 @@ Corrige el defecto del legado: el modelo puede estar renumerado desde 1
 (fragmento de ESMFold), así que la posición proteica se traduce al resSeq del
 modelo con
 
-    pos_modelo = pos_proteína - (start - 1)
+    pos_modelo = resseq_inicial + (pos_proteína - model_start)
 
 y el residuo se verifica (existe y, si se indica, coincide con el aminoácido
 esperado). Si no se puede verificar, el proceso falla: no hay fallback
 silencioso al centro de masa.
+
+`--meta` permite leer `mutation_pos`, `model_start` y `expected_aa` del sidecar
+de PREDICT_STRUCTURE, de modo que Nextflow no tenga que repetir esos valores y
+no puedan desincronizarse. Los argumentos explícitos tienen prioridad.
 """
 
 from __future__ import annotations
@@ -19,7 +23,9 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from gemamx_common import AA3, AA3_TO_1, die, residue_range, write_json  # noqa: E402
+from gemamx_common import (  # noqa: E402
+    AA3, AA3_TO_1, die, read_json, residue_range, write_json,
+)
 
 
 def read_residue_atoms(pdbqt_path: Path, resseq: int) -> list[tuple[float, float, float, str, str]]:
@@ -70,9 +76,11 @@ def main() -> int:
     parser.add_argument("--out", required=True, help="box.json de salida")
     parser.add_argument("--mode", choices=("mutation", "centroid", "binding-site"),
                         default="mutation")
+    parser.add_argument("--meta", help="sidecar de PREDICT_STRUCTURE "
+                                       "(mutation_pos, model_start, expected_aa)")
     parser.add_argument("--mutation-pos", type=int, help="posición 1-based en la proteína")
-    parser.add_argument("--model-start", type=int, default=1,
-                        help="primer residuo proteico presente en el modelo")
+    parser.add_argument("--model-start", type=int,
+                        help="primer residuo proteico del modelo (por defecto, el del --meta o 1)")
     parser.add_argument("--expected-aa", help="aminoácido esperado en esa posición (1 letra)")
     parser.add_argument("--center", nargs=3, type=float, metavar=("X", "Y", "Z"),
                         help="centro explícito (mode=binding-site)")
@@ -83,11 +91,29 @@ def main() -> int:
     if not receptor.exists():
         die(f"no existe el receptor: {receptor}")
 
+    meta: dict = {}
+    if args.meta:
+        meta_path = Path(args.meta)
+        if not meta_path.exists():
+            die(f"no existe el sidecar: {meta_path}")
+        meta = read_json(meta_path)
+        if not isinstance(meta, dict):
+            die(f"sidecar inválido: {meta_path}")
+
+    if args.model_start is None:
+        args.model_start = meta.get("model_start", 1)
+    if args.mutation_pos is None and meta.get("mutation_pos") is not None:
+        args.mutation_pos = int(meta["mutation_pos"])
+    if not args.expected_aa and meta.get("expected_aa"):
+        args.expected_aa = str(meta["expected_aa"])
+
     result = {
         "box_size": args.box_size,
         "mode": args.mode,
         "receptor": receptor.name,
     }
+    if args.meta:
+        result["meta"] = Path(args.meta).name
 
     if args.mode == "binding-site":
         if not args.center:
@@ -108,6 +134,14 @@ def main() -> int:
             die(f"el receptor no tiene residuos: {receptor.name}")
         model_resseq_start = rng[0]
         model_resseq = model_resseq_start + (args.mutation_pos - args.model_start)
+        if meta.get("mutation_resseq_model") is not None:
+            if int(meta["mutation_resseq_model"]) != model_resseq:
+                die(
+                    f"el sidecar indica mutation_resseq_model={meta['mutation_resseq_model']} "
+                    f"pero con model_start={args.model_start} y el receptor actual "
+                    f"(resseq inicial {model_resseq_start}) se obtiene {model_resseq}. "
+                    "Sidecar y estructura no corresponden."
+                )
         atoms = read_residue_atoms(receptor, model_resseq)
         if not atoms:
             rango = f"{rng[0]}..{rng[1]}"
