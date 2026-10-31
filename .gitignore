@@ -29,3 +29,6 @@ secrets.env
 *.tar
 *.tar.gz
 !tests/reference/**/*.gz
+
+# Graphify — grafo de conocimiento (se regenera con: graphify update .)
+graphify-out/
