@@ -31,8 +31,9 @@ Incluye una **WebApp interactiva SPA (6 vistas dinámicas e integradas)** con se
    - [Pipeline V2 (Romero-Córdoba 2021 HM)](#pipeline-v2-romero-córdoba-2021-hm)
 7. [Servicios Docker y MLflow](#7-servicios-docker-y-mlflow)
 8. [WebApp Interactiva (6 Vistas Integradas)](#8-webapp-interactiva-6-vistas-integradas)
-9. [Referencias y Tecnologías](#9-referencias-y-tecnologías)
-10. [Licencia y Créditos](#10-licencia-y-créditos)
+9. [Pipelines Nextflow y Herramientas Relacionadas](#9-pipelines-nextflow-y-herramientas-relacionadas)
+10. [Referencias y Tecnologías](#10-referencias-y-tecnologías)
+11. [Licencia y Créditos](#11-licencia-y-créditos)
 
 ---
 
@@ -132,7 +133,8 @@ gemamx_nf/
 │   └── docking/                # gemamx-nf-docking:1.0.0
 ├── docs/                       # Documentación y diagramas
 │   ├── index.html              # Portal de documentación en GitHub Pages
-│   └── architecture.html       # Diagrama de arquitectura interactivo (Archify)
+│   ├── architecture.html       # Diagrama de arquitectura interactivo (Archify)
+│   └── PIPELINES_RELACIONADOS.md # Pipelines Nextflow y herramientas relacionadas
 ├── infra/                      # Almacén de infraestructura autónoma
 │   ├── mlflow/                 # Artefactos y volúmenes de MLflow
 │   └── postgres-init/          # Scripts de inicialización SQL
@@ -240,7 +242,21 @@ La WebApp está disponible en **`http://localhost:8080`**. Al cambiar de corrida
 
 ---
 
-## 9. Referencias y Tecnologías
+## 9. Pipelines Nextflow y Herramientas Relacionadas
+
+Proyectos de la comunidad Nextflow y de oncología genómica que complementan a GEMA MX y pueden inspirar futuras extensiones (tipificación HLA, neoantígenos, anotación clínica de variantes). Ninguno forma parte del pipeline actual.
+
+| Proyecto | Qué hace | Relación con GEMA MX |
+|---|---|---|
+| [**NeoFlow**](https://github.com/bzhanglab/neoflow) ([Wen et al., *Nat Commun* 2020](https://doi.org/10.1038/s41467-020-15456-w)) | Pipeline Nextflow de proteogenómica para el descubrimiento de neoantígenos: anotación de variantes, identificación de péptidos variantes por MS/MS, tipificación HLA y predicción de neoantígenos | Convertir las variantes somáticas priorizadas en neoepítopos |
+| [**nf-core/hlatyping**](https://nf-co.re/hlatyping/2.2.0/) | Tipificación HLA a partir de datos NGS con [OptiType](https://github.com/FRED-2/OptiType) (DNA/RNA, DSL2) | Genotipo HLA de las pacientes; los alelos HLA varían entre poblaciones |
+| [**WiGiTS (hmftools)**](https://github.com/hartwigmedical/hmftools) | Suite abierta de análisis de genoma y transcriptoma para cáncer (Sage, Pave, Purple, Lilac, Neo, Linx, Protect, entre otras), ejecutable con [Oncoanalyser](https://nf-co.re/oncoanalyser) | Llamado, anotación y accionabilidad clínica de variantes (licencia GPL-3.0) |
+
+Descripción detallada, entradas requeridas, consideraciones de compatibilidad y posibles líneas de integración en **[`docs/PIPELINES_RELACIONADOS.md`](docs/PIPELINES_RELACIONADOS.md)**.
+
+---
+
+## 10. Referencias y Tecnologías
 
 - **[Nextflow](https://www.nextflow.io/)**: Di Tommaso, P., et al. (2017). *Nextflow enables reproducible computational workflows*. Nature Biotechnology, 35(4), 316-319.
 - **[MLflow](https://mlflow.org/)**: Zaharia, M., et al. (2018). *Accelerating the Machine Learning Lifecycle with MLflow*. IEEE Micro.
@@ -248,9 +264,11 @@ La WebApp está disponible en **`http://localhost:8080`**. Al cambiar de corrida
 - **AutoDock Vina**: Trott, O., & Olson, A. J. (2010). *AutoDock Vina: improving the speed and accuracy of docking with a new scoring function, efficient optimization, and multithreading*. Journal of computational chemistry, 31(2), 455-461.
 - **ChEMBL**: Gaulton, A., et al. (2012). *ChEMBL: a large-scale bioactivity database for drug discovery*. Nucleic Acids Research, 40(D1), D1100-D1107.
 - **CiViC**: Griffith, M., et al. (2017). *CIViC is a community knowledgebase for expert crowdsourcing the clinical interpretation of variants in cancer*. Nature Genetics, 49(2), 170-174.
+- **NeoFlow**: Wen, B., et al. (2020). *Cancer neoantigen prioritization through sensitive and reliable proteogenomics analysis*. Nature Communications, 11, 1759. [DOI: 10.1038/s41467-020-15456-w](https://doi.org/10.1038/s41467-020-15456-w).
+- **nf-core**: Ewels, P. A., et al. (2020). *The nf-core framework for community-curated bioinformatics pipelines*. Nature Biotechnology. [DOI: 10.1038/s41587-020-0439-x](https://doi.org/10.1038/s41587-020-0439-x).
 
 ---
 
-## 10. Licencia y Créditos
+## 11. Licencia y Créditos
 
 Proyecto desarrollado por el equipo de investigación **GEMA MX** en la **Universidad de Sonora (UNISON)**. Distribuido bajo la licencia [MIT](LICENSE).
