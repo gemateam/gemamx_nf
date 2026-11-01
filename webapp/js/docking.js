@@ -11,6 +11,7 @@ import {
   DATA, loadJSON, PLOTLY_LAYOUT, DRUG_META, BASE_PATH, contractUrl,
   registerLoader, registerReloadFlag,
 } from './app.js';
+import { renderDrugSources, parseDrugCatalogCSV, enrichWithChEMBL } from './drug-sources.js';
 
 const state = {
   loaded: false,
@@ -18,7 +19,7 @@ const state = {
   affinities: null,
   variantId: null,
   poseCache: new Map(),   // url -> bool (HEAD del complejo)
-  viewerUrl: null,        // estructura cargada actualmente en el visor
+  drugCatalog: [],        // catálogo local parseado + enriquecido con ChEMBL
 };
 
 registerReloadFlag('docking', state);
@@ -26,8 +27,12 @@ registerReloadFlag('docking', state);
 const POSE_DEFAULT_LABEL =
   'Pulsa «Ver pose» en el ranking o en la tabla para cargar el complejo de AutoDock Vina.';
 
-// ── Visor 3D ───────────────────────────────────────────────────────────────
-function viewerContainer() {
+// ── Visor 3D (PDBeMolstarPlugin en div) ───────────────────────────────────
+let dockingViewer = null;
+let dockingViewerReady = false;
+let dockingCurrentUrl = null;
+
+function viewerEl() {
   return document.getElementById('viewer-docking');
 }
 
@@ -36,54 +41,64 @@ function setPoseLabel(text) {
   if (el) el.textContent = text;
 }
 
-/** Crea el plugin en la primera pose y reutiliza el visor en las siguientes. */
-let viewerPromise = null;
+const waitForDockingCanvas = (timeout = 10000) => new Promise(resolve => {
+  if (dockingViewer?.plugin?.canvas3d) { resolve(true); return; }
+  const t0 = Date.now();
+  const id = setInterval(() => {
+    if (dockingViewer?.plugin?.canvas3d)  { clearInterval(id); resolve(true); }
+    else if (Date.now() - t0 > timeout)   { clearInterval(id); resolve(false); }
+  }, 150);
+});
 
-function renderOptions(url, format) {
-  return {
-    customData:    { url, format, binary: false },
-    bgColor:       { r: 10, g: 10, b: 20 },
-    hideControls:  true,
-    selectInteraction: false,
-    landscape:     false,
-    pdbeLink:      false,
-    sequencePanel: false,
-  };
+async function ensureDockingViewer(firstUrl, firstFormat) {
+  if (dockingViewerReady) return dockingViewer;
+  if (typeof PDBeMolstarPlugin === 'undefined') return null;
+
+  const el = viewerEl();
+  if (!el) return null;
+
+  try {
+    dockingViewer = new PDBeMolstarPlugin();
+    await dockingViewer.render(el, {
+      customData:    { url: firstUrl, format: firstFormat },
+      bgColor:       { r: 10, g: 10, b: 20 },
+      hideControls:  true,
+      pdbeLink:      false,
+      sequencePanel: false,
+    });
+    dockingViewerReady = true;
+    dockingCurrentUrl  = firstUrl;
+    return dockingViewer;
+  } catch (e) {
+    console.warn('[Docking] Error iniciando viewer:', e);
+    dockingViewer = null;
+    return null;
+  }
 }
 
-async function ensureViewer(url, format) {
-  const el = viewerContainer();
-  if (!el || typeof PDBeMolstarPlugin === 'undefined') return null;
+async function loadInViewer(url, format, selection) {
+  const plugin = await ensureDockingViewer(url, format);
+  if (!plugin) return false;
 
-  if (!viewerPromise) {
-    viewerPromise = (async () => {
-      const plugin = new PDBeMolstarPlugin();
-      const loaded = new Promise((resolve) => {
-        let settled = false;
-        const done = () => { if (!settled) { settled = true; resolve(); } };
-        try { plugin.events.loadComplete.subscribe(done); } catch { /* v3 opcional */ }
-        setTimeout(done, 15000);   // red lenta o evento no emitido
-      });
-      plugin.render(el, renderOptions(url, format));
-      await loaded;
-      return plugin;
-    })().catch((e) => {
-      console.warn('Molstar no pudo inicializarse:', e);
-      viewerPromise = null;
-      return null;
-    });
+  await waitForDockingCanvas();
+
+  if (dockingCurrentUrl !== url) {
+    try {
+      await plugin.visual.update({ customData: { url, format } });
+      dockingCurrentUrl = url;
+    } catch (e) {
+      console.warn('[Docking] Error actualizando viewer:', e);
+      return false;
+    }
   }
 
-  const plugin = await viewerPromise;
-  if (!plugin) return null;
-  if (state.viewerUrl !== url) {
-    await plugin.visual.update({
-      customData: { url, format, binary: false },
-      bgColor:    { r: 10, g: 10, b: 20 },
-    });
+  if (selection?.length) {
+    setTimeout(async () => {
+      try { await plugin.visual.select({ data: selection, nonSelectedColor: null }); }
+      catch (_) {}
+    }, 600);
   }
-  state.viewerUrl = url;
-  return plugin;
+  return true;
 }
 
 function complexUrl(variantId, drug) {
@@ -137,22 +152,7 @@ async function showPose(variantId, drug) {
     : `🧬 Estructura proteica (sin ligando) · ${drug} → ${variantLabel}`);
 
   const format = target.endsWith('.cif') ? 'mmcif' : 'pdb';
-  let plugin;
-  try {
-    plugin = await ensureViewer(target, format);
-  } catch (e) {
-    console.warn('No se pudo cargar la pose:', target, e);
-    plugin = null;
-  }
-  if (!plugin) {
-    setPoseLabel('Visor 3D no disponible (revisa la carga de PDBe Molstar).');
-    return;
-  }
 
-  // Resaltado: ligando en naranja y residuo mutado en rojo.
-  // PDBe Molstar no entiende `chain_id`; la cadena es `auth_asym_id`/
-  // `struct_asym_id` y el resSeq de PDB es `auth_seq_id` (no `residue_number`,
-  // que compara label_seq_id).
   const selection = [];
   if (fromComplex) {
     selection.push({ label_comp_id: 'LIG', color: { r: 251, g: 146, b: 60 } });
@@ -165,13 +165,11 @@ async function showPose(variantId, drug) {
       color: { r: 239, g: 68, b: 68 },
     });
   }
-  if (selection.length) {
-    try {
-      await plugin.visual.select({ data: selection, nonSelectedColor: null });
-    } catch { /* decorativo */ }
-  }
 
-  viewerContainer()?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  const ok = await loadInViewer(target, format, selection.length ? selection : null);
+  if (!ok) setPoseLabel('Visor 3D no disponible (revisa la carga de PDBe Molstar).');
+
+  viewerEl()?.scrollIntoView({ behavior: 'smooth', block: 'center' });
 }
 
 // ── Carga de datos y render ────────────────────────────────────────────────
@@ -181,13 +179,21 @@ async function loadDocking() {
   state.poseCache.clear();
   setPoseLabel(POSE_DEFAULT_LABEL);
 
-  const [variants, metrics, affinities] = await Promise.all([
+  const [variants, metrics, affinities, catalogCsv] = await Promise.all([
     loadJSON(DATA.topVariants()),
     loadJSON(DATA.structuralMetrics()),
     loadJSON(DATA.vinaAffinities()),
+    fetch('data/drug_catalog.csv').then(r => r.ok ? r.text() : null).catch(() => null),
   ]);
-  state.metrics = metrics;
+  state.metrics    = metrics;
   state.affinities = affinities;
+
+  // Parsear y enriquecer el catálogo con ChEMBL en background
+  if (catalogCsv) {
+    const rawCatalog = parseDrugCatalogCSV(catalogCsv);
+    enrichWithChEMBL(rawCatalog).then(enriched => { state.drugCatalog = enriched; });
+    state.drugCatalog = rawCatalog; // versión sin enriquecer mientras llega ChEMBL
+  }
 
   if (!affinities) {
     document.getElementById('chart-docking-ranking').innerHTML =
@@ -323,6 +329,14 @@ async function renderDocking(variantId, metrics, affinities) {
   setPoseLabel(withComplex
     ? `${withComplex}/${drugs.length} fármacos con complejo proteína–ligando · pulsa «Ver pose»`
     : POSE_DEFAULT_LABEL);
+
+  // ── Fuentes de datos en vivo (ChEMBL + CiViC) ─────────────────────────
+  const [hugo, ...changeParts] = variantId.split('_');
+  const protChange = changeParts.join('_');
+  // No bloquea el render; actualiza las tarjetas en background
+  renderDrugSources(hugo, protChange, state.drugCatalog).catch(e =>
+    console.warn('[Docking] renderDrugSources:', e)
+  );
 }
 
 registerLoader('docking', loadDocking);

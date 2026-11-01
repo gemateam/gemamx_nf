@@ -28,6 +28,7 @@ export const DATA = {
   vinaAffinities:     () => dataUrl('docking/vina_affinities.json'),
   mutationStats:      () => dataUrl('mutation_stats.json'),
   runManifest:        () => dataUrl('run_manifest.json'),
+  rawMutations:       () => dataUrl('raw_mutations.json'),
 };
 
 // ── Catálogo de fármacos (targets y estado, sin red) ──────────────────────
@@ -91,7 +92,7 @@ export const PLOTLY_LAYOUT = {
 };
 
 // ── Navegación SPA ─────────────────────────────────────────────────────────
-const VIEWS = ['dashboard','analysis','structural','docking','report'];
+const VIEWS = ['dashboard','analysis','structural','docking','report','pipeline','explore'];
 
 // Dispatch de carga por vista (se registra desde cada módulo)
 const loaders = {};
@@ -124,24 +125,37 @@ async function populateRunSelector() {
   if (!sel) return;
 
   const runs = await loadRunIndex();
-  if (!runs.length) {
-    sel.innerHTML = '<option value="">Sin corridas archivadas</option>';
-    sel.disabled = true;
-    return;
-  }
-
-  sel.innerHTML = runs.map((r, i) =>
-    `<option value="${r.path}"${i === 0 ? '' : ''}>
-      ${r.run_name} · ${r.published_at.slice(0, 10)}
-    </option>`
-  ).join('');
 
   // Primera opción = contrato vigente (data/)
   const liveOpt = document.createElement('option');
   liveOpt.value = 'data';
   liveOpt.textContent = '⬤ Corrida vigente';
   liveOpt.selected = true;
-  sel.insertBefore(liveOpt, sel.firstChild);
+  sel.innerHTML = '';
+  sel.appendChild(liveOpt);
+
+  if (!runs.length) return;
+
+  // Agrupar por pipeline_version
+  const byVersion = {};
+  runs.forEach(r => {
+    const v = r.pipeline_version ?? 'Sin versión';
+    (byVersion[v] = byVersion[v] ?? []).push(r);
+  });
+
+  Object.entries(byVersion).forEach(([version, vRuns]) => {
+    const group = document.createElement('optgroup');
+    group.label = `📦 ${version}`;
+    vRuns.forEach(r => {
+      const opt = document.createElement('option');
+      opt.value = r.path;
+      const date = r.published_at?.slice(0, 10) ?? '';
+      const commit = r.git_commit ? ` · ${r.git_commit.slice(0, 7)}` : '';
+      opt.textContent = `${r.run_name} · ${date}${commit}`;
+      group.appendChild(opt);
+    });
+    sel.appendChild(group);
+  });
 
   sel.addEventListener('change', () => switchRun(sel.value));
 }
@@ -158,9 +172,16 @@ function switchRun(path) {
 
   // Actualizar footer
   loadJSON(DATA.runManifest()).then(m => {
-    if (m?.run_name) {
-      document.getElementById('footer-run').textContent =
-        `Run: ${m.run_name}  ·  ${m.published_at ?? ''}`;
+    const footerEl = document.getElementById('footer-run');
+    if (!footerEl) return;
+    if (path === 'data') {
+      footerEl.textContent = m?.run_name
+        ? `Run: ${m.run_name}  ·  ${m.published_at ?? ''}  ·  ${m.params?.mlflow_experiment ?? ''}`
+        : '';
+    } else {
+      footerEl.textContent = m?.run_name
+        ? `Run: ${m.run_name}  ·  ${m.published_at?.slice(0,10) ?? ''}  ·  ${m.params?.mlflow_experiment ?? ''}`
+        : '';
     }
   });
 
@@ -182,7 +203,7 @@ document.addEventListener('DOMContentLoaded', () => {
   loadJSON(DATA.runManifest()).then(m => {
     if (m?.run_name) {
       document.getElementById('footer-run').textContent =
-        `Run: ${m.run_name}  ·  ${m.published_at ?? ''}`;
+        `Run: ${m.run_name}  ·  ${m.published_at?.slice(0,10) ?? ''}  ·  ${m.params?.mlflow_experiment ?? ''}`;
     }
   });
 

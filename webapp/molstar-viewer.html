@@ -25,31 +25,62 @@
   </pdbe-molstar>
 
   <script>
-    // Recibir mensajes del padre para cargar estructuras
-    window.addEventListener('message', function(event) {
-      if (event.data?.type !== 'loadStructure') return;
+    // Mensaje pendiente si llega antes de que Molstar esté listo
+    let pendingMsg = null;
+    let molstarReady = false;
+
+    function applyMessage(data) {
       const el = document.getElementById('viewer');
       if (!el) return;
 
-      const { url, format, mutPos } = event.data;
+      const { url, format, mutPos, selection } = data;
       if (!url) return;
 
       el.setAttribute('custom-data-format', format || 'mmcif');
       el.setAttribute('custom-data-url', url);
 
-      if (mutPos) {
+      // Resaltar residuos tras carga
+      const highlights = selection || (mutPos ? [{ residue_number: mutPos, color: { r: 255, g: 100, b: 50 }, focus: true }] : null);
+      if (highlights) {
         const onLoad = () => {
           try {
             el.viewerInstance?.visual.select({
-              data: [{ residue_number: mutPos,
-                       color: { r: 255, g: 100, b: 50 },
-                       focus: true }],
+              data: highlights,
               nonSelectedColor: null,
             });
           } catch(_) {}
           el.removeEventListener('load', onLoad);
         };
         el.addEventListener('load', onLoad);
+      }
+    }
+
+    // Esperar a que el Web Component esté registrado y listo
+    function waitForMolstar(callback, tries = 0) {
+      const el = document.getElementById('viewer');
+      if (el && customElements.get('pdbe-molstar')) {
+        molstarReady = true;
+        callback();
+      } else if (tries < 50) {
+        setTimeout(() => waitForMolstar(callback, tries + 1), 100);
+      }
+    }
+
+    waitForMolstar(() => {
+      if (pendingMsg) {
+        applyMessage(pendingMsg);
+        pendingMsg = null;
+      }
+    });
+
+    // Recibir mensajes del padre para cargar estructuras
+    window.addEventListener('message', function(event) {
+      if (event.data?.type !== 'loadStructure') return;
+      if (molstarReady) {
+        applyMessage(event.data);
+      } else {
+        // Guardar el último mensaje; se aplica cuando Molstar esté listo
+        pendingMsg = event.data;
       }
     });
   </script>

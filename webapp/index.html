@@ -6,8 +6,11 @@
   <title>GEMA MX — Genomic Analysis of Mammary Cancer</title>
   <link rel="icon" type="image/svg+xml" href="favicon.svg" />
   <link rel="stylesheet" href="css/style.css" />
-  <!-- PDBe Molstar carga en iframes separados (molstar-viewer.html) para evitar
-       colisión del registro global de símbolos con múltiples instancias. -->
+  <!-- PDBe Molstar JS Plugin (una sola carga; viewers en divs directos) -->
+  <link rel="stylesheet" type="text/css"
+    href="https://cdn.jsdelivr.net/npm/pdbe-molstar@3.2.0/build/pdbe-molstar.css" />
+  <script type="text/javascript"
+    src="https://cdn.jsdelivr.net/npm/pdbe-molstar@3.2.0/build/pdbe-molstar-plugin.js"></script>
   <!-- Plotly.js -->
   <script src="https://cdn.jsdelivr.net/npm/plotly.js-dist@2.32.0/plotly.min.js"></script>
 </head>
@@ -21,14 +24,16 @@
   </div>
   <ul class="nav-links">
     <li><a href="#" data-view="dashboard"  class="nav-link active">Dashboard</a></li>
+    <li><a href="#" data-view="pipeline"   class="nav-link">Pipeline Status</a></li>
+    <li><a href="#" data-view="explore"    class="nav-link">Exploración</a></li>
     <li><a href="#" data-view="analysis"   class="nav-link">Análisis</a></li>
     <li><a href="#" data-view="structural" class="nav-link">Estructuras 3D</a></li>
     <li><a href="#" data-view="docking"    class="nav-link">Docking</a></li>
     <li><a href="#" data-view="report"     class="nav-link">Reporte</a></li>
   </ul>
   <div class="run-selector">
-    <label for="sel-run" class="run-selector-label">Corrida</label>
-    <select id="sel-run" title="Seleccionar corrida del pipeline">
+    <label for="sel-run" class="run-selector-label">Pipeline / Corrida</label>
+    <select id="sel-run" title="Seleccionar versión del pipeline y corrida">
       <option value="data">⬤ Corrida vigente</option>
     </select>
   </div>
@@ -81,6 +86,68 @@
     </div>
   </section>
 
+  <!-- ── EXPLORACIÓN ──────────────────────────────────────────── -->
+  <section id="view-explore" class="view">
+
+    <div class="section-header">
+      <h1>Exploración TCGA</h1>
+    </div>
+
+    <!-- Filtros -->
+    <div class="card explore-filters">
+      <div class="explore-filters-row">
+        <div class="explore-filter-group">
+          <label class="explore-filter-label">SEARCH GENE</label>
+          <input id="exp-search-gene" type="text" class="explore-input"
+                 placeholder="Ex: PIK3CA, TP53…" autocomplete="off" />
+        </div>
+        <div class="explore-filter-group">
+          <label class="explore-filter-label">PROTEIN VARIANT</label>
+          <input id="exp-search-variant" type="text" class="explore-input"
+                 placeholder="Ex: H1047, R248…" autocomplete="off" />
+        </div>
+      </div>
+      <div class="explore-filters-row explore-filters-row--second">
+        <div class="explore-filter-group explore-filter-group--wide">
+          <label class="explore-filter-label">CLASSIFICATION</label>
+          <select id="exp-filter-class" class="explore-select">
+            <option value="">All</option>
+            <option value="patog">Patogénica</option>
+            <option value="hotspot">Hotspot</option>
+            <option value="vus">VUS</option>
+            <option value="baja">Baja relevancia</option>
+          </select>
+        </div>
+        <div class="explore-count-badge" id="exp-count-badge">MOSTRANDO: 0 / 0</div>
+      </div>
+    </div>
+
+    <!-- Info de épica -->
+    <p class="explore-epic-note" id="exp-epic-note">
+      Épica 1: Ingesta de datos y filtrado de relevancia clínica.
+    </p>
+
+    <!-- Tabla -->
+    <div class="table-wrapper explore-table-wrapper">
+      <table id="exp-table">
+        <thead>
+          <tr>
+            <th>RANK</th>
+            <th>GENE</th>
+            <th>PROTEIN VARIANT</th>
+            <th>FREQUENCY</th>
+            <th>% COHORT</th>
+            <th>GENOMIC POSITION</th>
+            <th>CLASSIFICATION</th>
+            <th>ALPHAFOLD INPUT</th>
+          </tr>
+        </thead>
+        <tbody id="exp-tbody"></tbody>
+      </table>
+    </div>
+
+  </section>
+
   <!-- ── ANÁLISIS ──────────────────────────────────────────────── -->
   <section id="view-analysis" class="view">
     <div class="section-header">
@@ -120,23 +187,25 @@
     <div class="card-grid">
       <div class="card viewer-card">
         <h2>Wild-Type (WT)</h2>
-        <iframe id="viewer-wt" src="molstar-viewer.html"
-                class="molstar-viewer" title="Visor WT"
-                sandbox="allow-scripts allow-same-origin">
-        </iframe>
+        <div id="viewer-wt" class="molstar-viewer"></div>
       </div>
       <div class="card viewer-card">
         <h2>Mutado (MUT)</h2>
-        <iframe id="viewer-mut" src="molstar-viewer.html"
-                class="molstar-viewer" title="Visor MUT"
-                sandbox="allow-scripts allow-same-origin">
-        </iframe>
+        <div id="viewer-mut" class="molstar-viewer"></div>
       </div>
     </div>
 
     <div class="card full-width">
       <h2>RMSD por Región</h2>
       <div id="rmsd-regions"></div>
+    </div>
+
+    <!-- Barra de acciones inferior -->
+    <div class="structural-actions card">
+      <select id="sel-variant-bottom" class="struct-action-select"></select>
+      <button id="btn-scientific-mode" class="struct-action-btn">🔬 Modo Científico: OFF</button>
+      <button id="btn-superimpose" class="struct-action-btn struct-action-btn--info">⧗ Superimpose WT/Mut</button>
+      <button id="btn-continue-docking" class="struct-action-btn struct-action-btn--primary">Continue to docking →</button>
     </div>
   </section>
 
@@ -145,6 +214,47 @@
     <div class="section-header">
       <h1>Docking Molecular — AutoDock Vina</h1>
       <p class="subtitle">Afinidades de unión WT vs MUT (kcal/mol · más negativo = mayor afinidad)</p>
+    </div>
+
+    <!-- Bloque de fuentes de datos -->
+    <div class="card full-width drug-sources-card">
+      <div class="drug-sources-header">
+        <span class="drug-sources-bar"></span>
+        <span>Real source status in this view</span>
+      </div>
+      <div class="drug-sources-note">
+        <p><strong>Drug ranking:</strong> local GEMA catalog with metadata curated from <strong>ChEMBL</strong> and <strong>DrugBank</strong>; it is not a live query.</p>
+        <p><strong>External clinical validation:</strong> optional query of <strong>CiViC</strong> and <strong>OncoKB</strong> for the active variant.</p>
+        <p><strong>VICC Meta-knowledgebase:</strong> pending integration.</p>
+        <p><strong>Mexico Availability (IMSS / CAUSES):</strong> pending integration as a verifiable local filter.</p>
+        <p><strong>SGMM Coverage:</strong> pending as a viability estimate, not as a coverage guarantee.</p>
+      </div>
+      <div class="drug-sources-grid">
+        <div class="drug-source-card">
+          <div class="ds-title">Catalogo local GEMA</div>
+          <div class="ds-status ds-status--active">Activo</div>
+          <div class="ds-desc">Fuente primaria del ranking actual. Reune 11 fármacos y metadatos curados para el pipeline de docking.</div>
+          <div class="ds-tags"><span class="ds-tag ds-tag--fda">FDA / Trial</span></div>
+        </div>
+        <div class="drug-source-card">
+          <div class="ds-title">ChEMBL</div>
+          <div class="ds-status ds-status--live">Consulta pública posible</div>
+          <div class="ds-desc">Su API y web services son públicos; en GEMA hoy se usa como procedencia del catálogo, no como consulta viva en esta vista.</div>
+          <div class="ds-tags"><span class="ds-tag ds-tag--live">Live-capable</span></div>
+        </div>
+        <div class="drug-source-card">
+          <div class="ds-title">DrugBank</div>
+          <div class="ds-status ds-status--restricted">Licencia/API requerida</div>
+          <div class="ds-desc">Puede enriquecer el catálogo, pero no se trata como fuente abierta en vivo dentro de GEMA.</div>
+          <div class="ds-tags"><span class="ds-tag ds-tag--restricted">Restricted</span></div>
+        </div>
+        <div class="drug-source-card">
+          <div class="ds-title">CiViC</div>
+          <div class="ds-status ds-status--active">Integrado</div>
+          <div class="ds-desc">Consulta opcional ya disponible para la variante activa como validación clínica pública.</div>
+          <div class="ds-tags"><span class="ds-tag ds-tag--in-use">En uso</span></div>
+        </div>
+      </div>
     </div>
 
     <div class="docking-controls card">
@@ -201,6 +311,119 @@
     <div id="report-content"></div>
   </section>
 
+  <!-- ── PIPELINE STATUS ──────────────────────────────────────── -->
+  <section id="view-pipeline" class="view">
+
+    <!-- Header con run activo -->
+    <div class="ps-header">
+      <div class="ps-title-block">
+        <h1>Pipeline Status</h1>
+        <p class="subtitle">Resumen ejecutivo del proyecto GEMA MX sobre la cohorte TCGA-BRCA.</p>
+      </div>
+      <div class="ps-run-badge">
+        <span class="ps-run-dot"></span>
+        <span id="ps-dataset-label">Dataset: TCGA-BRCA</span>
+        <span class="ps-run-chip" id="ps-run-chip">—</span>
+      </div>
+    </div>
+
+    <!-- KPI Grid superior (8 tarjetas) -->
+    <div class="ps-kpi-grid">
+      <div class="ps-kpi-card">
+        <div class="ps-kpi-label">PRIORITIZED VARIANTS</div>
+        <div class="ps-kpi-value" id="ps-kpi-variants">—</div>
+        <div class="ps-kpi-sub" id="ps-kpi-variants-sub"></div>
+      </div>
+      <div class="ps-kpi-card">
+        <div class="ps-kpi-label">HOTSPOT #1</div>
+        <div class="ps-kpi-value ps-kpi-white" id="ps-kpi-hotspot">—</div>
+        <div class="ps-kpi-sub" id="ps-kpi-hotspot-sub"></div>
+      </div>
+      <div class="ps-kpi-card">
+        <div class="ps-kpi-label">3D STRUCTURES</div>
+        <div class="ps-kpi-value ps-kpi-white" id="ps-kpi-structs">—</div>
+        <div class="ps-kpi-sub" id="ps-kpi-structs-sub">Boltz-1 · AlphaFold · ESMFold</div>
+      </div>
+      <div class="ps-kpi-card">
+        <div class="ps-kpi-label">HIGHEST STRUCTURAL IMPACT</div>
+        <div class="ps-kpi-value ps-kpi-danger" id="ps-kpi-rmsd">—</div>
+        <div class="ps-kpi-sub" id="ps-kpi-rmsd-sub"></div>
+      </div>
+      <div class="ps-kpi-card">
+        <div class="ps-kpi-label">VARIANTS WITH DOCKING</div>
+        <div class="ps-kpi-value ps-kpi-white" id="ps-kpi-docking-vars">—</div>
+        <div class="ps-kpi-sub" id="ps-kpi-docking-sub"></div>
+      </div>
+      <div class="ps-kpi-card">
+        <div class="ps-kpi-label">BEST GLOBAL AFFINITY</div>
+        <div class="ps-kpi-value ps-kpi-accent" id="ps-kpi-affinity">—</div>
+        <div class="ps-kpi-sub" id="ps-kpi-affinity-sub"></div>
+      </div>
+      <div class="ps-kpi-card">
+        <div class="ps-kpi-label">REPOSITIONABLE CANDIDATES</div>
+        <div class="ps-kpi-value ps-kpi-white" id="ps-kpi-repro">—</div>
+        <div class="ps-kpi-sub">pairs with Δ ≤ −0.5 kcal/mol</div>
+      </div>
+      <div class="ps-kpi-card ps-kpi-card--links">
+        <div class="ps-kpi-label">QUICK ACCESS</div>
+        <div class="ps-quick-links">
+          <a href="#" class="ps-qlink" data-view="analysis">Explore variants →</a>
+          <a href="#" class="ps-qlink" data-view="structural">View 3D structures →</a>
+          <a href="#" class="ps-qlink" data-view="docking">View docking →</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Timeline de etapas del pipeline -->
+    <div class="card ps-timeline-card">
+      <h2>Pipeline Execution</h2>
+      <div class="ps-timeline" id="ps-timeline">
+        <!-- generado por JS -->
+      </div>
+    </div>
+
+    <!-- Parámetros de la corrida -->
+    <div class="card-grid">
+      <div class="card">
+        <h2>Run Parameters</h2>
+        <div class="ps-params-grid" id="ps-params-grid">
+          <!-- generado por JS -->
+        </div>
+      </div>
+      <div class="card">
+        <h2>MLflow Experiment</h2>
+        <div class="ps-mlflow-block" id="ps-mlflow-block">
+          <!-- generado por JS -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Tabla de métricas por variante -->
+    <div class="card full-width">
+      <div class="ps-table-header">
+        <h2>Top 5 variants — integrated summary</h2>
+        <button id="ps-view-all-btn" class="ps-viewall-btn">View all →</button>
+      </div>
+      <div class="table-wrapper">
+        <table id="ps-table-metrics">
+          <thead>
+            <tr>
+              <th>#  GENE</th>
+              <th>VARIANT</th>
+              <th>CASES</th>
+              <th>CLASSIFICATION</th>
+              <th>BEST VINA</th>
+              <th>DRUG</th>
+              <th>COMPLEXES</th>
+            </tr>
+          </thead>
+          <tbody id="ps-tbody-metrics"></tbody>
+        </table>
+      </div>
+    </div>
+
+  </section>
+
 </main>
 
 <!-- ═════════════════════════ FOOTER ═════════════════════════ -->
@@ -215,5 +438,7 @@
 <script src="js/structural.js" type="module"></script>
 <script src="js/docking.js"   type="module"></script>
 <script src="js/report.js"    type="module"></script>
+<script src="js/pipeline.js"  type="module"></script>
+<script src="js/explore.js"   type="module"></script>
 </body>
 </html>
