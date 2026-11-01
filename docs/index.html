@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GEMA MX — Documentación</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: #0f172a;
+      color: #e2e8f0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      gap: 2rem;
+    }
+    header { text-align: center; }
+    .brand {
+      font-size: 2.5rem;
+      font-weight: 800;
+      letter-spacing: -.02em;
+    }
+    .brand-gema { color: #14b8a6; }
+    .brand-mx   { color: #fff; }
+    .subtitle {
+      color: #94a3b8;
+      font-size: 1rem;
+      margin-top: .4rem;
+    }
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1rem;
+      width: 100%;
+      max-width: 900px;
+    }
+    .card {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 12px;
+      padding: 1.5rem;
+      text-decoration: none;
+      color: inherit;
+      transition: border-color .2s, transform .2s;
+      display: flex;
+      flex-direction: column;
+      gap: .6rem;
+    }
+    .card:hover {
+      border-color: #14b8a6;
+      transform: translateY(-2px);
+    }
+    .card-icon { font-size: 1.8rem; }
+    .card-title { font-weight: 700; font-size: 1.1rem; color: #fff; }
+    .card-desc  { font-size: .85rem; color: #94a3b8; line-height: 1.5; }
+    .card-tag {
+      display: inline-block;
+      font-size: .7rem;
+      font-weight: 700;
+      padding: .2rem .6rem;
+      border-radius: 99px;
+      background: rgba(20,184,166,.15);
+      color: #14b8a6;
+      border: 1px solid rgba(20,184,166,.3);
+      width: fit-content;
+    }
+    footer {
+      color: #475569;
+      font-size: .8rem;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="brand">
+    <span class="brand-gema">GEMA</span><span class="brand-mx"> MX</span>
+  </div>
+  <p class="subtitle">Genomic Analysis of Mammary Cancer · TCGA-BRCA · Universidad de Sonora</p>
+</header>
+
+<div class="cards">
+
+  <a class="card" href="architecture.html">
+    <div class="card-icon">🏗️</div>
+    <div class="card-title">Diagrama de Arquitectura</div>
+    <div class="card-desc">
+      Vista interactiva del pipeline Nextflow, la webapp SPA, MLflow, 
+      y las conexiones a ChEMBL y CiViC. Generado con Archify.
+    </div>
+    <span class="card-tag">Archify · Interactive HTML</span>
+  </a>
+
+  <a class="card" href="https://github.com/gemateam/gemamx_nf" target="_blank" rel="noopener">
+    <div class="card-icon">📦</div>
+    <div class="card-title">Repositorio GitHub</div>
+    <div class="card-desc">
+      Código fuente del pipeline Nextflow DSL2, la webapp y los contenedores Docker. 
+      Incluye README con pasos de instalación.
+    </div>
+    <span class="card-tag">github.com/gemateam</span>
+  </a>
+
+  <a class="card" href="https://github.com/gemateam/gemamx_nf#readme" target="_blank" rel="noopener">
+    <div class="card-icon">📖</div>
+    <div class="card-title">README — Guía de instalación</div>
+    <div class="card-desc">
+      Requisitos, instalación, perfiles Nextflow (CPU/GPU), 
+      selector de corridas MLflow, APIs externas y desarrollo local.
+    </div>
+    <span class="card-tag">Documentación completa</span>
+  </a>
+
+  <a class="card" href="PROPUESTAS_PLATAFORMA.md" target="_blank" rel="noopener">
+    <div class="card-icon">💡</div>
+    <div class="card-title">Propuestas de Plataforma</div>
+    <div class="card-desc">
+      Roadmap de integraciones futuras: VICC, OncoKB, IMSS/CAUSES, 
+      disponibilidad de fármacos en México.
+    </div>
+    <span class="card-tag">Roadmap</span>
+  </a>
+
+</div>
+
+<footer>
+  GEMA MX · Pipeline V1 · TCGA-BRCA · Universidad de Sonora
+</footer>
+
+</body>
+</html>
