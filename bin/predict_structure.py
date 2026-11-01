@@ -26,7 +26,7 @@ import time
 from pathlib import Path
 
 import requests
-from Bio.PDB import MMCIFParser, PDBIO, PDBParser
+from Bio.PDB import MMCIFParser, MMCIFIO, PDBIO, PDBParser
 from Bio.PDB.Polypeptide import protein_letters_3to1
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
@@ -54,6 +54,18 @@ def convert_to_pdb(source: Path, target: Path) -> None:
     writer.save(str(target))
     if not target.is_file() or target.stat().st_size == 0:
         die(f"la conversión CIF->PDB de {source.name} no produjo salida")
+
+
+def convert_pdb_to_cif(pdb_path: Path, cif_path: Path) -> None:
+    """Convierte un PDB a mmCIF mínimo. Molstar v3 parsea mmCIF de forma nativa
+    y más robusta que PDB (evita el 'TypeError: entry' con fragmentos sin CRYST1)."""
+    parser = PDBParser(QUIET=True)
+    structure = parser.get_structure("model", str(pdb_path))
+    writer = MMCIFIO()
+    writer.set_structure(structure)
+    writer.save(str(cif_path))
+    if not cif_path.is_file() or cif_path.stat().st_size == 0:
+        die(f"la conversión PDB->CIF de {pdb_path.name} no produjo salida")
 
 
 def sidecar_model_start(source: Path) -> int | None:
@@ -127,6 +139,7 @@ def main() -> int:
     parser.add_argument("--model-start", type=int,
                         help="primer residuo proteico del modelo (precomputed; "
                              "por defecto, sidecar hermano o primer resSeq)")
+    parser.add_argument("--out-cif", help="ruta de salida mmCIF adicional (para la webapp)")
     parser.add_argument("--window", type=int, default=180)
     parser.add_argument("--timeout", type=int, default=300)
     parser.add_argument("--retries", type=int, default=3)
@@ -232,6 +245,16 @@ def main() -> int:
                 f"({match['one']}), se esperaba {expected} para role={args.role}")
 
     write_json(args.meta, meta, sort_keys=True)
+
+    # Generar mmCIF adicional para la webapp (Molstar v3 lo parsea sin errores)
+    if args.out_cif:
+        cif_out = Path(args.out_cif)
+        cif_out.parent.mkdir(parents=True, exist_ok=True)
+        convert_pdb_to_cif(out, cif_out)
+        meta["structure_cif"] = cif_out.name
+        write_json(args.meta, meta, sort_keys=True)  # actualizar sidecar con cif
+        print(f"  cif: {cif_out.name} ({cif_out.stat().st_size // 1024} KB)")
+
     print(f"OK estructura {out.name}: {len(residues)} residuos, "
           f"pLDDT {meta['plddt_mean']}, modelo {meta['model_start']}..{meta['model_end']}")
     return 0

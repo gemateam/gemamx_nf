@@ -124,13 +124,15 @@ workflow {
     RUN_VINA(ch_docking_pairs)
 
     // ── BUILD JSONS ───────────────────────────────────────────────────────────
-    // Recolectar todos los PDB+JSON de estructuras en una sola lista
+    // Recolectar todos los PDB+JSON+CIF de estructuras en una sola lista
     def ch_struct_files = PREDICT_STRUCTURE_WT.out.wt_struct
         .flatMap { gene, pdb, meta -> [pdb, meta] }
+        .mix(PREDICT_STRUCTURE_WT.out.wt_cif)
         .mix(
             PREDICT_STRUCTURE_MUT.out.mut_struct
                 .flatMap { gene, pc, pdb, meta -> [pdb, meta] }
         )
+        .mix(PREDICT_STRUCTURE_MUT.out.mut_cif)
         .collect()
 
     // Recolectar resúmenes Vina (summary + out.pdbqt) y complejos PDB

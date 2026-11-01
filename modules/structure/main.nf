@@ -7,6 +7,7 @@ process PREDICT_STRUCTURE_WT {
 
     output:
     tuple val(gene), path("${gene}_WT.pdb"), path("${gene}_WT.json"), emit: wt_struct
+    path "${gene}_WT.cif", optional: true, emit: wt_cif
 
     script:
     def mode = params.structures_mode
@@ -24,13 +25,15 @@ process PREDICT_STRUCTURE_WT {
         ${precomp_arg} \\
         --window ${params.domain_window} \\
         --out "${gene}_WT.pdb" \\
+        --out-cif "${gene}_WT.cif" \\
         --meta "${gene}_WT.json"
     """
 
     stub:
     """
     echo "ATOM      1  CA  MET A   1       0.000   0.000   0.000  1.00 80.00           C" > "${gene}_WT.pdb"
-    echo '{"gene":"${gene}","protein_change":"WT","model_start":1,"model_resseq_start":1,"model_resseq_end":10,"mutation_resseq_model":null,"mean_plddt":80.0,"plddt_source":"esmfold"}' > "${gene}_WT.json"
+    echo '{"gene":"${gene}","protein_change":"WT","model_start":1,"model_resseq_start":1,"model_resseq_end":10,"mutation_resseq_model":null,"mean_plddt":80.0,"plddt_source":"esmfold","structure_cif":"${gene}_WT.cif"}' > "${gene}_WT.json"
+    touch "${gene}_WT.cif"
     """
 }
 
@@ -43,6 +46,7 @@ process PREDICT_STRUCTURE_MUT {
 
     output:
     tuple val(gene), val(protein_change), path("${gene}_${protein_change}.pdb"), path("${gene}_${protein_change}.json"), emit: mut_struct
+    path "${gene}_${protein_change}.cif", optional: true, emit: mut_cif
 
     script:
     def mode = params.structures_mode
@@ -60,13 +64,15 @@ process PREDICT_STRUCTURE_MUT {
         ${precomp_arg} \\
         --window ${params.domain_window} \\
         --out "${gene}_${protein_change}.pdb" \\
+        --out-cif "${gene}_${protein_change}.cif" \\
         --meta "${gene}_${protein_change}.json"
     """
 
     stub:
     """
     echo "ATOM      1  CA  MET A   1       0.000   0.000   0.000  1.00 80.00           C" > "${gene}_${protein_change}.pdb"
-    echo '{"gene":"${gene}","protein_change":"${protein_change}","model_start":1,"model_resseq_start":1,"model_resseq_end":10,"mutation_resseq_model":5,"mean_plddt":80.0,"plddt_source":"esmfold"}' > "${gene}_${protein_change}.json"
+    echo '{"gene":"${gene}","protein_change":"${protein_change}","model_start":1,"model_resseq_start":1,"model_resseq_end":10,"mutation_resseq_model":5,"mean_plddt":80.0,"plddt_source":"esmfold","structure_cif":"${gene}_${protein_change}.cif"}' > "${gene}_${protein_change}.json"
+    touch "${gene}_${protein_change}.cif"
     """
 }
 

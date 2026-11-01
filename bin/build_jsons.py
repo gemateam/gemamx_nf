@@ -57,10 +57,11 @@ def main() -> int:
     if not isinstance(top, list):
         die(f"top_variants inválido: {args.top}")
 
-    # --- estructuras: pLDDT, manifest y copia al contrato ------------------
+    # --- estructuras: pLDDT, manifest, copia al contrato y mutation_resseq_model --
     structures_out = outdir / "structures"
     manifest: dict[str, str | None] = {}
     plddt: dict[str, float] = {}
+    mut_resseq: dict[str, int] = {}   # variante → mutation_resseq_model
     for meta_path in args.structure_meta:
         meta = read_json(meta_path)
         gene = meta.get("gene")
@@ -76,9 +77,22 @@ def main() -> int:
             die(f"no existe la estructura {structure_path} referida por {meta_path}")
         structures_out.mkdir(parents=True, exist_ok=True)
         shutil.copyfile(structure_path, structures_out / structure_file)
-        manifest[key] = f"{args.prefix.rstrip('/')}/{structure_file}"
+        # Si el sidecar indica un .cif hermano, copiarlo también y usar ese en el manifest
+        cif_name = meta.get("structure_cif")
+        if cif_name:
+            cif_path = Path(meta_path).with_name(cif_name)
+            if cif_path.is_file():
+                shutil.copyfile(cif_path, structures_out / cif_name)
+                manifest[key] = f"{args.prefix.rstrip('/')}/{cif_name}"
+            else:
+                manifest[key] = f"{args.prefix.rstrip('/')}/{structure_file}"
+        else:
+            manifest[key] = f"{args.prefix.rstrip('/')}/{structure_file}"
         if "plddt_mean" in meta:
             plddt[key] = float(meta["plddt_mean"])
+        # Guardar posición del residuo mutado en el modelo (para highlight en webapp)
+        if "mutation_resseq_model" in meta:
+            mut_resseq[key] = int(meta["mutation_resseq_model"])
 
     # --- RMSD por variante ------------------------------------------------
     rmsd_by_variant: dict[str, dict] = {}
@@ -143,6 +157,8 @@ def main() -> int:
             "rmsd_active": rmsd["rmsd_active"],
             "rmsd_regions": rmsd.get("rmsd_regions", []),
         }
+        if variant in mut_resseq:
+            entry["mutation_resseq_model"] = mut_resseq[variant]
         if scores:
             best_drug = min(scores, key=lambda d: (scores[d], d))
             entry["best_vina_drug"] = best_drug

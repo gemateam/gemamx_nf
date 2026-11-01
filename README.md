@@ -27,7 +27,7 @@ contrato** que consume la app web estática de GEMXMXv1 (sin modificarla).
 | 5 | Validación contra GEMXMXv1 | ✅ completada — contratos compatibles, webapp funcionando, estructuras 3D en mmCIF |
 | 6 | Resiliencia (`-resume`) | ⏳ pendiente |
 | 7 | MLflow (run padre + hijas + artefactos) | ✅ integrado en Fase 3 (módulo + scripts) |
-| 8 | Verificación de independencia | ⏳ pendiente |
+| 8 | Verificación de independencia | ✅ completada — sin referencias a Gemacont/GEMXMXv1 en código |
 | 9 | `structures_mode=boltz` (solo configuración: no hay GPU) | ⏳ pendiente |
 
 ---
