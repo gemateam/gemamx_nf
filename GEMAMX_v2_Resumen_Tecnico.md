@@ -264,17 +264,19 @@ Tres sub-fases con scripts independientes. La fase más voluminosa: 902 archivos
 
 | Fármaco | ChEMBL ID | Diana | Estatus |
 |---|---|---|---|
-| Alpelisib | CHEMBL3301610 | PI3Kα | FDA |
-| Capivasertib | CHEMBL3301612 | AKT1/2/3 | FDA |
-| Palbociclib | CHEMBL1771552 | CDK4/6 | FDA |
-| Abemaciclib | CHEMBL3545110 | CDK4/6 | FDA |
-| Ribociclib | CHEMBL3545283 | CDK4/6 | FDA |
-| Copanlisib | CHEMBL3137587 | Pan-PI3K | FDA |
-| Everolimus | CHEMBL1560600 | mTOR | FDA |
-| Pictilisib | CHEMBL2178688 | Pan-PI3K | Trial |
-| Gedatolisib | CHEMBL3188482 | PI3K/mTOR | Trial |
-| Taselisib | CHEMBL3301609 | PI3Kα | Trial |
-| Buparlisib | CHEMBL2180717 | Pan-PI3K | Trial |
+| Alpelisib | CHEMBL2396661 | PI3Kα | FDA |
+| Capivasertib | CHEMBL2325741 | AKT1/2/3 | FDA |
+| Palbociclib | CHEMBL189963 | CDK4/6 | FDA |
+| Abemaciclib | CHEMBL3301610 | CDK4/6 | FDA |
+| Ribociclib | CHEMBL3545110 | CDK4/6 | FDA |
+| Copanlisib | CHEMBL3218576 | Pan-PI3K | FDA |
+| Everolimus | CHEMBL1908360 | mTOR | FDA |
+| Pictilisib | CHEMBL521851 | Pan-PI3K | Trial |
+| Gedatolisib | CHEMBL592445 | PI3K/mTOR | Trial |
+| Taselisib | CHEMBL2387080 | PI3Kα | Trial |
+| Buparlisib | CHEMBL2017974 | Pan-PI3K | Trial |
+
+> **Fe de erratas:** los ChEMBL IDs de esta tabla fueron corregidos. Los PDFs originales (`docs/docs_legados/`) contenían identificadores que no corresponden a estos fármacos. Los valores actuales coinciden con `assets/drug_catalog.csv` y fueron verificados contra fuentes públicas (Wikipedia, RCSB PDB, Pharos/NIH, DrugBank) el 2026-11-01.
 
 **Conversión de ligandos:** SDF descargado de API ChEMBL → RDKit (`LargestFragmentChooser`, `AddHs`, embed 3D ETKDG, minimización MMFF) → Meeko → PDBQT (cargas Gasteiger implícitas en formato AutoDock).
 

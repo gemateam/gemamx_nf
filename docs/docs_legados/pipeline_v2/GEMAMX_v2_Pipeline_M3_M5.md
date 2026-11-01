@@ -1,4 +1,7 @@
-GEMAMX v2  |  Pipeline Fases M3–M5: IA Estructural, Docking Molecular e Insights Clínicos 
+GEMAMX v2  |  Pipeline Fases M3–M5: IA Estructural, Docking Molecular e Insights Clínicos
+
+> **Fe de erratas (2026-11-01):** conversión fiel del PDF original. Los ChEMBL IDs de fármacos que aparezcan en este documento no coinciden con los verificados. Los valores vigentes están en [`assets/drug_catalog.csv`](../../../assets/drug_catalog.csv).
+ 
 
 # **GEMAMX v2** 
 

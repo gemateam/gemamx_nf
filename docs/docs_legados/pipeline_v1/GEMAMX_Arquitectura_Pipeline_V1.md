@@ -4,7 +4,10 @@ _Genomic Analysis of Mammary cancer in Mexico_
 
 ## **Reporte de Arquitectura e Implementación del Pipeline** 
 
-Pipeline de Oncología de Precisión · TCGA-BRCA · Versión 1.0 
+Pipeline de Oncología de Precisión · TCGA-BRCA · Versión 1.0
+
+> **Fe de erratas (2026-11-01):** conversión fiel del PDF original. Los ChEMBL IDs de fármacos de la sección 6.2 son incorrectos: ninguno de los 11 coincide con el compuesto indicado. Los valores vigentes y verificados están en [`assets/drug_catalog.csv`](../../../assets/drug_catalog.csv).
+ 
 
 **Líder del Proyecto** Ing. Ximena Gutiérrez Gálvez **Asesores** Dr. Julio Waissman Vilanova Mtro. Héctor Gutiérrez Ibarra **Institución** Universidad de Sonora (UNISON) **Fecha** Marzo 2026 
 
