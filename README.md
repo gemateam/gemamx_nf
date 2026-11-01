@@ -24,7 +24,7 @@ contrato** que consume la app web estática de GEMXMXv1 (sin modificarla).
 | 2 | Scripts CLI (`bin/`) + imagen de docking + pruebas aisladas | ✅ completada |
 | 3 | Workflow con `-stub-run` y DAG | ✅ completada — 46 tareas ✔, 0 warnings |
 | 4 | Perfil `test` (1 variante, estructuras precomputadas) | ✅ completada — `dreamy_caravaggio`, 52 archivos publicados, reportes en MLflow |
-| 5 | Validación contra GEMXMXv1 | ⏳ pendiente |
+| 5 | Validación contra GEMXMXv1 | ✅ completada — contratos compatibles, webapp funcionando, estructuras 3D en mmCIF |
 | 6 | Resiliencia (`-resume`) | ⏳ pendiente |
 | 7 | MLflow (run padre + hijas + artefactos) | ✅ integrado en Fase 3 (módulo + scripts) |
 | 8 | Verificación de independencia | ⏳ pendiente |
