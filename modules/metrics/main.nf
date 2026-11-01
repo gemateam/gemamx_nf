@@ -5,7 +5,10 @@ process BUILD_JSONS {
     // publishDir copia el árbol data/ al outdir del host directamente.
     // Nextflow ejecuta el copy desde el orquestador (fuera del contenedor),
     // por lo que accede al filesystem del host sin restricciones.
-    publishDir "${params.outdir}", mode: 'copy', overwrite: true, saveAs: { fn ->
+    // En -stub-run no se publica nada: los JSON son placeholders ([]/{} y
+    // estructuras vacías) y sobrescribirían el contrato vigente de results/data.
+    publishDir "${params.outdir}", mode: 'copy', overwrite: true,
+               enabled: !workflow.stubRun, saveAs: { fn ->
         // stage/data/foo.json → data/foo.json
         fn.startsWith("stage/") ? fn.substring("stage/".length()) : fn
     }
@@ -65,9 +68,12 @@ process PUBLISH {
     container "${params.image_cpu}"
 
     // Publica run_manifest.json tanto en la raíz del outdir como en data/
-    // para que la webapp lo encuentre en data/run_manifest.json
-    publishDir "${params.outdir}",        mode: 'copy', overwrite: true, pattern: "run_manifest.json"
-    publishDir "${params.outdir}/data",   mode: 'copy', overwrite: true, pattern: "run_manifest.json"
+    // para que la webapp lo encuentre en data/run_manifest.json.
+    // Igual que BUILD_JSONS: un -stub-run no debe tocar el contrato vigente.
+    publishDir "${params.outdir}",        mode: 'copy', overwrite: true,
+               pattern: "run_manifest.json", enabled: !workflow.stubRun
+    publishDir "${params.outdir}/data",   mode: 'copy', overwrite: true,
+               pattern: "run_manifest.json", enabled: !workflow.stubRun
 
     input:
     // Solo los seis JSON del contrato — archivos planos, sin directorios

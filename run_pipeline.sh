@@ -24,6 +24,15 @@ MLFLOW_URI="${MLFLOW_URI:-http://localhost:5000}"
 NF_OUTDIR="${NF_OUTDIR:-results}"
 NF_EXPERIMENT="${NF_EXPERIMENT:-GEMAMX-V1-NF}"
 
+# -stub-run no ejecuta nada real: los JSON son placeholders. No debe archivarse
+# como corrida ni entrar en runs/index.json (PUBLISH tampoco publica en data/).
+STUB_RUN=0
+for arg in "$@"; do
+    if [[ "${arg}" == "-stub-run" || "${arg}" == "-stub" ]]; then
+        STUB_RUN=1
+    fi
+done
+
 # Detectar el outdir efectivo desde los args del usuario (--outdir <valor>).
 # Si no se especifica, usa NF_OUTDIR. El perfil 'test' ya apunta a 'results'
 # en nextflow.config, así que no hace falta caso especial aquí.
@@ -57,6 +66,12 @@ if [ $NF_EXIT -ne 0 ]; then
 fi
 
 echo "✓ Pipeline completado."
+
+if [ "${STUB_RUN}" -eq 1 ]; then
+    echo "▶ -stub-run: no se archiva la corrida, no se actualiza runs/index.json"
+    echo "  (el contrato vigente en ${EFFECTIVE_OUTDIR}/data no se ha tocado)"
+    exit 0
+fi
 
 # ---------------------------------------------------------------------------
 # 2. Obtener el runName de la última corrida desde el log de Nextflow
