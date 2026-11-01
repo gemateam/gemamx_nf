@@ -8,23 +8,12 @@
  *    (cambio de corrida) para evitar la doble inicialización de Molstar
  *    que produce "Symbol already added".
  */
-import { DATA, loadJSON, fmt, registerLoader, registerReloadFlag, BASE_PATH } from './app.js';
+import { DATA, loadJSON, fmt, registerLoader, registerReloadFlag, contractUrl } from './app.js';
 
 const state = { loaded: false };
 registerReloadFlag('structural', state);
 let pluginWT  = null;
 let pluginMUT = null;
-
-// ── Resolver rutas del manifest contra el árbol de datos activo ───────────
-// El contrato guarda las estructuras como "data/structures/<archivo>".
-// Con BASE_PATH = "data" la URL es directa; con una corrida histórica
-// ("runs/<run>/data") hay que reescribir el prefijo o se cargarían las
-// estructuras de la corrida vigente.
-function structUrl(path) {
-  if (!path) return null;
-  const prefix = 'data/';
-  return path.startsWith(prefix) ? `${BASE_PATH}/${path.slice(prefix.length)}` : path;
-}
 
 // ── Inicializar visor y cargar estructura inicial ─────────────────────────
 function createViewer(containerId, structPath) {
@@ -32,7 +21,7 @@ function createViewer(containerId, structPath) {
   if (!el) return Promise.resolve(null);
 
   const plugin = new PDBeMolstarPlugin();
-  const url = structUrl(structPath);
+  const url = contractUrl(structPath);
   const format = (url ?? '').endsWith('.cif') ? 'mmcif' : 'pdb';
 
   const ready = new Promise((resolve) => {
@@ -59,7 +48,7 @@ function createViewer(containerId, structPath) {
 async function loadStructure(plugin, structPath, mutPos) {
   if (!plugin || !structPath) return;
   try {
-    const url = structUrl(structPath);
+    const url = contractUrl(structPath);
     const format = url.endsWith('.cif') ? 'mmcif' : 'pdb';
     await plugin.visual.update({
       customData: { url, format, binary: false },

@@ -3,7 +3,7 @@ process PREDICT_STRUCTURE_WT {
     container "${params.structures_mode == 'boltz' ? params.image_gpu : params.image_cpu}"
 
     input:
-    tuple val(gene), path(fasta), path(precomputed_pdb), path(precomputed_meta)
+    tuple val(gene), path(fasta), path(precomputed_pdb), path(precomputed_meta), val(window_center)
 
     output:
     tuple val(gene), path("${gene}_WT.pdb"), path("${gene}_WT.json"), emit: wt_struct
@@ -15,6 +15,9 @@ process PREDICT_STRUCTURE_WT {
         error "El backend 'boltz' requiere GPU y la imagen ${params.image_gpu} no está autorizada/disponible en local."
     }
     def precomp_arg = (mode == 'precomputed' && precomputed_pdb) ? "--structure ${precomputed_pdb}" : ""
+    // WT no tiene mutación: con esmfold la ventana se centra en la posición
+    // del evento que se compara (la primera mutación conocida del gen).
+    def center_arg = (window_center && window_center > 0) ? "--window-center ${window_center}" : ""
     """
     predict_structure.py \\
         --fasta "${fasta}" \\
@@ -23,6 +26,7 @@ process PREDICT_STRUCTURE_WT {
         --role "wt" \\
         --backend "${mode}" \\
         ${precomp_arg} \\
+        ${center_arg} \\
         --window ${params.domain_window} \\
         --out "${gene}_WT.pdb" \\
         --out-cif "${gene}_WT.cif" \\

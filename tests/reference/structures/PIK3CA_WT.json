@@ -1,10 +1,11 @@
 {
     "gene": "PIK3CA",
     "protein_change": "WT",
-    "model_start": 1,
+    "model_start": 957,
     "model_resseq_start": 1,
     "model_resseq_end": 112,
     "mutation_resseq_model": null,
     "mean_plddt": 86.88,
-    "plddt_source": "alphafold"
+    "plddt_source": "alphafold",
+    "model_start_basis": "fragmento 957..1068 renumerado 1..112 por tests/normalize_pdbs.py"
 }

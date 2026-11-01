@@ -33,6 +33,13 @@ process BUILD_JSONS {
     path "stage/data/mutation_stats.json",     emit: mutation_stats_out
     path "stage/data/docking/vina_affinities.json", emit: vina_affinities
 
+    // Artefactos que la webapp consume además de los seis JSON: estructuras
+    // (manifest_structures.json apunta a ellas), poses y complejos de docking.
+    // Sin declararlos como output, publishDir no los copia al outdir.
+    path "stage/data/structures/*",       optional: true, emit: structures_out
+    path "stage/data/docking/results/*",  optional: true, emit: poses_out
+    path "stage/data/docking/complex/*",  optional: true, emit: complexes_out
+
     script:
     """
     mkdir -p stage/data

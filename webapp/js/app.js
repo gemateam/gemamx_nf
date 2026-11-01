@@ -12,6 +12,15 @@ export function dataUrl(file) {
   return `${BASE_PATH}/${file}`;
 }
 
+// El contrato publica rutas relativas al árbol de datos ("data/...").
+// Al navegar a una corrida histórica (BASE_PATH = "runs/<run>/data") hay que
+// reescribir el prefijo; si no, se cargarían los ficheros de la vigente.
+export function contractUrl(path) {
+  if (!path) return null;
+  const prefix = 'data/';
+  return path.startsWith(prefix) ? `${BASE_PATH}/${path.slice(prefix.length)}` : path;
+}
+
 export const DATA = {
   topVariants:        () => dataUrl('top_variants.json'),
   structuralMetrics:  () => dataUrl('structural_metrics.json'),

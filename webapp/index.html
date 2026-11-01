@@ -148,6 +148,20 @@
       </label>
     </div>
 
+    <!-- Visor 3D de la pose (proteína + ligando) -->
+    <div class="card full-width viewer-card">
+      <h2>Pose proteína–ligando</h2>
+      <p class="subtitle" id="docking-pose-label">
+        Pulsa «Ver pose» en el ranking o en la tabla para cargar el complejo de AutoDock Vina.
+      </p>
+      <div id="viewer-docking" class="molstar-viewer"></div>
+      <p class="pose-legend">
+        <span class="legend-item"><i class="legend-dot legend-protein"></i> Proteína (cartoon)</span>
+        <span class="legend-item"><i class="legend-dot legend-ligand"></i> Ligando (cadena L)</span>
+        <span class="legend-item"><i class="legend-dot legend-mutation"></i> Residuo mutado</span>
+      </p>
+    </div>
+
     <div class="card full-width">
       <h2>Ranking de Fármacos</h2>
       <div id="chart-docking-ranking"></div>
@@ -158,7 +172,7 @@
       <div class="table-wrapper">
         <table id="table-docking">
           <thead>
-            <tr><th>Fármaco</th><th>Target</th><th>Estado</th><th>Afinidad WT (kcal/mol)</th><th>Afinidad MUT (kcal/mol)</th><th>Δ (MUT - WT)</th></tr>
+            <tr><th>Fármaco</th><th>Target</th><th>Estado</th><th>Afinidad WT (kcal/mol)</th><th>Afinidad MUT (kcal/mol)</th><th>Δ (MUT - WT)</th><th>Pose</th></tr>
           </thead>
           <tbody id="tbody-docking"></tbody>
         </table>

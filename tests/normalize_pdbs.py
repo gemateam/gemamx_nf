@@ -2,8 +2,12 @@
 Normaliza los PDBs de referencia para que sean compatibles con PDBe Molstar v3:
   1. Renumera residuos desde 1 (Molstar espera numeración continua)
   2. Agrega HEADER, REMARK y END obligatorios
-  3. Escribe en /workspace/tests/reference/structures/ Y en /workspace/results/data/structures/
+  3. Actualiza el sidecar `<pdb>.json` para que `model_start` siga siendo la
+     posición real del primer residuo en la proteína (si el PDB original usa
+     numeración de proteína) y `model_resseq_*` refleje la renumeración.
+  4. Escribe en /workspace/tests/reference/structures/ Y en /workspace/results/data/structures/
 """
+import json
 from pathlib import Path
 
 STRUCTS = [
@@ -18,7 +22,8 @@ OUTPUT_DIRS = [
 ]
 
 
-def normalize_pdb(src: Path, gene: str, variant: str) -> str:
+def normalize_pdb(src: Path, gene: str, variant: str) -> tuple[str, int, int]:
+    """Devuelve (contenido PDB, primer resSeq original, nº de residuos)."""
     lines = src.read_text().splitlines()
 
     # Recopilar líneas ATOM/HETATM y renumerar residuos desde 1
@@ -47,7 +52,32 @@ def normalize_pdb(src: Path, gene: str, variant: str) -> str:
     header = f"HEADER    {title:<40}  01-JAN-26   GEMX\n"
     remark = f"REMARK   1 GEMAMX pipeline — {gene} {variant} — residues renumbered 1..{counter}\n"
 
-    return header + remark + "\n".join(new_atoms) + "\nEND\n"
+    first_original = int(atom_lines[0][22:26]) if atom_lines else 1
+    return header + remark + "\n".join(new_atoms) + "\nEND\n", first_original, counter
+
+
+def update_sidecar(src: Path, first_original: int, residues: int) -> None:
+    """Mantiene `model_start` coherente con la renumeración del PDB.
+
+    Si el PDB original ya usaba numeración de proteína (p. ej. 957..1068), el
+    primer resSeq ES la posición en la proteína y debe pasar a `model_start`.
+    Si ya empezaba en 1, se respeta el `model_start` existente (el offset no
+    es deducible del fichero).
+    """
+    sidecar = src.with_suffix(".json")
+    if not sidecar.is_file():
+        print(f"  WARN: sin sidecar para {src.name}; no se puede fijar model_start")
+        return
+
+    meta = json.loads(sidecar.read_text())
+    if first_original != 1:
+        meta["model_start"] = first_original
+    meta["model_resseq_start"] = 1
+    meta["model_resseq_end"] = residues
+    meta["model_length"] = residues
+    meta["residues"] = residues
+    sidecar.write_text(json.dumps(meta, indent=4, sort_keys=False) + "\n")
+    print(f"  ✓ {sidecar}  (model_start={meta.get('model_start')})")
 
 
 for src_str, gene, variant in STRUCTS:
@@ -56,7 +86,7 @@ for src_str, gene, variant in STRUCTS:
         print(f"SKIP (no existe): {src}")
         continue
 
-    content = normalize_pdb(src, gene, variant)
+    content, first_original, residues = normalize_pdb(src, gene, variant)
     fname = src.name
 
     for out_dir in OUTPUT_DIRS:
@@ -65,5 +95,7 @@ for src_str, gene, variant in STRUCTS:
         out.write_text(content)
         lines = content.count("\n")
         print(f"  ✓ {out}  ({lines} líneas)")
+
+    update_sidecar(src, first_original, residues)
 
 print("Done.")

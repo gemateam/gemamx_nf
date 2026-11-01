@@ -51,6 +51,18 @@ workflow {
         .map { gene, pc -> gene }
         .unique()
 
+    // Ventana de ESMFold para WT: el WT no tiene mutación propia, así que se
+    // centra en la primera mutación conocida del gen. Sin esto, una proteína
+    // larga (p. ej. PIK3CA, 1068 aa) no se puede plegar con la API (límite 390)
+    // y WT/MUT cubrirían regiones distintas (RMSD no comparable).
+    def ch_gene_center = ch_variants
+        .map { gene, pc ->
+            def m = (pc =~ /^[A-Za-z](\d+)[A-Za-z]$/)
+            tuple(gene, m.matches() ? (m[0][1] as Integer) : 0)
+        }
+        .groupTuple()
+        .map { gene, positions -> tuple(gene, positions.find { it > 0 } ?: 0) }
+
     // ── FASTA ─────────────────────────────────────────────────────────────────
     FETCH_FASTA_WT(ch_genes)
 
@@ -65,12 +77,14 @@ workflow {
     def struct_dir = params.structures_dir ? file(params.structures_dir) : null
 
     def ch_wt_struct_input = FETCH_FASTA_WT.out.wt_fasta
-        .map { gene, fasta ->
+        .join(ch_gene_center)
+        .map { gene, fasta, window_center ->
             def pdb  = struct_dir ? file("${struct_dir}/${gene}_WT.pdb")  : []
             def meta = struct_dir ? file("${struct_dir}/${gene}_WT.json") : []
             tuple(gene, fasta,
                   (pdb instanceof java.nio.file.Path && pdb.exists()) ? pdb  : [],
-                  (meta instanceof java.nio.file.Path && meta.exists()) ? meta : [])
+                  (meta instanceof java.nio.file.Path && meta.exists()) ? meta : [],
+                  window_center)
         }
 
     PREDICT_STRUCTURE_WT(ch_wt_struct_input)

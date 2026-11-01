@@ -148,11 +148,16 @@ tbody tr:hover { background: rgba(13,148,136,.1); }
 .metric-item .m-value { font-weight: 700; color: var(--teal-light); font-size: 1rem; }
 
 .viewer-card { min-height: 420px; }
-.molstar-viewer { height: 380px; border-radius: 6px; overflow: hidden; background: #0a0a14; }
+/* Molstar posiciona su raíz con position:absolute; el contenedor debe ser
+   el bloque contenedor (position:relative) o el visor se escapa del card. */
+.molstar-viewer {
+  position: relative;
+  height: 380px; border-radius: 6px; overflow: hidden; background: #0a0a14;
+}
 
 /* ── RMSD REGIONS ────────────────────────────────────────── */
 .rmsd-bar-container { display: flex; flex-direction: column; gap: .6rem; }
-.rmsd-bar-item { display: flex; align-items: center; gap .75rem; }
+.rmsd-bar-item { display: flex; align-items: center; gap: .75rem; }
 .rmsd-bar-label { width: 200px; font-size: .85rem; flex-shrink: 0; }
 .rmsd-bar-track { flex: 1; background: var(--bg); border-radius: 99px; height: 12px; overflow: hidden; }
 .rmsd-bar-fill  { height: 100%; border-radius: 99px; transition: width .6s ease; }
@@ -162,6 +167,30 @@ tbody tr:hover { background: rgba(13,148,136,.1); }
 .docking-controls { margin-bottom: 1rem; }
 .delta-positive { color: var(--green); }
 .delta-negative { color: var(--red); }
+
+/* Botón «Ver pose» de la tabla de afinidades */
+.btn-pose {
+  background: rgba(13, 148, 136, .15);
+  border: 1px solid var(--teal);
+  color: var(--teal-light);
+  padding: .3rem .7rem; border-radius: var(--radius);
+  font-size: .78rem; font-weight: 600; cursor: pointer;
+  transition: background .15s ease, color .15s ease;
+  white-space: nowrap;
+}
+.btn-pose:hover:not(:disabled) { background: var(--teal); color: #fff; }
+.btn-pose:disabled { opacity: .4; cursor: not-allowed; }
+
+/* Leyenda del visor de poses */
+.pose-legend {
+  display: flex; gap: 1.25rem; flex-wrap: wrap;
+  margin-top: .6rem; font-size: .75rem; color: var(--text-muted);
+}
+.legend-item { display: inline-flex; align-items: center; gap: .4rem; }
+.legend-dot { width: 9px; height: 9px; border-radius: 50%; display: inline-block; }
+.legend-protein  { background: #6ee7d7; }
+.legend-ligand   { background: #fb923c; }
+.legend-mutation { background: #ef4444; }
 
 /* ── REPORT ──────────────────────────────────────────────── */
 .report-controls { margin-bottom: 1rem; }

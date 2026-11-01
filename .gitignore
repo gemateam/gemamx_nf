@@ -15,6 +15,9 @@ venv/
 __pycache__/
 *.pyc
 
+# Editor
+.vscode/
+
 # Sistema
 .DS_Store
 Thumbs.db

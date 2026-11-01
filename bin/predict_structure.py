@@ -3,8 +3,10 @@
 
 Backends:
   - esmfold     : API pública de ESMFold (sin GPU). Secuencias > 390 aa se
-                  recortan a una ventana alrededor de la mutación y el sidecar
-                  registra start/end para aplicar el offset aguas abajo.
+                  recortan a una ventana alrededor de la mutación (o de
+                  `--window-center`, que es como el WT cubre la misma región
+                  que el MUT) y el sidecar registra start/end para aplicar el
+                  offset aguas abajo.
   - precomputed : copia una estructura existente y calcula su pLDDT. Si la
                   entrada es CIF/mmCIF se convierte a PDB: la salida de este
                   proceso es siempre un `.pdb`.
@@ -110,6 +112,28 @@ def load_ca(path: Path) -> list[dict]:
     return residues
 
 
+def fasta_model_start(sequence: str, residues: list[dict]) -> int | None:
+    """Posición 1-based del modelo dentro de la secuencia completa.
+
+    Sólo devuelve un valor si los residuos son contiguos, no hay `X` y la
+    secuencia del modelo aparece exactamente una vez en la proteína. Sirve
+    para detectar un `model_start` de sidecar incoherente (p. ej. tras
+    renumerar un PDB fragmento desde 1).
+    """
+    if not residues:
+        return None
+    positions = [r["resseq"] for r in residues]
+    if positions != list(range(positions[0], positions[-1] + 1)):
+        return None
+    model_seq = "".join(r["one"] for r in residues)
+    if not model_seq or "X" in model_seq:
+        return None
+    first, last = sequence.find(model_seq), sequence.rfind(model_seq)
+    if first == -1 or first != last:
+        return None
+    return first + 1
+
+
 def fold_with_esmfold(sequence: str, timeout: int, retries: int) -> str:
     headers = {"Content-Type": "application/x-www-form-urlencoded"}
     last_error = None
@@ -141,6 +165,9 @@ def main() -> int:
                              "por defecto, sidecar hermano o primer resSeq)")
     parser.add_argument("--out-cif", help="ruta de salida mmCIF adicional (para la webapp)")
     parser.add_argument("--window", type=int, default=180)
+    parser.add_argument("--window-center", type=int,
+                        help="posición proteica sobre la que centrar la ventana "
+                             "de ESMFold en WT (por defecto, la mutación)")
     parser.add_argument("--timeout", type=int, default=300)
     parser.add_argument("--retries", type=int, default=3)
     args = parser.parse_args()
@@ -171,13 +198,19 @@ def main() -> int:
             model_start, model_end = 1, len(sequence)
             model_seq = sequence
         else:
-            if mutation_pos is None:
+            # WT no tiene posición de mutación propia: se centra la ventana en
+            # --window-center (la del evento que se compara) para que WT y MUT
+            # cubran la misma región y el RMSD sea comparable.
+            center = mutation_pos if mutation_pos is not None else args.window_center
+            if center is None:
                 die(f"{gene}: secuencia de {len(sequence)} aa sin posición de mutación "
-                    f"para recortar la ventana")
+                    f"ni --window-center para recortar la ventana")
+            if not 1 <= center <= len(sequence):
+                die(f"--window-center fuera de rango: {center} (1..{len(sequence)})")
             if args.window < 20:
                 die(f"--window demasiado pequeño: {args.window}")
-            model_start = max(1, mutation_pos - args.window)
-            model_end = min(len(sequence), mutation_pos + args.window - 1)
+            model_start = max(1, center - args.window)
+            model_end = min(len(sequence), center + args.window - 1)
             model_seq = sequence[model_start - 1:model_end]
         if len(model_seq) > ESMFOLD_LIMIT:
             die(f"ventana de {len(model_seq)} aa supera el límite de ESMFold ({ESMFOLD_LIMIT})")
@@ -210,6 +243,19 @@ def main() -> int:
             model_start = observed_start
     if model_start < 1:
         die(f"model_start inválido: {model_start}")
+
+    # En precomputed, si el modelo es un fragmento identificable en la proteína,
+    # la secuencia manda: un sidecar con model_start incoherente (típico tras
+    # renumerar el PDB desde 1) desplazaría la mutación al resSeq equivocado.
+    if args.backend == "precomputed":
+        inferred_start = fasta_model_start(sequence, residues)
+        if inferred_start is not None and inferred_start != model_start:
+            print(f"WARN: {out.name}: model_start={model_start} no coincide con la "
+                  f"secuencia de la proteína (el modelo empieza en {inferred_start}); "
+                  f"se usa {inferred_start}. Revisa el sidecar de la estructura "
+                  f"precomputada.", file=sys.stderr)
+            model_start = inferred_start
+            meta["model_start_source"] = "fasta_alignment"
 
     raw_bfactors = [r["bfactor"] for r in residues]
     # ESMFold (API) escribe pLDDT en 0..1; AlphaFold/Boltz en 0..100.

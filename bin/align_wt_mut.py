@@ -1,8 +1,11 @@
 #!/usr/bin/env python3
-"""ALIGN_WT_MUT — RMSD real entre WT y MUT (CA emparejados por resSeq).
+"""ALIGN_WT_MUT — RMSD real entre WT y MUT (CA emparejados por posición proteica).
 
 No existía en el legado. Método:
-  1. Se emparejan residuos por número (resSeq) presentes en ambos modelos.
+  1. Cada CA se indexa por su posición en la proteína completa
+     (`model_start + resseq - model_resseq_start`). Emparejar por resSeq del
+     modelo es incorrecto cuando WT y MUT cubren fragmentos distintos
+     (p. ej. WT 957..1068 y MUT 867..1068).
   2. Superposición global con SVD (Biopython SVDSuperimposer) -> rmsd_global.
   3. rmsd_active: RMSD de los CA dentro de --active-radius Å del residuo mutado
      (en coordenadas WT, tras la superposición global).
@@ -22,10 +25,14 @@ from gemamx_common import die, parse_mutation, read_json, write_json  # noqa: E4
 from predict_structure import load_ca  # noqa: E402
 
 
-def index_by_resseq(residues: list[dict]) -> dict[int, dict]:
+def index_by_protein_pos(residues: list[dict], meta: dict) -> dict[int, dict]:
+    """Indexa los CA por posición en la proteína completa (no por resSeq del modelo)."""
+    model_start = int(meta.get("model_start", 1))
+    resseq_start = int(meta.get("model_resseq_start", 1))
     indexed: dict[int, dict] = {}
     for residue in residues:
-        indexed.setdefault(residue["resseq"], residue)
+        position = model_start + (residue["resseq"] - resseq_start)
+        indexed.setdefault(position, residue)
     return indexed
 
 
@@ -59,8 +66,8 @@ def main() -> int:
     if wt_meta.get("gene") != mut_meta.get("gene"):
         die(f"genes distintos: {wt_meta.get('gene')} vs {mut_meta.get('gene')}")
 
-    wt_res = index_by_resseq(load_ca(Path(args.wt)))
-    mut_res = index_by_resseq(load_ca(Path(args.mut)))
+    wt_res = index_by_protein_pos(load_ca(Path(args.wt)), wt_meta)
+    mut_res = index_by_protein_pos(load_ca(Path(args.mut)), mut_meta)
     common = sorted(set(wt_res) & set(mut_res))
     if len(common) < args.min_matched:
         die(f"solo {len(common)} residuos CA en común (mínimo {args.min_matched}). "
@@ -76,29 +83,17 @@ def main() -> int:
     rotation, translation = superimposer.get_rotran()
     mut_aligned = (mut_coords @ rotation) + translation
 
-    mut_resseq = int(mut_meta["mutation_resseq_model"])
-    # Para WT, resseq_inicial + (pos - model_start)
-    wt_model_start = int(wt_meta.get("model_start", wt_meta.get("model_resseq_start", 1)))
-    wt_resseq_start = int(wt_meta.get("model_resseq_start", 1))
-    wt_resseq = wt_meta.get("mutation_resseq_model")
-    if wt_resseq is not None:
-        wt_resseq = int(wt_resseq)
-    else:
-        wt_resseq = wt_resseq_start + (mutation_pos - wt_model_start)
-
-    for label, indexed, resseq, expected in (
-        ("WT", wt_res, wt_resseq, wt_aa),
-        ("MUT", mut_res, mut_resseq, mut_aa),
-    ):
-        residue = indexed.get(resseq)
+    for label, indexed, expected in (("WT", wt_res, wt_aa), ("MUT", mut_res, mut_aa)):
+        residue = indexed.get(mutation_pos)
         if residue is None:
-            die(f"{label}: el residuo {mutation_pos} (modelo: {resseq}) no está en la estructura")
+            die(f"{label}: el residuo {mutation_pos} no está en la estructura "
+                f"(posiciones {min(indexed)}..{max(indexed)})")
         if residue["one"] != expected:
             die(f"{label}: residuo {mutation_pos} es {residue['resname']} "
                 f"({residue['one']}), se esperaba {expected}")
 
     # Sitio activo: residuos del WT cerca del residuo mutado (coordenadas WT)
-    mutation_coord = np.array(wt_res[wt_resseq]["coord"], dtype=float)
+    mutation_coord = np.array(wt_res[mutation_pos]["coord"], dtype=float)
     distances = np.linalg.norm(wt_coords - mutation_coord, axis=1)
     active_mask = distances <= args.active_radius
     if active_mask.sum() < 5:
@@ -107,8 +102,8 @@ def main() -> int:
         np.sum((wt_coords[active_mask] - mut_aligned[active_mask]) ** 2, axis=1)
     )))
 
-    wt_resname = wt_res[wt_resseq]["resname"].title()
-    mut_resname = mut_res[mut_resseq]["resname"].title()
+    wt_resname = wt_res[mutation_pos]["resname"].title()
+    mut_resname = mut_res[mutation_pos]["resname"].title()
     if wt_resname == mut_resname:
         die(f"el residuo {mutation_pos} es {wt_resname} en WT y MUT: la mutación no está aplicada")
 
@@ -126,7 +121,7 @@ def main() -> int:
         "active_residues": int(active_mask.sum()),
         "active_radius": args.active_radius,
         "mutation_pos": mutation_pos,
-        "mutation_resseq_model": mut_resseq,
+        "mutation_resseq_model": mut_res[mutation_pos]["resseq"],
         "wt_residue": wt_resname.upper(),
         "mut_residue": mut_resname.upper(),
         "wt_file": Path(args.wt).name,
