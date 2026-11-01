@@ -36,6 +36,68 @@ const STAGES_V2 = [
 ];
 
 // ── Helpers ────────────────────────────────────────────────────────────────
+function getCodeBase() {
+  if (BASE_PATH === 'data') {
+    return 'data/source_code';
+  }
+  // BASE_PATH is "runs/<runName>/data"
+  return BASE_PATH.replace(/\/data$/, '/source_code');
+}
+
+async function viewCodeModal(filePath, scriptLabel) {
+  const modal = document.getElementById('code-modal');
+  const modalTitle = document.getElementById('code-modal-title');
+  const modalRun = document.getElementById('code-modal-run');
+  const modalContent = document.getElementById('code-modal-content');
+  const rawBtn = document.getElementById('code-modal-raw-btn');
+  if (!modal) return;
+
+  const currentRun = document.getElementById('sel-run')?.options[document.getElementById('sel-run').selectedIndex]?.text ?? 'Corrida activa';
+  modalTitle.textContent = scriptLabel || filePath;
+  modalRun.textContent = currentRun;
+  modalContent.textContent = 'Cargando código ejecutado en esta corrida específica...';
+  modal.style.display = 'flex';
+
+  const codeBase = getCodeBase();
+  const url = `${codeBase}/${filePath}`;
+  if (rawBtn) {
+    rawBtn.href = url;
+  }
+
+  try {
+    const res = await fetch(url);
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const codeText = await res.text();
+    modalContent.textContent = codeText;
+  } catch (err) {
+    modalContent.textContent = `No se pudo cargar el archivo directo desde ${url}: ${err.message}`;
+  }
+}
+
+// Inicializar listeners del modal una sola vez
+if (typeof window !== 'undefined' && !window.__codeModalAttached) {
+  window.__codeModalAttached = true;
+  document.addEventListener('click', e => {
+    if (e.target.id === 'code-modal-close' || e.target.classList?.contains('code-modal-backdrop')) {
+      const modal = document.getElementById('code-modal');
+      if (modal) modal.style.display = 'none';
+    }
+    const codeBtn = e.target.closest('.ps-code-view-btn');
+    if (codeBtn) {
+      e.preventDefault();
+      const file = codeBtn.dataset.codeFile;
+      const label = codeBtn.dataset.codeLabel;
+      viewCodeModal(file, label);
+    }
+  });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') {
+      const modal = document.getElementById('code-modal');
+      if (modal) modal.style.display = 'none';
+    }
+  });
+}
+
 function setText(id, val) {
   const el = document.getElementById(id);
   if (el) el.textContent = val ?? '—';
@@ -219,15 +281,15 @@ async function loadPipeline() {
         ? stageLabel.docking_partial
         : stageLabel[status];
       const cls = `ps-stage ps-stage--${status}`;
-      const codeUrl = `${GITHUB_REPO}/${s.file}`;
+      const fileName = s.file.split('/').pop();
       return `
         <div class="${cls}">
           <div class="ps-stage-node">${s.id}</div>
           <div class="ps-stage-label">
             ${s.label}<br>
-            <a href="${codeUrl}" target="_blank" rel="noopener" class="ps-code-link" title="Ver código fuente de este paso en GitHub">
-              ⚡ ${s.file.split('/').pop()} ↗
-            </a>
+            <button class="ps-code-view-btn" data-code-file="${s.file}" data-code-label="${s.file}" title="Ver código exacto ejecutado en esta corrida" style="background:transparent;border:none;color:var(--teal-light);font-family:var(--font-mono, monospace);font-size:.73rem;cursor:pointer;padding:0;text-decoration:underline;">
+              ⚡ ${fileName} 👁️
+            </button>
           </div>
           <div class="ps-stage-status">${labelText}</div>
           ${i < activeStages.length - 1 ? '<div class="ps-stage-connector"></div>' : ''}
@@ -299,6 +361,14 @@ async function loadPipeline() {
           <a href="${mlflowRunUrl}" target="_blank" rel="noopener" class="ps-mlflow-btn" style="display:inline-block;padding:3px 10px;background:var(--teal);color:#021013;font-size:.78rem;font-weight:700;border-radius:4px;text-decoration:none;">
             🚀 Ver corrida en MLflow
           </a>
+        </span>
+      </div>
+      <div class="ps-mlflow-row">
+        <span class="ps-mlflow-label">Workflow Code</span>
+        <span class="ps-mlflow-value">
+          <button class="ps-code-view-btn" data-code-file="${isRomero ? 'main_v2.nf' : 'main.nf'}" data-code-label="${isRomero ? 'main_v2.nf (Workflow DSL2 Romero V2)' : 'main.nf (Workflow DSL2 TCGA V1)'}" style="background:rgba(20,184,166,0.15);border:1px solid var(--teal);color:var(--teal-light);font-size:.75rem;padding:2px 8px;border-radius:4px;cursor:pointer;">
+            📄 Ver ${isRomero ? 'main_v2.nf' : 'main.nf'} ejecutado
+          </button>
         </span>
       </div>
       <div class="ps-mlflow-row">

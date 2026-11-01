@@ -976,3 +976,115 @@ tbody tr:hover { background: rgba(13,148,136,.1); }
 }
 #table-clinical tbody tr:hover { background: rgba(255,255,255,.03); }
 #table-clinical td { padding: .6rem 1rem; font-size: .85rem; vertical-align: middle; }
+
+/* ── MODAL DE CODIGO FUENTE REAL EJECUTADO ─────────────────── */
+.code-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(4, 13, 20, 0.85);
+  backdrop-filter: blur(4px);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+}
+.code-modal-dialog {
+  background: #0b1522;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  width: 90vw;
+  max-width: 1050px;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.6);
+  animation: modalFadeIn 0.2s ease-out;
+}
+@keyframes modalFadeIn {
+  from { opacity: 0; transform: scale(0.97); }
+  to { opacity: 1; transform: scale(1); }
+}
+.code-modal-header {
+  padding: 0.9rem 1.25rem;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #070e17;
+  border-radius: 8px 8px 0 0;
+}
+.code-modal-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.code-modal-badge {
+  background: rgba(20, 184, 166, 0.15);
+  color: var(--teal-light);
+  border: 1px solid var(--teal);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+}
+#code-modal-title {
+  margin: 0;
+  font-size: 1rem;
+  font-family: var(--font-mono, monospace);
+  color: #f1f5f9;
+}
+.code-modal-run {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  font-family: var(--font-mono, monospace);
+}
+.code-modal-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.code-modal-btn {
+  font-size: 0.78rem;
+  color: var(--teal-light);
+  border: 1px solid rgba(20, 184, 166, 0.4);
+  padding: 0.25rem 0.6rem;
+  border-radius: 4px;
+  text-decoration: none;
+  transition: all 0.15s;
+}
+.code-modal-btn:hover {
+  background: var(--teal);
+  color: #021013;
+}
+.code-modal-close {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: 1.25rem;
+  cursor: pointer;
+  line-height: 1;
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  transition: color 0.15s;
+}
+.code-modal-close:hover {
+  color: #f87171;
+}
+.code-modal-body {
+  padding: 1rem 1.25rem;
+  overflow: auto;
+  flex: 1;
+  background: #040910;
+  border-radius: 0 0 8px 8px;
+}
+.code-modal-body pre {
+  margin: 0;
+  font-family: "JetBrains Mono", Consolas, "Fira Code", monospace;
+  font-size: 0.82rem;
+  line-height: 1.5;
+  color: #cbd5e1;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
