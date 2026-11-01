@@ -12,7 +12,9 @@ process PREDICT_STRUCTURE_WT {
     script:
     def mode = params.structures_mode
     if (mode == 'boltz') {
-        error "El backend 'boltz' requiere GPU y la imagen ${params.image_gpu} no está autorizada/disponible en local."
+        error "El backend 'boltz' requiere GPU (en YUCA: AMD MI210 de 64 GB con ROCm 6.2.3) y la imagen ${params.image_gpu}. " +
+              "Está implementado en modules/structure/boltz.nf pero NO cableado en main.nf: " +
+              "ver docs/BOLTZ_HPC.md § 5. Activación."
     }
     def precomp_arg = (mode == 'precomputed' && precomputed_pdb) ? "--structure ${precomputed_pdb}" : ""
     // WT no tiene mutación: con esmfold la ventana se centra en la posición
@@ -55,7 +57,9 @@ process PREDICT_STRUCTURE_MUT {
     script:
     def mode = params.structures_mode
     if (mode == 'boltz') {
-        error "El backend 'boltz' requiere GPU y la imagen ${params.image_gpu} no está autorizada/disponible en local."
+        error "El backend 'boltz' requiere GPU (en YUCA: AMD MI210 de 64 GB con ROCm 6.2.3) y la imagen ${params.image_gpu}. " +
+              "Está implementado en modules/structure/boltz.nf pero NO cableado en main.nf: " +
+              "ver docs/BOLTZ_HPC.md § 5. Activación."
     }
     def precomp_arg = (mode == 'precomputed' && precomputed_pdb) ? "--structure ${precomputed_pdb}" : ""
     """

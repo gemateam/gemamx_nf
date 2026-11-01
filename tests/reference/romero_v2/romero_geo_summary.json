@@ -1,0 +1,68 @@
+{
+  "datasets": {
+    "GSE86374": {
+      "dataset": "GSE86374",
+      "series_title": "Analysis of somatic DNA copy number alterations and frequency of breast cancer intrinsic subtypes from Mexican women [gene expression]",
+      "series_summary": "Breast cancer is a heterogeneous disease described in well-recognized biological subtypes. Particularly, gene expression profiling has revealed 5 intrinsic subtypes of breast cancer characterized by different biological and clinical features. The diversity of the intrinsic subtypes across human population has been limited described, and there is few information about the genomic architecture of breast tumors in Mexican or Hispanic populations. In this study, we performed PAM50 assay, based in Affymetrix microarray profiling of 128 fresh frozen tumors from Mexican Latino Hispanic population, to describe the overall distribution of subtypes, and characterize the relation to clinicopathologic characteristics. As well, we correlated the mRNA expression patterns with specific copy number alterations (CPA), in order to analyze their role in breast tumors. A total of 100 blood-tumor samples were assayed using Affymetrix 6.0 SNP arrays; segmentation analysis and GISTIC were performed to identify focal amplifications or deletions. The distribution of PAM50 intrinsic subtypes in our cohort was computed to be 44% luminal A, 20% luminal B, 12.0% HER2-enriched, 12% basal-like, and 12% normal-like. Study comparison with the literature mainly TCGA and METABRIC (most of the patients came from Caucasian population), as well as LACE (which describe a population study) show a similar distribution of the intrinsic subtypes within Hispanic and Caucasian populations. Interestingly, basal-like subtype is less represented than in African-American race. The sum of sensitivity and specificity between the clinicopathologic and intrinsic subtype categories across 4 groups (excluding normal-like) was 50% and 87.5%, respectively. Differentially expression profiles within the subtypes reveal a set of genes altered in each group with biological relevance to stablish the phenotypical characteristics of each subtype. Our analyses confirmed the already reported copy number data. Importantly, many of the copy number profiles correlated with mRNA subtype. With this analysis we can conclude that breast cancer intrinsic subtypes have been reproduced in Mexican population contributing to the description of the PAM50 subtypes among multiple ethnic groups based on a gene expression assay. Our observation based in the integrative genomic analysis of mRNA expression and CPA allowed us to define gene circuits and phenotypic characteristics that can explain the heterogeneity of breast cancer subtypes.",
+      "series_overall_design": "Breast cancer tumors were collected at the Fundación Mexicana de Fomento para la Prevención Oportuna del Cáncer de Mama, A.C., (FUCAM) during the surgical procedure in adjuvant. Two training pathologist carefully performed a histopathological review to define percentage of tumoral cells. Also, immunochemistry markers (ER-, PR- and Her2-) were analyzed. Thus tumors with at least 70% of tumoral cells were processed (N=124). Total RNA was extracted and hybridize on Affymetrix miRNA microarrays. To define PAM50 subtypes Parker algorithm was computed.",
+      "pubmed_id": null,
+      "platform_id": "GPL6244",
+      "platform_title": "[HuGene-1_0-st] Affymetrix Human Gene 1.0 ST Array [transcript (gene) version]",
+      "platform_manufacturer": "Affymetrix",
+      "omics_kind": "expression",
+      "sample_count": 159,
+      "inferred_subtype_counts": {
+        "LumA": 50,
+        "Basal": 14,
+        "LumB": 27,
+        "Her2": 18,
+        "Normal-like": 14,
+        "UNK": 36
+      }
+    },
+    "GSE87048": {
+      "dataset": "GSE87048",
+      "series_title": "Analysis of somatic DNA copy number alterations and frequency of breast cancer intrinsic subtypes from Mexican women [copy number]",
+      "series_summary": "Breast cancer is a heterogeneous disease described in well-recognized biological subtypes. Particularly, gene expression profiling has revealed 5 intrinsic subtypes of breast cancer characterized by different biological and clinical features. The diversity of the intrinsic subtypes across human population has been limited described, and there is few information about the genomic architecture of breast tumors in Mexican or Hispanic populations. In this study, we performed PAM50 assay, based in Affymetrix microarray profiling of 128 fresh frozen tumors from Mexican Latino Hispanic population, to describe the overall distribution of subtypes, and characterize the relation to clinicopathologic characteristics. As well, we correlated the mRNA expression patterns with specific copy number alterations (CPA), in order to analyze their role in breast tumors. A total of 100 blood-tumor samples were assayed using Affymetrix 6.0 SNP arrays; segmentation analysis and GISTIC were performed to identify focal amplifications or deletions. The distribution of PAM50 intrinsic subtypes in our cohort was computed to be 44% luminal A, 20% luminal B, 12.0% HER2-enriched, 12% basal-like, and 12% normal-like. Study comparison with the literature mainly TCGA and METABRIC (most of the patients came from Caucasian population), as well as LACE (which describe a population study) show a similar distribution of the intrinsic subtypes within Hispanic and Caucasian populations. Interestingly, basal-like subtype is less represented than in African-American race. The sum of sensitivity and specificity between the clinicopathologic and intrinsic subtype categories across 4 groups (excluding normal-like) was 50% and 87.5%, respectively. Differentially expression profiles within the subtypes reveal a set of genes altered in each group with biological relevance to stablish the phenotypical characteristics of each subtype. Our analyses confirmed the already reported copy number data. Importantly, many of the copy number profiles correlated with mRNA subtype. With this analysis we can conclude that breast cancer intrinsic subtypes have been reproduced in Mexican population contributing to the description of the PAM50 subtypes among multiple ethnic groups based on a gene expression assay. Our observation based in the integrative genomic analysis of mRNA expression and CPA allowed us to define gene circuits and phenotypic characteristics that can explain the heterogeneity of breast cancer subtypes.",
+      "series_overall_design": "Breast cancer tumors were collected at the Fundación Mexicana de Fomento para la Prevención Oportuna del Cáncer de Mama, A.C., (FUCAM) during the surgical procedure in adjuvant, togehetr with 5ml of blood. Two training pathologist carefully performed a histopathological review to define percentage of tumoral cells. Also, immunochemistry markers (ER-, PR- and Her2-) were analyzed. Thus tumors with at least 70% of tumoral cells were processed (N=124). Genomic DNA was extracted and hybridize on Affymetrix SNP6 microarrays. To define SCNAs GISTIC algorithm was computed. SNP markers were used to define ancestry",
+      "pubmed_id": "33854067",
+      "platform_id": "GPL6801",
+      "platform_title": "[GenomeWideSNP_6] Affymetrix Genome-Wide Human SNP 6.0 Array",
+      "platform_manufacturer": "Affymetrix",
+      "omics_kind": "cnv",
+      "sample_count": 200,
+      "inferred_subtype_counts": {
+        "UNK": 200
+      }
+    },
+    "GSE87049": {
+      "dataset": "GSE87049",
+      "series_title": "Analysis of somatic DNA copy number alterations and frequency of breast cancer intrinsic subtypes from Mexican women",
+      "series_summary": "This SuperSeries is composed of the SubSeries listed below.",
+      "series_overall_design": "Refer to individual Series",
+      "pubmed_id": "33854067",
+      "platform_id": [
+        "GPL6244",
+        "GPL6801"
+      ],
+      "platform_title": [
+        "[HuGene-1_0-st] Affymetrix Human Gene 1.0 ST Array [transcript (gene) version]",
+        "[GenomeWideSNP_6] Affymetrix Genome-Wide Human SNP 6.0 Array"
+      ],
+      "platform_manufacturer": [
+        "Affymetrix",
+        "Affymetrix"
+      ],
+      "omics_kind": "superseries",
+      "sample_count": 359,
+      "inferred_subtype_counts": {
+        "LumA": 50,
+        "Basal": 14,
+        "LumB": 27,
+        "Her2": 18,
+        "Normal-like": 14,
+        "UNK": 236
+      }
+    }
+  }
+}

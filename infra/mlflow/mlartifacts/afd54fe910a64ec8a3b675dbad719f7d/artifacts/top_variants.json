@@ -1,0 +1,12 @@
+[
+    {
+        "hugo_symbol": "PIK3CA",
+        "protein_change": "H1047R",
+        "chromosome": "3",
+        "start_position": 178952085,
+        "frequency": 5,
+        "cohort_percentage": 38.461538,
+        "classification": "Patogénica",
+        "rank": 1
+    }
+]

@@ -881,3 +881,98 @@ tbody tr:hover { background: rgba(13,148,136,.1); }
   .ps-timeline { flex-direction: column; align-items: flex-start; }
   .ps-timeline::before { display: none; }
 }
+
+/* ══════════════════════════════════════════════════════════
+   VISTA CLÍNICO (v2 Romero)
+   ══════════════════════════════════════════════════════════ */
+
+/* ── GEO datasets ─────────────────────────────────────────── */
+.geo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: .75rem;
+  margin-top: .5rem;
+}
+.geo-card {
+  background: rgba(255,255,255,.03);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+}
+.geo-id {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+}
+.geo-link {
+  font-weight: 700;
+  font-size: .9rem;
+  color: var(--teal-light);
+  text-decoration: none;
+}
+.geo-link:hover { text-decoration: underline; }
+
+.geo-kind-badge {
+  font-size: .65rem;
+  font-weight: 700;
+  padding: .15rem .5rem;
+  border-radius: 99px;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+}
+.geo-kind--expression { background: rgba(96,165,250,.15); color: #60a5fa; border: 1px solid rgba(96,165,250,.3); }
+.geo-kind--cnv        { background: rgba(251,191,36,.15);  color: #fbbf24; border: 1px solid rgba(251,191,36,.3); }
+.geo-kind--superseries{ background: rgba(167,139,250,.15); color: #a78bfa; border: 1px solid rgba(167,139,250,.3); }
+
+.geo-title {
+  font-size: .78rem;
+  color: var(--text-muted);
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.geo-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .4rem;
+  font-size: .72rem;
+  color: var(--text-muted);
+}
+.geo-subtypes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .3rem;
+  margin-top: .25rem;
+}
+.geo-subtype-chip {
+  font-size: .68rem;
+  padding: .1rem .45rem;
+  border-radius: 99px;
+  background: rgba(20,184,166,.1);
+  color: var(--teal-light);
+  border: 1px solid rgba(20,184,136,.25);
+  font-weight: 600;
+}
+
+/* ── Nav tab v2 ───────────────────────────────────────────── */
+.nav-link--v2 { border-left: 2px solid var(--teal); padding-left: .6rem; }
+
+/* ── Tabla clínica ────────────────────────────────────────── */
+#table-clinical { width: 100%; border-collapse: collapse; }
+#table-clinical thead th {
+  font-size: .7rem; font-weight: 700; letter-spacing: .07em;
+  text-transform: uppercase; color: var(--text-muted);
+  padding: .5rem 1rem; text-align: left;
+  border-bottom: 1px solid var(--border);
+}
+#table-clinical tbody tr {
+  border-bottom: 1px solid rgba(255,255,255,.04);
+  transition: background .15s;
+}
+#table-clinical tbody tr:hover { background: rgba(255,255,255,.03); }
+#table-clinical td { padding: .6rem 1rem; font-size: .85rem; vertical-align: middle; }

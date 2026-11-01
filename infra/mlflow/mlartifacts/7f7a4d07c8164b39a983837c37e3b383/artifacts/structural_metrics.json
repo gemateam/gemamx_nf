@@ -1,0 +1,30 @@
+{
+    "PIK3CA_H1047R": {
+        "best_vina_drug": "Pictilisib",
+        "best_vina_score": -6.184,
+        "mut_plddt": 85.3,
+        "rmsd_active": 0.0,
+        "rmsd_global": 0.0,
+        "rmsd_regions": [
+            {
+                "color": "#10b981",
+                "region": "Sitio activo H1047R",
+                "value": 0.0
+            }
+        ],
+        "vina_scores": {
+            "Abemaciclib": -6.001,
+            "Alpelisib": -5.065,
+            "Buparlisib": -5.359,
+            "Capivasertib": -5.271,
+            "Copanlisib": -5.81,
+            "Everolimus": -4.056,
+            "Gedatolisib": -5.99,
+            "Palbociclib": -5.977,
+            "Pictilisib": -6.184,
+            "Ribociclib": -6.015,
+            "Taselisib": -4.85
+        },
+        "wt_plddt": 85.3
+    }
+}

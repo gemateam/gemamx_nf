@@ -35,3 +35,15 @@ secrets.env
 
 # Graphify — grafo de conocimiento (se regenera con: graphify update .)
 graphify-out/
+
+# Node / Dependencias de build
+node_modules/
+package-lock.json
+
+# Archify artifacts temporales de comprobación
+.archify/
+docs/*.visual-check.*
+docs/*.browser-check.json
+docs/*.delivery.json
+docs/*.finalize*.json
+

@@ -62,8 +62,23 @@ def main() -> int:
     manifest: dict[str, str | None] = {}
     plddt: dict[str, float] = {}
     mut_resseq: dict[str, int] = {}   # variante → mutation_resseq_model
+    EXTRA_JSON_NAMES = {
+        "variant_clinical_summary.json",
+        "clinical_metadata.json",
+        "romero_geo_summary.json",
+        "GSE86374_summary.json",
+        "GSE87048_summary.json",
+        "GSE87049_summary.json",
+        "fasta_sequences.json",
+    }
     for meta_path in args.structure_meta:
+        name = Path(meta_path).name
+        if name in EXTRA_JSON_NAMES:
+            shutil.copyfile(meta_path, outdir / name)
+            continue
         meta = read_json(meta_path)
+        if not isinstance(meta, dict):
+            continue
         gene = meta.get("gene")
         change = meta.get("protein_change", "WT")
         if not gene:
@@ -181,6 +196,22 @@ def main() -> int:
                          (args.raw, "raw_mutations.json"),
                          (args.stats, "mutation_stats.json")):
         shutil.copyfile(source, outdir / name)
+
+    # Copiar archivos de datos adicionales pasados como --structure-meta si
+    # tienen nombres reconocidos (clínicos, GEO summaries, etc.)
+    EXTRA_JSON_NAMES = {
+        "variant_clinical_summary.json",
+        "clinical_metadata.json",
+        "romero_geo_summary.json",
+        "GSE86374_summary.json",
+        "GSE87048_summary.json",
+        "GSE87049_summary.json",
+        "fasta_sequences.json",
+    }
+    for meta_path in args.structure_meta:
+        name = Path(meta_path).name
+        if name in EXTRA_JSON_NAMES:
+            shutil.copyfile(meta_path, outdir / name)
 
     print(f"OK contratos: {len(metrics)} variantes, {len(affinities)} con docking, "
           f"{len(manifest)} entradas de manifest")

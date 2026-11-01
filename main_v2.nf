@@ -1,0 +1,227 @@
+nextflow.enable.dsl = 2
+
+/*
+ * ============================================================================
+ * gemamx_nf — GEMA MX · Pipeline V2 (Romero-Córdoba 2021 HM)
+ * Nextflow DSL2 · Docker · MLflow
+ *
+ * Módulos ejecutados en este workflow:
+ *
+ *   M1/M2  INGEST_ROMERO          — parsea XLSX MOESM8 + MOESM9 desde datos crudos
+ *   M5a    EXTRACT_CLINICAL       — parsea XLSX MOESM4: edad, IHC, PAM50, SBR
+ *   M5b    BUILD_CLINICAL_SUMMARY — cruza variantes + clínica
+ *   FASTA  FETCH_FASTA_WT/MUT     — obtiene FASTA para WT y variantes mutantes
+ *   STRUCT PREDICT_STRUCTURE_WT/MUT — genera modelos 3D y sidecars de validación
+ *   RMSD   ALIGN_WT_MUT           — calcula RMSD global y del sitio activo
+ *   DOCK   PREP_LIGAND/RECEPTOR   — prepara ligandos PDBQT y receptores
+ *          DOCK_CENTER/RUN_VINA   — define cajas de docking y ejecuta Vina
+ *   CONTR  BUILD_JSONS            — ensambla los contratos de datos y clínica
+ *   PUB    PUBLISH                — sella la corrida y genera run_manifest.json
+ *   MLFLOW LOG_MLFLOW             — registra la corrida completa en MLflow
+ *
+ * Uso:
+ *   nextflow run main_v2.nf -profile docker,'romero-v2' --run-name romero_v2
+ * ============================================================================
+ */
+
+include { INGEST_ROMERO; EXTRACT_CLINICAL; BUILD_CLINICAL_SUMMARY }         from './modules/clinical/main'
+include { FETCH_FASTA_WT; FETCH_FASTA_MUT }                                from './modules/fasta/main'
+include { PREDICT_STRUCTURE_WT; PREDICT_STRUCTURE_MUT; ALIGN_WT_MUT }     from './modules/structure/main'
+include { PREP_LIGAND; PREP_RECEPTOR; DOCK_CENTER; RUN_VINA }              from './modules/docking/main'
+include { BUILD_JSONS; PUBLISH }                                           from './modules/metrics/main'
+include { LOG_MLFLOW }                                                     from './modules/mlflow/main'
+
+workflow {
+
+    // ── Commit del repositorio ─────────────────────────────────────────────
+    def commit_hash = 'unknown'
+    try {
+        def proc = ['git', 'rev-parse', 'HEAD'].execute()
+        proc.waitFor()
+        if (proc.exitValue() == 0) commit_hash = proc.text.trim()
+    } catch (Exception e) { /* sin git */ }
+
+    // ── Archivos de entrada ────────────────────────────────────────────────
+    def maf_xlsx       = file(params.romero_maf,      checkIfExists: true)
+    def drivers_xlsx   = file(params.romero_drivers,  checkIfExists: true)
+    def clinical_xlsx  = file(params.romero_clinical, checkIfExists: true)
+    def drug_catalog_file = file(params.drug_catalog, checkIfExists: true)
+
+    // ── M1/M2 — Ingestión desde XLSX nativos de Romero ────────────────────
+    INGEST_ROMERO(maf_xlsx, drivers_xlsx)
+
+    // ── M5a/M5b — Metadatos y resumen clínico por variante ─────────────────
+    EXTRACT_CLINICAL(clinical_xlsx)
+
+    BUILD_CLINICAL_SUMMARY(
+        INGEST_ROMERO.out.raw_mutations,
+        EXTRACT_CLINICAL.out.clinical_metadata,
+        INGEST_ROMERO.out.top_variants
+    )
+
+    // ── Parsear variantes priorizadas → [gene, protein_change] ─────────────
+    def ch_variants = INGEST_ROMERO.out.top_variants
+        .flatMap { json_file ->
+            def json = new groovy.json.JsonSlurper().parse(json_file)
+            json.collect { row ->
+                def gene = row.hugo_symbol ?: row.gene
+                def pc   = row.protein_change
+                tuple(gene, pc)
+            }
+        }
+
+    // Genes únicos para WT
+    def ch_genes = ch_variants
+        .map { gene, pc -> gene }
+        .unique()
+
+    def ch_gene_center = ch_variants
+        .map { gene, pc ->
+            def m = (pc =~ /^[A-Za-z](\d+)[A-Za-z]$/)
+            tuple(gene, m.matches() ? (m[0][1] as Integer) : 0)
+        }
+        .groupTuple()
+        .map { gene, positions -> tuple(gene, positions.find { it > 0 } ?: 0) }
+
+    // ── FASTA ─────────────────────────────────────────────────────────────
+    def fasta_dir = params.fasta_dir ? file(params.fasta_dir) : null
+
+    def ch_wt_fasta_input = ch_genes
+        .map { gene ->
+            def precomp = fasta_dir ? file("${fasta_dir}/${gene}_WT.fasta") : []
+            def precomp_exists = (precomp instanceof java.nio.file.Path && precomp.exists()) ? precomp : []
+            tuple(gene, precomp_exists)
+        }
+
+    FETCH_FASTA_WT(ch_wt_fasta_input)
+
+    def ch_mut_with_wt = ch_variants
+        .combine(FETCH_FASTA_WT.out.wt_fasta, by: 0)
+        .map { gene, pc, fasta_wt ->
+            def precomp = fasta_dir ? file("${fasta_dir}/${gene}_${pc}.fasta") : []
+            def precomp_exists = (precomp instanceof java.nio.file.Path && precomp.exists()) ? precomp : []
+            tuple(gene, pc, fasta_wt, precomp_exists)
+        }
+
+    FETCH_FASTA_MUT(ch_mut_with_wt)
+
+    // ── ESTRUCTURAS 3D ────────────────────────────────────────────────────
+    def struct_dir = params.structures_dir ? file(params.structures_dir) : null
+
+    def ch_wt_struct_input = FETCH_FASTA_WT.out.wt_fasta
+        .join(ch_gene_center)
+        .map { gene, fasta, window_center ->
+            def pdb  = struct_dir ? file("${struct_dir}/${gene}_WT.pdb")  : []
+            def meta = struct_dir ? file("${struct_dir}/${gene}_WT.json") : []
+            tuple(gene, fasta,
+                  (pdb instanceof java.nio.file.Path && pdb.exists()) ? pdb  : [],
+                  (meta instanceof java.nio.file.Path && meta.exists()) ? meta : [],
+                  window_center)
+        }
+
+    PREDICT_STRUCTURE_WT(ch_wt_struct_input)
+
+    def ch_mut_struct_input = FETCH_FASTA_MUT.out.mut_fasta
+        .map { gene, pc, fasta ->
+            def pdb  = struct_dir ? file("${struct_dir}/${gene}_${pc}.pdb")  : []
+            def meta = struct_dir ? file("${struct_dir}/${gene}_${pc}.json") : []
+            tuple(gene, pc, fasta,
+                  (pdb instanceof java.nio.file.Path && pdb.exists()) ? pdb  : [],
+                  (meta instanceof java.nio.file.Path && meta.exists()) ? meta : [])
+        }
+
+    PREDICT_STRUCTURE_MUT(ch_mut_struct_input)
+
+    // Alineamiento WT vs MUT: cross por gene
+    def ch_align_input = PREDICT_STRUCTURE_WT.out.wt_struct
+        .cross(PREDICT_STRUCTURE_MUT.out.mut_struct)
+        .map { wt, mut ->
+            tuple(wt[0], mut[1], wt[1], wt[2], mut[2], mut[3])
+        }
+
+    ALIGN_WT_MUT(ch_align_input)
+
+    // ── LIGANDOS Y RECEPTORES ─────────────────────────────────────────────
+    def ch_drugs = Channel.fromPath(drug_catalog_file)
+        .splitCsv(header: true)
+        .map { row -> tuple(row.name, drug_catalog_file) }
+
+    PREP_LIGAND(ch_drugs)
+
+    def ch_receptors = PREDICT_STRUCTURE_WT.out.wt_struct
+        .map { gene, pdb, meta -> tuple("${gene}_WT", pdb, meta) }
+        .mix(
+            PREDICT_STRUCTURE_MUT.out.mut_struct
+                .map { gene, pc, pdb, meta -> tuple("${gene}_${pc}", pdb, meta) }
+        )
+
+    PREP_RECEPTOR(ch_receptors)
+    DOCK_CENTER(PREP_RECEPTOR.out.receptor_pdbqt)
+
+    // Producto cartesiano Receptores × Ligandos
+    def ch_docking_pairs = DOCK_CENTER.out.target_box
+        .combine(PREP_LIGAND.out.ligand_pdbqt)
+
+    // ── AUTODOCK VINA ─────────────────────────────────────────────────────
+    RUN_VINA(ch_docking_pairs)
+
+    // ── BUILD JSONS ───────────────────────────────────────────────────────
+    def ch_struct_files = PREDICT_STRUCTURE_WT.out.wt_struct
+        .flatMap { gene, pdb, meta -> [pdb, meta] }
+        .mix(PREDICT_STRUCTURE_WT.out.wt_cif)
+        .mix(
+            PREDICT_STRUCTURE_MUT.out.mut_struct
+                .flatMap { gene, pc, pdb, meta -> [pdb, meta] }
+        )
+        .mix(PREDICT_STRUCTURE_MUT.out.mut_cif)
+        .collect()
+
+    def ch_vina_files = RUN_VINA.out.vina_summary
+        .map { target, drug, summary -> summary }
+        .mix(RUN_VINA.out.vina_out_pdbqt)
+        .collect()
+
+    def ch_complex_files = RUN_VINA.out.vina_complex_pdb.collect()
+
+    def ch_clinical_files = BUILD_CLINICAL_SUMMARY.out.clinical_summary
+        .mix(EXTRACT_CLINICAL.out.clinical_metadata)
+        .collect()
+
+    BUILD_JSONS(
+        INGEST_ROMERO.out.top_variants,
+        INGEST_ROMERO.out.raw_mutations,
+        INGEST_ROMERO.out.mutation_stats,
+        drug_catalog_file,
+        ch_struct_files,
+        ALIGN_WT_MUT.out.rmsd_json.collect(),
+        ch_vina_files,
+        ch_complex_files,
+        ch_clinical_files
+    )
+
+    // ── PUBLISH ───────────────────────────────────────────────────────────
+    PUBLISH(
+        BUILD_JSONS.out.top_variants_out,
+        BUILD_JSONS.out.structural_metrics,
+        BUILD_JSONS.out.manifest_structures,
+        BUILD_JSONS.out.raw_mutations_out,
+        BUILD_JSONS.out.mutation_stats_out,
+        BUILD_JSONS.out.vina_affinities,
+        workflow.runName,
+        commit_hash
+    )
+
+    // ── LOG MLFLOW ────────────────────────────────────────────────────────
+    LOG_MLFLOW(
+        workflow.runName,
+        params.mlflow_tracking_uri,
+        params.mlflow_experiment,
+        commit_hash,
+        PUBLISH.out.run_manifest,
+        PUBLISH.out.run_params,
+        BUILD_JSONS.out.top_variants_out
+            .mix(BUILD_JSONS.out.structural_metrics)
+            .mix(BUILD_JSONS.out.vina_affinities)
+            .collect()
+    )
+}

@@ -1,24 +1,65 @@
 # =============================================================================
-# GEMA MX — Stack local del pipeline gemamx_nf
+# GEMA MX — Stack local autónomo del pipeline gemamx_nf
 #
 # Servicios:
-#   webapp   → app web estática servida por Nginx
-#
-# El servidor MLflow NO se define aquí: se asume que ya corre en la red
-# gemacont_default (gemacont-mlflow-1 / gemamx-mlflow:1.0.0).
-# Si se necesita un MLflow local independiente, usar el perfil "standalone":
-#   docker compose --profile standalone up -d
-#
-# La webapp monta results/data/ (contrato vigente) y results/runs/
-# (historial de corridas) en modo read-only.
+#   postgres → Base de datos de MLflow (inicializada con corridas históricas)
+#   mlflow   → Servidor de tracking y artefactos en http://localhost:5000
+#   webapp   → Aplicación web interactiva en http://localhost:8080
 #
 # Uso habitual:
-#   docker compose up -d webapp       # levantar/recargar solo la webapp
-#   docker compose logs -f webapp     # ver logs
-#   docker compose down               # parar
+#   docker compose up -d          # levantar todos los servicios
+#   docker compose logs -f mlflow # ver logs de MLflow
+#   docker compose down           # detener
 # =============================================================================
 
 services:
+
+  # ── PostgreSQL para MLflow ─────────────────────────────────────────────
+  postgres:
+    image: postgres:16.4-bookworm
+    container_name: gemamx_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: gemamx
+      POSTGRES_PASSWORD: change-me
+      POSTGRES_DB: mlflow
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./infra/postgres-init:/docker-entrypoint-initdb.d:ro
+      - gemamx_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U gemamx -d mlflow"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - gemamx_net
+
+  # ── Servidor MLflow ────────────────────────────────────────────────────
+  mlflow:
+    image: gemamx-mlflow:1.0.0
+    container_name: gemamx_mlflow
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      MLFLOW_BACKEND_STORE_URI: postgresql+psycopg2://gemamx:change-me@postgres:5432/mlflow
+      MLFLOW_ARTIFACT_ROOT: /mlflow/artifacts
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./infra/mlflow/artifacts:/mlflow/artifacts
+      - ./infra/mlflow/mlartifacts:/mlartifacts
+    healthcheck:
+      test: ["CMD-SHELL", "python3 -c \"import urllib.request; urllib.request.urlopen('http://localhost:5000/health')\""]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+    networks:
+      - gemamx_net
 
   # ── Web App estática ───────────────────────────────────────────────────
   webapp:
@@ -41,31 +82,13 @@ services:
       timeout: 5s
       retries: 3
       start_period: 10s
-
-  # ── MLflow standalone (opcional, solo si no hay gemacont corriendo) ────
-  mlflow:
-    profiles: ["standalone"]
-    image: ghcr.io/mlflow/mlflow:v2.19.0
-    container_name: gemamx_mlflow
-    restart: unless-stopped
-    ports:
-      - "5000:5000"
-    volumes:
-      - mlflow_data:/mlflow
-    command: >
-      mlflow server
-        --host 0.0.0.0
-        --port 5000
-        --backend-store-uri sqlite:////mlflow/mlflow.db
-        --artifacts-destination /mlflow/artifacts
-        --serve-artifacts
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:5000/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 20s
+    networks:
+      - gemamx_net
 
 volumes:
-  mlflow_data:
-    name: gemamx_mlflow_data
+  gemamx_pgdata:
+    name: gemamx_pgdata
+
+networks:
+  gemamx_net:
+    name: gemamx_net

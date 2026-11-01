@@ -22,13 +22,16 @@ export function contractUrl(path) {
 }
 
 export const DATA = {
-  topVariants:        () => dataUrl('top_variants.json'),
-  structuralMetrics:  () => dataUrl('structural_metrics.json'),
-  manifestStructures: () => dataUrl('manifest_structures.json'),
-  vinaAffinities:     () => dataUrl('docking/vina_affinities.json'),
-  mutationStats:      () => dataUrl('mutation_stats.json'),
-  runManifest:        () => dataUrl('run_manifest.json'),
-  rawMutations:       () => dataUrl('raw_mutations.json'),
+  topVariants:          () => dataUrl('top_variants.json'),
+  structuralMetrics:    () => dataUrl('structural_metrics.json'),
+  manifestStructures:   () => dataUrl('manifest_structures.json'),
+  vinaAffinities:       () => dataUrl('docking/vina_affinities.json'),
+  mutationStats:        () => dataUrl('mutation_stats.json'),
+  runManifest:          () => dataUrl('run_manifest.json'),
+  rawMutations:         () => dataUrl('raw_mutations.json'),
+  clinicalMetadata:     () => dataUrl('clinical_metadata.json'),
+  variantClinicalSummary: () => dataUrl('variant_clinical_summary.json'),
+  romeroGeoSummary:     () => dataUrl('romero_geo_summary.json'),
 };
 
 // ── Catálogo de fármacos (targets y estado, sin red) ──────────────────────
@@ -92,7 +95,13 @@ export const PLOTLY_LAYOUT = {
 };
 
 // ── Navegación SPA ─────────────────────────────────────────────────────────
-const VIEWS = ['dashboard','analysis','structural','docking','report','pipeline','explore'];
+const VIEWS = ['dashboard','analysis','structural','docking','report','pipeline','explore','clinical'];
+
+// ── Detección de versión del pipeline ─────────────────────────────────────
+export function isV2() {
+  return BASE_PATH.includes('romero_v2') ||
+    document.getElementById('sel-run')?.value?.includes('romero');
+}
 
 // Dispatch de carga por vista (se registra desde cada módulo)
 const loaders = {};
@@ -170,19 +179,24 @@ function switchRun(path) {
   // Resetear flags de carga de cada módulo
   Object.values(reloadFlags).forEach(f => { f.loaded = false; });
 
-  // Actualizar footer
+  // Mostrar/ocultar tab Clínico según pipeline version
+  const clinicalTab = document.getElementById('nav-clinical');
+  if (clinicalTab) {
+    const isRomero = path.includes('romero');
+    clinicalTab.style.display = isRomero ? '' : 'none';
+    // Si estamos en la vista clínica y cambiamos a v1, volver a dashboard
+    if (!isRomero && activeView === 'clinical') {
+      activateView('dashboard');
+    }
+  }
+
+  // Actualizar footer con versión de pipeline
   loadJSON(DATA.runManifest()).then(m => {
     const footerEl = document.getElementById('footer-run');
     if (!footerEl) return;
-    if (path === 'data') {
-      footerEl.textContent = m?.run_name
-        ? `Run: ${m.run_name}  ·  ${m.published_at ?? ''}  ·  ${m.params?.mlflow_experiment ?? ''}`
-        : '';
-    } else {
-      footerEl.textContent = m?.run_name
-        ? `Run: ${m.run_name}  ·  ${m.published_at?.slice(0,10) ?? ''}  ·  ${m.params?.mlflow_experiment ?? ''}`
-        : '';
-    }
+    footerEl.textContent = m?.run_name
+      ? `Run: ${m.run_name}  ·  ${m.published_at?.slice(0,10) ?? ''}  ·  ${m.params?.mlflow_experiment ?? ''}`
+      : '';
   });
 
   // Recargar la vista activa

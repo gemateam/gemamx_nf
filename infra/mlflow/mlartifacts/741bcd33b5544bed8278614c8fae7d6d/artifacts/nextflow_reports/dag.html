@@ -1,0 +1,146 @@
+<!--
+  ~ Copyright 2013-2026, Seqera Labs
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+<html>
+<head>
+<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1">
+</head>
+<body>
+<pre class="mermaid" style="text-align: center;">
+%%{
+  init: {
+    'theme': 'base',
+    'themeVariables': {
+      'primaryColor': '#B6ECE2',
+      'primaryTextColor': '#160F26',
+      'primaryBorderColor': '#065647',
+      'lineColor': '#545555',
+      'clusterBkg': '#BABCBD22',
+      'clusterBorder': '#DDDEDE',
+      'fontFamily': 'arial'
+    }
+  }
+}%%
+flowchart TB
+    subgraph " "
+    v0["maf_xlsx"]
+    v1["drivers_xlsx"]
+    v3["clinical_xlsx"]
+    v25["channel.fromPath"]
+    v49["drug_catalog"]
+    v56["run_name"]
+    v57["commit_hash"]
+    v62["run_name"]
+    v63["tracking_uri"]
+    v64["experiment_name"]
+    v65["commit_hash"]
+    end
+    v2(["INGEST_ROMERO"])
+    v4(["EXTRACT_CLINICAL"])
+    v5(["BUILD_CLINICAL_SUMMARY"])
+    v13(["FETCH_FASTA_WT"])
+    v16(["FETCH_FASTA_MUT"])
+    v19(["PREDICT_STRUCTURE_WT"])
+    v21(["PREDICT_STRUCTURE_MUT"])
+    v24(["ALIGN_WT_MUT"])
+    v28(["PREP_LIGAND"])
+    v32(["PREP_RECEPTOR"])
+    v33(["DOCK_CENTER"])
+    v35(["RUN_VINA"])
+    v50(["BUILD_JSONS"])
+    subgraph " "
+    v51[" "]
+    v52[" "]
+    v53[" "]
+    v54[" "]
+    v55[" "]
+    v67[" "]
+    end
+    v58(["PUBLISH"])
+    v66(["LOG_MLFLOW"])
+    v6(( ))
+    v20(( ))
+    v22(( ))
+    v26(( ))
+    v29(( ))
+    v34(( ))
+    v36(( ))
+    v42(( ))
+    v45(( ))
+    v46(( ))
+    v48(( ))
+    v59(( ))
+    v0 --> v2
+    v1 --> v2
+    v2 --> v5
+    v2 --> v50
+    v2 --> v6
+    v3 --> v4
+    v4 --> v5
+    v4 --> v46
+    v5 --> v46
+    v6 --> v13
+    v13 --> v6
+    v6 --> v16
+    v16 --> v20
+    v6 --> v19
+    v19 --> v22
+    v19 --> v29
+    v19 --> v36
+    v20 --> v21
+    v21 --> v22
+    v21 --> v29
+    v21 --> v36
+    v22 --> v24
+    v24 --> v48
+    v25 --> v26
+    v26 --> v28
+    v28 --> v34
+    v29 --> v32
+    v32 --> v33
+    v33 --> v34
+    v34 --> v35
+    v35 --> v42
+    v35 --> v45
+    v49 --> v50
+    v36 --> v50
+    v42 --> v50
+    v45 --> v50
+    v46 --> v50
+    v48 --> v50
+    v50 --> v58
+    v50 --> v55
+    v50 --> v54
+    v50 --> v53
+    v50 --> v52
+    v50 --> v51
+    v50 --> v59
+    v56 --> v58
+    v57 --> v58
+    v58 --> v66
+    v62 --> v66
+    v63 --> v66
+    v64 --> v66
+    v65 --> v66
+    v59 --> v66
+    v66 --> v67
+
+</pre>
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({ startOnLoad: true, maxTextSize: Number.MAX_SAFE_INTEGER, maxEdges: Number.MAX_SAFE_INTEGER });
+</script>
+</body>
+</html>

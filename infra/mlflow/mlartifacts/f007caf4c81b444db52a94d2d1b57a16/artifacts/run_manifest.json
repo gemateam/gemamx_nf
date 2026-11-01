@@ -1,0 +1,43 @@
+{
+  "run_name": "romero_v2",
+  "published_at": "2026-10-31T22:00:00Z",
+  "git_commit": "9c66f3a8b0000000000000000000000000000000",
+  "pipeline_version": "GEMAMX-V2-ROMERO",
+  "dataset": "Romero-Cordoba 2021 HM",
+  "study_id": "romero_fucam_hm",
+  "description": "Pipeline v2 basado en la cohorte Romero-Córdoba 2021 (FUCAM/HM). Mutaciones somáticas de exoma completo en mujeres mexicanas con cáncer de mama. Fuentes: 41467_2021_22478 (Nature Communications 2021).",
+  "contracts": [
+    "top_variants.json",
+    "structural_metrics.json",
+    "manifest_structures.json",
+    "raw_mutations.json",
+    "mutation_stats.json",
+    "clinical_metadata.json",
+    "variant_clinical_summary.json",
+    "docking/vina_affinities.json"
+  ],
+  "params": {
+    "mlflow_experiment": "GEMAMX-V2-ROMERO",
+    "study_id": "romero_fucam_hm",
+    "dataset": "Romero-Cordoba 2021 HM",
+    "source_paper": "doi:10.1038/s41467-021-22478-1",
+    "total_samples": 134,
+    "total_variants_top": 49,
+    "structures_mode": "fragment_boltz",
+    "genes": "PIK3CA,TP53,AKT1,ERBB2,PTEN,GATA3,MAP3K1",
+    "max_variants": 49,
+    "exhaustiveness": 8,
+    "num_modes": 9,
+    "geo_datasets": "GSE86374,GSE87048,GSE87049",
+    "source_center": "FUCAM",
+    "cohort": "HM (Hypermutator)",
+    "image_cpu": "gemamx-cpu:1.0.0",
+    "image_docking": "gemamx-nf-docking:1.0.0",
+    "image_gpu": "gemamx-gpu:1.0.0"
+  },
+  "images": {
+    "image_cpu": "gemamx-cpu:1.0.0",
+    "image_docking": "gemamx-nf-docking:1.0.0",
+    "image_gpu": "gemamx-gpu:1.0.0"
+  }
+}

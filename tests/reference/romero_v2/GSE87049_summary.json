@@ -1,0 +1,29 @@
+{
+  "dataset": "GSE87049",
+  "series_title": "Analysis of somatic DNA copy number alterations and frequency of breast cancer intrinsic subtypes from Mexican women",
+  "series_summary": "This SuperSeries is composed of the SubSeries listed below.",
+  "series_overall_design": "Refer to individual Series",
+  "pubmed_id": "33854067",
+  "platform_id": [
+    "GPL6244",
+    "GPL6801"
+  ],
+  "platform_title": [
+    "[HuGene-1_0-st] Affymetrix Human Gene 1.0 ST Array [transcript (gene) version]",
+    "[GenomeWideSNP_6] Affymetrix Genome-Wide Human SNP 6.0 Array"
+  ],
+  "platform_manufacturer": [
+    "Affymetrix",
+    "Affymetrix"
+  ],
+  "omics_kind": "superseries",
+  "sample_count": 359,
+  "inferred_subtype_counts": {
+    "LumA": 50,
+    "Basal": 14,
+    "LumB": 27,
+    "Her2": 18,
+    "Normal-like": 14,
+    "UNK": 236
+  }
+}

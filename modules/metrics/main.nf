@@ -18,10 +18,11 @@ process BUILD_JSONS {
     path raw_mutations
     path mutation_stats
     path drug_catalog
-    path struct_files,  stageAs: "structures/*"
-    path rmsd_files,    stageAs: "rmsd/*"
-    path vina_files,    stageAs: "vina/*"
-    path complex_files, stageAs: "complex/*"
+    path struct_files,   stageAs: "structures/*"
+    path rmsd_files,     stageAs: "rmsd/*"
+    path vina_files,     stageAs: "vina/*"
+    path complex_files,  stageAs: "complex/*"
+    path clinical_files, stageAs: "clinical/*"
 
     output:
     // Emitir los JSON del contrato como archivos individuales (no el directorio)
@@ -39,6 +40,9 @@ process BUILD_JSONS {
     path "stage/data/structures/*",       optional: true, emit: structures_out
     path "stage/data/docking/results/*",  optional: true, emit: poses_out
     path "stage/data/docking/complex/*",  optional: true, emit: complexes_out
+    // Archivos V2 extras (clínico, GEO summaries) — opcionales
+    path "stage/data/variant_clinical_summary.json", optional: true, emit: clinical_summary_out
+    path "stage/data/clinical_metadata.json",        optional: true, emit: clinical_metadata_out
 
     script:
     """
@@ -52,6 +56,7 @@ process BUILD_JSONS {
         --stats "${mutation_stats}" \\
         --catalog "${drug_catalog}" \\
         \$(ls structures/*.json 2>/dev/null | sed 's/^/--structure-meta /' | tr '\\n' ' ') \\
+        \$(ls clinical/*.json 2>/dev/null | sed 's/^/--structure-meta /' | tr '\\n' ' ') \\
         \$(ls rmsd/*.json 2>/dev/null | sed 's/^/--rmsd /' | tr '\\n' ' ') \\
         \$(ls vina/*_summary.json 2>/dev/null | sed 's/^/--vina /' | tr '\\n' ' ') \\
         \$(ls complex/*.pdb 2>/dev/null | sed 's/^/--complex /' | tr '\\n' ' ') \\

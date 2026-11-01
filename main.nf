@@ -64,12 +64,26 @@ workflow {
         .map { gene, positions -> tuple(gene, positions.find { it > 0 } ?: 0) }
 
     // ── FASTA ─────────────────────────────────────────────────────────────────
-    FETCH_FASTA_WT(ch_genes)
+    // Cuando fasta_dir está definido, se usan FASTA precomputados (sin red).
+    def fasta_dir = params.fasta_dir ? file(params.fasta_dir) : null
 
-    // Combinar por gene: [gene, fasta_wt] × [gene, pc] → [gene, pc, fasta_wt]
+    def ch_wt_fasta_input = ch_genes
+        .map { gene ->
+            def precomp = fasta_dir ? file("${fasta_dir}/${gene}_WT.fasta") : []
+            def precomp_exists = (precomp instanceof java.nio.file.Path && precomp.exists()) ? precomp : []
+            tuple(gene, precomp_exists)
+        }
+
+    FETCH_FASTA_WT(ch_wt_fasta_input)
+
+    // Combinar por gene: [gene, fasta_wt] × [gene, pc] → [gene, pc, fasta_wt, precomp_mut]
     def ch_mut_with_wt = ch_variants
         .combine(FETCH_FASTA_WT.out.wt_fasta, by: 0)
-        .map { gene, pc, fasta_wt -> tuple(gene, pc, fasta_wt) }
+        .map { gene, pc, fasta_wt ->
+            def precomp = fasta_dir ? file("${fasta_dir}/${gene}_${pc}.fasta") : []
+            def precomp_exists = (precomp instanceof java.nio.file.Path && precomp.exists()) ? precomp : []
+            tuple(gene, pc, fasta_wt, precomp_exists)
+        }
 
     FETCH_FASTA_MUT(ch_mut_with_wt)
 
@@ -165,7 +179,8 @@ workflow {
         ch_struct_files,
         ALIGN_WT_MUT.out.rmsd_json.collect(),
         ch_vina_files,
-        ch_complex_files
+        ch_complex_files,
+        []
     )
 
     // ── PUBLISH ───────────────────────────────────────────────────────────────

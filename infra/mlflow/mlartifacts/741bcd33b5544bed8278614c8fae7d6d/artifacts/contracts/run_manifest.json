@@ -1,0 +1,62 @@
+{
+    "contracts": [
+        "top_variants.json",
+        "structural_metrics.json",
+        "manifest_structures.json",
+        "raw_mutations.json",
+        "mutation_stats.json",
+        "vina_affinities.json"
+    ],
+    "files": {
+        "manifest_structures.json": "ad8c40ea4023b6caf299e69d88c0a4f17acfe9ff8c2e5d69148e7517f804940a",
+        "mutation_stats.json": "17e68da43020573676a22503392b8a1d0f147c81a666f8e704a68b9141e3cc9b",
+        "raw_mutations.json": "edd8db67e80ff4d4891cf2708b49747dbb06c9359377f4b4de5acf3e3feeb5b9",
+        "structural_metrics.json": "a9b2ac0bffee5b7515b8272255e586dae5f1af2360a4bceb145d50b5b951e2ad",
+        "top_variants.json": "4ae4646f8f468c1a0cd4fabfe698d39f9f28e681dcda4e3758286883d5372bea",
+        "vina_affinities.json": "a02df43038075d14937b26533f396084b0151fc7a6e9a75b13fbb0e46e3da145"
+    },
+    "git_commit": "9c66f3a7d3636d7ee218dce2c6527b50d68add49",
+    "images": {
+        "image_cpu": "gemamx-cpu:1.0.0",
+        "image_docking": "gemamx-nf-docking:1.0.0",
+        "image_gpu": "gemamx-gpu:1.0.0",
+        "image_mlflow": "gemamx-cpu:1.0.0"
+    },
+    "params": {
+        "boltz_seed": 42,
+        "boltz_use_msa_server": true,
+        "box_center_mode": "mutation",
+        "box_size": 25,
+        "docking_complex_dir": null,
+        "docking_results_dir": null,
+        "domain_window": 180,
+        "drug_catalog": "assets/drug_catalog.csv",
+        "exhaustiveness": 1,
+        "fasta_dir": "/mnt/d/ProyectosIA/gemamx_nf/tests/reference/romero_v2/fasta",
+        "genes": "PIK3CA,TP53,AKT1,ERBB2,PTEN,GATA3,MAP3K1",
+        "image_cpu": "gemamx-cpu:1.0.0",
+        "image_docking": "gemamx-nf-docking:1.0.0",
+        "image_gpu": "gemamx-gpu:1.0.0",
+        "image_mlflow": "gemamx-cpu:1.0.0",
+        "max_variants": "1",
+        "mlflow_experiment": "GEMAMX-V2-ROMERO",
+        "mlflow_tracking_uri": "http://host.docker.internal:5000",
+        "mutations_json": null,
+        "num_modes": 5,
+        "outdir": "results",
+        "publish_run_archive": true,
+        "romero_clinical": "/mnt/d/ProyectosIA/gemamx_nf/tests/reference/romero_v2/raw/41467_2021_22478_MOESM4_ESM.xlsx",
+        "romero_drivers": "/mnt/d/ProyectosIA/gemamx_nf/tests/reference/romero_v2/raw/41467_2021_22478_MOESM9_ESM.xlsx",
+        "romero_maf": "/mnt/d/ProyectosIA/gemamx_nf/tests/reference/romero_v2/raw/41467_2021_22478_MOESM8_ESM.xlsx",
+        "structural_metrics_precomp": null,
+        "structures_dir": "/mnt/d/ProyectosIA/gemamx_nf/tests/reference/romero_v2/structures",
+        "structures_mode": "precomputed",
+        "study_id": "romero_fucam_hm",
+        "vina_affinities": null,
+        "vina_seed": 42,
+        "vina_timeout_sec": 1800,
+        "work_dir": "~/gemamx-work"
+    },
+    "published_at": "2026-11-01T17:28:18Z",
+    "run_name": "romero_v2_20261101_041237"
+}

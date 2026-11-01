@@ -1,0 +1,208 @@
+[
+  {
+    "gene": "IDO1",
+    "strategy": "macrophage_repolarization",
+    "hub_score": 0.23194664773864646,
+    "druggable_drugs": [
+      "Berberine",
+      "Epacadostat",
+      "Navoximod"
+    ],
+    "n_drugs": 3
+  },
+  {
+    "gene": "TGFBR2",
+    "strategy": "tgfbeta_reversal",
+    "hub_score": 0.22576039024023617,
+    "druggable_drugs": [
+      "Galunisertib"
+    ],
+    "n_drugs": 1
+  },
+  {
+    "gene": "PARP1",
+    "strategy": "parp_chemo_immuno",
+    "hub_score": 0.22452321613556486,
+    "druggable_drugs": [
+      "Niraparib",
+      "Olaparib",
+      "Talazoparib"
+    ],
+    "n_drugs": 3
+  },
+  {
+    "gene": "LDHA",
+    "strategy": "metabolic_modulation",
+    "hub_score": 0.22446114484442842,
+    "druggable_drugs": [
+      "Berberine"
+    ],
+    "n_drugs": 1
+  },
+  {
+    "gene": "TDO2",
+    "strategy": "metabolic_modulation",
+    "hub_score": 0.22015649895902983,
+    "druggable_drugs": [],
+    "n_drugs": 0
+  },
+  {
+    "gene": "PTK2",
+    "strategy": "tgfbeta_reversal",
+    "hub_score": 0.21836048731620553,
+    "druggable_drugs": [
+      "Defactinib"
+    ],
+    "n_drugs": 1
+  },
+  {
+    "gene": "TOP2A",
+    "strategy": "parp_chemo_immuno",
+    "hub_score": 0.2179020816380195,
+    "druggable_drugs": [],
+    "n_drugs": 0
+  },
+  {
+    "gene": "CGAS",
+    "strategy": "sting_activation",
+    "hub_score": 0.20942904473552879,
+    "druggable_drugs": [],
+    "n_drugs": 0
+  },
+  {
+    "gene": "DNMT1",
+    "strategy": "parp_chemo_immuno",
+    "hub_score": 0.20942904473552879,
+    "druggable_drugs": [],
+    "n_drugs": 0
+  },
+  {
+    "gene": "PARP2",
+    "strategy": "parp_chemo_immuno",
+    "hub_score": 0.20942904473552879,
+    "druggable_drugs": [
+      "Niraparib",
+      "Olaparib",
+      "Talazoparib"
+    ],
+    "n_drugs": 3
+  },
+  {
+    "gene": "ADORA2A",
+    "strategy": "metabolic_modulation",
+    "hub_score": 0.20942904473552879,
+    "druggable_drugs": [
+      "Istradefylline"
+    ],
+    "n_drugs": 1
+  },
+  {
+    "gene": "NLRP3",
+    "strategy": "sting_activation",
+    "hub_score": 0.20942904473552879,
+    "druggable_drugs": [],
+    "n_drugs": 0
+  },
+  {
+    "gene": "TLR9",
+    "strategy": "sting_activation",
+    "hub_score": 0.20942904473552879,
+    "druggable_drugs": [],
+    "n_drugs": 0
+  },
+  {
+    "gene": "TGFBR1",
+    "strategy": "tgfbeta_reversal",
+    "hub_score": 0.20942904473552879,
+    "druggable_drugs": [
+      "Galunisertib"
+    ],
+    "n_drugs": 1
+  },
+  {
+    "gene": "CD47",
+    "strategy": "macrophage_repolarization",
+    "hub_score": 0.20942904473552879,
+    "druggable_drugs": [
+      "Magrolimab"
+    ],
+    "n_drugs": 1
+  },
+  {
+    "gene": "ARG1",
+    "strategy": "macrophage_repolarization",
+    "hub_score": 0.20942904473552879,
+    "druggable_drugs": [],
+    "n_drugs": 0
+  },
+  {
+    "gene": "CSF1R",
+    "strategy": "macrophage_repolarization",
+    "hub_score": 0.20942904473552879,
+    "druggable_drugs": [
+      "Pexidartinib"
+    ],
+    "n_drugs": 1
+  },
+  {
+    "gene": "SIGLEC15",
+    "strategy": "alt_checkpoints",
+    "hub_score": 0.20942904473552879,
+    "druggable_drugs": [],
+    "n_drugs": 0
+  },
+  {
+    "gene": "TIGIT",
+    "strategy": "alt_checkpoints",
+    "hub_score": 0.20942904473552879,
+    "druggable_drugs": [
+      "Tiragolumab"
+    ],
+    "n_drugs": 1
+  },
+  {
+    "gene": "LAG3",
+    "strategy": "alt_checkpoints",
+    "hub_score": 0.20942904473552879,
+    "druggable_drugs": [
+      "Fianlimab"
+    ],
+    "n_drugs": 1
+  },
+  {
+    "gene": "HAVCR2",
+    "strategy": "alt_checkpoints",
+    "hub_score": 0.20942904473552879,
+    "druggable_drugs": [
+      "Sabatolimab"
+    ],
+    "n_drugs": 1
+  },
+  {
+    "gene": "KDR",
+    "strategy": "tgfbeta_reversal",
+    "hub_score": 0.20942904473552879,
+    "druggable_drugs": [
+      "Quercetina"
+    ],
+    "n_drugs": 1
+  },
+  {
+    "gene": "TMEM173",
+    "strategy": "sting_activation",
+    "hub_score": 0.20261086291734695,
+    "druggable_drugs": [
+      "ADU-S100",
+      "BMS-986299",
+      "Curcumin"
+    ],
+    "n_drugs": 3
+  },
+  {
+    "gene": "VSIR",
+    "strategy": "alt_checkpoints",
+    "hub_score": 0.20261086291734695,
+    "druggable_drugs": [],
+    "n_drugs": 0
+  }
+]

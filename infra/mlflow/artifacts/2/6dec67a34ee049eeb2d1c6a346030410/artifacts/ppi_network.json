@@ -1,0 +1,354 @@
+{
+  "nodes": [
+    {
+      "id": "TGFBR1",
+      "type": "receptor",
+      "strategy": "tgfbeta_reversal",
+      "druggable": true
+    },
+    {
+      "id": "TGFBR2",
+      "type": "receptor",
+      "strategy": "tgfbeta_reversal",
+      "druggable": true
+    },
+    {
+      "id": "PTK2",
+      "type": "kinase",
+      "strategy": "tgfbeta_reversal",
+      "druggable": true
+    },
+    {
+      "id": "KDR",
+      "type": "receptor",
+      "strategy": "tgfbeta_reversal",
+      "druggable": true
+    },
+    {
+      "id": "HAVCR2",
+      "type": "checkpoint",
+      "strategy": "alt_checkpoints",
+      "druggable": true
+    },
+    {
+      "id": "LAG3",
+      "type": "checkpoint",
+      "strategy": "alt_checkpoints",
+      "druggable": true
+    },
+    {
+      "id": "TIGIT",
+      "type": "checkpoint",
+      "strategy": "alt_checkpoints",
+      "druggable": true
+    },
+    {
+      "id": "VSIR",
+      "type": "checkpoint",
+      "strategy": "alt_checkpoints",
+      "druggable": true
+    },
+    {
+      "id": "SIGLEC15",
+      "type": "checkpoint",
+      "strategy": "alt_checkpoints",
+      "druggable": true
+    },
+    {
+      "id": "CSF1R",
+      "type": "receptor",
+      "strategy": "macrophage_repolarization",
+      "druggable": true
+    },
+    {
+      "id": "IDO1",
+      "type": "enzyme",
+      "strategy": "macrophage_repolarization",
+      "druggable": true
+    },
+    {
+      "id": "ARG1",
+      "type": "enzyme",
+      "strategy": "macrophage_repolarization",
+      "druggable": true
+    },
+    {
+      "id": "CD47",
+      "type": "checkpoint",
+      "strategy": "macrophage_repolarization",
+      "druggable": true
+    },
+    {
+      "id": "TMEM173",
+      "type": " adaptor",
+      "strategy": "sting_activation",
+      "druggable": true
+    },
+    {
+      "id": "CGAS",
+      "type": "enzyme",
+      "strategy": "sting_activation",
+      "druggable": true
+    },
+    {
+      "id": "TLR9",
+      "type": "receptor",
+      "strategy": "sting_activation",
+      "druggable": true
+    },
+    {
+      "id": "NLRP3",
+      "type": "inflammasome",
+      "strategy": "sting_activation",
+      "druggable": true
+    },
+    {
+      "id": "TDO2",
+      "type": "enzyme",
+      "strategy": "metabolic_modulation",
+      "druggable": true
+    },
+    {
+      "id": "ADORA2A",
+      "type": "receptor",
+      "strategy": "metabolic_modulation",
+      "druggable": true
+    },
+    {
+      "id": "LDHA",
+      "type": "enzyme",
+      "strategy": "metabolic_modulation",
+      "druggable": true
+    },
+    {
+      "id": "PARP1",
+      "type": "enzyme",
+      "strategy": "parp_chemo_immuno",
+      "druggable": true
+    },
+    {
+      "id": "PARP2",
+      "type": "enzyme",
+      "strategy": "parp_chemo_immuno",
+      "druggable": true
+    },
+    {
+      "id": "TOP2A",
+      "type": "enzyme",
+      "strategy": "parp_chemo_immuno",
+      "druggable": true
+    },
+    {
+      "id": "DNMT1",
+      "type": "enzyme",
+      "strategy": "parp_chemo_immuno",
+      "druggable": true
+    },
+    {
+      "id": "NFKB1",
+      "type": "transcription_factor",
+      "strategy": "sting_activation",
+      "druggable": false
+    },
+    {
+      "id": "SIRT1",
+      "type": "enzyme",
+      "strategy": "metabolic_modulation",
+      "druggable": false
+    }
+  ],
+  "edges": [
+    {
+      "source": "TGFBR1",
+      "target": "TGFBR2",
+      "weight": 0.95,
+      "direction": "TGFBR1->TGFBR2"
+    },
+    {
+      "source": "TGFBR2",
+      "target": "SMAD2",
+      "weight": 0.9,
+      "direction": "TGFBR2->SMAD2"
+    },
+    {
+      "source": "TGFBR2",
+      "target": "PTK2",
+      "weight": 0.7,
+      "direction": "TGFBR2->PTK2"
+    },
+    {
+      "source": "PTK2",
+      "target": "SRC",
+      "weight": 0.8,
+      "direction": "PTK2->SRC"
+    },
+    {
+      "source": "KDR",
+      "target": "VEGFA",
+      "weight": 0.85,
+      "direction": "KDR->VEGFA"
+    },
+    {
+      "source": "VEGFA",
+      "target": "NFKB1",
+      "weight": 0.6,
+      "direction": "VEGFA->NFKB1"
+    },
+    {
+      "source": "HAVCR2",
+      "target": "LGALS9",
+      "weight": 0.75,
+      "direction": "HAVCR2->LGALS9"
+    },
+    {
+      "source": "TIGIT",
+      "target": "PVR",
+      "weight": 0.9,
+      "direction": "TIGIT->PVR"
+    },
+    {
+      "source": "LAG3",
+      "target": "MHC2",
+      "weight": 0.8,
+      "direction": "LAG3->MHC2"
+    },
+    {
+      "source": "SIGLEC15",
+      "target": "CD33",
+      "weight": 0.65,
+      "direction": "SIGLEC15->CD33"
+    },
+    {
+      "source": "CSF1R",
+      "target": "CSF1",
+      "weight": 0.85,
+      "direction": "CSF1R->CSF1"
+    },
+    {
+      "source": "IDO1",
+      "target": "KYNU",
+      "weight": 0.75,
+      "direction": "IDO1->KYNU"
+    },
+    {
+      "source": "ARG1",
+      "target": "ARG2",
+      "weight": 0.7,
+      "direction": "ARG1->ARG2"
+    },
+    {
+      "source": "CD47",
+      "target": "SIRPA",
+      "weight": 0.95,
+      "direction": "CD47->SIRPA"
+    },
+    {
+      "source": "CGAS",
+      "target": "STING1",
+      "weight": 0.88,
+      "direction": "CGAS->STING1"
+    },
+    {
+      "source": "STING1",
+      "target": "TBK1",
+      "weight": 0.9,
+      "direction": "STING1->TBK1"
+    },
+    {
+      "source": "STING1",
+      "target": "NFKB1",
+      "weight": 0.75,
+      "direction": "STING1->NFKB1"
+    },
+    {
+      "source": "TLR9",
+      "target": "MYD88",
+      "weight": 0.85,
+      "direction": "TLR9->MYD88"
+    },
+    {
+      "source": "NLRP3",
+      "target": "ASC",
+      "weight": 0.8,
+      "direction": "NLRP3->ASC"
+    },
+    {
+      "source": "TDO2",
+      "target": "KYNU",
+      "weight": 0.7,
+      "direction": "TDO2->KYNU"
+    },
+    {
+      "source": "IDO1",
+      "target": "TDO2",
+      "weight": 0.65,
+      "direction": "IDO1->TDO2"
+    },
+    {
+      "source": "ADORA2A",
+      "target": "ATP",
+      "weight": 0.6,
+      "direction": "ADORA2A->ATP"
+    },
+    {
+      "source": "LDHA",
+      "target": "LDHB",
+      "weight": 0.9,
+      "direction": "LDHA->LDHB"
+    },
+    {
+      "source": "LDHA",
+      "target": "NAD",
+      "weight": 0.75,
+      "direction": "LDHA->NAD"
+    },
+    {
+      "source": "PARP1",
+      "target": "NAD",
+      "weight": 0.8,
+      "direction": "PARP1->NAD"
+    },
+    {
+      "source": "PARP2",
+      "target": "NAD",
+      "weight": 0.75,
+      "direction": "PARP2->NAD"
+    },
+    {
+      "source": "TOP2A",
+      "target": "DNA",
+      "weight": 0.85,
+      "direction": "TOP2A->DNA"
+    },
+    {
+      "source": "DNMT1",
+      "target": "DNA",
+      "weight": 0.8,
+      "direction": "DNMT1->DNA"
+    },
+    {
+      "source": "PARP1",
+      "target": "TOP2A",
+      "weight": 0.6,
+      "direction": "PARP1->TOP2A"
+    },
+    {
+      "source": "NFKB1",
+      "target": "IDO1",
+      "weight": 0.65,
+      "direction": "NFKB1->IDO1"
+    },
+    {
+      "source": "SIRT1",
+      "target": "LDHA",
+      "weight": 0.6,
+      "direction": "SIRT1->LDHA"
+    },
+    {
+      "source": "SIRT1",
+      "target": "PARP1",
+      "weight": 0.55,
+      "direction": "SIRT1->PARP1"
+    }
+  ]
+}

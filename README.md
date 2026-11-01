@@ -1,12 +1,16 @@
 # GEMA MX — Genomic Analysis of Mammary Cancer
 
-[![Pipeline](https://img.shields.io/badge/pipeline-Nextflow%20DSL2-brightgreen)](https://nextflow.io)
-[![MLflow](https://img.shields.io/badge/tracking-MLflow-blue)](https://mlflow.org)
+[![Pipeline](https://img.shields.io/badge/pipeline-Nextflow%20DSL2-brightgreen)](https://www.nextflow.io/)
+[![Tracking](https://img.shields.io/badge/tracking-MLflow%202.19-blue)](https://mlflow.org/)
 [![License](https://img.shields.io/badge/license-MIT-lightgrey)](LICENSE)
 
-Pipeline bioinformático completo para el análisis genómico de cáncer de mama (TCGA-BRCA).
-Cubre desde la ingesta de datos del GDC hasta docking molecular con AutoDock Vina, con una
-webapp interactiva para exploración de resultados y conexión en vivo a ChEMBL y CiViC.
+Pipeline bioinformático y plataforma genómico-estructural reproducible para cáncer de mama, orquestado con [Nextflow DSL2](https://www.nextflow.io/) y registrado en [MLflow](https://mlflow.org/). 
+
+Soporta dos pipelines bioinformáticos complementarios:
+- **V1 (TCGA-BRCA)**: Ingesta pública del GDC/NCI, priorización ACMG, predicción estructural y docking molecular con AutoDock Vina.
+- **V2 (Romero-Córdoba 2021 HM)**: Cohorte clínica de mujeres hispanas/mexicanas del FUCAM (*Nature Communications 2021*), incorporando WES, subclasificación clínica (IHC: Luminal A/B, HER2+, TNBC; PAM50: LumA, LumB, Basal, Her2, Normal) y catálogo de fármacos optimizado para México.
+
+Incluye una **WebApp interactiva SPA (8 vistas dinámicas)** con selector reactivo de corridas, visores macromoleculares 3D ([PDBe Molstar](https://github.com/PDBeurope/pdbe-molstar)) y enriquecimiento en vivo con [ChEMBL](https://www.ebi.ac.uk/chembl/) y [CiViC](https://civicdb.org).
 
 ![Arquitectura GEMA MX](docs/architecture.png)
 
@@ -14,370 +18,229 @@ webapp interactiva para exploración de resultados y conexión en vivo a ChEMBL 
 
 ## Tabla de contenidos
 
-1. [Requisitos](#1-requisitos)
-2. [Instalación rápida](#2-instalación-rápida)
-3. [Estructura del proyecto](#3-estructura-del-proyecto)
-4. [Ejecutar el pipeline](#4-ejecutar-el-pipeline)
-5. [Levantar la webapp](#5-levantar-la-webapp)
-6. [Selector de corridas (MLflow)](#6-selector-de-corridas-mlflow)
-7. [Fuentes de datos externas](#7-fuentes-de-datos-externas)
-8. [Desarrollo local de la webapp](#8-desarrollo-local-de-la-webapp)
-9. [Generador de diagramas (Archify)](#9-generador-de-diagramas-archify)
-10. [Variables de entorno y configuración](#10-variables-de-entorno-y-configuración)
-11. [Solución de problemas comunes](#11-solución-de-problemas-comunes)
-12. [Contribuir](#12-contribuir)
+1. [Arquitectura del Sistema](#1-arquitectura-del-sistema)
+2. [Pipelines V1 y V2](#2-pipelines-v1-y-v2)
+3. [Requisitos e Infraestructura](#3-requisitos-e-infraestructura)
+4. [Instalación Rápida](#4-instalación-rápida)
+5. [Estructura del Proyecto](#5-estructura-del-proyecto)
+6. [Ejecución del Pipeline](#6-ejecución-del-pipeline)
+   - [Pipeline V1 (TCGA-BRCA)](#pipeline-v1-tcga-brca)
+   - [Pipeline V2 (Romero-Córdoba 2021 HM)](#pipeline-v2-romero-córdoba-2021-hm)
+7. [Servicios Docker y MLflow](#7-servicios-docker-y-mlflow)
+8. [WebApp Interactiva (8 Vistas)](#8-webapp-interactiva-8-vistas)
+9. [Referencias y Tecnologías](#9-referencias-y-tecnologías)
+10. [Licencia y Créditos](#10-licencia-y-créditos)
 
 ---
 
-## 1. Requisitos
+## 1. Arquitectura del Sistema
 
-| Herramienta | Versión mínima | Propósito |
+El sistema implementa una arquitectura desacoplada en cuatro capas principales:
+
+1. **Orquestación y Cómputo Bioinformático ([Nextflow DSL2](https://www.nextflow.io/))**:
+   - `main.nf`: Flujo V1 para la cohorte TCGA-BRCA.
+   - `main_v2.nf`: Flujo V2 para la cohorte Romero-Córdoba 2021 (FUCAM HM), agregando extracción clínica e integración WES.
+   - Procesamiento modular en contenedores Docker dedicados: CPU (`gemamx-cpu:1.0.0`), GPU (`gemamx-gpu:1.0.0`) y Docking (`gemamx-nf-docking:1.0.0`).
+
+2. **Seguimiento de Experimentos y Linaje ([MLflow Tracking](https://mlflow.org/))**:
+   - Servidor MLflow 2.19 autónomo con backend en PostgreSQL (`gemamx_postgres:5432`) y almacén de artefactos (`gemamx_mlflow:5000`).
+   - Trazabilidad de 145+ corridas históricas con registro de métricas pLDDT, RMSD, puntuaciones de afinidad AutoDock Vina, reportes Nextflow y trazabilidad Git.
+
+3. **Contrato de Datos Inmutable (`results/data/`)**:
+   - Interfaz desacoplada basada en esquemas JSON (`top_variants.json`, `structural_metrics.json`, `vina_affinities.json`, `variant_clinical_summary.json`, etc.) y archivos PDB/CIF.
+   - Versionado histórico por corrida en `results/runs/<run_name>/data`.
+
+4. **Visualización y Exploración SPA (Nginx :8080)**:
+   - WebApp reactiva sin dependencias de compilación pesada.
+   - Selector reactivo de corridas que commuta en caliente el espacio de datos (`#sel-run`).
+   - Integración REST/GraphQL viva con [ChEMBL](https://www.ebi.ac.uk/chembl/) y [CiViC](https://civicdb.org).
+
+---
+
+## 2. Pipelines V1 y V2
+
+| Característica | Pipeline V1 (`main.nf`) | Pipeline V2 (`main_v2.nf`) |
 |---|---|---|
-| [Nextflow](https://nextflow.io/docs/latest/install.html) | 23.10+ | Orquestador del pipeline |
-| [Docker](https://docs.docker.com/get-docker/) | 24+ | Contenedores CPU/GPU |
-| [Docker Compose](https://docs.docker.com/compose/install/) | 2.20+ | Stack webapp + MLflow |
-| [Node.js](https://nodejs.org/) | 18+ | Archify (diagramas) |
-| Git | 2.40+ | Control de versiones |
-| GPU opcional | NVIDIA con CUDA | Módulo Boltz-1 (M3) |
-
-> **Windows**: se recomienda WSL2 + Docker Desktop. El pipeline Nextflow corre dentro de
-> contenedores, por lo que WSL2 no es estrictamente necesario para la webapp.
+| **Cohorte** | TCGA-BRCA (Internacional) | Romero-Córdoba 2021 (FUCAM · México) |
+| **Insumo Genómico** | API NCI GDC / MAF preprocesado | WES somático curado (MOESM8 / MOESM9) |
+| **Metadatos Clínicos** | Parámetros estándar TCGA | IHC, PAM50, rangos de edad, WES (MOESM4) |
+| **Priorización de Variantes** | Frecuencia de cohorte + ClinVar/ACMG | Frecuencia en mujeres mexicanas + Hotspots |
+| **Modelado 3D** | Boltz-1 / AlphaFold / ESMFold | Boltz-1 / AlphaFold / PDB precomputados |
+| **Docking Molecular** | AutoDock Vina 1.2.3 (11 fármacos) | AutoDock Vina 1.2.3 (11 fármacos curados) |
+| **Experimento [MLflow](https://mlflow.org/)** | `GEMAMX-V1-NF` | `GEMAMX-V2-ROMERO` |
+| **Módulo Clínico Web** | Oculto / No aplicable | Activo (pestaña dedicada en WebApp) |
 
 ---
 
-## 2. Instalación rápida
+## 3. Requisitos e Infraestructura
+
+| Herramienta | Versión mínima | Propósito | Referencia |
+|---|---|---|---|
+| **Nextflow** | 23.10+ | Orquestador de flujos bioinformáticos | [https://www.nextflow.io/](https://www.nextflow.io/) |
+| **MLflow** | 2.19+ | Registro de experimentos y métricas | [https://mlflow.org/](https://mlflow.org/) |
+| **Docker Engine** | 24+ | Ejecución aislada de módulos | [Docker Docs](https://docs.docker.com/) |
+| **Docker Compose** | 2.20+ | Orquestación de servicios (Web, MLflow, Postgres) | [Compose Docs](https://docs.docker.com/compose/) |
+| **Python** | 3.10+ | Scripts auxiliares y APIs bioinformáticas | [Python.org](https://www.python.org/) |
+| **NVIDIA GPU (Opcional)** | CUDA 12+ | Aceleración de predicción estructural (Boltz-1) | [NVIDIA CUDA](https://developer.nvidia.com/cuda-zone) |
+
+---
+
+## 4. Instalación Rápida
 
 ```bash
 # 1. Clonar el repositorio
 git clone https://github.com/gemateam/gemamx_nf.git
 cd gemamx_nf
 
-# 2. (Opcional) Construir imágenes Docker locales
-#    Solo necesario si no se usan las imágenes publicadas en el registry
-docker build -t gemamx-cpu:1.0.0  containers/cpu/
-docker build -t gemamx-gpu:1.0.0  containers/gpu/
-docker build -t gemamx-nf-docking:1.0.0  containers/docking/
+# 2. Levantar el stack completo (Postgres, MLflow y WebApp)
+docker compose up -d
 
-# 3. Levantar MLflow (necesario para el pipeline)
-docker compose --profile standalone up -d mlflow
-
-# 4. Verificar que MLflow esté listo
-curl http://localhost:5000/health
-
-# 5. Ejecutar el pipeline con datos de prueba
-nextflow run main.nf -profile test
+# 3. Verificar estado de los servicios
+docker compose ps
+# gemamx_postgres -> localhost:5432 (healthy)
+# gemamx_mlflow   -> http://localhost:5000 (healthy)
+# gemamx_webapp   -> http://localhost:8080 (healthy)
 ```
 
 ---
 
-## 3. Estructura del proyecto
+## 5. Estructura del Proyecto
 
 ```
 gemamx_nf/
-├── main.nf                     # Punto de entrada del pipeline Nextflow
-├── nextflow.config             # Configuración global (perfiles, recursos)
-├── nextflow_schema.json        # Schema JSON para validación de parámetros
+├── main.nf                     # Pipeline V1 (TCGA-BRCA) en Nextflow DSL2
+├── main_v2.nf                  # Pipeline V2 (Romero-Córdoba HM) en Nextflow DSL2
+├── nextflow.config             # Configuración central (perfiles: cpu, gpu, test, romero-v2)
+├── docker-compose.yml          # Stack de infraestructura: Postgres, MLflow, WebApp
 ├── assets/
-│   └── drug_catalog.csv        # Catálogo de 11 fármacos con ChEMBL IDs
-├── bin/                        # Scripts Python auxiliares del pipeline
-│   └── prep_boltz_yaml.py
-├── conf/                       # Configs por perfil (cpu, gpu, hpc)
+│   └── drug_catalog.csv        # Catálogo curado de 11 fármacos oncológicos
+├── bin/                        # Lógica ejecutable de los procesos Nextflow
+│   ├── build_jsons.py          # Ensamblador del contrato JSON inmutable
+│   ├── extract_clinical_romero.py # Extractor de metadatos clínicos FUCAM
+│   ├── build_clinical_summary.py  # Generador de resúmenes variantes × clínica
+│   └── ingest_romero.py        # Ingestor WES para cohorte mexicana
+├── conf/                       # Perfiles de recursos y ejecución
 │   ├── base.config
 │   ├── cpu.config
 │   └── gpu.config
-├── containers/                 # Dockerfiles
-│   ├── cpu/                    # Imagen CPU (variant prioritization, report)
-│   ├── gpu/                    # Imagen GPU (Boltz-1 structural prediction)
-│   └── docking/                # Imagen AutoDock Vina 1.2.3
-├── docs/
-│   └── architecture.html       # Diagrama de arquitectura interactivo (Archify)
-├── modules/
-│   ├── ingestion/              # M1: GDC API → mutations JSON
-│   ├── variants/               # M2: priorización clínica
-│   ├── structure/              # M3: Boltz-1 / AlphaFold / ESMFold
-│   ├── docking/                # M4: AutoDock Vina
-│   └── report/                 # M5: publicación del contrato de datos
+├── containers/                 # Dockerfiles de los entornos del pipeline
+│   ├── cpu/                    # gemamx-cpu:1.0.0
+│   ├── gpu/                    # gemamx-gpu:1.0.0
+│   └── docking/                # gemamx-nf-docking:1.0.0
+├── docs/                       # Documentación y diagramas
+│   ├── architecture.html       # Diagrama de arquitectura interactivo (Archify)
+│   └── architecture.png        # Render de alta resolución del diagrama
+├── infra/                      # Almacén de infraestructura autónoma
+│   ├── mlflow/                 # Artefactos y volúmenes de MLflow
+│   └── postgres-init/          # Scripts de inicialización SQL
+├── modules/                    # Módulos modulares Nextflow DSL2
+│   ├── clinical/               # Extracción y resumen clínico V2
+│   ├── docking/                # Preparación de ligandos/receptores y Vina
+│   ├── fasta/                  # Descarga y formateo de secuencias
+│   ├── ingest/ & ingest_v2/    # Ingesta GDC (V1) y Romero WES (V2)
+│   ├── metrics/ & metrics_v2/  # Cálculo de RMSD y alineamiento WT/MUT
+│   ├── report/                 # Publicación de contratos y registro MLflow
+│   └── structure/              # Predicción 3D (Boltz-1 / AlphaFold)
 ├── results/
-│   ├── data/                   # Contrato vigente (JSON + CIF/PDB)
-│   │   ├── top_variants.json
-│   │   ├── structural_metrics.json
-│   │   ├── manifest_structures.json
-│   │   ├── mutation_stats.json
-│   │   ├── raw_mutations.json
-│   │   ├── run_manifest.json
-│   │   ├── drug_catalog.csv
-│   │   ├── docking/
-│   │   │   ├── vina_affinities.json
-│   │   │   ├── complex/        # PDB proteína+ligando por fármaco
-│   │   │   └── results/        # PDBQT crudos de Vina
-│   │   └── structures/         # CIF/PDB de variantes WT y MUT
-│   └── runs/                   # Historial de corridas archivadas
-│       ├── index.json          # Índice de corridas con pipeline_version
-│       └── <run_name>/
-│           ├── data/           # Snapshot del contrato de esa corrida
-│           └── run_manifest.json
-├── tests/
-│   └── reference/              # Datos de referencia para pruebas
-├── webapp/                     # Frontend SPA
-│   ├── index.html
-│   ├── molstar-viewer.html
-│   ├── favicon.svg
-│   ├── css/style.css
-│   ├── js/
-│   │   ├── app.js              # Navegación SPA, loadJSON, BASE_PATH
-│   │   ├── dashboard.js        # Dashboard general
-│   │   ├── explore.js          # Exploración TCGA (tabla completa)
-│   │   ├── pipeline.js         # Pipeline Status + MLflow params
-│   │   ├── structural.js       # Visores PDBe Molstar WT/MUT
-│   │   ├── docking.js          # Ranking fármacos + visor de poses
-│   │   ├── drug-sources.js     # ChEMBL REST + CiViC GraphQL en vivo
-│   │   ├── analysis.js         # Análisis mutacional
-│   │   └── report.js           # Reporte por variante
-│   ├── Dockerfile
-│   └── nginx.conf
-├── docker-compose.yml
-└── .claude/
-    └── skills/archify/         # Skill Archify para generación de diagramas
+│   ├── data/                   # Contrato de datos vigente servido a la WebApp
+│   └── runs/                   # Histórico de corridas archivadas con index.json
+├── tests/reference/            # Insumos de referencia y datos preprocesados
+│   ├── romero_v2/              # Archivos MOESM crudos, WES y fasta V2
+│   └── structures/             # PDBs y predicciones validadas
+└── webapp/                     # Frontend SPA en Vanilla JS + PDBe Molstar
+    ├── index.html              # Plantilla base y layout
+    ├── css/style.css           # Tema oscuro bioinformático
+    └── js/                     # Módulos reactivos (app, dashboard, clinical, etc.)
 ```
 
 ---
 
-## 4. Ejecutar el pipeline
+## 6. Ejecución del Pipeline
 
-### Parámetros principales
+Ambos pipelines están implementados bajo la especificación [Nextflow DSL2](https://www.nextflow.io/).
 
-| Parámetro | Default | Descripción |
-|---|---|---|
-| `--study_id` | `brca_tcga` | ID del estudio TCGA |
-| `--genes` | `PIK3CA,TP53,ERBB2,...` | Genes a analizar (comma-separated) |
-| `--max_variants` | `1` | Variantes por gen para estructuras/docking |
-| `--structures_mode` | `precomputed` | `precomputed` o `boltz` o `alphafold` |
-| `--exhaustiveness` | `1` | Exhaustividad AutoDock Vina (1-32) |
-| `--num_modes` | `5` | Poses de docking por fármaco |
-| `--outdir` | `results` | Directorio de salida |
-| `--mlflow_tracking_uri` | `http://localhost:5000` | URI del servidor MLflow |
-| `--mlflow_experiment` | `GEMAMX-V1-NF` | Nombre del experimento en MLflow |
+### Pipeline V1 (TCGA-BRCA)
 
-### Perfiles disponibles
+Ejecuta el flujo para la cohorte internacional TCGA-BRCA:
 
 ```bash
-# Prueba rápida con datos de referencia (no requiere GPU)
+# Modo de prueba con datos precalculados (rápido, sin GPU)
 nextflow run main.nf -profile test
 
-# Producción con CPU (estructuras precomputadas)
+# Modo producción con CPU
 nextflow run main.nf \
   --study_id brca_tcga \
-  --genes "PIK3CA,TP53,ERBB2,BRCA1,BRCA2" \
-  --max_variants 5 \
+  --genes "PIK3CA,TP53,AKT1,ERBB2" \
+  --max_variants 3 \
   --structures_mode precomputed \
   --exhaustiveness 8 \
   -profile cpu
 
-# Producción con GPU (Boltz-1 para predicción estructural)
-nextflow run main.nf \
-  --study_id brca_tcga \
-  --genes "PIK3CA,TP53,ERBB2,BRCA1,BRCA2" \
-  --max_variants 5 \
-  --structures_mode boltz \
-  --exhaustiveness 16 \
-  -profile gpu
-
-# Reanudar una corrida interrumpida
+# Reanudar ejecución previa
 nextflow run main.nf -resume -profile cpu
 ```
 
-### Ver logs de MLflow
+### Pipeline V2 (Romero-Córdoba 2021 HM)
 
-Una vez que el pipeline termina, abre `http://localhost:5000` para ver las métricas,
-parámetros y artefactos registrados bajo el experimento `GEMAMX-V1-NF`.
-
----
-
-## 5. Levantar la webapp
+Ejecuta el flujo para la cohorte de pacientes mexicanas con integración clínica:
 
 ```bash
-# Primera vez: construir la imagen y levantar
-docker compose up -d webapp
+# Ejecutar pipeline V2 completo
+nextflow run main_v2.nf \
+  --genes "PIK3CA,TP53,AKT1,ERBB2,PTEN,GATA3,MAP3K1" \
+  --max_variants 1 \
+  --structures_mode precomputed \
+  --exhaustiveness 1 \
+  -profile romero-v2
 
-# Actualizar tras cambios en webapp/
-docker compose build webapp
-docker compose up -d webapp
-
-# Ver logs
-docker compose logs -f webapp
-
-# Parar
-docker compose down
-```
-
-La webapp queda disponible en **http://localhost:8080**.
-
-### Vistas disponibles
-
-| Vista | Descripción |
-|---|---|
-| **Dashboard** | KPIs generales: variantes, hotspot #1, estructuras, mejor afinidad |
-| **Pipeline Status** | Estado por etapa (M1–M5), parámetros de la corrida, info MLflow |
-| **Exploración TCGA** | Tabla completa de variantes con filtros; botones WT/MUT → visor 3D |
-| **Análisis** | Distribución de mutaciones por gen y tipo |
-| **Estructuras 3D** | Visor PDBe Molstar WT vs MUT, pLDDT, RMSD por región |
-| **Docking** | Ranking de fármacos, tabla WT vs MUT, visor de poses, fuentes de datos |
-| **Reporte** | Perfil completo por variante |
-
----
-
-## 6. Selector de corridas (MLflow)
-
-El selector **Pipeline / Corrida** en el navbar permite cambiar entre:
-
-- **Corrida vigente** — datos en `results/data/` (los más recientes)
-- **Corridas archivadas** — listadas desde `results/runs/index.json`, agrupadas por
-  versión del pipeline (campo `pipeline_version`)
-
-Cuando el pipeline termina con `--publish_run_archive true` (default), archiva
-automáticamente un snapshot en `results/runs/<run_name>/`.
-
-### Agregar una corrida al índice manualmente
-
-Edita `results/runs/index.json`:
-
-```json
-[
-  {
-    "run_name": "mi_corrida",
-    "published_at": "2026-11-01T00:00:00Z",
-    "git_commit": "abc1234",
-    "pipeline_version": "GEMAMX-V1-NF",
-    "path": "runs/mi_corrida/data"
-  }
-]
+# O mediante el script auxiliar
+bash run_pipeline_v2.sh
 ```
 
 ---
 
-## 7. Fuentes de datos externas
+## 7. Servicios Docker y MLflow
 
-La webapp conecta en vivo (sin autenticación) a:
+El proyecto cuenta con un stack Docker autónomo en `docker-compose.yml`:
 
-| Fuente | Tipo | URL | Datos |
-|---|---|---|---|
-| **ChEMBL** | REST JSON | `https://www.ebi.ac.uk/chembl/api/data/` | Fases clínicas, mecanismo de acción |
-| **CiViC** | GraphQL v2 | `https://civicdb.org/api/graphql` | Evidencia clínica por variante |
-| **PDBe Molstar** | CDN JS | `https://cdn.jsdelivr.net/npm/pdbe-molstar@3.2.0/` | Visor 3D CIF/PDB |
-
-DrugBank y OncoKB requieren licencia; se muestran como pendientes en el panel de fuentes.
-
----
-
-## 8. Desarrollo local de la webapp
-
-La webapp es HTML/CSS/JS puro (sin bundler). Para desarrollo sin Docker:
-
-```bash
-# Servir localmente con cualquier servidor estático
-# Opción 1: Python
-cd webapp
-python -m http.server 8080
-
-# Opción 2: Node.js
-npx serve webapp -p 8080
-
-# Opción 3: Live Server (VS Code / Kiro extension)
-# Abrir webapp/index.html con Live Server
+```yaml
+services:
+  gemamx_postgres:  # Base de datos relacional para MLflow (puerto 5432)
+  gemamx_mlflow:    # Servidor MLflow Tracking UI (puerto 5000)
+  gemamx_webapp:    # Servidor Nginx para la WebApp (puerto 8080)
 ```
 
-> Los archivos de datos deben estar en `webapp/data/` o montar `results/data/` en esa ruta.
-> Con Docker Compose esto se hace automáticamente vía el volumen `:ro`.
+- **Interfaz [MLflow](https://mlflow.org/)**: Accede a `http://localhost:5000` para comparar corridas, inspeccionar curvas de afinidad, descargar artefactos PDBQT o auditar el rendimiento entre `GEMAMX-V1-NF` y `GEMAMX-V2-ROMERO`.
+- **Independencia de Entorno**: El stack no depende de contenedores externos ni servicios en la nube de pago para la persistencia.
 
 ---
 
-## 9. Generador de diagramas (Archify)
+## 8. WebApp Interactiva (8 Vistas)
 
-El proyecto incluye [Archify](https://github.com/tt-a1i/archify) instalado como skill de Kiro
-en `.claude/skills/archify/`. Permite generar diagramas de arquitectura interactivos.
+La WebApp está disponible en **`http://localhost:8080`**. Al cambiar de corrida en el selector superior (`#sel-run`), la aplicación conmuta reactivamente todas las vistas:
 
-```bash
-# Verificar instalación
-node .claude/skills/archify/bin/archify.mjs doctor
-
-# Regenerar el diagrama de arquitectura
-node .claude/skills/archify/bin/archify.mjs finalize architecture \
-  .archify/architecture-gemamx-20261031-222552/candidate.json \
-  docs/architecture.html \
-  --repo-root . \
-  --quality showcase \
-  --json
-```
-
-El diagrama `docs/architecture.html` es un HTML standalone interactivo con tema oscuro/claro.
+1. **Dashboard General**: KPIs de variantes analizadas, hotspot #1, estructuras 3D generadas y mejor afinidad global.
+2. **Pipeline Status**: Trazabilidad del flujo de trabajo, parámetros de ejecución y estado de sincronización con [MLflow](https://mlflow.org/).
+3. **Exploración**: Tabla paginada y filtrable de mutaciones somáticas (frecuencias, clasificaciones de patogenicidad y enlaces directos a visores 3D).
+4. **Análisis Mutacional**: Gráficas interactivas con Plotly de distribución por gen y tipos de mutación (missense, frameshift, nonsense).
+5. **Estructuras 3D**: Visores sincronizados con [PDBe Molstar](https://github.com/PDBeurope/pdbe-molstar) para inspeccionar Wild-Type (WT) vs Mutado (MUT), pLDDT y RMSD por región.
+6. **Docking Molecular**: Ranking de los 11 fármacos evaluados en AutoDock Vina, deltas de afinidad $\Delta = \text{MUT} - \text{WT}$, panel de disponibilidad en México y visualización 3D del complejo receptor-ligando.
+7. **Análisis Clínico (V2)**: Distribución de subtipos moleculares (IHC y PAM50), rangos de edad y correlación directa variante × clínica de la cohorte Romero-Córdoba 2021.
+8. **Reporte por Variante**: Ficha técnica descargable de impacto clínico, estructural y farmacológico para oncología de precisión.
 
 ---
 
-## 10. Variables de entorno y configuración
+## 9. Referencias y Tecnologías
 
-El pipeline no requiere variables de entorno obligatorias, pero puede configurarse vía
-`nextflow.config` o parámetros en línea de comandos.
-
-Para usar un servidor MLflow remoto:
-
-```bash
-nextflow run main.nf \
-  --mlflow_tracking_uri http://mi-servidor-mlflow:5000 \
-  --mlflow_experiment GEMAMX-V1-NF \
-  -profile cpu
-```
-
-Para HPC con SLURM, añade un perfil en `nextflow.config`:
-
-```groovy
-profiles {
-  slurm {
-    process.executor = 'slurm'
-    process.queue    = 'gpu'
-    process.clusterOptions = '--gres=gpu:1'
-  }
-}
-```
+- **[Nextflow](https://www.nextflow.io/)**: Di Tommaso, P., et al. (2017). *Nextflow enables reproducible computational workflows*. Nature Biotechnology, 35(4), 316-319.
+- **[MLflow](https://mlflow.org/)**: Zaharia, M., et al. (2018). *Accelerating the Machine Learning Lifecycle with MLflow*. IEEE Micro.
+- **Cohorte Mexicana (Romero-Córdoba 2021)**: Romero-Córdoba, S. L., et al. (2021). *The landscape of somatic mutations and clinical phenotypes in Mexican patients with breast cancer*. Nature Communications, 12(1), 22478. [DOI: 10.1038/s41467-021-22478-5](https://doi.org/10.1038/s41467-021-22478-5).
+- **AutoDock Vina**: Trott, O., & Olson, A. J. (2010). *AutoDock Vina: improving the speed and accuracy of docking with a new scoring function, efficient optimization, and multithreading*. Journal of computational chemistry, 31(2), 455-461.
+- **ChEMBL**: Gaulton, A., et al. (2012). *ChEMBL: a large-scale bioactivity database for drug discovery*. Nucleic Acids Research, 40(D1), D1100-D1107.
+- **CiViC**: Griffith, M., et al. (2017). *CIViC is a community knowledgebase for expert crowdsourcing the clinical interpretation of variants in cancer*. Nature Genetics, 49(2), 170-174.
 
 ---
 
-## 11. Solución de problemas comunes
+## 10. Licencia y Créditos
 
-| Problema | Causa probable | Solución |
-|---|---|---|
-| `PDBeMolstarPlugin is not defined` | CSS de Molstar no cargado | Verificar `<link>` de `pdbe-molstar.css` en `index.html` |
-| Visor 3D negro sin estructura | `postMessage` antes de init | Ya resuelto en v1 con `render()` secuencial + `waitForBothViewers` |
-| `manifest_structures.json` vacío | Pipeline no completó M3 | Ejecutar con `--structures_mode precomputed` y estructuras en `tests/reference/structures/` |
-| MLflow `unhealthy` | Puerto 5000 en uso | Cambiar puerto en `docker-compose.yml` o cerrar el proceso que usa 5000 |
-| `vina_affinities.json` no encontrado | M4 no ejecutado | Usar `-profile test` para datos de prueba precalculados |
-| CiViC sin respuesta | CORS en desarrollo local | Usar Docker Compose (Nginx maneja CORS) o un proxy local |
-
----
-
-## 12. Contribuir
-
-1. Haz fork del repositorio en GitHub
-2. Crea una rama: `git checkout -b feature/mi-mejora`
-3. Commitea tus cambios con mensajes descriptivos
-4. Abre un Pull Request describiendo el cambio y lo que se probó
-
-### Estándares de código
-
-- **Nextflow**: seguir convenciones DSL2 (módulos en `modules/`, procesos con `container`)
-- **JavaScript**: ES modules (`import/export`), sin bundler, compatible con Chrome 100+
-- **CSS**: variables CSS (`--teal`, `--bg`, etc.), BEM-like para clases específicas
-- **Datos**: el contrato de datos (`results/data/`) debe ser backward-compatible entre versiones
-
----
-
-## Créditos
-
-Proyecto desarrollado en la **Universidad de Sonora (UNISON)** por el equipo GEMA MX.
-
-- Pipeline bioinformático: Nextflow DSL2 + Docker
-- Predicción estructural: [Boltz-1](https://github.com/jwohlwend/boltz), AlphaFold, ESMFold
-- Docking molecular: [AutoDock Vina 1.2.3](https://github.com/ccsb-scripps/AutoDock-Vina)
-- Visor 3D: [PDBe Molstar](https://github.com/PDBeurope/pdbe-molstar)
-- Datos clínicos: [NCI GDC](https://portal.gdc.cancer.gov/) · TCGA-BRCA
-- Farmacología: [ChEMBL](https://www.ebi.ac.uk/chembl/) · [CiViC](https://civicdb.org)
-- Diagramas: [Archify](https://github.com/tt-a1i/archify)
+Proyecto desarrollado por el equipo de investigación **GEMA MX** en la **Universidad de Sonora (UNISON)**. Distribuido bajo la licencia [MIT](LICENSE).

@@ -1,0 +1,986 @@
+[
+  {
+    "variant_id": "PIK3CA_H1047R",
+    "gene": "PIK3CA",
+    "protein_change": "H1047R",
+    "mutation_pos": 1047,
+    "wt_key": "WT__PIK3CA_H1047R",
+    "wt_out": "v2/data/structures/WT__PIK3CA_H1047R.pdb",
+    "wt_sequence_length": 202,
+    "wt_fragment": {
+      "start": 867,
+      "end": 1068,
+      "full_length": 1068,
+      "mode": "fragment"
+    },
+    "mut_key": "PIK3CA_H1047R",
+    "mut_out": "v2/data/structures/PIK3CA_H1047R.pdb",
+    "mut_sequence_length": 202,
+    "mut_fragment": {
+      "start": 867,
+      "end": 1068,
+      "full_length": 1068,
+      "mode": "fragment"
+    }
+  },
+  {
+    "variant_id": "AKT1_E17K",
+    "gene": "AKT1",
+    "protein_change": "E17K",
+    "mutation_pos": 17,
+    "wt_key": "WT__AKT1_E17K",
+    "wt_out": "v2/data/structures/WT__AKT1_E17K.pdb",
+    "wt_sequence_length": 197,
+    "wt_fragment": {
+      "start": 1,
+      "end": 197,
+      "full_length": 480,
+      "mode": "fragment"
+    },
+    "mut_key": "AKT1_E17K",
+    "mut_out": "v2/data/structures/AKT1_E17K.pdb",
+    "mut_sequence_length": 197,
+    "mut_fragment": {
+      "start": 1,
+      "end": 197,
+      "full_length": 480,
+      "mode": "fragment"
+    }
+  },
+  {
+    "variant_id": "PIK3CA_E542K",
+    "gene": "PIK3CA",
+    "protein_change": "E542K",
+    "mutation_pos": 542,
+    "wt_key": "WT__PIK3CA_E542K",
+    "wt_out": "v2/data/structures/WT__PIK3CA_E542K.pdb",
+    "wt_sequence_length": 361,
+    "wt_fragment": {
+      "start": 362,
+      "end": 722,
+      "full_length": 1068,
+      "mode": "fragment"
+    },
+    "mut_key": "PIK3CA_E542K",
+    "mut_out": "v2/data/structures/PIK3CA_E542K.pdb",
+    "mut_sequence_length": 361,
+    "mut_fragment": {
+      "start": 362,
+      "end": 722,
+      "full_length": 1068,
+      "mode": "fragment"
+    }
+  },
+  {
+    "variant_id": "PIK3CA_E545K",
+    "gene": "PIK3CA",
+    "protein_change": "E545K",
+    "mutation_pos": 545,
+    "wt_key": "WT__PIK3CA_E545K",
+    "wt_out": "v2/data/structures/WT__PIK3CA_E545K.pdb",
+    "wt_sequence_length": 361,
+    "wt_fragment": {
+      "start": 365,
+      "end": 725,
+      "full_length": 1068,
+      "mode": "fragment"
+    },
+    "mut_key": "PIK3CA_E545K",
+    "mut_out": "v2/data/structures/PIK3CA_E545K.pdb",
+    "mut_sequence_length": 361,
+    "mut_fragment": {
+      "start": 365,
+      "end": 725,
+      "full_length": 1068,
+      "mode": "fragment"
+    }
+  },
+  {
+    "variant_id": "PIK3CA_H1047L",
+    "gene": "PIK3CA",
+    "protein_change": "H1047L",
+    "mutation_pos": 1047,
+    "wt_key": "WT__PIK3CA_H1047L",
+    "wt_out": "v2/data/structures/WT__PIK3CA_H1047L.pdb",
+    "wt_sequence_length": 202,
+    "wt_fragment": {
+      "start": 867,
+      "end": 1068,
+      "full_length": 1068,
+      "mode": "fragment"
+    },
+    "mut_key": "PIK3CA_H1047L",
+    "mut_out": "v2/data/structures/PIK3CA_H1047L.pdb",
+    "mut_sequence_length": 202,
+    "mut_fragment": {
+      "start": 867,
+      "end": 1068,
+      "full_length": 1068,
+      "mode": "fragment"
+    }
+  },
+  {
+    "variant_id": "PIK3CA_C420R",
+    "gene": "PIK3CA",
+    "protein_change": "C420R",
+    "mutation_pos": 420,
+    "wt_key": "WT__PIK3CA_C420R",
+    "wt_out": "v2/data/structures/WT__PIK3CA_C420R.pdb",
+    "wt_sequence_length": 361,
+    "wt_fragment": {
+      "start": 240,
+      "end": 600,
+      "full_length": 1068,
+      "mode": "fragment"
+    },
+    "mut_key": "PIK3CA_C420R",
+    "mut_out": "v2/data/structures/PIK3CA_C420R.pdb",
+    "mut_sequence_length": 361,
+    "mut_fragment": {
+      "start": 240,
+      "end": 600,
+      "full_length": 1068,
+      "mode": "fragment"
+    }
+  },
+  {
+    "variant_id": "TP53_C135F",
+    "gene": "TP53",
+    "protein_change": "C135F",
+    "mutation_pos": 135,
+    "wt_key": "WT__TP53_C135F",
+    "wt_out": "v2/data/structures/WT__TP53_C135F.pdb",
+    "wt_sequence_length": 315,
+    "wt_fragment": {
+      "start": 1,
+      "end": 315,
+      "full_length": 393,
+      "mode": "fragment"
+    },
+    "mut_key": "TP53_C135F",
+    "mut_out": "v2/data/structures/TP53_C135F.pdb",
+    "mut_sequence_length": 315,
+    "mut_fragment": {
+      "start": 1,
+      "end": 315,
+      "full_length": 393,
+      "mode": "fragment"
+    }
+  },
+  {
+    "variant_id": "TP53_I195T",
+    "gene": "TP53",
+    "protein_change": "I195T",
+    "mutation_pos": 195,
+    "wt_key": "WT__TP53_I195T",
+    "wt_out": "v2/data/structures/WT__TP53_I195T.pdb",
+    "wt_sequence_length": 361,
+    "wt_fragment": {
+      "start": 15,
+      "end": 375,
+      "full_length": 393,
+      "mode": "fragment"
+    },
+    "mut_key": "TP53_I195T",
+    "mut_out": "v2/data/structures/TP53_I195T.pdb",
+    "mut_sequence_length": 361,
+    "mut_fragment": {
+      "start": 15,
+      "end": 375,
+      "full_length": 393,
+      "mode": "fragment"
+    }
+  },
+  {
+    "variant_id": "ERBB2_S310F",
+    "gene": "ERBB2",
+    "protein_change": "S310F",
+    "mutation_pos": 310,
+    "wt_key": "WT__ERBB2_S310F",
+    "wt_out": "v2/data/structures/WT__ERBB2_S310F.pdb",
+    "wt_sequence_length": 361,
+    "wt_fragment": {
+      "start": 130,
+      "end": 490,
+      "full_length": 1255,
+      "mode": "fragment"
+    },
+    "mut_key": "ERBB2_S310F",
+    "mut_out": "v2/data/structures/ERBB2_S310F.pdb",
+    "mut_sequence_length": 361,
+    "mut_fragment": {
+      "start": 130,
+      "end": 490,
+      "full_length": 1255,
+      "mode": "fragment"
+    }
+  },
+  {
+    "variant_id": "PIK3CA_E542Q",
+    "gene": "PIK3CA",
+    "protein_change": "E542Q",
+    "mutation_pos": 542,
+    "wt_key": "WT__PIK3CA_E542Q",
+    "wt_out": "v2/data/structures/WT__PIK3CA_E542Q.pdb",
+    "wt_sequence_length": 361,
+    "wt_fragment": {
+      "start": 362,
+      "end": 722,
+      "full_length": 1068,
+      "mode": "fragment"
+    },
+    "mut_key": "PIK3CA_E542Q",
+    "mut_out": "v2/data/structures/PIK3CA_E542Q.pdb",
+    "mut_sequence_length": 361,
+    "mut_fragment": {
+      "start": 362,
+      "end": 722,
+      "full_length": 1068,
+      "mode": "fragment"
+    }
+  },
+  {
+    "variant_id": "TP53_R273H",
+    "gene": "TP53",
+    "protein_change": "R273H",
+    "mutation_pos": 273,
+    "wt_key": "WT__TP53_R273H",
+    "wt_out": "v2/data/structures/WT__TP53_R273H.pdb",
+    "wt_sequence_length": 301,
+    "wt_fragment": {
+      "start": 93,
+      "end": 393,
+      "full_length": 393,
+      "mode": "fragment"
+    },
+    "mut_key": "TP53_R273H",
+    "mut_out": "v2/data/structures/TP53_R273H.pdb",
+    "mut_sequence_length": 301,
+    "mut_fragment": {
+      "start": 93,
+      "end": 393,
+      "full_length": 393,
+      "mode": "fragment"
+    }
+  },
+  {
+    "variant_id": "TP53_G266E",
+    "gene": "TP53",
+    "protein_change": "G266E",
+    "mutation_pos": 266,
+    "wt_key": "WT__TP53_G266E",
+    "wt_out": "v2/data/structures/WT__TP53_G266E.pdb",
+    "wt_sequence_length": 308,
+    "wt_fragment": {
+      "start": 86,
+      "end": 393,
+      "full_length": 393,
+      "mode": "fragment"
+    },
+    "mut_key": "TP53_G266E",
+    "mut_out": "v2/data/structures/TP53_G266E.pdb",
+    "mut_sequence_length": 308,
+    "mut_fragment": {
+      "start": 86,
+      "end": 393,
+      "full_length": 393,
+      "mode": "fragment"
+    }
+  },
+  {
+    "variant_id": "TP53_G245S",
+    "gene": "TP53",
+    "protein_change": "G245S",
+    "mutation_pos": 245,
+    "wt_key": "WT__TP53_G245S",
+    "wt_out": "v2/data/structures/WT__TP53_G245S.pdb",
+    "wt_sequence_length": 329,
+    "wt_fragment": {
+      "start": 65,
+      "end": 393,
+      "full_length": 393,
+      "mode": "fragment"
+    },
+    "mut_key": "TP53_G245S",
+    "mut_out": "v2/data/structures/TP53_G245S.pdb",
+    "mut_sequence_length": 329,
+    "mut_fragment": {
+      "start": 65,
+      "end": 393,
+      "full_length": 393,
+      "mode": "fragment"
+    }
+  },
+  {
+    "variant_id": "PIK3CA_E453K",
+    "gene": "PIK3CA",
+    "protein_change": "E453K",
+    "mutation_pos": 453,
+    "wt_key": "WT__PIK3CA_E453K",
+    "wt_out": "v2/data/structures/WT__PIK3CA_E453K.pdb",
+    "wt_sequence_length": 361,
+    "wt_fragment": {
+      "start": 273,
+      "end": 633,
+      "full_length": 1068,
+      "mode": "fragment"
+    },
+    "mut_key": "PIK3CA_E453K",
+    "mut_out": "v2/data/structures/PIK3CA_E453K.pdb",
+    "mut_sequence_length": 361,
+    "mut_fragment": {
+      "start": 273,
+      "end": 633,
+      "full_length": 1068,
+      "mode": "fragment"
+    }
+  },
+  {
+    "variant_id": "PIK3CA_E545G",
+    "gene": "PIK3CA",
+    "protein_change": "E545G",
+    "mutation_pos": 545,
+    "wt_key": "WT__PIK3CA_E545G",
+    "wt_out": "v2/data/structures/WT__PIK3CA_E545G.pdb",
+    "wt_sequence_length": 361,
+    "wt_fragment": {
+      "start": 365,
+      "end": 725,
+      "full_length": 1068,
+      "mode": "fragment"
+    },
+    "mut_key": "PIK3CA_E545G",
+    "mut_out": "v2/data/structures/PIK3CA_E545G.pdb",
+    "mut_sequence_length": 361,
+    "mut_fragment": {
+      "start": 365,
+      "end": 725,
+      "full_length": 1068,
+      "mode": "fragment"
+    }
+  },
+  {
+    "variant_id": "TP53_R273C",
+    "gene": "TP53",
+    "protein_change": "R273C",
+    "mutation_pos": 273,
+    "wt_key": "WT__TP53_R273C",
+    "wt_out": "v2/data/structures/WT__TP53_R273C.pdb",
+    "wt_sequence_length": 301,
+    "wt_fragment": {
+      "start": 93,
+      "end": 393,
+      "full_length": 393,
+      "mode": "fragment"
+    },
+    "mut_key": "TP53_R273C",
+    "mut_out": "v2/data/structures/TP53_R273C.pdb",
+    "mut_sequence_length": 301,
+    "mut_fragment": {
+      "start": 93,
+      "end": 393,
+      "full_length": 393,
+      "mode": "fragment"
+    }
+  },
+  {
+    "variant_id": "PTEN_R173H",
+    "gene": "PTEN",
+    "protein_change": "R173H",
+    "mutation_pos": 173,
+    "wt_key": "WT__PTEN_R173H",
+    "wt_out": "v2/data/structures/WT__PTEN_R173H.pdb",
+    "wt_sequence_length": 353,
+    "wt_fragment": {
+      "start": 1,
+      "end": 353,
+      "full_length": 403,
+      "mode": "fragment"
+    },
+    "mut_key": "PTEN_R173H",
+    "mut_out": "v2/data/structures/PTEN_R173H.pdb",
+    "mut_sequence_length": 353,
+    "mut_fragment": {
+      "start": 1,
+      "end": 353,
+      "full_length": 403,
+      "mode": "fragment"
+    }
+  },
+  {
+    "variant_id": "TP53_H179Y",
+    "gene": "TP53",
+    "protein_change": "H179Y",
+    "mutation_pos": 179,
+    "wt_key": "WT__TP53_H179Y",
+    "wt_out": "v2/data/structures/WT__TP53_H179Y.pdb",
+    "wt_sequence_length": 359,
+    "wt_fragment": {
+      "start": 1,
+      "end": 359,
+      "full_length": 393,
+      "mode": "fragment"
+    },
+    "mut_key": "TP53_H179Y",
+    "mut_out": "v2/data/structures/TP53_H179Y.pdb",
+    "mut_sequence_length": 359,
+    "mut_fragment": {
+      "start": 1,
+      "end": 359,
+      "full_length": 393,
+      "mode": "fragment"
+    }
+  },
+  {
+    "variant_id": "GATA3_S137L",
+    "gene": "GATA3",
+    "protein_change": "S137L",
+    "mutation_pos": 137,
+    "wt_key": "WT__GATA3_S137L",
+    "wt_out": "v2/data/structures/WT__GATA3_S137L.pdb",
+    "wt_sequence_length": 317,
+    "wt_fragment": {
+      "start": 1,
+      "end": 317,
+      "full_length": 443,
+      "mode": "fragment"
+    },
+    "mut_key": "GATA3_S137L",
+    "mut_out": "v2/data/structures/GATA3_S137L.pdb",
+    "mut_sequence_length": 317,
+    "mut_fragment": {
+      "start": 1,
+      "end": 317,
+      "full_length": 443,
+      "mode": "fragment"
+    }
+  },
+  {
+    "variant_id": "PTEN_R159S",
+    "gene": "PTEN",
+    "protein_change": "R159S",
+    "mutation_pos": 159,
+    "wt_key": "WT__PTEN_R159S",
+    "wt_out": "v2/data/structures/WT__PTEN_R159S.pdb",
+    "wt_sequence_length": 339,
+    "wt_fragment": {
+      "start": 1,
+      "end": 339,
+      "full_length": 403,
+      "mode": "fragment"
+    },
+    "mut_key": "PTEN_R159S",
+    "mut_out": "v2/data/structures/PTEN_R159S.pdb",
+    "mut_sequence_length": 339,
+    "mut_fragment": {
+      "start": 1,
+      "end": 339,
+      "full_length": 403,
+      "mode": "fragment"
+    }
+  },
+  {
+    "variant_id": "GATA3_Q83L",
+    "gene": "GATA3",
+    "protein_change": "Q83L",
+    "mutation_pos": 83,
+    "wt_key": "WT__GATA3_Q83L",
+    "wt_out": "v2/data/structures/WT__GATA3_Q83L.pdb",
+    "wt_sequence_length": 263,
+    "wt_fragment": {
+      "start": 1,
+      "end": 263,
+      "full_length": 443,
+      "mode": "fragment"
+    },
+    "mut_key": "GATA3_Q83L",
+    "mut_out": "v2/data/structures/GATA3_Q83L.pdb",
+    "mut_sequence_length": 263,
+    "mut_fragment": {
+      "start": 1,
+      "end": 263,
+      "full_length": 443,
+      "mode": "fragment"
+    }
+  },
+  {
+    "variant_id": "PIK3CA_E245Q",
+    "gene": "PIK3CA",
+    "protein_change": "E245Q",
+    "mutation_pos": 245,
+    "wt_key": "WT__PIK3CA_E245Q",
+    "wt_out": "v2/data/structures/WT__PIK3CA_E245Q.pdb",
+    "wt_sequence_length": 361,
+    "wt_fragment": {
+      "start": 65,
+      "end": 425,
+      "full_length": 1068,
+      "mode": "fragment"
+    },
+    "mut_key": "PIK3CA_E245Q",
+    "mut_out": "v2/data/structures/PIK3CA_E245Q.pdb",
+    "mut_sequence_length": 361,
+    "mut_fragment": {
+      "start": 65,
+      "end": 425,
+      "full_length": 1068,
+      "mode": "fragment"
+    }
+  },
+  {
+    "variant_id": "PIK3CA_M1004I",
+    "gene": "PIK3CA",
+    "protein_change": "M1004I",
+    "mutation_pos": 1004,
+    "wt_key": "WT__PIK3CA_M1004I",
+    "wt_out": "v2/data/structures/WT__PIK3CA_M1004I.pdb",
+    "wt_sequence_length": 245,
+    "wt_fragment": {
+      "start": 824,
+      "end": 1068,
+      "full_length": 1068,
+      "mode": "fragment"
+    },
+    "mut_key": "PIK3CA_M1004I",
+    "mut_out": "v2/data/structures/PIK3CA_M1004I.pdb",
+    "mut_sequence_length": 245,
+    "mut_fragment": {
+      "start": 824,
+      "end": 1068,
+      "full_length": 1068,
+      "mode": "fragment"
+    }
+  },
+  {
+    "variant_id": "TP53_R175H",
+    "gene": "TP53",
+    "protein_change": "R175H",
+    "mutation_pos": 175,
+    "wt_key": "WT__TP53_R175H",
+    "wt_out": "v2/data/structures/WT__TP53_R175H.pdb",
+    "wt_sequence_length": 355,
+    "wt_fragment": {
+      "start": 1,
+      "end": 355,
+      "full_length": 393,
+      "mode": "fragment"
+    },
+    "mut_key": "TP53_R175H",
+    "mut_out": "v2/data/structures/TP53_R175H.pdb",
+    "mut_sequence_length": 355,
+    "mut_fragment": {
+      "start": 1,
+      "end": 355,
+      "full_length": 393,
+      "mode": "fragment"
+    }
+  },
+  {
+    "variant_id": "TP53_D57N",
+    "gene": "TP53",
+    "protein_change": "D57N",
+    "mutation_pos": 57,
+    "wt_key": "WT__TP53_D57N",
+    "wt_out": "v2/data/structures/WT__TP53_D57N.pdb",
+    "wt_sequence_length": 237,
+    "wt_fragment": {
+      "start": 1,
+      "end": 237,
+      "full_length": 393,
+      "mode": "fragment"
+    },
+    "mut_key": "TP53_D57N",
+    "mut_out": "v2/data/structures/TP53_D57N.pdb",
+    "mut_sequence_length": 237,
+    "mut_fragment": {
+      "start": 1,
+      "end": 237,
+      "full_length": 393,
+      "mode": "fragment"
+    }
+  },
+  {
+    "variant_id": "TP53_E285K",
+    "gene": "TP53",
+    "protein_change": "E285K",
+    "mutation_pos": 285,
+    "wt_key": "WT__TP53_E285K",
+    "wt_out": "v2/data/structures/WT__TP53_E285K.pdb",
+    "wt_sequence_length": 289,
+    "wt_fragment": {
+      "start": 105,
+      "end": 393,
+      "full_length": 393,
+      "mode": "fragment"
+    },
+    "mut_key": "TP53_E285K",
+    "mut_out": "v2/data/structures/TP53_E285K.pdb",
+    "mut_sequence_length": 289,
+    "mut_fragment": {
+      "start": 105,
+      "end": 393,
+      "full_length": 393,
+      "mode": "fragment"
+    }
+  },
+  {
+    "variant_id": "GATA3_T418A",
+    "gene": "GATA3",
+    "protein_change": "T418A",
+    "mutation_pos": 418,
+    "wt_key": "WT__GATA3_T418A",
+    "wt_out": "v2/data/structures/WT__GATA3_T418A.pdb",
+    "wt_sequence_length": 206,
+    "wt_fragment": {
+      "start": 238,
+      "end": 443,
+      "full_length": 443,
+      "mode": "fragment"
+    },
+    "mut_key": "GATA3_T418A",
+    "mut_out": "v2/data/structures/GATA3_T418A.pdb",
+    "mut_sequence_length": 206,
+    "mut_fragment": {
+      "start": 238,
+      "end": 443,
+      "full_length": 443,
+      "mode": "fragment"
+    }
+  },
+  {
+    "variant_id": "AKT1_L52R",
+    "gene": "AKT1",
+    "protein_change": "L52R",
+    "mutation_pos": 52,
+    "wt_key": "WT__AKT1_L52R",
+    "wt_out": "v2/data/structures/WT__AKT1_L52R.pdb",
+    "wt_sequence_length": 232,
+    "wt_fragment": {
+      "start": 1,
+      "end": 232,
+      "full_length": 480,
+      "mode": "fragment"
+    },
+    "mut_key": "AKT1_L52R",
+    "mut_out": "v2/data/structures/AKT1_L52R.pdb",
+    "mut_sequence_length": 232,
+    "mut_fragment": {
+      "start": 1,
+      "end": 232,
+      "full_length": 480,
+      "mode": "fragment"
+    }
+  },
+  {
+    "variant_id": "TP53_R110L",
+    "gene": "TP53",
+    "protein_change": "R110L",
+    "mutation_pos": 110,
+    "wt_key": "WT__TP53_R110L",
+    "wt_out": "v2/data/structures/WT__TP53_R110L.pdb",
+    "wt_sequence_length": 290,
+    "wt_fragment": {
+      "start": 1,
+      "end": 290,
+      "full_length": 393,
+      "mode": "fragment"
+    },
+    "mut_key": "TP53_R110L",
+    "mut_out": "v2/data/structures/TP53_R110L.pdb",
+    "mut_sequence_length": 290,
+    "mut_fragment": {
+      "start": 1,
+      "end": 290,
+      "full_length": 393,
+      "mode": "fragment"
+    }
+  },
+  {
+    "variant_id": "TP53_M246V",
+    "gene": "TP53",
+    "protein_change": "M246V",
+    "mutation_pos": 246,
+    "wt_key": "WT__TP53_M246V",
+    "wt_out": "v2/data/structures/WT__TP53_M246V.pdb",
+    "wt_sequence_length": 328,
+    "wt_fragment": {
+      "start": 66,
+      "end": 393,
+      "full_length": 393,
+      "mode": "fragment"
+    },
+    "mut_key": "TP53_M246V",
+    "mut_out": "v2/data/structures/TP53_M246V.pdb",
+    "mut_sequence_length": 328,
+    "mut_fragment": {
+      "start": 66,
+      "end": 393,
+      "full_length": 393,
+      "mode": "fragment"
+    }
+  },
+  {
+    "variant_id": "TP53_C141Y",
+    "gene": "TP53",
+    "protein_change": "C141Y",
+    "mutation_pos": 141,
+    "wt_key": "WT__TP53_C141Y",
+    "wt_out": "v2/data/structures/WT__TP53_C141Y.pdb",
+    "wt_sequence_length": 321,
+    "wt_fragment": {
+      "start": 1,
+      "end": 321,
+      "full_length": 393,
+      "mode": "fragment"
+    },
+    "mut_key": "TP53_C141Y",
+    "mut_out": "v2/data/structures/TP53_C141Y.pdb",
+    "mut_sequence_length": 321,
+    "mut_fragment": {
+      "start": 1,
+      "end": 321,
+      "full_length": 393,
+      "mode": "fragment"
+    }
+  },
+  {
+    "variant_id": "PIK3CA_H1047Y",
+    "gene": "PIK3CA",
+    "protein_change": "H1047Y",
+    "mutation_pos": 1047,
+    "wt_key": "WT__PIK3CA_H1047Y",
+    "wt_out": "v2/data/structures/WT__PIK3CA_H1047Y.pdb",
+    "wt_sequence_length": 202,
+    "wt_fragment": {
+      "start": 867,
+      "end": 1068,
+      "full_length": 1068,
+      "mode": "fragment"
+    },
+    "mut_key": "PIK3CA_H1047Y",
+    "mut_out": "v2/data/structures/PIK3CA_H1047Y.pdb",
+    "mut_sequence_length": 202,
+    "mut_fragment": {
+      "start": 867,
+      "end": 1068,
+      "full_length": 1068,
+      "mode": "fragment"
+    }
+  },
+  {
+    "variant_id": "TP53_C176S",
+    "gene": "TP53",
+    "protein_change": "C176S",
+    "mutation_pos": 176,
+    "wt_key": "WT__TP53_C176S",
+    "wt_out": "v2/data/structures/WT__TP53_C176S.pdb",
+    "wt_sequence_length": 356,
+    "wt_fragment": {
+      "start": 1,
+      "end": 356,
+      "full_length": 393,
+      "mode": "fragment"
+    },
+    "mut_key": "TP53_C176S",
+    "mut_out": "v2/data/structures/TP53_C176S.pdb",
+    "mut_sequence_length": 356,
+    "mut_fragment": {
+      "start": 1,
+      "end": 356,
+      "full_length": 393,
+      "mode": "fragment"
+    }
+  },
+  {
+    "variant_id": "PTEN_D297H",
+    "gene": "PTEN",
+    "protein_change": "D297H",
+    "mutation_pos": 297,
+    "wt_key": "WT__PTEN_D297H",
+    "wt_out": "v2/data/structures/WT__PTEN_D297H.pdb",
+    "wt_sequence_length": 287,
+    "wt_fragment": {
+      "start": 117,
+      "end": 403,
+      "full_length": 403,
+      "mode": "fragment"
+    },
+    "mut_key": "PTEN_D297H",
+    "mut_out": "v2/data/structures/PTEN_D297H.pdb",
+    "mut_sequence_length": 287,
+    "mut_fragment": {
+      "start": 117,
+      "end": 403,
+      "full_length": 403,
+      "mode": "fragment"
+    }
+  },
+  {
+    "variant_id": "PIK3CA_E365K",
+    "gene": "PIK3CA",
+    "protein_change": "E365K",
+    "mutation_pos": 365,
+    "wt_key": "WT__PIK3CA_E365K",
+    "wt_out": "v2/data/structures/WT__PIK3CA_E365K.pdb",
+    "wt_sequence_length": 361,
+    "wt_fragment": {
+      "start": 185,
+      "end": 545,
+      "full_length": 1068,
+      "mode": "fragment"
+    },
+    "mut_key": "PIK3CA_E365K",
+    "mut_out": "v2/data/structures/PIK3CA_E365K.pdb",
+    "mut_sequence_length": 361,
+    "mut_fragment": {
+      "start": 185,
+      "end": 545,
+      "full_length": 1068,
+      "mode": "fragment"
+    }
+  },
+  {
+    "variant_id": "ERBB2_V777L",
+    "gene": "ERBB2",
+    "protein_change": "V777L",
+    "mutation_pos": 777,
+    "wt_key": "WT__ERBB2_V777L",
+    "wt_out": "v2/data/structures/WT__ERBB2_V777L.pdb",
+    "wt_sequence_length": 361,
+    "wt_fragment": {
+      "start": 597,
+      "end": 957,
+      "full_length": 1255,
+      "mode": "fragment"
+    },
+    "mut_key": "ERBB2_V777L",
+    "mut_out": "v2/data/structures/ERBB2_V777L.pdb",
+    "mut_sequence_length": 361,
+    "mut_fragment": {
+      "start": 597,
+      "end": 957,
+      "full_length": 1255,
+      "mode": "fragment"
+    }
+  },
+  {
+    "variant_id": "TP53_L194H",
+    "gene": "TP53",
+    "protein_change": "L194H",
+    "mutation_pos": 194,
+    "wt_key": "WT__TP53_L194H",
+    "wt_out": "v2/data/structures/WT__TP53_L194H.pdb",
+    "wt_sequence_length": 361,
+    "wt_fragment": {
+      "start": 14,
+      "end": 374,
+      "full_length": 393,
+      "mode": "fragment"
+    },
+    "mut_key": "TP53_L194H",
+    "mut_out": "v2/data/structures/TP53_L194H.pdb",
+    "mut_sequence_length": 361,
+    "mut_fragment": {
+      "start": 14,
+      "end": 374,
+      "full_length": 393,
+      "mode": "fragment"
+    }
+  },
+  {
+    "variant_id": "TP53_T256P",
+    "gene": "TP53",
+    "protein_change": "T256P",
+    "mutation_pos": 256,
+    "wt_key": "WT__TP53_T256P",
+    "wt_out": "v2/data/structures/WT__TP53_T256P.pdb",
+    "wt_sequence_length": 318,
+    "wt_fragment": {
+      "start": 76,
+      "end": 393,
+      "full_length": 393,
+      "mode": "fragment"
+    },
+    "mut_key": "TP53_T256P",
+    "mut_out": "v2/data/structures/TP53_T256P.pdb",
+    "mut_sequence_length": 318,
+    "mut_fragment": {
+      "start": 76,
+      "end": 393,
+      "full_length": 393,
+      "mode": "fragment"
+    }
+  },
+  {
+    "variant_id": "PTEN_I28F",
+    "gene": "PTEN",
+    "protein_change": "I28F",
+    "mutation_pos": 28,
+    "wt_key": "WT__PTEN_I28F",
+    "wt_out": "v2/data/structures/WT__PTEN_I28F.pdb",
+    "wt_sequence_length": 208,
+    "wt_fragment": {
+      "start": 1,
+      "end": 208,
+      "full_length": 403,
+      "mode": "fragment"
+    },
+    "mut_key": "PTEN_I28F",
+    "mut_out": "v2/data/structures/PTEN_I28F.pdb",
+    "mut_sequence_length": 208,
+    "mut_fragment": {
+      "start": 1,
+      "end": 208,
+      "full_length": 403,
+      "mode": "fragment"
+    }
+  },
+  {
+    "variant_id": "MAP3K1_M1442I",
+    "gene": "MAP3K1",
+    "protein_change": "M1442I",
+    "mutation_pos": 1442,
+    "wt_key": "WT__MAP3K1_M1442I",
+    "wt_out": "v2/data/structures/WT__MAP3K1_M1442I.pdb",
+    "wt_sequence_length": 251,
+    "wt_fragment": {
+      "start": 1262,
+      "end": 1512,
+      "full_length": 1512,
+      "mode": "fragment"
+    },
+    "mut_key": "MAP3K1_M1442I",
+    "mut_out": "v2/data/structures/MAP3K1_M1442I.pdb",
+    "mut_sequence_length": 251,
+    "mut_fragment": {
+      "start": 1262,
+      "end": 1512,
+      "full_length": 1512,
+      "mode": "fragment"
+    }
+  },
+  {
+    "variant_id": "PIK3CA_C378F",
+    "gene": "PIK3CA",
+    "protein_change": "C378F",
+    "mutation_pos": 378,
+    "wt_key": "WT__PIK3CA_C378F",
+    "wt_out": "v2/data/structures/WT__PIK3CA_C378F.pdb",
+    "wt_sequence_length": 361,
+    "wt_fragment": {
+      "start": 198,
+      "end": 558,
+      "full_length": 1068,
+      "mode": "fragment"
+    },
+    "mut_key": "PIK3CA_C378F",
+    "mut_out": "v2/data/structures/PIK3CA_C378F.pdb",
+    "mut_sequence_length": 361,
+    "mut_fragment": {
+      "start": 198,
+      "end": 558,
+      "full_length": 1068,
+      "mode": "fragment"
+    }
+  }
+]

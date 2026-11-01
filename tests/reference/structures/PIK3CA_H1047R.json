@@ -1,26 +1,24 @@
 {
-    "backend": "precomputed",
-    "expected_aa": "R",
-    "fasta_length": 480,
-    "fasta_sha256": "af9e595564731da21bffab324446f9cc4da838ef8a21504740fb7ffd8336e2b9",
-    "format": "pdb",
-    "gene": "PIK3CA",
-    "model_end": 1068,
-    "model_length": 202,
-    "model_resseq_end": 202,
-    "model_resseq_start": 1,
-    "model_start": 867,
-    "mutation_pos": 1047,
-    "mutation_resseq_model": 181,
-    "plddt_max": 97.0,
-    "plddt_mean": 85.3,
-    "plddt_min": 39.0,
-    "protein_change": "H1047R",
+    "atoms": 3297,
+    "chains": [
+        "A"
+    ],
+    "deterministic_check": true,
+    "elements": {
+        "C": 1067,
+        "H": 1635,
+        "N": 289,
+        "O": 294,
+        "S": 12
+    },
+    "ob_random_seed": 42,
+    "obabel": "Open Babel 3.2.1 -- Aug 19 2026 -- 17:02:47",
+    "pdbqt_file": "test_rec.pdbqt",
+    "pdbqt_sha256": "63c9d368c1d6c250d77bb45de0addd0c3f92ba32e27c337b656c3ee441b94ac2",
+    "ph": 7.4,
+    "polar_hydrogens": 373,
     "residues": 202,
-    "role": "mut",
-    "source": "PIK3CA_H1047R.pdb",
-    "source_format": "pdb",
-    "source_sha256": "4260f1f16935010c7c12fe979795083ff110b5d13856ffd88f34f4be91a43609",
-    "structure_file": "PIK3CA_H1047R.pdb",
-    "structure_sha256": "4260f1f16935010c7c12fe979795083ff110b5d13856ffd88f34f4be91a43609"
+    "strip_hetatm": true,
+    "structure": "PIK3CA_H1047R.pdb",
+    "structure_sha256": "4f20e8c90cc5e00aa35cd02aa09af2409f489939028b61a77c187e8c6ed65192"
 }

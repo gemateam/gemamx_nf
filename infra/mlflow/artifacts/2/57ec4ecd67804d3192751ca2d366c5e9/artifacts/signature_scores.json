@@ -1,0 +1,967 @@
+{
+  "signatures": [
+    "IDO1",
+    "ARG1",
+    "VEGFA",
+    "CCL2",
+    "CXCL8",
+    "IL6"
+  ],
+  "samples": [
+    {
+      "sample_id": "GSM2301021",
+      "cold_score": 0.6039051025414728,
+      "classification": "Warm",
+      "cold_subtype": "Immune-excluded"
+    },
+    {
+      "sample_id": "GSM2301022",
+      "cold_score": 0.5854485796149973,
+      "classification": "Warm",
+      "cold_subtype": "Claudin-low"
+    },
+    {
+      "sample_id": "GSM2301023",
+      "cold_score": 0.596036720229283,
+      "classification": "Warm",
+      "cold_subtype": "Claudin-low"
+    },
+    {
+      "sample_id": "GSM2301024",
+      "cold_score": 0.5945299581723276,
+      "classification": "Warm",
+      "cold_subtype": "Claudin-low"
+    },
+    {
+      "sample_id": "GSM2301025",
+      "cold_score": 0.5936669677382942,
+      "classification": "Warm",
+      "cold_subtype": "Claudin-low"
+    },
+    {
+      "sample_id": "GSM2301026",
+      "cold_score": 0.6042456909749863,
+      "classification": "Warm",
+      "cold_subtype": "Immune-excluded"
+    },
+    {
+      "sample_id": "GSM2301027",
+      "cold_score": 0.5988413328934238,
+      "classification": "Warm",
+      "cold_subtype": "Claudin-low"
+    },
+    {
+      "sample_id": "GSM2301028",
+      "cold_score": 0.5916593822388017,
+      "classification": "Warm",
+      "cold_subtype": "Claudin-low"
+    },
+    {
+      "sample_id": "GSM2301029",
+      "cold_score": 0.5940056537425296,
+      "classification": "Warm",
+      "cold_subtype": "Claudin-low"
+    },
+    {
+      "sample_id": "GSM2301030",
+      "cold_score": 0.6057935970611257,
+      "classification": "Warm",
+      "cold_subtype": "Immune-excluded"
+    },
+    {
+      "sample_id": "GSM2301031",
+      "cold_score": 0.5877714178073106,
+      "classification": "Warm",
+      "cold_subtype": "Claudin-low"
+    },
+    {
+      "sample_id": "GSM2301032",
+      "cold_score": 0.5919852627665397,
+      "classification": "Warm",
+      "cold_subtype": "Claudin-low"
+    },
+    {
+      "sample_id": "GSM2301033",
+      "cold_score": 0.5988461571512388,
+      "classification": "Warm",
+      "cold_subtype": "Claudin-low"
+    },
+    {
+      "sample_id": "GSM2301034",
+      "cold_score": 0.5973102862457411,
+      "classification": "Warm",
+      "cold_subtype": "Claudin-low"
+    },
+    {
+      "sample_id": "GSM2301035",
+      "cold_score": 0.6185176948500888,
+      "classification": "Warm",
+      "cold_subtype": "Immune-excluded"
+    },
+    {
+      "sample_id": "GSM2301036",
+      "cold_score": 0.5901889163987889,
+      "classification": "Warm",
+      "cold_subtype": "Claudin-low"
+    },
+    {
+      "sample_id": "GSM2301037",
+      "cold_score": 0.5947096128282502,
+      "classification": "Warm",
+      "cold_subtype": "Claudin-low"
+    },
+    {
+      "sample_id": "GSM2301038",
+      "cold_score": 0.5935195491680043,
+      "classification": "Warm",
+      "cold_subtype": "Claudin-low"
+    },
+    {
+      "sample_id": "GSM2301039",
+      "cold_score": 0.5953202182553405,
+      "classification": "Warm",
+      "cold_subtype": "Claudin-low"
+    },
+    {
+      "sample_id": "GSM2301040",
+      "cold_score": 0.5911667200745302,
+      "classification": "Warm",
+      "cold_subtype": "Claudin-low"
+    },
+    {
+      "sample_id": "GSM2301041",
+      "cold_score": 0.5909545327963125,
+      "classification": "Warm",
+      "cold_subtype": "Claudin-low"
+    },
+    {
+      "sample_id": "GSM2301042",
+      "cold_score": 0.6013822271912928,
+      "classification": "Warm",
+      "cold_subtype": "Immune-excluded"
+    },
+    {
+      "sample_id": "GSM2301043",
+      "cold_score": 0.6035563877756094,
+      "classification": "Warm",
+      "cold_subtype": "Immune-excluded"
+    },
+    {
+      "sample_id": "GSM2301044",
+      "cold_score": 0.6024665938757292,
+      "classification": "Warm",
+      "cold_subtype": "Immune-excluded"
+    },
+    {
+      "sample_id": "GSM2301045",
+      "cold_score": 0.5866280184522864,
+      "classification": "Warm",
+      "cold_subtype": "Claudin-low"
+    },
+    {
+      "sample_id": "GSM2301046",
+      "cold_score": 0.5932467908031633,
+      "classification": "Warm",
+      "cold_subtype": "Claudin-low"
+    },
+    {
+      "sample_id": "GSM2301047",
+      "cold_score": 0.5914347747753409,
+      "classification": "Warm",
+      "cold_subtype": "Claudin-low"
+    },
+    {
+      "sample_id": "GSM2301048",
+      "cold_score": 0.5943764696642792,
+      "classification": "Warm",
+      "cold_subtype": "Claudin-low"
+    },
+    {
+      "sample_id": "GSM2301049",
+      "cold_score": 0.5918752378111677,
+      "classification": "Warm",
+      "cold_subtype": "Claudin-low"
+    },
+    {
+      "sample_id": "GSM2301050",
+      "cold_score": 0.5972739126869936,
+      "classification": "Warm",
+      "cold_subtype": "Claudin-low"
+    },
+    {
+      "sample_id": "GSM2301051",
+      "cold_score": 0.5961787529450551,
+      "classification": "Warm",
+      "cold_subtype": "Claudin-low"
+    },
+    {
+      "sample_id": "GSM2301052",
+      "cold_score": 0.5908324102185082,
+      "classification": "Warm",
+      "cold_subtype": "Claudin-low"
+    },
+    {
+      "sample_id": "GSM2301053",
+      "cold_score": 0.5929340064664599,
+      "classification": "Warm",
+      "cold_subtype": "Claudin-low"
+    },
+    {
+      "sample_id": "GSM2301054",
+      "cold_score": 0.5855375987017319,
+      "classification": "Warm",
+      "cold_subtype": "Claudin-low"
+    },
+    {
+      "sample_id": "GSM2301055",
+      "cold_score": 0.5934286481884345,
+      "classification": "Warm",
+      "cold_subtype": "Claudin-low"
+    },
+    {
+      "sample_id": "GSM2301056",
+      "cold_score": 0.6024497572056031,
+      "classification": "Warm",
+      "cold_subtype": "Immune-excluded"
+    },
+    {
+      "sample_id": "GSM2301057",
+      "cold_score": 0.5926226510187108,
+      "classification": "Warm",
+      "cold_subtype": "Claudin-low"
+    },
+    {
+      "sample_id": "GSM2301058",
+      "cold_score": 0.597312222920079,
+      "classification": "Warm",
+      "cold_subtype": "Claudin-low"
+    },
+    {
+      "sample_id": "GSM2301059",
+      "cold_score": 0.6023132516480364,
+      "classification": "Warm",
+      "cold_subtype": "Immune-excluded"
+    },
+    {
+      "sample_id": "GSM2301060",
+      "cold_score": 0.5836602315554469,
+      "classification": "Warm",
+      "cold_subtype": "Claudin-low"
+    },
+    {
+      "sample_id": "GSM2301061",
+      "cold_score": 0.5893138738012728,
+      "classification": "Warm",
+      "cold_subtype": "Claudin-low"
+    },
+    {
+      "sample_id": "GSM2301062",
+      "cold_score": 0.6042315843246853,
+      "classification": "Warm",
+      "cold_subtype": "Immune-excluded"
+    },
+    {
+      "sample_id": "GSM2301063",
+      "cold_score": 0.6002235152976978,
+      "classification": "Warm",
+      "cold_subtype": "Immune-excluded"
+    },
+    {
+      "sample_id": "GSM2301064",
+      "cold_score": 0.5978804876885686,
+      "classification": "Warm",
+      "cold_subtype": "Claudin-low"
+    },
+    {
+      "sample_id": "GSM2301065",
+      "cold_score": 0.5989162594381021,
+      "classification": "Warm",
+      "cold_subtype": "Claudin-low"
+    },
+    {
+      "sample_id": "GSM2301066",
+      "cold_score": 0.5964042620184467,
+      "classification": "Warm",
+      "cold_subtype": "Claudin-low"
+    },
+    {
+      "sample_id": "GSM2301067",
+      "cold_score": 0.6019614218643535,
+      "classification": "Warm",
+      "cold_subtype": "Immune-excluded"
+    },
+    {
+      "sample_id": "GSM2301068",
+      "cold_score": 0.5912369011264362,
+      "classification": "Warm",
+      "cold_subtype": "Claudin-low"
+    },
+    {
+      "sample_id": "GSM2301069",
+      "cold_score": 0.5970061757242812,
+      "classification": "Warm",
+      "cold_subtype": "Claudin-low"
+    },
+    {
+      "sample_id": "GSM2301070",
+      "cold_score": 0.5951973740604855,
+      "classification": "Warm",
+      "cold_subtype": "Claudin-low"
+    },
+    {
+      "sample_id": "GSM2301071",
+      "cold_score": 0.6089974740023707,
+      "classification": "Warm",
+      "cold_subtype": "Immune-excluded"
+    },
+    {
+      "sample_id": "GSM2301072",
+      "cold_score": 0.5998064214768088,
+      "classification": "Warm",
+      "cold_subtype": "Claudin-low"
+    },
+    {
+      "sample_id": "GSM2301073",
+      "cold_score": 0.5936247880376248,
+      "classification": "Warm",
+      "cold_subtype": "Claudin-low"
+    },
+    {
+      "sample_id": "GSM2301074",
+      "cold_score": 0.6118248749565389,
+      "classification": "Warm",
+      "cold_subtype": "Immune-excluded"
+    },
+    {
+      "sample_id": "GSM2301075",
+      "cold_score": 0.5949159647440412,
+      "classification": "Warm",
+      "cold_subtype": "Claudin-low"
+    },
+    {
+      "sample_id": "GSM2301076",
+      "cold_score": 0.5911454941764728,
+      "classification": "Warm",
+      "cold_subtype": "Claudin-low"
+    },
+    {
+      "sample_id": "GSM2301077",
+      "cold_score": 0.5962435277129204,
+      "classification": "Warm",
+      "cold_subtype": "Claudin-low"
+    },
+    {
+      "sample_id": "GSM2301078",
+      "cold_score": 0.5919844206777747,
+      "classification": "Warm",
+      "cold_subtype": "Claudin-low"
+    },
+    {
+      "sample_id": "GSM2301079",
+      "cold_score": 0.5948443120808555,
+      "classification": "Warm",
+      "cold_subtype": "Claudin-low"
+    },
+    {
+      "sample_id": "GSM2301080",
+      "cold_score": 0.5915381538665996,
+      "classification": "Warm",
+      "cold_subtype": "Claudin-low"
+    },
+    {
+      "sample_id": "GSM2301081",
+      "cold_score": 0.5855116672795421,
+      "classification": "Warm",
+      "cold_subtype": "Claudin-low"
+    },
+    {
+      "sample_id": "GSM2301082",
+      "cold_score": 0.6066041023166848,
+      "classification": "Warm",
+      "cold_subtype": "Immune-excluded"
+    },
+    {
+      "sample_id": "GSM2301083",
+      "cold_score": 0.5967478004789201,
+      "classification": "Warm",
+      "cold_subtype": "Claudin-low"
+    },
+    {
+      "sample_id": "GSM2301084",
+      "cold_score": 0.5976391716699072,
+      "classification": "Warm",
+      "cold_subtype": "Claudin-low"
+    },
+    {
+      "sample_id": "GSM2301085",
+      "cold_score": 0.5974371542381862,
+      "classification": "Warm",
+      "cold_subtype": "Claudin-low"
+    },
+    {
+      "sample_id": "GSM2301086",
+      "cold_score": 0.6054804905993805,
+      "classification": "Warm",
+      "cold_subtype": "Immune-excluded"
+    },
+    {
+      "sample_id": "GSM2301087",
+      "cold_score": 0.5913893363159141,
+      "classification": "Warm",
+      "cold_subtype": "Claudin-low"
+    },
+    {
+      "sample_id": "GSM2301088",
+      "cold_score": 0.5904443489527711,
+      "classification": "Warm",
+      "cold_subtype": "Claudin-low"
+    },
+    {
+      "sample_id": "GSM2301089",
+      "cold_score": 0.6057382636989196,
+      "classification": "Warm",
+      "cold_subtype": "Immune-excluded"
+    },
+    {
+      "sample_id": "GSM2301090",
+      "cold_score": 0.5991024524896005,
+      "classification": "Warm",
+      "cold_subtype": "Claudin-low"
+    },
+    {
+      "sample_id": "GSM2301091",
+      "cold_score": 0.5883102021596331,
+      "classification": "Warm",
+      "cold_subtype": "Claudin-low"
+    },
+    {
+      "sample_id": "GSM2301092",
+      "cold_score": 0.5966781235279521,
+      "classification": "Warm",
+      "cold_subtype": "Claudin-low"
+    },
+    {
+      "sample_id": "GSM2301093",
+      "cold_score": 0.5891258167141504,
+      "classification": "Warm",
+      "cold_subtype": "Claudin-low"
+    },
+    {
+      "sample_id": "GSM2301094",
+      "cold_score": 0.5954483448386345,
+      "classification": "Warm",
+      "cold_subtype": "Claudin-low"
+    },
+    {
+      "sample_id": "GSM2301095",
+      "cold_score": 0.6100596050412088,
+      "classification": "Warm",
+      "cold_subtype": "Immune-excluded"
+    },
+    {
+      "sample_id": "GSM2301096",
+      "cold_score": 0.6020075014285375,
+      "classification": "Warm",
+      "cold_subtype": "Immune-excluded"
+    },
+    {
+      "sample_id": "GSM2301097",
+      "cold_score": 0.5920215034336598,
+      "classification": "Warm",
+      "cold_subtype": "Claudin-low"
+    },
+    {
+      "sample_id": "GSM2301098",
+      "cold_score": 0.5909437213172529,
+      "classification": "Warm",
+      "cold_subtype": "Claudin-low"
+    },
+    {
+      "sample_id": "GSM2301099",
+      "cold_score": 0.5779946271923826,
+      "classification": "Warm",
+      "cold_subtype": "Claudin-low"
+    },
+    {
+      "sample_id": "GSM2301100",
+      "cold_score": 0.5993067470833975,
+      "classification": "Warm",
+      "cold_subtype": "Claudin-low"
+    },
+    {
+      "sample_id": "GSM2301101",
+      "cold_score": 0.6044274986127528,
+      "classification": "Warm",
+      "cold_subtype": "Immune-excluded"
+    },
+    {
+      "sample_id": "GSM2301102",
+      "cold_score": 0.605438450015349,
+      "classification": "Warm",
+      "cold_subtype": "Immune-excluded"
+    },
+    {
+      "sample_id": "GSM2301103",
+      "cold_score": 0.5861525898556423,
+      "classification": "Warm",
+      "cold_subtype": "Claudin-low"
+    },
+    {
+      "sample_id": "GSM2301104",
+      "cold_score": 0.5986904138803717,
+      "classification": "Warm",
+      "cold_subtype": "Claudin-low"
+    },
+    {
+      "sample_id": "GSM2301105",
+      "cold_score": 0.5934979944072187,
+      "classification": "Warm",
+      "cold_subtype": "Claudin-low"
+    },
+    {
+      "sample_id": "GSM2301106",
+      "cold_score": 0.5826124819635049,
+      "classification": "Warm",
+      "cold_subtype": "Claudin-low"
+    },
+    {
+      "sample_id": "GSM2301107",
+      "cold_score": 0.5976326156177637,
+      "classification": "Warm",
+      "cold_subtype": "Claudin-low"
+    },
+    {
+      "sample_id": "GSM2301108",
+      "cold_score": 0.601632777169148,
+      "classification": "Warm",
+      "cold_subtype": "Immune-excluded"
+    },
+    {
+      "sample_id": "GSM2301109",
+      "cold_score": 0.5936823751977034,
+      "classification": "Warm",
+      "cold_subtype": "Claudin-low"
+    },
+    {
+      "sample_id": "GSM2301110",
+      "cold_score": 0.5945143846943749,
+      "classification": "Warm",
+      "cold_subtype": "Claudin-low"
+    },
+    {
+      "sample_id": "GSM2301111",
+      "cold_score": 0.5981048151323621,
+      "classification": "Warm",
+      "cold_subtype": "Claudin-low"
+    },
+    {
+      "sample_id": "GSM2301112",
+      "cold_score": 0.6067760402445339,
+      "classification": "Warm",
+      "cold_subtype": "Immune-excluded"
+    },
+    {
+      "sample_id": "GSM2301113",
+      "cold_score": 0.5978916687474239,
+      "classification": "Warm",
+      "cold_subtype": "Claudin-low"
+    },
+    {
+      "sample_id": "GSM2301114",
+      "cold_score": 0.6055209528674036,
+      "classification": "Warm",
+      "cold_subtype": "Immune-excluded"
+    },
+    {
+      "sample_id": "GSM2301115",
+      "cold_score": 0.5904830756699504,
+      "classification": "Warm",
+      "cold_subtype": "Claudin-low"
+    },
+    {
+      "sample_id": "GSM2301116",
+      "cold_score": 0.5885646497115146,
+      "classification": "Warm",
+      "cold_subtype": "Claudin-low"
+    },
+    {
+      "sample_id": "GSM2301117",
+      "cold_score": 0.6033178352773575,
+      "classification": "Warm",
+      "cold_subtype": "Immune-excluded"
+    },
+    {
+      "sample_id": "GSM2301118",
+      "cold_score": 0.5879122631962567,
+      "classification": "Warm",
+      "cold_subtype": "Claudin-low"
+    },
+    {
+      "sample_id": "GSM2301119",
+      "cold_score": 0.6018807476015352,
+      "classification": "Warm",
+      "cold_subtype": "Immune-excluded"
+    },
+    {
+      "sample_id": "GSM2301120",
+      "cold_score": 0.5989503094552188,
+      "classification": "Warm",
+      "cold_subtype": "Claudin-low"
+    },
+    {
+      "sample_id": "GSM2301121",
+      "cold_score": 0.6011061616061262,
+      "classification": "Warm",
+      "cold_subtype": "Immune-excluded"
+    },
+    {
+      "sample_id": "GSM2301122",
+      "cold_score": 0.607748557490647,
+      "classification": "Warm",
+      "cold_subtype": "Immune-excluded"
+    },
+    {
+      "sample_id": "GSM2301123",
+      "cold_score": 0.6047107252841338,
+      "classification": "Warm",
+      "cold_subtype": "Immune-excluded"
+    },
+    {
+      "sample_id": "GSM2301124",
+      "cold_score": 0.5955217595966066,
+      "classification": "Warm",
+      "cold_subtype": "Claudin-low"
+    },
+    {
+      "sample_id": "GSM2301125",
+      "cold_score": 0.6001355789418966,
+      "classification": "Warm",
+      "cold_subtype": "Immune-excluded"
+    },
+    {
+      "sample_id": "GSM2301126",
+      "cold_score": 0.6004707014304492,
+      "classification": "Warm",
+      "cold_subtype": "Immune-excluded"
+    },
+    {
+      "sample_id": "GSM2301127",
+      "cold_score": 0.5900371626198984,
+      "classification": "Warm",
+      "cold_subtype": "Claudin-low"
+    },
+    {
+      "sample_id": "GSM2301128",
+      "cold_score": 0.5946933423858863,
+      "classification": "Warm",
+      "cold_subtype": "Claudin-low"
+    },
+    {
+      "sample_id": "GSM2301129",
+      "cold_score": 0.5811002610022734,
+      "classification": "Warm",
+      "cold_subtype": "Claudin-low"
+    },
+    {
+      "sample_id": "GSM2301130",
+      "cold_score": 0.5897271067904315,
+      "classification": "Warm",
+      "cold_subtype": "Claudin-low"
+    },
+    {
+      "sample_id": "GSM2301131",
+      "cold_score": 0.5903259928002864,
+      "classification": "Warm",
+      "cold_subtype": "Claudin-low"
+    },
+    {
+      "sample_id": "GSM2301132",
+      "cold_score": 0.5967017324420957,
+      "classification": "Warm",
+      "cold_subtype": "Claudin-low"
+    },
+    {
+      "sample_id": "GSM2301133",
+      "cold_score": 0.5956942664097107,
+      "classification": "Warm",
+      "cold_subtype": "Claudin-low"
+    },
+    {
+      "sample_id": "GSM2301134",
+      "cold_score": 0.6056079942664775,
+      "classification": "Warm",
+      "cold_subtype": "Immune-excluded"
+    },
+    {
+      "sample_id": "GSM2301135",
+      "cold_score": 0.5911590948670948,
+      "classification": "Warm",
+      "cold_subtype": "Claudin-low"
+    },
+    {
+      "sample_id": "GSM2301136",
+      "cold_score": 0.6011765232871831,
+      "classification": "Warm",
+      "cold_subtype": "Immune-excluded"
+    },
+    {
+      "sample_id": "GSM2301137",
+      "cold_score": 0.5840100659502286,
+      "classification": "Warm",
+      "cold_subtype": "Claudin-low"
+    },
+    {
+      "sample_id": "GSM2301138",
+      "cold_score": 0.5883544519320494,
+      "classification": "Warm",
+      "cold_subtype": "Claudin-low"
+    },
+    {
+      "sample_id": "GSM2301139",
+      "cold_score": 0.5978785097923708,
+      "classification": "Warm",
+      "cold_subtype": "Claudin-low"
+    },
+    {
+      "sample_id": "GSM2301140",
+      "cold_score": 0.5983379121744989,
+      "classification": "Warm",
+      "cold_subtype": "Claudin-low"
+    },
+    {
+      "sample_id": "GSM2301141",
+      "cold_score": 0.5877376742048904,
+      "classification": "Warm",
+      "cold_subtype": "Claudin-low"
+    },
+    {
+      "sample_id": "GSM2301142",
+      "cold_score": 0.6003071282057552,
+      "classification": "Warm",
+      "cold_subtype": "Immune-excluded"
+    },
+    {
+      "sample_id": "GSM2301143",
+      "cold_score": 0.5885740505684839,
+      "classification": "Warm",
+      "cold_subtype": "Claudin-low"
+    },
+    {
+      "sample_id": "GSM2301144",
+      "cold_score": 0.5966780253358952,
+      "classification": "Warm",
+      "cold_subtype": "Claudin-low"
+    },
+    {
+      "sample_id": "GSM2301145",
+      "cold_score": 0.5997900657250775,
+      "classification": "Warm",
+      "cold_subtype": "Claudin-low"
+    },
+    {
+      "sample_id": "GSM2301146",
+      "cold_score": 0.5961732641946293,
+      "classification": "Warm",
+      "cold_subtype": "Claudin-low"
+    },
+    {
+      "sample_id": "GSM2301147",
+      "cold_score": 0.606588477758558,
+      "classification": "Warm",
+      "cold_subtype": "Immune-excluded"
+    },
+    {
+      "sample_id": "GSM2301148",
+      "cold_score": 0.592517802951458,
+      "classification": "Warm",
+      "cold_subtype": "Claudin-low"
+    },
+    {
+      "sample_id": "GSM2301149",
+      "cold_score": 0.5916691409703637,
+      "classification": "Warm",
+      "cold_subtype": "Claudin-low"
+    },
+    {
+      "sample_id": "GSM2301150",
+      "cold_score": 0.5987035508779917,
+      "classification": "Warm",
+      "cold_subtype": "Claudin-low"
+    },
+    {
+      "sample_id": "GSM2301151",
+      "cold_score": 0.6060522081026717,
+      "classification": "Warm",
+      "cold_subtype": "Immune-excluded"
+    },
+    {
+      "sample_id": "GSM2301152",
+      "cold_score": 0.5972795137843865,
+      "classification": "Warm",
+      "cold_subtype": "Claudin-low"
+    },
+    {
+      "sample_id": "GSM2301153",
+      "cold_score": 0.5874905379623947,
+      "classification": "Warm",
+      "cold_subtype": "Claudin-low"
+    },
+    {
+      "sample_id": "GSM2301154",
+      "cold_score": 0.6065411220993474,
+      "classification": "Warm",
+      "cold_subtype": "Immune-excluded"
+    },
+    {
+      "sample_id": "GSM2301155",
+      "cold_score": 0.6054504776766492,
+      "classification": "Warm",
+      "cold_subtype": "Immune-excluded"
+    },
+    {
+      "sample_id": "GSM2301156",
+      "cold_score": 0.6010854756484632,
+      "classification": "Warm",
+      "cold_subtype": "Immune-excluded"
+    },
+    {
+      "sample_id": "GSM2301157",
+      "cold_score": 0.594156916527112,
+      "classification": "Warm",
+      "cold_subtype": "Claudin-low"
+    },
+    {
+      "sample_id": "GSM2301158",
+      "cold_score": 0.5913659685010273,
+      "classification": "Warm",
+      "cold_subtype": "Claudin-low"
+    },
+    {
+      "sample_id": "GSM2301159",
+      "cold_score": 0.5914362533023806,
+      "classification": "Warm",
+      "cold_subtype": "Claudin-low"
+    },
+    {
+      "sample_id": "GSM2301160",
+      "cold_score": 0.5928978827403348,
+      "classification": "Warm",
+      "cold_subtype": "Claudin-low"
+    },
+    {
+      "sample_id": "GSM2301161",
+      "cold_score": 0.5957995807480403,
+      "classification": "Warm",
+      "cold_subtype": "Claudin-low"
+    },
+    {
+      "sample_id": "GSM2301162",
+      "cold_score": 0.5956806062345281,
+      "classification": "Warm",
+      "cold_subtype": "Claudin-low"
+    },
+    {
+      "sample_id": "GSM2301163",
+      "cold_score": 0.5891060189858683,
+      "classification": "Warm",
+      "cold_subtype": "Claudin-low"
+    },
+    {
+      "sample_id": "GSM2301164",
+      "cold_score": 0.5957352632392083,
+      "classification": "Warm",
+      "cold_subtype": "Claudin-low"
+    },
+    {
+      "sample_id": "GSM2301165",
+      "cold_score": 0.5918070203623275,
+      "classification": "Warm",
+      "cold_subtype": "Claudin-low"
+    },
+    {
+      "sample_id": "GSM2301166",
+      "cold_score": 0.5935694380282178,
+      "classification": "Warm",
+      "cold_subtype": "Claudin-low"
+    },
+    {
+      "sample_id": "GSM2301167",
+      "cold_score": 0.5884650851594875,
+      "classification": "Warm",
+      "cold_subtype": "Claudin-low"
+    },
+    {
+      "sample_id": "GSM2301168",
+      "cold_score": 0.5939939861450964,
+      "classification": "Warm",
+      "cold_subtype": "Claudin-low"
+    },
+    {
+      "sample_id": "GSM2301169",
+      "cold_score": 0.5975184451011406,
+      "classification": "Warm",
+      "cold_subtype": "Claudin-low"
+    },
+    {
+      "sample_id": "GSM2301170",
+      "cold_score": 0.5894358361477555,
+      "classification": "Warm",
+      "cold_subtype": "Claudin-low"
+    },
+    {
+      "sample_id": "GSM2301171",
+      "cold_score": 0.5888341155407082,
+      "classification": "Warm",
+      "cold_subtype": "Claudin-low"
+    },
+    {
+      "sample_id": "GSM2301172",
+      "cold_score": 0.5839734726015161,
+      "classification": "Warm",
+      "cold_subtype": "Claudin-low"
+    },
+    {
+      "sample_id": "GSM2301173",
+      "cold_score": 0.5976002318876169,
+      "classification": "Warm",
+      "cold_subtype": "Claudin-low"
+    },
+    {
+      "sample_id": "GSM2301174",
+      "cold_score": 0.6056471549027105,
+      "classification": "Warm",
+      "cold_subtype": "Immune-excluded"
+    },
+    {
+      "sample_id": "GSM2301175",
+      "cold_score": 0.5972458262417117,
+      "classification": "Warm",
+      "cold_subtype": "Claudin-low"
+    },
+    {
+      "sample_id": "GSM2301176",
+      "cold_score": 0.6028678673100549,
+      "classification": "Warm",
+      "cold_subtype": "Immune-excluded"
+    },
+    {
+      "sample_id": "GSM2301177",
+      "cold_score": 0.5942512266106476,
+      "classification": "Warm",
+      "cold_subtype": "Claudin-low"
+    },
+    {
+      "sample_id": "GSM2301178",
+      "cold_score": 0.5938334586567175,
+      "classification": "Warm",
+      "cold_subtype": "Claudin-low"
+    },
+    {
+      "sample_id": "GSM2301179",
+      "cold_score": 0.5906635861837851,
+      "classification": "Warm",
+      "cold_subtype": "Claudin-low"
+    }
+  ],
+  "n_samples": 159
+}

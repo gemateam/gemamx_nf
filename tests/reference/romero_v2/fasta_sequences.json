@@ -1,0 +1,378 @@
+[
+  {
+    "gene": "PIK3CA",
+    "protein_change": "H1047R",
+    "uniprot_id": "P42336",
+    "mutation_pos": 1047,
+    "wt_fasta": "v2/data/fasta/PIK3CA_WT.fasta",
+    "mut_fasta": "v2/data/fasta/PIK3CA_H1047R.fasta"
+  },
+  {
+    "gene": "AKT1",
+    "protein_change": "E17K",
+    "uniprot_id": "P31749",
+    "mutation_pos": 17,
+    "wt_fasta": "v2/data/fasta/AKT1_WT.fasta",
+    "mut_fasta": "v2/data/fasta/AKT1_E17K.fasta"
+  },
+  {
+    "gene": "PIK3CA",
+    "protein_change": "E542K",
+    "uniprot_id": "P42336",
+    "mutation_pos": 542,
+    "wt_fasta": "v2/data/fasta/PIK3CA_WT.fasta",
+    "mut_fasta": "v2/data/fasta/PIK3CA_E542K.fasta"
+  },
+  {
+    "gene": "PIK3CA",
+    "protein_change": "E545K",
+    "uniprot_id": "P42336",
+    "mutation_pos": 545,
+    "wt_fasta": "v2/data/fasta/PIK3CA_WT.fasta",
+    "mut_fasta": "v2/data/fasta/PIK3CA_E545K.fasta"
+  },
+  {
+    "gene": "PIK3CA",
+    "protein_change": "H1047L",
+    "uniprot_id": "P42336",
+    "mutation_pos": 1047,
+    "wt_fasta": "v2/data/fasta/PIK3CA_WT.fasta",
+    "mut_fasta": "v2/data/fasta/PIK3CA_H1047L.fasta"
+  },
+  {
+    "gene": "PIK3CA",
+    "protein_change": "C420R",
+    "uniprot_id": "P42336",
+    "mutation_pos": 420,
+    "wt_fasta": "v2/data/fasta/PIK3CA_WT.fasta",
+    "mut_fasta": "v2/data/fasta/PIK3CA_C420R.fasta"
+  },
+  {
+    "gene": "TP53",
+    "protein_change": "C135F",
+    "uniprot_id": "P04637",
+    "mutation_pos": 135,
+    "wt_fasta": "v2/data/fasta/TP53_WT.fasta",
+    "mut_fasta": "v2/data/fasta/TP53_C135F.fasta"
+  },
+  {
+    "gene": "TP53",
+    "protein_change": "I195T",
+    "uniprot_id": "P04637",
+    "mutation_pos": 195,
+    "wt_fasta": "v2/data/fasta/TP53_WT.fasta",
+    "mut_fasta": "v2/data/fasta/TP53_I195T.fasta"
+  },
+  {
+    "gene": "ERBB2",
+    "protein_change": "S310F",
+    "uniprot_id": "P04626",
+    "mutation_pos": 310,
+    "wt_fasta": "v2/data/fasta/ERBB2_WT.fasta",
+    "mut_fasta": "v2/data/fasta/ERBB2_S310F.fasta"
+  },
+  {
+    "gene": "TP53",
+    "protein_change": "C176R",
+    "uniprot_id": "P04637",
+    "mutation_pos": 176,
+    "wt_fasta": "v2/data/fasta/TP53_WT.fasta",
+    "mut_fasta": "v2/data/fasta/TP53_C176R.fasta"
+  },
+  {
+    "gene": "PIK3CA",
+    "protein_change": "E542Q",
+    "uniprot_id": "P42336",
+    "mutation_pos": 542,
+    "wt_fasta": "v2/data/fasta/PIK3CA_WT.fasta",
+    "mut_fasta": "v2/data/fasta/PIK3CA_E542Q.fasta"
+  },
+  {
+    "gene": "TP53",
+    "protein_change": "R273H",
+    "uniprot_id": "P04637",
+    "mutation_pos": 273,
+    "wt_fasta": "v2/data/fasta/TP53_WT.fasta",
+    "mut_fasta": "v2/data/fasta/TP53_R273H.fasta"
+  },
+  {
+    "gene": "TP53",
+    "protein_change": "G266E",
+    "uniprot_id": "P04637",
+    "mutation_pos": 266,
+    "wt_fasta": "v2/data/fasta/TP53_WT.fasta",
+    "mut_fasta": "v2/data/fasta/TP53_G266E.fasta"
+  },
+  {
+    "gene": "TP53",
+    "protein_change": "G245S",
+    "uniprot_id": "P04637",
+    "mutation_pos": 245,
+    "wt_fasta": "v2/data/fasta/TP53_WT.fasta",
+    "mut_fasta": "v2/data/fasta/TP53_G245S.fasta"
+  },
+  {
+    "gene": "PIK3CA",
+    "protein_change": "E453K",
+    "uniprot_id": "P42336",
+    "mutation_pos": 453,
+    "wt_fasta": "v2/data/fasta/PIK3CA_WT.fasta",
+    "mut_fasta": "v2/data/fasta/PIK3CA_E453K.fasta"
+  },
+  {
+    "gene": "PIK3CA",
+    "protein_change": "E545G",
+    "uniprot_id": "P42336",
+    "mutation_pos": 545,
+    "wt_fasta": "v2/data/fasta/PIK3CA_WT.fasta",
+    "mut_fasta": "v2/data/fasta/PIK3CA_E545G.fasta"
+  },
+  {
+    "gene": "TP53",
+    "protein_change": "R248Q",
+    "uniprot_id": "P04637",
+    "mutation_pos": 248,
+    "wt_fasta": "v2/data/fasta/TP53_WT.fasta",
+    "mut_fasta": "v2/data/fasta/TP53_R248Q.fasta"
+  },
+  {
+    "gene": "TP53",
+    "protein_change": "R273C",
+    "uniprot_id": "P04637",
+    "mutation_pos": 273,
+    "wt_fasta": "v2/data/fasta/TP53_WT.fasta",
+    "mut_fasta": "v2/data/fasta/TP53_R273C.fasta"
+  },
+  {
+    "gene": "PTEN",
+    "protein_change": "R173H",
+    "uniprot_id": "P60484",
+    "mutation_pos": 173,
+    "wt_fasta": "v2/data/fasta/PTEN_WT.fasta",
+    "mut_fasta": "v2/data/fasta/PTEN_R173H.fasta"
+  },
+  {
+    "gene": "PTEN",
+    "protein_change": "H123Y",
+    "uniprot_id": "P60484",
+    "mutation_pos": 123,
+    "wt_fasta": "v2/data/fasta/PTEN_WT.fasta",
+    "mut_fasta": "v2/data/fasta/PTEN_H123Y.fasta"
+  },
+  {
+    "gene": "TP53",
+    "protein_change": "H179Y",
+    "uniprot_id": "P04637",
+    "mutation_pos": 179,
+    "wt_fasta": "v2/data/fasta/TP53_WT.fasta",
+    "mut_fasta": "v2/data/fasta/TP53_H179Y.fasta"
+  },
+  {
+    "gene": "GATA3",
+    "protein_change": "S137L",
+    "uniprot_id": "P23771",
+    "mutation_pos": 137,
+    "wt_fasta": "v2/data/fasta/GATA3_WT.fasta",
+    "mut_fasta": "v2/data/fasta/GATA3_S137L.fasta"
+  },
+  {
+    "gene": "PTEN",
+    "protein_change": "R159S",
+    "uniprot_id": "P60484",
+    "mutation_pos": 159,
+    "wt_fasta": "v2/data/fasta/PTEN_WT.fasta",
+    "mut_fasta": "v2/data/fasta/PTEN_R159S.fasta"
+  },
+  {
+    "gene": "GATA3",
+    "protein_change": "Q83L",
+    "uniprot_id": "P23771",
+    "mutation_pos": 83,
+    "wt_fasta": "v2/data/fasta/GATA3_WT.fasta",
+    "mut_fasta": "v2/data/fasta/GATA3_Q83L.fasta"
+  },
+  {
+    "gene": "PIK3CA",
+    "protein_change": "E245Q",
+    "uniprot_id": "P42336",
+    "mutation_pos": 245,
+    "wt_fasta": "v2/data/fasta/PIK3CA_WT.fasta",
+    "mut_fasta": "v2/data/fasta/PIK3CA_E245Q.fasta"
+  },
+  {
+    "gene": "PIK3CA",
+    "protein_change": "M1004I",
+    "uniprot_id": "P42336",
+    "mutation_pos": 1004,
+    "wt_fasta": "v2/data/fasta/PIK3CA_WT.fasta",
+    "mut_fasta": "v2/data/fasta/PIK3CA_M1004I.fasta"
+  },
+  {
+    "gene": "TP53",
+    "protein_change": "R175H",
+    "uniprot_id": "P04637",
+    "mutation_pos": 175,
+    "wt_fasta": "v2/data/fasta/TP53_WT.fasta",
+    "mut_fasta": "v2/data/fasta/TP53_R175H.fasta"
+  },
+  {
+    "gene": "TP53",
+    "protein_change": "D57N",
+    "uniprot_id": "P04637",
+    "mutation_pos": 57,
+    "wt_fasta": "v2/data/fasta/TP53_WT.fasta",
+    "mut_fasta": "v2/data/fasta/TP53_D57N.fasta"
+  },
+  {
+    "gene": "TP53",
+    "protein_change": "E285K",
+    "uniprot_id": "P04637",
+    "mutation_pos": 285,
+    "wt_fasta": "v2/data/fasta/TP53_WT.fasta",
+    "mut_fasta": "v2/data/fasta/TP53_E285K.fasta"
+  },
+  {
+    "gene": "GATA3",
+    "protein_change": "T418A",
+    "uniprot_id": "P23771",
+    "mutation_pos": 418,
+    "wt_fasta": "v2/data/fasta/GATA3_WT.fasta",
+    "mut_fasta": "v2/data/fasta/GATA3_T418A.fasta"
+  },
+  {
+    "gene": "TP53",
+    "protein_change": "Y236N",
+    "uniprot_id": "P04637",
+    "mutation_pos": 236,
+    "wt_fasta": "v2/data/fasta/TP53_WT.fasta",
+    "mut_fasta": "v2/data/fasta/TP53_Y236N.fasta"
+  },
+  {
+    "gene": "AKT1",
+    "protein_change": "L52R",
+    "uniprot_id": "P31749",
+    "mutation_pos": 52,
+    "wt_fasta": "v2/data/fasta/AKT1_WT.fasta",
+    "mut_fasta": "v2/data/fasta/AKT1_L52R.fasta"
+  },
+  {
+    "gene": "TP53",
+    "protein_change": "R110L",
+    "uniprot_id": "P04637",
+    "mutation_pos": 110,
+    "wt_fasta": "v2/data/fasta/TP53_WT.fasta",
+    "mut_fasta": "v2/data/fasta/TP53_R110L.fasta"
+  },
+  {
+    "gene": "TP53",
+    "protein_change": "M246V",
+    "uniprot_id": "P04637",
+    "mutation_pos": 246,
+    "wt_fasta": "v2/data/fasta/TP53_WT.fasta",
+    "mut_fasta": "v2/data/fasta/TP53_M246V.fasta"
+  },
+  {
+    "gene": "MAP3K1",
+    "protein_change": "E929Q",
+    "uniprot_id": "Q13233",
+    "mutation_pos": 929,
+    "wt_fasta": "v2/data/fasta/MAP3K1_WT.fasta",
+    "mut_fasta": "v2/data/fasta/MAP3K1_E929Q.fasta"
+  },
+  {
+    "gene": "TP53",
+    "protein_change": "C141Y",
+    "uniprot_id": "P04637",
+    "mutation_pos": 141,
+    "wt_fasta": "v2/data/fasta/TP53_WT.fasta",
+    "mut_fasta": "v2/data/fasta/TP53_C141Y.fasta"
+  },
+  {
+    "gene": "PIK3CA",
+    "protein_change": "H1047Y",
+    "uniprot_id": "P42336",
+    "mutation_pos": 1047,
+    "wt_fasta": "v2/data/fasta/PIK3CA_WT.fasta",
+    "mut_fasta": "v2/data/fasta/PIK3CA_H1047Y.fasta"
+  },
+  {
+    "gene": "TP53",
+    "protein_change": "C176S",
+    "uniprot_id": "P04637",
+    "mutation_pos": 176,
+    "wt_fasta": "v2/data/fasta/TP53_WT.fasta",
+    "mut_fasta": "v2/data/fasta/TP53_C176S.fasta"
+  },
+  {
+    "gene": "PTEN",
+    "protein_change": "D297H",
+    "uniprot_id": "P60484",
+    "mutation_pos": 297,
+    "wt_fasta": "v2/data/fasta/PTEN_WT.fasta",
+    "mut_fasta": "v2/data/fasta/PTEN_D297H.fasta"
+  },
+  {
+    "gene": "PIK3CA",
+    "protein_change": "E365K",
+    "uniprot_id": "P42336",
+    "mutation_pos": 365,
+    "wt_fasta": "v2/data/fasta/PIK3CA_WT.fasta",
+    "mut_fasta": "v2/data/fasta/PIK3CA_E365K.fasta"
+  },
+  {
+    "gene": "PTEN",
+    "protein_change": "D326H",
+    "uniprot_id": "P60484",
+    "mutation_pos": 326,
+    "wt_fasta": "v2/data/fasta/PTEN_WT.fasta",
+    "mut_fasta": "v2/data/fasta/PTEN_D326H.fasta"
+  },
+  {
+    "gene": "ERBB2",
+    "protein_change": "V777L",
+    "uniprot_id": "P04626",
+    "mutation_pos": 777,
+    "wt_fasta": "v2/data/fasta/ERBB2_WT.fasta",
+    "mut_fasta": "v2/data/fasta/ERBB2_V777L.fasta"
+  },
+  {
+    "gene": "TP53",
+    "protein_change": "L194H",
+    "uniprot_id": "P04637",
+    "mutation_pos": 194,
+    "wt_fasta": "v2/data/fasta/TP53_WT.fasta",
+    "mut_fasta": "v2/data/fasta/TP53_L194H.fasta"
+  },
+  {
+    "gene": "TP53",
+    "protein_change": "T256P",
+    "uniprot_id": "P04637",
+    "mutation_pos": 256,
+    "wt_fasta": "v2/data/fasta/TP53_WT.fasta",
+    "mut_fasta": "v2/data/fasta/TP53_T256P.fasta"
+  },
+  {
+    "gene": "PTEN",
+    "protein_change": "I28F",
+    "uniprot_id": "P60484",
+    "mutation_pos": 28,
+    "wt_fasta": "v2/data/fasta/PTEN_WT.fasta",
+    "mut_fasta": "v2/data/fasta/PTEN_I28F.fasta"
+  },
+  {
+    "gene": "MAP3K1",
+    "protein_change": "M1442I",
+    "uniprot_id": "Q13233",
+    "mutation_pos": 1442,
+    "wt_fasta": "v2/data/fasta/MAP3K1_WT.fasta",
+    "mut_fasta": "v2/data/fasta/MAP3K1_M1442I.fasta"
+  },
+  {
+    "gene": "PIK3CA",
+    "protein_change": "C378F",
+    "uniprot_id": "P42336",
+    "mutation_pos": 378,
+    "wt_fasta": "v2/data/fasta/PIK3CA_WT.fasta",
+    "mut_fasta": "v2/data/fasta/PIK3CA_C378F.fasta"
+  }
+]

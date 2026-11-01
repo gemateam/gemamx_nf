@@ -46,6 +46,13 @@ desde `gemamx_nf`**.
 **Impacto.** Bloquea `--structures_mode boltz` (Fase 9). No afecta a
 `precomputed` ni `esmfold`, que son los modos usados en Fases 4–5.
 
+**Estado.** El módulo Boltz (`modules/structure/boltz.nf`), el perfil `hpc-yuca`
+y la imagen derivada (`containers/gpu/Dockerfile`) ya están preparados y
+documentados en [`BOLTZ_HPC.md`](BOLTZ_HPC.md); falta construir y publicar la
+imagen. En local no hay GPU; en YUCA (ACARUS) la GPU es **AMD MI210 (64 GB,
+ROCm 6.2.3)**, no NVIDIA, así que la base CUDA de `gemamx-gpu:1.0.0` solo sirve
+para el perfil `gpu` local o para Pitaya (L4 24 GB).
+
 **Propuesta.** Construir una vez desde `Gemacont/`:
 
 ```bash

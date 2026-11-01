@@ -1,0 +1,289 @@
+{
+  "ADORA2A": {
+    "covered": true,
+    "drugs": [
+      "Istradefylline"
+    ],
+    "n_drugs": 1
+  },
+  "ARG1": {
+    "covered": false,
+    "drugs": [],
+    "n_drugs": 0
+  },
+  "CD47": {
+    "covered": true,
+    "drugs": [
+      "Magrolimab"
+    ],
+    "n_drugs": 1
+  },
+  "CDK4": {
+    "covered": true,
+    "drugs": [
+      "Abemaciclib",
+      "Palbociclib",
+      "Ribociclib"
+    ],
+    "n_drugs": 3
+  },
+  "CDK6": {
+    "covered": true,
+    "drugs": [
+      "Abemaciclib",
+      "Palbociclib",
+      "Ribociclib"
+    ],
+    "n_drugs": 3
+  },
+  "CGAS": {
+    "covered": false,
+    "drugs": [],
+    "n_drugs": 0
+  },
+  "CSF1": {
+    "covered": true,
+    "drugs": [
+      "Pexidartinib"
+    ],
+    "n_drugs": 1
+  },
+  "CSF1R": {
+    "covered": true,
+    "drugs": [
+      "Pexidartinib"
+    ],
+    "n_drugs": 1
+  },
+  "CYP19A1": {
+    "covered": true,
+    "drugs": [
+      "Anastrozole",
+      "Exemestano",
+      "Letrozol"
+    ],
+    "n_drugs": 3
+  },
+  "DNMT1": {
+    "covered": false,
+    "drugs": [],
+    "n_drugs": 0
+  },
+  "EGFR": {
+    "covered": true,
+    "drugs": [
+      "Lapatinib",
+      "Neratinib"
+    ],
+    "n_drugs": 2
+  },
+  "ERBB2": {
+    "covered": true,
+    "drugs": [
+      "Lapatinib",
+      "Neratinib",
+      "Tucatinib"
+    ],
+    "n_drugs": 3
+  },
+  "ERBB4": {
+    "covered": true,
+    "drugs": [
+      "Neratinib"
+    ],
+    "n_drugs": 1
+  },
+  "HAVCR2": {
+    "covered": true,
+    "drugs": [
+      "Sabatolimab"
+    ],
+    "n_drugs": 1
+  },
+  "IDO1": {
+    "covered": true,
+    "drugs": [
+      "Berberine",
+      "Epacadostat",
+      "Navoximod"
+    ],
+    "n_drugs": 3
+  },
+  "KDR": {
+    "covered": true,
+    "drugs": [
+      "Quercetina"
+    ],
+    "n_drugs": 1
+  },
+  "KIT": {
+    "covered": true,
+    "drugs": [
+      "Pexidartinib"
+    ],
+    "n_drugs": 1
+  },
+  "LAG3": {
+    "covered": true,
+    "drugs": [
+      "Fianlimab"
+    ],
+    "n_drugs": 1
+  },
+  "LDHA": {
+    "covered": true,
+    "drugs": [
+      "Berberine"
+    ],
+    "n_drugs": 1
+  },
+  "NFKB1": {
+    "covered": true,
+    "drugs": [
+      "Curcumin"
+    ],
+    "n_drugs": 1
+  },
+  "NLRP3": {
+    "covered": false,
+    "drugs": [],
+    "n_drugs": 0
+  },
+  "PARP1": {
+    "covered": true,
+    "drugs": [
+      "Niraparib",
+      "Olaparib",
+      "Talazoparib"
+    ],
+    "n_drugs": 3
+  },
+  "PARP2": {
+    "covered": true,
+    "drugs": [
+      "Niraparib",
+      "Olaparib",
+      "Talazoparib"
+    ],
+    "n_drugs": 3
+  },
+  "PARP3": {
+    "covered": true,
+    "drugs": [
+      "Talazoparib"
+    ],
+    "n_drugs": 1
+  },
+  "PIK3CA": {
+    "covered": true,
+    "drugs": [
+      "Alpelisib",
+      "Idelalisib"
+    ],
+    "n_drugs": 2
+  },
+  "PIK3CD": {
+    "covered": true,
+    "drugs": [
+      "Idelalisib"
+    ],
+    "n_drugs": 1
+  },
+  "PTK2": {
+    "covered": true,
+    "drugs": [
+      "Defactinib"
+    ],
+    "n_drugs": 1
+  },
+  "SIGLEC15": {
+    "covered": false,
+    "drugs": [],
+    "n_drugs": 0
+  },
+  "SIRT1": {
+    "covered": true,
+    "drugs": [
+      "Resveratrol"
+    ],
+    "n_drugs": 1
+  },
+  "TDO2": {
+    "covered": false,
+    "drugs": [],
+    "n_drugs": 0
+  },
+  "TGFBETA_REVERSAL": {
+    "covered": true,
+    "drugs": [
+      "Defactinib"
+    ],
+    "n_drugs": 1
+  },
+  "TGFBR1": {
+    "covered": true,
+    "drugs": [
+      "Galunisertib"
+    ],
+    "n_drugs": 1
+  },
+  "TGFBR2": {
+    "covered": true,
+    "drugs": [
+      "Galunisertib"
+    ],
+    "n_drugs": 1
+  },
+  "TIGIT": {
+    "covered": true,
+    "drugs": [
+      "Tiragolumab"
+    ],
+    "n_drugs": 1
+  },
+  "TLR9": {
+    "covered": false,
+    "drugs": [],
+    "n_drugs": 0
+  },
+  "TMEM173": {
+    "covered": true,
+    "drugs": [
+      "ADU-S100",
+      "BMS-986299",
+      "Curcumin"
+    ],
+    "n_drugs": 3
+  },
+  "TOP2A": {
+    "covered": false,
+    "drugs": [],
+    "n_drugs": 0
+  },
+  "TROP2": {
+    "covered": true,
+    "drugs": [
+      "Sacituzumab govitecan"
+    ],
+    "n_drugs": 1
+  },
+  "TRPV1": {
+    "covered": true,
+    "drugs": [
+      "Capsaicin"
+    ],
+    "n_drugs": 1
+  },
+  "VEGFA": {
+    "covered": true,
+    "drugs": [
+      "Quercetina"
+    ],
+    "n_drugs": 1
+  },
+  "VSIR": {
+    "covered": false,
+    "drugs": [],
+    "n_drugs": 0
+  }
+}

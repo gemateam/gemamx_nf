@@ -1,0 +1,12 @@
+{
+    "gene_distribution": {
+        "PIK3CA": 5,
+        "AKT1": 4,
+        "TP53": 4
+    },
+    "type_distribution": {
+        "Missense_Mutation": 13
+    },
+    "total_samples": 13,
+    "total_mutations": 13
+}

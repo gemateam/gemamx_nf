@@ -28,6 +28,11 @@
           "description": "Snapshot de mutaciones crudas (JSON). Si se indica, INGEST no consulta cBioPortal.",
           "help_text": "Formato: lista de objetos con hugo_symbol, variant_classification, protein_change, sample_id, chromosome y start_position."
         },
+        "fasta_dir": {
+          "type": "string",
+          "description": "Directorio con FASTA precomputados (<GENE>_WT.fasta, <GENE>_<PC>.fasta). Evita consultar UniProt.",
+          "help_text": "Útil en corridas sin acceso a red o con secuencias propias. Si un gen/variante no tiene FASTA en el directorio, se descarga de UniProt automáticamente."
+        },
         "max_variants": {
           "type": "integer",
           "default": 20,
@@ -47,7 +52,7 @@
           "default": "precomputed",
           "enum": ["precomputed", "esmfold", "boltz"],
           "description": "Origen de las estructuras 3D.",
-          "help_text": "precomputed: reutiliza archivos existentes en structures_dir. esmfold: API pública de ESMFold (sin GPU). boltz: Boltz-1 local (requiere --profile gpu)."
+          "help_text": "precomputed: reutiliza archivos existentes en structures_dir. esmfold: API pública de ESMFold (sin GPU). boltz: Boltz-1 (GPU ≥ 16 GB; en YUCA hay AMD MI210 de 64 GB con ROCm 6.2.3; ver docs/BOLTZ_HPC.md)."
         },
         "structures_dir": {
           "type": "string",
@@ -60,6 +65,17 @@
           "minimum": 40,
           "maximum": 400,
           "description": "Ventana (± residuos) del fragmento de dominio para proteínas largas."
+        },
+        "boltz_seed": {
+          "type": "integer",
+          "default": 42,
+          "minimum": 0,
+          "description": "Semilla de Boltz-1 (solo structures_mode=boltz)."
+        },
+        "boltz_use_msa_server": {
+          "type": "boolean",
+          "default": true,
+          "description": "Generar el MSA con el servidor público de ColabFold (requiere internet; solo structures_mode=boltz)."
         }
       },
       "required": ["structures_mode"]

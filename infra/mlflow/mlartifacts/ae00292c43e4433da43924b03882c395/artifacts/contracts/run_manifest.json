@@ -1,0 +1,52 @@
+{
+    "contracts": [
+        "top_variants.json",
+        "structural_metrics.json",
+        "manifest_structures.json",
+        "raw_mutations.json",
+        "mutation_stats.json",
+        "vina_affinities.json"
+    ],
+    "files": {
+        "manifest_structures.json": "ad8c40ea4023b6caf299e69d88c0a4f17acfe9ff8c2e5d69148e7517f804940a",
+        "mutation_stats.json": "078ae69805bb985892a310171cc14afc58f2e4a26f982373e10b4fcd17e9f1b8",
+        "raw_mutations.json": "cf7da37b9ce52e667d005f119f1656a0f30db0f8ed2cd5dafa5cccfc46812d78",
+        "structural_metrics.json": "e6affc00be7879d383f56ee69a4f379e8ab828abbf1526438da4ff9a89f4aba3",
+        "top_variants.json": "50c2c65812a5fe6937607c326eee9645e7c6091f2dc5b0bf042472b3e763d288",
+        "vina_affinities.json": "623311498b79ac72a6f0ef2c8b388589ae0c86d5babc5de153c72f2ea22badf2"
+    },
+    "git_commit": "f48336221bff8ecd775aa8c738c015ed5888122a",
+    "images": {
+        "image_cpu": "gemamx-cpu:1.0.0",
+        "image_docking": "gemamx-nf-docking:1.0.0",
+        "image_gpu": "gemamx-gpu:1.0.0",
+        "image_mlflow": "gemamx-cpu:1.0.0"
+    },
+    "params": {
+        "box_center_mode": "mutation",
+        "box_size": 25,
+        "domain_window": 180,
+        "drug_catalog": "assets/drug_catalog.csv",
+        "exhaustiveness": 1,
+        "genes": "PIK3CA,TP53,ERBB2,BRCA1,BRCA2,CDH1,GATA3,MAP3K1,KMT2C,PTEN,RB1,ARID1A,SF3B1,AKT1,CBFB",
+        "image_cpu": "gemamx-cpu:1.0.0",
+        "image_docking": "gemamx-nf-docking:1.0.0",
+        "image_gpu": "gemamx-gpu:1.0.0",
+        "image_mlflow": "gemamx-cpu:1.0.0",
+        "max_variants": 1,
+        "mlflow_experiment": "GEMAMX-V1-NF",
+        "mlflow_tracking_uri": "http://host.docker.internal:5000",
+        "mutations_json": "/mnt/d/ProyectosIA/gemamx_nf/tests/reference/mutations_snapshot.json",
+        "num_modes": 5,
+        "outdir": "results",
+        "publish_run_archive": true,
+        "structures_dir": "/mnt/d/ProyectosIA/gemamx_nf/tests/reference/structures",
+        "structures_mode": "precomputed",
+        "study_id": "brca_tcga",
+        "vina_seed": 42,
+        "vina_timeout_sec": 1800,
+        "work_dir": "~/gemamx-work"
+    },
+    "published_at": "2026-11-01T01:56:02Z",
+    "run_name": "distraught_celsius"
+}

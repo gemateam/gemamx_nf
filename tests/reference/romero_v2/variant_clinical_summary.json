@@ -1,0 +1,3222 @@
+[
+  {
+    "variant_id": "PIK3CA_H1047R",
+    "hugo_symbol": "PIK3CA",
+    "protein_change": "H1047R",
+    "sample_count": 15,
+    "matched_clinical_count": 15,
+    "age": {
+      "mean": 56.71,
+      "min": 39,
+      "max": 92
+    },
+    "age_class_distribution": {
+      "Older": 11,
+      "Younger": 3
+    },
+    "ihc_subtype_distribution": {
+      "Luminal A": 12,
+      "Luminal B": 2,
+      "Her2-enriched": 1
+    },
+    "class_ihc_distribution": {
+      "HR+/HER2-": 12,
+      "HR+/HER2+": 2,
+      "HER2+": 1
+    },
+    "pam50_distribution": {
+      "LumB": 2,
+      "LumA": 5
+    },
+    "grade_distribution": {
+      "II": 10,
+      "I": 2,
+      "III": 1
+    },
+    "histology_distribution": {
+      "IDC": 12,
+      "IL": 1,
+      "Other": 1
+    },
+    "highlights": {
+      "top_age_class": "Older",
+      "top_ihc_subtype": "Luminal A",
+      "top_class_ihc": "HR+/HER2-",
+      "top_pam50": "LumA"
+    },
+    "top_distributions": {
+      "age_class": [
+        {
+          "label": "Older",
+          "count": 11
+        },
+        {
+          "label": "Younger",
+          "count": 3
+        }
+      ],
+      "ihc_subtype": [
+        {
+          "label": "Luminal A",
+          "count": 12
+        },
+        {
+          "label": "Luminal B",
+          "count": 2
+        },
+        {
+          "label": "Her2-enriched",
+          "count": 1
+        }
+      ],
+      "class_ihc": [
+        {
+          "label": "HR+/HER2-",
+          "count": 12
+        },
+        {
+          "label": "HR+/HER2+",
+          "count": 2
+        },
+        {
+          "label": "HER2+",
+          "count": 1
+        }
+      ],
+      "pam50": [
+        {
+          "label": "LumA",
+          "count": 5
+        },
+        {
+          "label": "LumB",
+          "count": 2
+        }
+      ],
+      "grade": [
+        {
+          "label": "II",
+          "count": 10
+        },
+        {
+          "label": "I",
+          "count": 2
+        },
+        {
+          "label": "III",
+          "count": 1
+        }
+      ]
+    }
+  },
+  {
+    "variant_id": "AKT1_E17K",
+    "hugo_symbol": "AKT1",
+    "protein_change": "E17K",
+    "sample_count": 10,
+    "matched_clinical_count": 10,
+    "age": {
+      "mean": 52.67,
+      "min": 44,
+      "max": 63
+    },
+    "age_class_distribution": {
+      "Older": 8,
+      "Younger": 1
+    },
+    "ihc_subtype_distribution": {
+      "Luminal A": 9
+    },
+    "class_ihc_distribution": {
+      "HR+/HER2-": 9
+    },
+    "pam50_distribution": {
+      "LumA": 3
+    },
+    "grade_distribution": {
+      "II": 5,
+      "I": 1
+    },
+    "histology_distribution": {
+      "IDC": 5,
+      "Other": 2,
+      "IL": 1
+    },
+    "highlights": {
+      "top_age_class": "Older",
+      "top_ihc_subtype": "Luminal A",
+      "top_class_ihc": "HR+/HER2-",
+      "top_pam50": "LumA"
+    },
+    "top_distributions": {
+      "age_class": [
+        {
+          "label": "Older",
+          "count": 8
+        },
+        {
+          "label": "Younger",
+          "count": 1
+        }
+      ],
+      "ihc_subtype": [
+        {
+          "label": "Luminal A",
+          "count": 9
+        }
+      ],
+      "class_ihc": [
+        {
+          "label": "HR+/HER2-",
+          "count": 9
+        }
+      ],
+      "pam50": [
+        {
+          "label": "LumA",
+          "count": 3
+        }
+      ],
+      "grade": [
+        {
+          "label": "II",
+          "count": 5
+        },
+        {
+          "label": "I",
+          "count": 1
+        }
+      ]
+    }
+  },
+  {
+    "variant_id": "PIK3CA_E542K",
+    "hugo_symbol": "PIK3CA",
+    "protein_change": "E542K",
+    "sample_count": 6,
+    "matched_clinical_count": 6,
+    "age": {
+      "mean": 49.33,
+      "min": 41,
+      "max": 54
+    },
+    "age_class_distribution": {
+      "Older": 4,
+      "Younger": 2
+    },
+    "ihc_subtype_distribution": {
+      "Luminal A": 5,
+      "Luminal B": 1
+    },
+    "class_ihc_distribution": {
+      "HR+/HER2-": 5,
+      "HR+/HER2+": 1
+    },
+    "pam50_distribution": {
+      "LumA": 3,
+      "Her2": 1
+    },
+    "grade_distribution": {
+      "I": 2,
+      "II": 4
+    },
+    "histology_distribution": {
+      "IDC": 5,
+      "Other": 1
+    },
+    "highlights": {
+      "top_age_class": "Older",
+      "top_ihc_subtype": "Luminal A",
+      "top_class_ihc": "HR+/HER2-",
+      "top_pam50": "LumA"
+    },
+    "top_distributions": {
+      "age_class": [
+        {
+          "label": "Older",
+          "count": 4
+        },
+        {
+          "label": "Younger",
+          "count": 2
+        }
+      ],
+      "ihc_subtype": [
+        {
+          "label": "Luminal A",
+          "count": 5
+        },
+        {
+          "label": "Luminal B",
+          "count": 1
+        }
+      ],
+      "class_ihc": [
+        {
+          "label": "HR+/HER2-",
+          "count": 5
+        },
+        {
+          "label": "HR+/HER2+",
+          "count": 1
+        }
+      ],
+      "pam50": [
+        {
+          "label": "LumA",
+          "count": 3
+        },
+        {
+          "label": "Her2",
+          "count": 1
+        }
+      ],
+      "grade": [
+        {
+          "label": "II",
+          "count": 4
+        },
+        {
+          "label": "I",
+          "count": 2
+        }
+      ]
+    }
+  },
+  {
+    "variant_id": "PIK3CA_E545K",
+    "hugo_symbol": "PIK3CA",
+    "protein_change": "E545K",
+    "sample_count": 6,
+    "matched_clinical_count": 6,
+    "age": {
+      "mean": 55.17,
+      "min": 39,
+      "max": 68
+    },
+    "age_class_distribution": {
+      "Younger": 2,
+      "Older": 4
+    },
+    "ihc_subtype_distribution": {
+      "Luminal A": 3,
+      "TN": 1,
+      "Luminal B": 1
+    },
+    "class_ihc_distribution": {
+      "HR+/HER2-": 3,
+      "TN": 1,
+      "HR+/HER2+": 1
+    },
+    "pam50_distribution": {
+      "Basal": 1,
+      "LumB": 1
+    },
+    "grade_distribution": {
+      "II": 3,
+      "III": 2
+    },
+    "histology_distribution": {
+      "IL": 1,
+      "IDC": 5
+    },
+    "highlights": {
+      "top_age_class": "Older",
+      "top_ihc_subtype": "Luminal A",
+      "top_class_ihc": "HR+/HER2-",
+      "top_pam50": "Basal"
+    },
+    "top_distributions": {
+      "age_class": [
+        {
+          "label": "Older",
+          "count": 4
+        },
+        {
+          "label": "Younger",
+          "count": 2
+        }
+      ],
+      "ihc_subtype": [
+        {
+          "label": "Luminal A",
+          "count": 3
+        },
+        {
+          "label": "TN",
+          "count": 1
+        },
+        {
+          "label": "Luminal B",
+          "count": 1
+        }
+      ],
+      "class_ihc": [
+        {
+          "label": "HR+/HER2-",
+          "count": 3
+        },
+        {
+          "label": "TN",
+          "count": 1
+        },
+        {
+          "label": "HR+/HER2+",
+          "count": 1
+        }
+      ],
+      "pam50": [
+        {
+          "label": "Basal",
+          "count": 1
+        },
+        {
+          "label": "LumB",
+          "count": 1
+        }
+      ],
+      "grade": [
+        {
+          "label": "II",
+          "count": 3
+        },
+        {
+          "label": "III",
+          "count": 2
+        }
+      ]
+    }
+  },
+  {
+    "variant_id": "PIK3CA_H1047L",
+    "hugo_symbol": "PIK3CA",
+    "protein_change": "H1047L",
+    "sample_count": 5,
+    "matched_clinical_count": 5,
+    "age": {
+      "mean": 54.8,
+      "min": 45,
+      "max": 66
+    },
+    "age_class_distribution": {
+      "Older": 3,
+      "Younger": 2
+    },
+    "ihc_subtype_distribution": {
+      "Luminal A": 5
+    },
+    "class_ihc_distribution": {
+      "HR+/HER2-": 5
+    },
+    "pam50_distribution": {
+      "LumA": 1
+    },
+    "grade_distribution": {
+      "II": 5
+    },
+    "histology_distribution": {
+      "Other": 1,
+      "IDC": 4
+    },
+    "highlights": {
+      "top_age_class": "Older",
+      "top_ihc_subtype": "Luminal A",
+      "top_class_ihc": "HR+/HER2-",
+      "top_pam50": "LumA"
+    },
+    "top_distributions": {
+      "age_class": [
+        {
+          "label": "Older",
+          "count": 3
+        },
+        {
+          "label": "Younger",
+          "count": 2
+        }
+      ],
+      "ihc_subtype": [
+        {
+          "label": "Luminal A",
+          "count": 5
+        }
+      ],
+      "class_ihc": [
+        {
+          "label": "HR+/HER2-",
+          "count": 5
+        }
+      ],
+      "pam50": [
+        {
+          "label": "LumA",
+          "count": 1
+        }
+      ],
+      "grade": [
+        {
+          "label": "II",
+          "count": 5
+        }
+      ]
+    }
+  },
+  {
+    "variant_id": "PIK3CA_C420R",
+    "hugo_symbol": "PIK3CA",
+    "protein_change": "C420R",
+    "sample_count": 2,
+    "matched_clinical_count": 2,
+    "age": {
+      "mean": 68.5,
+      "min": 48,
+      "max": 89
+    },
+    "age_class_distribution": {
+      "Older": 2
+    },
+    "ihc_subtype_distribution": {
+      "Luminal A": 2
+    },
+    "class_ihc_distribution": {
+      "HR+/HER2-": 2
+    },
+    "pam50_distribution": {
+      "LumA": 1
+    },
+    "grade_distribution": {},
+    "histology_distribution": {},
+    "highlights": {
+      "top_age_class": "Older",
+      "top_ihc_subtype": "Luminal A",
+      "top_class_ihc": "HR+/HER2-",
+      "top_pam50": "LumA"
+    },
+    "top_distributions": {
+      "age_class": [
+        {
+          "label": "Older",
+          "count": 2
+        }
+      ],
+      "ihc_subtype": [
+        {
+          "label": "Luminal A",
+          "count": 2
+        }
+      ],
+      "class_ihc": [
+        {
+          "label": "HR+/HER2-",
+          "count": 2
+        }
+      ],
+      "pam50": [
+        {
+          "label": "LumA",
+          "count": 1
+        }
+      ],
+      "grade": []
+    }
+  },
+  {
+    "variant_id": "TP53_C135F",
+    "hugo_symbol": "TP53",
+    "protein_change": "C135F",
+    "sample_count": 2,
+    "matched_clinical_count": 2,
+    "age": {
+      "mean": 53.5,
+      "min": 42,
+      "max": 65
+    },
+    "age_class_distribution": {
+      "Younger": 1,
+      "Older": 1
+    },
+    "ihc_subtype_distribution": {
+      "Luminal A": 2
+    },
+    "class_ihc_distribution": {
+      "HR+/HER2-": 2
+    },
+    "pam50_distribution": {
+      "LumA": 1
+    },
+    "grade_distribution": {
+      "II": 2
+    },
+    "histology_distribution": {
+      "IDC": 2
+    },
+    "highlights": {
+      "top_age_class": "Younger",
+      "top_ihc_subtype": "Luminal A",
+      "top_class_ihc": "HR+/HER2-",
+      "top_pam50": "LumA"
+    },
+    "top_distributions": {
+      "age_class": [
+        {
+          "label": "Younger",
+          "count": 1
+        },
+        {
+          "label": "Older",
+          "count": 1
+        }
+      ],
+      "ihc_subtype": [
+        {
+          "label": "Luminal A",
+          "count": 2
+        }
+      ],
+      "class_ihc": [
+        {
+          "label": "HR+/HER2-",
+          "count": 2
+        }
+      ],
+      "pam50": [
+        {
+          "label": "LumA",
+          "count": 1
+        }
+      ],
+      "grade": [
+        {
+          "label": "II",
+          "count": 2
+        }
+      ]
+    }
+  },
+  {
+    "variant_id": "TP53_I195T",
+    "hugo_symbol": "TP53",
+    "protein_change": "I195T",
+    "sample_count": 2,
+    "matched_clinical_count": 2,
+    "age": {
+      "mean": 65,
+      "min": 65,
+      "max": 65
+    },
+    "age_class_distribution": {
+      "Older": 2
+    },
+    "ihc_subtype_distribution": {
+      "Luminal A": 2
+    },
+    "class_ihc_distribution": {
+      "HR+/HER2-": 2
+    },
+    "pam50_distribution": {
+      "LumB": 1
+    },
+    "grade_distribution": {
+      "II": 2
+    },
+    "histology_distribution": {
+      "IDC": 1
+    },
+    "highlights": {
+      "top_age_class": "Older",
+      "top_ihc_subtype": "Luminal A",
+      "top_class_ihc": "HR+/HER2-",
+      "top_pam50": "LumB"
+    },
+    "top_distributions": {
+      "age_class": [
+        {
+          "label": "Older",
+          "count": 2
+        }
+      ],
+      "ihc_subtype": [
+        {
+          "label": "Luminal A",
+          "count": 2
+        }
+      ],
+      "class_ihc": [
+        {
+          "label": "HR+/HER2-",
+          "count": 2
+        }
+      ],
+      "pam50": [
+        {
+          "label": "LumB",
+          "count": 1
+        }
+      ],
+      "grade": [
+        {
+          "label": "II",
+          "count": 2
+        }
+      ]
+    }
+  },
+  {
+    "variant_id": "ERBB2_S310F",
+    "hugo_symbol": "ERBB2",
+    "protein_change": "S310F",
+    "sample_count": 2,
+    "matched_clinical_count": 2,
+    "age": {
+      "mean": 52,
+      "min": 52,
+      "max": 52
+    },
+    "age_class_distribution": {
+      "Older": 1
+    },
+    "ihc_subtype_distribution": {
+      "Luminal A": 1
+    },
+    "class_ihc_distribution": {
+      "HR+/HER2-": 1
+    },
+    "pam50_distribution": {
+      "Her2": 1,
+      "LumB": 1
+    },
+    "grade_distribution": {
+      "II": 1
+    },
+    "histology_distribution": {
+      "IL": 1,
+      "Other": 1
+    },
+    "highlights": {
+      "top_age_class": "Older",
+      "top_ihc_subtype": "Luminal A",
+      "top_class_ihc": "HR+/HER2-",
+      "top_pam50": "Her2"
+    },
+    "top_distributions": {
+      "age_class": [
+        {
+          "label": "Older",
+          "count": 1
+        }
+      ],
+      "ihc_subtype": [
+        {
+          "label": "Luminal A",
+          "count": 1
+        }
+      ],
+      "class_ihc": [
+        {
+          "label": "HR+/HER2-",
+          "count": 1
+        }
+      ],
+      "pam50": [
+        {
+          "label": "Her2",
+          "count": 1
+        },
+        {
+          "label": "LumB",
+          "count": 1
+        }
+      ],
+      "grade": [
+        {
+          "label": "II",
+          "count": 1
+        }
+      ]
+    }
+  },
+  {
+    "variant_id": "TP53_C176R",
+    "hugo_symbol": "TP53",
+    "protein_change": "C176R",
+    "sample_count": 2,
+    "matched_clinical_count": 2,
+    "age": {
+      "mean": 49,
+      "min": 48,
+      "max": 50
+    },
+    "age_class_distribution": {
+      "Older": 2
+    },
+    "ihc_subtype_distribution": {
+      "Luminal A": 1,
+      "Her2-enriched": 1
+    },
+    "class_ihc_distribution": {
+      "HR+/HER2-": 1,
+      "HER2+": 1
+    },
+    "pam50_distribution": {},
+    "grade_distribution": {
+      "II": 1
+    },
+    "histology_distribution": {
+      "IDC": 1
+    },
+    "highlights": {
+      "top_age_class": "Older",
+      "top_ihc_subtype": "Luminal A",
+      "top_class_ihc": "HR+/HER2-",
+      "top_pam50": null
+    },
+    "top_distributions": {
+      "age_class": [
+        {
+          "label": "Older",
+          "count": 2
+        }
+      ],
+      "ihc_subtype": [
+        {
+          "label": "Luminal A",
+          "count": 1
+        },
+        {
+          "label": "Her2-enriched",
+          "count": 1
+        }
+      ],
+      "class_ihc": [
+        {
+          "label": "HR+/HER2-",
+          "count": 1
+        },
+        {
+          "label": "HER2+",
+          "count": 1
+        }
+      ],
+      "pam50": [],
+      "grade": [
+        {
+          "label": "II",
+          "count": 1
+        }
+      ]
+    }
+  },
+  {
+    "variant_id": "PIK3CA_E542Q",
+    "hugo_symbol": "PIK3CA",
+    "protein_change": "E542Q",
+    "sample_count": 1,
+    "matched_clinical_count": 1,
+    "age": {
+      "mean": 59,
+      "min": 59,
+      "max": 59
+    },
+    "age_class_distribution": {
+      "Older": 1
+    },
+    "ihc_subtype_distribution": {
+      "Luminal A": 1
+    },
+    "class_ihc_distribution": {
+      "HR+/HER2-": 1
+    },
+    "pam50_distribution": {
+      "LumA": 1
+    },
+    "grade_distribution": {},
+    "histology_distribution": {
+      "IL": 1
+    },
+    "highlights": {
+      "top_age_class": "Older",
+      "top_ihc_subtype": "Luminal A",
+      "top_class_ihc": "HR+/HER2-",
+      "top_pam50": "LumA"
+    },
+    "top_distributions": {
+      "age_class": [
+        {
+          "label": "Older",
+          "count": 1
+        }
+      ],
+      "ihc_subtype": [
+        {
+          "label": "Luminal A",
+          "count": 1
+        }
+      ],
+      "class_ihc": [
+        {
+          "label": "HR+/HER2-",
+          "count": 1
+        }
+      ],
+      "pam50": [
+        {
+          "label": "LumA",
+          "count": 1
+        }
+      ],
+      "grade": []
+    }
+  },
+  {
+    "variant_id": "TP53_R273H",
+    "hugo_symbol": "TP53",
+    "protein_change": "R273H",
+    "sample_count": 1,
+    "matched_clinical_count": 1,
+    "age": {
+      "mean": 47,
+      "min": 47,
+      "max": 47
+    },
+    "age_class_distribution": {
+      "Older": 1
+    },
+    "ihc_subtype_distribution": {
+      "Luminal B": 1
+    },
+    "class_ihc_distribution": {
+      "HR+/HER2+": 1
+    },
+    "pam50_distribution": {
+      "LumA": 1
+    },
+    "grade_distribution": {
+      "II": 1
+    },
+    "histology_distribution": {
+      "IDC": 1
+    },
+    "highlights": {
+      "top_age_class": "Older",
+      "top_ihc_subtype": "Luminal B",
+      "top_class_ihc": "HR+/HER2+",
+      "top_pam50": "LumA"
+    },
+    "top_distributions": {
+      "age_class": [
+        {
+          "label": "Older",
+          "count": 1
+        }
+      ],
+      "ihc_subtype": [
+        {
+          "label": "Luminal B",
+          "count": 1
+        }
+      ],
+      "class_ihc": [
+        {
+          "label": "HR+/HER2+",
+          "count": 1
+        }
+      ],
+      "pam50": [
+        {
+          "label": "LumA",
+          "count": 1
+        }
+      ],
+      "grade": [
+        {
+          "label": "II",
+          "count": 1
+        }
+      ]
+    }
+  },
+  {
+    "variant_id": "TP53_G266E",
+    "hugo_symbol": "TP53",
+    "protein_change": "G266E",
+    "sample_count": 1,
+    "matched_clinical_count": 1,
+    "age": {
+      "mean": 52,
+      "min": 52,
+      "max": 52
+    },
+    "age_class_distribution": {
+      "Older": 1
+    },
+    "ihc_subtype_distribution": {
+      "Luminal A": 1
+    },
+    "class_ihc_distribution": {
+      "HR+/HER2-": 1
+    },
+    "pam50_distribution": {
+      "Her2": 1
+    },
+    "grade_distribution": {},
+    "histology_distribution": {
+      "IL": 1
+    },
+    "highlights": {
+      "top_age_class": "Older",
+      "top_ihc_subtype": "Luminal A",
+      "top_class_ihc": "HR+/HER2-",
+      "top_pam50": "Her2"
+    },
+    "top_distributions": {
+      "age_class": [
+        {
+          "label": "Older",
+          "count": 1
+        }
+      ],
+      "ihc_subtype": [
+        {
+          "label": "Luminal A",
+          "count": 1
+        }
+      ],
+      "class_ihc": [
+        {
+          "label": "HR+/HER2-",
+          "count": 1
+        }
+      ],
+      "pam50": [
+        {
+          "label": "Her2",
+          "count": 1
+        }
+      ],
+      "grade": []
+    }
+  },
+  {
+    "variant_id": "TP53_G245S",
+    "hugo_symbol": "TP53",
+    "protein_change": "G245S",
+    "sample_count": 1,
+    "matched_clinical_count": 1,
+    "age": {
+      "mean": 51,
+      "min": 51,
+      "max": 51
+    },
+    "age_class_distribution": {
+      "Older": 1
+    },
+    "ihc_subtype_distribution": {
+      "TN": 1
+    },
+    "class_ihc_distribution": {
+      "TN": 1
+    },
+    "pam50_distribution": {
+      "Basal": 1
+    },
+    "grade_distribution": {
+      "III": 1
+    },
+    "histology_distribution": {
+      "IDC": 1
+    },
+    "highlights": {
+      "top_age_class": "Older",
+      "top_ihc_subtype": "TN",
+      "top_class_ihc": "TN",
+      "top_pam50": "Basal"
+    },
+    "top_distributions": {
+      "age_class": [
+        {
+          "label": "Older",
+          "count": 1
+        }
+      ],
+      "ihc_subtype": [
+        {
+          "label": "TN",
+          "count": 1
+        }
+      ],
+      "class_ihc": [
+        {
+          "label": "TN",
+          "count": 1
+        }
+      ],
+      "pam50": [
+        {
+          "label": "Basal",
+          "count": 1
+        }
+      ],
+      "grade": [
+        {
+          "label": "III",
+          "count": 1
+        }
+      ]
+    }
+  },
+  {
+    "variant_id": "PIK3CA_E453K",
+    "hugo_symbol": "PIK3CA",
+    "protein_change": "E453K",
+    "sample_count": 1,
+    "matched_clinical_count": 1,
+    "age": {
+      "mean": 49,
+      "min": 49,
+      "max": 49
+    },
+    "age_class_distribution": {
+      "Older": 1
+    },
+    "ihc_subtype_distribution": {
+      "Luminal A": 1
+    },
+    "class_ihc_distribution": {
+      "HR+/HER2-": 1
+    },
+    "pam50_distribution": {
+      "LumB": 1
+    },
+    "grade_distribution": {
+      "II": 1
+    },
+    "histology_distribution": {
+      "IDC": 1
+    },
+    "highlights": {
+      "top_age_class": "Older",
+      "top_ihc_subtype": "Luminal A",
+      "top_class_ihc": "HR+/HER2-",
+      "top_pam50": "LumB"
+    },
+    "top_distributions": {
+      "age_class": [
+        {
+          "label": "Older",
+          "count": 1
+        }
+      ],
+      "ihc_subtype": [
+        {
+          "label": "Luminal A",
+          "count": 1
+        }
+      ],
+      "class_ihc": [
+        {
+          "label": "HR+/HER2-",
+          "count": 1
+        }
+      ],
+      "pam50": [
+        {
+          "label": "LumB",
+          "count": 1
+        }
+      ],
+      "grade": [
+        {
+          "label": "II",
+          "count": 1
+        }
+      ]
+    }
+  },
+  {
+    "variant_id": "PIK3CA_E545G",
+    "hugo_symbol": "PIK3CA",
+    "protein_change": "E545G",
+    "sample_count": 1,
+    "matched_clinical_count": 1,
+    "age": {
+      "mean": 49,
+      "min": 49,
+      "max": 49
+    },
+    "age_class_distribution": {
+      "Older": 1
+    },
+    "ihc_subtype_distribution": {
+      "Luminal A": 1
+    },
+    "class_ihc_distribution": {
+      "HR+/HER2-": 1
+    },
+    "pam50_distribution": {
+      "LumB": 1
+    },
+    "grade_distribution": {
+      "II": 1
+    },
+    "histology_distribution": {
+      "IDC": 1
+    },
+    "highlights": {
+      "top_age_class": "Older",
+      "top_ihc_subtype": "Luminal A",
+      "top_class_ihc": "HR+/HER2-",
+      "top_pam50": "LumB"
+    },
+    "top_distributions": {
+      "age_class": [
+        {
+          "label": "Older",
+          "count": 1
+        }
+      ],
+      "ihc_subtype": [
+        {
+          "label": "Luminal A",
+          "count": 1
+        }
+      ],
+      "class_ihc": [
+        {
+          "label": "HR+/HER2-",
+          "count": 1
+        }
+      ],
+      "pam50": [
+        {
+          "label": "LumB",
+          "count": 1
+        }
+      ],
+      "grade": [
+        {
+          "label": "II",
+          "count": 1
+        }
+      ]
+    }
+  },
+  {
+    "variant_id": "TP53_R248Q",
+    "hugo_symbol": "TP53",
+    "protein_change": "R248Q",
+    "sample_count": 1,
+    "matched_clinical_count": 1,
+    "age": {
+      "mean": 65,
+      "min": 65,
+      "max": 65
+    },
+    "age_class_distribution": {
+      "Older": 1
+    },
+    "ihc_subtype_distribution": {
+      "TN": 1
+    },
+    "class_ihc_distribution": {
+      "TN": 1
+    },
+    "pam50_distribution": {
+      "Basal": 1
+    },
+    "grade_distribution": {
+      "I": 1
+    },
+    "histology_distribution": {
+      "Other": 1
+    },
+    "highlights": {
+      "top_age_class": "Older",
+      "top_ihc_subtype": "TN",
+      "top_class_ihc": "TN",
+      "top_pam50": "Basal"
+    },
+    "top_distributions": {
+      "age_class": [
+        {
+          "label": "Older",
+          "count": 1
+        }
+      ],
+      "ihc_subtype": [
+        {
+          "label": "TN",
+          "count": 1
+        }
+      ],
+      "class_ihc": [
+        {
+          "label": "TN",
+          "count": 1
+        }
+      ],
+      "pam50": [
+        {
+          "label": "Basal",
+          "count": 1
+        }
+      ],
+      "grade": [
+        {
+          "label": "I",
+          "count": 1
+        }
+      ]
+    }
+  },
+  {
+    "variant_id": "TP53_R273C",
+    "hugo_symbol": "TP53",
+    "protein_change": "R273C",
+    "sample_count": 1,
+    "matched_clinical_count": 1,
+    "age": {
+      "mean": 59,
+      "min": 59,
+      "max": 59
+    },
+    "age_class_distribution": {
+      "Older": 1
+    },
+    "ihc_subtype_distribution": {
+      "Luminal A": 1
+    },
+    "class_ihc_distribution": {
+      "HR+/HER2-": 1
+    },
+    "pam50_distribution": {
+      "LumA": 1
+    },
+    "grade_distribution": {
+      "II": 1
+    },
+    "histology_distribution": {},
+    "highlights": {
+      "top_age_class": "Older",
+      "top_ihc_subtype": "Luminal A",
+      "top_class_ihc": "HR+/HER2-",
+      "top_pam50": "LumA"
+    },
+    "top_distributions": {
+      "age_class": [
+        {
+          "label": "Older",
+          "count": 1
+        }
+      ],
+      "ihc_subtype": [
+        {
+          "label": "Luminal A",
+          "count": 1
+        }
+      ],
+      "class_ihc": [
+        {
+          "label": "HR+/HER2-",
+          "count": 1
+        }
+      ],
+      "pam50": [
+        {
+          "label": "LumA",
+          "count": 1
+        }
+      ],
+      "grade": [
+        {
+          "label": "II",
+          "count": 1
+        }
+      ]
+    }
+  },
+  {
+    "variant_id": "PTEN_R173H",
+    "hugo_symbol": "PTEN",
+    "protein_change": "R173H",
+    "sample_count": 1,
+    "matched_clinical_count": 1,
+    "age": {
+      "mean": 45,
+      "min": 45,
+      "max": 45
+    },
+    "age_class_distribution": {
+      "Younger": 1
+    },
+    "ihc_subtype_distribution": {},
+    "class_ihc_distribution": {},
+    "pam50_distribution": {},
+    "grade_distribution": {},
+    "histology_distribution": {
+      "IL": 1
+    },
+    "highlights": {
+      "top_age_class": "Younger",
+      "top_ihc_subtype": null,
+      "top_class_ihc": null,
+      "top_pam50": null
+    },
+    "top_distributions": {
+      "age_class": [
+        {
+          "label": "Younger",
+          "count": 1
+        }
+      ],
+      "ihc_subtype": [],
+      "class_ihc": [],
+      "pam50": [],
+      "grade": []
+    }
+  },
+  {
+    "variant_id": "PTEN_H123Y",
+    "hugo_symbol": "PTEN",
+    "protein_change": "H123Y",
+    "sample_count": 1,
+    "matched_clinical_count": 1,
+    "age": {
+      "mean": 45,
+      "min": 45,
+      "max": 45
+    },
+    "age_class_distribution": {
+      "Younger": 1
+    },
+    "ihc_subtype_distribution": {},
+    "class_ihc_distribution": {},
+    "pam50_distribution": {},
+    "grade_distribution": {},
+    "histology_distribution": {
+      "IL": 1
+    },
+    "highlights": {
+      "top_age_class": "Younger",
+      "top_ihc_subtype": null,
+      "top_class_ihc": null,
+      "top_pam50": null
+    },
+    "top_distributions": {
+      "age_class": [
+        {
+          "label": "Younger",
+          "count": 1
+        }
+      ],
+      "ihc_subtype": [],
+      "class_ihc": [],
+      "pam50": [],
+      "grade": []
+    }
+  },
+  {
+    "variant_id": "TP53_H179Y",
+    "hugo_symbol": "TP53",
+    "protein_change": "H179Y",
+    "sample_count": 1,
+    "matched_clinical_count": 1,
+    "age": {
+      "mean": 87,
+      "min": 87,
+      "max": 87
+    },
+    "age_class_distribution": {
+      "Older": 1
+    },
+    "ihc_subtype_distribution": {
+      "Luminal B": 1
+    },
+    "class_ihc_distribution": {
+      "HR+/HER2+": 1
+    },
+    "pam50_distribution": {},
+    "grade_distribution": {
+      "III": 1
+    },
+    "histology_distribution": {
+      "IDC": 1
+    },
+    "highlights": {
+      "top_age_class": "Older",
+      "top_ihc_subtype": "Luminal B",
+      "top_class_ihc": "HR+/HER2+",
+      "top_pam50": null
+    },
+    "top_distributions": {
+      "age_class": [
+        {
+          "label": "Older",
+          "count": 1
+        }
+      ],
+      "ihc_subtype": [
+        {
+          "label": "Luminal B",
+          "count": 1
+        }
+      ],
+      "class_ihc": [
+        {
+          "label": "HR+/HER2+",
+          "count": 1
+        }
+      ],
+      "pam50": [],
+      "grade": [
+        {
+          "label": "III",
+          "count": 1
+        }
+      ]
+    }
+  },
+  {
+    "variant_id": "GATA3_S137L",
+    "hugo_symbol": "GATA3",
+    "protein_change": "S137L",
+    "sample_count": 1,
+    "matched_clinical_count": 1,
+    "age": {
+      "mean": 62,
+      "min": 62,
+      "max": 62
+    },
+    "age_class_distribution": {
+      "Older": 1
+    },
+    "ihc_subtype_distribution": {
+      "Luminal A": 1
+    },
+    "class_ihc_distribution": {
+      "HR+/HER2-": 1
+    },
+    "pam50_distribution": {},
+    "grade_distribution": {},
+    "histology_distribution": {
+      "IL": 1
+    },
+    "highlights": {
+      "top_age_class": "Older",
+      "top_ihc_subtype": "Luminal A",
+      "top_class_ihc": "HR+/HER2-",
+      "top_pam50": null
+    },
+    "top_distributions": {
+      "age_class": [
+        {
+          "label": "Older",
+          "count": 1
+        }
+      ],
+      "ihc_subtype": [
+        {
+          "label": "Luminal A",
+          "count": 1
+        }
+      ],
+      "class_ihc": [
+        {
+          "label": "HR+/HER2-",
+          "count": 1
+        }
+      ],
+      "pam50": [],
+      "grade": []
+    }
+  },
+  {
+    "variant_id": "PTEN_R159S",
+    "hugo_symbol": "PTEN",
+    "protein_change": "R159S",
+    "sample_count": 1,
+    "matched_clinical_count": 1,
+    "age": {
+      "mean": 53,
+      "min": 53,
+      "max": 53
+    },
+    "age_class_distribution": {
+      "Older": 1
+    },
+    "ihc_subtype_distribution": {
+      "Luminal A": 1
+    },
+    "class_ihc_distribution": {
+      "HR+/HER2-": 1
+    },
+    "pam50_distribution": {},
+    "grade_distribution": {
+      "II": 1
+    },
+    "histology_distribution": {
+      "IDC": 1
+    },
+    "highlights": {
+      "top_age_class": "Older",
+      "top_ihc_subtype": "Luminal A",
+      "top_class_ihc": "HR+/HER2-",
+      "top_pam50": null
+    },
+    "top_distributions": {
+      "age_class": [
+        {
+          "label": "Older",
+          "count": 1
+        }
+      ],
+      "ihc_subtype": [
+        {
+          "label": "Luminal A",
+          "count": 1
+        }
+      ],
+      "class_ihc": [
+        {
+          "label": "HR+/HER2-",
+          "count": 1
+        }
+      ],
+      "pam50": [],
+      "grade": [
+        {
+          "label": "II",
+          "count": 1
+        }
+      ]
+    }
+  },
+  {
+    "variant_id": "GATA3_Q83L",
+    "hugo_symbol": "GATA3",
+    "protein_change": "Q83L",
+    "sample_count": 1,
+    "matched_clinical_count": 1,
+    "age": {
+      "mean": 66,
+      "min": 66,
+      "max": 66
+    },
+    "age_class_distribution": {
+      "Older": 1
+    },
+    "ihc_subtype_distribution": {
+      "Luminal A": 1
+    },
+    "class_ihc_distribution": {
+      "HR+/HER2-": 1
+    },
+    "pam50_distribution": {},
+    "grade_distribution": {
+      "II": 1
+    },
+    "histology_distribution": {
+      "Other": 1
+    },
+    "highlights": {
+      "top_age_class": "Older",
+      "top_ihc_subtype": "Luminal A",
+      "top_class_ihc": "HR+/HER2-",
+      "top_pam50": null
+    },
+    "top_distributions": {
+      "age_class": [
+        {
+          "label": "Older",
+          "count": 1
+        }
+      ],
+      "ihc_subtype": [
+        {
+          "label": "Luminal A",
+          "count": 1
+        }
+      ],
+      "class_ihc": [
+        {
+          "label": "HR+/HER2-",
+          "count": 1
+        }
+      ],
+      "pam50": [],
+      "grade": [
+        {
+          "label": "II",
+          "count": 1
+        }
+      ]
+    }
+  },
+  {
+    "variant_id": "PIK3CA_E245Q",
+    "hugo_symbol": "PIK3CA",
+    "protein_change": "E245Q",
+    "sample_count": 1,
+    "matched_clinical_count": 1,
+    "age": {
+      "mean": 62,
+      "min": 62,
+      "max": 62
+    },
+    "age_class_distribution": {
+      "Older": 1
+    },
+    "ihc_subtype_distribution": {
+      "Luminal A": 1
+    },
+    "class_ihc_distribution": {
+      "HR+/HER2-": 1
+    },
+    "pam50_distribution": {},
+    "grade_distribution": {
+      "II": 1
+    },
+    "histology_distribution": {
+      "IDC": 1
+    },
+    "highlights": {
+      "top_age_class": "Older",
+      "top_ihc_subtype": "Luminal A",
+      "top_class_ihc": "HR+/HER2-",
+      "top_pam50": null
+    },
+    "top_distributions": {
+      "age_class": [
+        {
+          "label": "Older",
+          "count": 1
+        }
+      ],
+      "ihc_subtype": [
+        {
+          "label": "Luminal A",
+          "count": 1
+        }
+      ],
+      "class_ihc": [
+        {
+          "label": "HR+/HER2-",
+          "count": 1
+        }
+      ],
+      "pam50": [],
+      "grade": [
+        {
+          "label": "II",
+          "count": 1
+        }
+      ]
+    }
+  },
+  {
+    "variant_id": "PIK3CA_M1004I",
+    "hugo_symbol": "PIK3CA",
+    "protein_change": "M1004I",
+    "sample_count": 1,
+    "matched_clinical_count": 1,
+    "age": {
+      "mean": 62,
+      "min": 62,
+      "max": 62
+    },
+    "age_class_distribution": {
+      "Older": 1
+    },
+    "ihc_subtype_distribution": {
+      "Luminal A": 1
+    },
+    "class_ihc_distribution": {
+      "HR+/HER2-": 1
+    },
+    "pam50_distribution": {},
+    "grade_distribution": {
+      "II": 1
+    },
+    "histology_distribution": {
+      "IDC": 1
+    },
+    "highlights": {
+      "top_age_class": "Older",
+      "top_ihc_subtype": "Luminal A",
+      "top_class_ihc": "HR+/HER2-",
+      "top_pam50": null
+    },
+    "top_distributions": {
+      "age_class": [
+        {
+          "label": "Older",
+          "count": 1
+        }
+      ],
+      "ihc_subtype": [
+        {
+          "label": "Luminal A",
+          "count": 1
+        }
+      ],
+      "class_ihc": [
+        {
+          "label": "HR+/HER2-",
+          "count": 1
+        }
+      ],
+      "pam50": [],
+      "grade": [
+        {
+          "label": "II",
+          "count": 1
+        }
+      ]
+    }
+  },
+  {
+    "variant_id": "TP53_R175H",
+    "hugo_symbol": "TP53",
+    "protein_change": "R175H",
+    "sample_count": 1,
+    "matched_clinical_count": 1,
+    "age": {
+      "mean": 37,
+      "min": 37,
+      "max": 37
+    },
+    "age_class_distribution": {
+      "Younger": 1
+    },
+    "ihc_subtype_distribution": {
+      "Luminal A": 1
+    },
+    "class_ihc_distribution": {
+      "HR+/HER2-": 1
+    },
+    "pam50_distribution": {},
+    "grade_distribution": {},
+    "histology_distribution": {},
+    "highlights": {
+      "top_age_class": "Younger",
+      "top_ihc_subtype": "Luminal A",
+      "top_class_ihc": "HR+/HER2-",
+      "top_pam50": null
+    },
+    "top_distributions": {
+      "age_class": [
+        {
+          "label": "Younger",
+          "count": 1
+        }
+      ],
+      "ihc_subtype": [
+        {
+          "label": "Luminal A",
+          "count": 1
+        }
+      ],
+      "class_ihc": [
+        {
+          "label": "HR+/HER2-",
+          "count": 1
+        }
+      ],
+      "pam50": [],
+      "grade": []
+    }
+  },
+  {
+    "variant_id": "GATA3_L328H",
+    "hugo_symbol": "GATA3",
+    "protein_change": "L328H",
+    "sample_count": 1,
+    "matched_clinical_count": 1,
+    "age": {
+      "mean": 70,
+      "min": 70,
+      "max": 70
+    },
+    "age_class_distribution": {
+      "Older": 1
+    },
+    "ihc_subtype_distribution": {
+      "Luminal A": 1
+    },
+    "class_ihc_distribution": {
+      "HR+/HER2-": 1
+    },
+    "pam50_distribution": {},
+    "grade_distribution": {
+      "II": 1
+    },
+    "histology_distribution": {
+      "IDC": 1
+    },
+    "highlights": {
+      "top_age_class": "Older",
+      "top_ihc_subtype": "Luminal A",
+      "top_class_ihc": "HR+/HER2-",
+      "top_pam50": null
+    },
+    "top_distributions": {
+      "age_class": [
+        {
+          "label": "Older",
+          "count": 1
+        }
+      ],
+      "ihc_subtype": [
+        {
+          "label": "Luminal A",
+          "count": 1
+        }
+      ],
+      "class_ihc": [
+        {
+          "label": "HR+/HER2-",
+          "count": 1
+        }
+      ],
+      "pam50": [],
+      "grade": [
+        {
+          "label": "II",
+          "count": 1
+        }
+      ]
+    }
+  },
+  {
+    "variant_id": "TP53_D57N",
+    "hugo_symbol": "TP53",
+    "protein_change": "D57N",
+    "sample_count": 1,
+    "matched_clinical_count": 1,
+    "age": {
+      "mean": 39,
+      "min": 39,
+      "max": 39
+    },
+    "age_class_distribution": {
+      "Younger": 1
+    },
+    "ihc_subtype_distribution": {
+      "Luminal A": 1
+    },
+    "class_ihc_distribution": {
+      "HR+/HER2-": 1
+    },
+    "pam50_distribution": {},
+    "grade_distribution": {
+      "II": 1
+    },
+    "histology_distribution": {
+      "IDC": 1
+    },
+    "highlights": {
+      "top_age_class": "Younger",
+      "top_ihc_subtype": "Luminal A",
+      "top_class_ihc": "HR+/HER2-",
+      "top_pam50": null
+    },
+    "top_distributions": {
+      "age_class": [
+        {
+          "label": "Younger",
+          "count": 1
+        }
+      ],
+      "ihc_subtype": [
+        {
+          "label": "Luminal A",
+          "count": 1
+        }
+      ],
+      "class_ihc": [
+        {
+          "label": "HR+/HER2-",
+          "count": 1
+        }
+      ],
+      "pam50": [],
+      "grade": [
+        {
+          "label": "II",
+          "count": 1
+        }
+      ]
+    }
+  },
+  {
+    "variant_id": "TP53_E285K",
+    "hugo_symbol": "TP53",
+    "protein_change": "E285K",
+    "sample_count": 1,
+    "matched_clinical_count": 1,
+    "age": {
+      "mean": 39,
+      "min": 39,
+      "max": 39
+    },
+    "age_class_distribution": {
+      "Younger": 1
+    },
+    "ihc_subtype_distribution": {
+      "Luminal A": 1
+    },
+    "class_ihc_distribution": {
+      "HR+/HER2-": 1
+    },
+    "pam50_distribution": {},
+    "grade_distribution": {
+      "II": 1
+    },
+    "histology_distribution": {
+      "IDC": 1
+    },
+    "highlights": {
+      "top_age_class": "Younger",
+      "top_ihc_subtype": "Luminal A",
+      "top_class_ihc": "HR+/HER2-",
+      "top_pam50": null
+    },
+    "top_distributions": {
+      "age_class": [
+        {
+          "label": "Younger",
+          "count": 1
+        }
+      ],
+      "ihc_subtype": [
+        {
+          "label": "Luminal A",
+          "count": 1
+        }
+      ],
+      "class_ihc": [
+        {
+          "label": "HR+/HER2-",
+          "count": 1
+        }
+      ],
+      "pam50": [],
+      "grade": [
+        {
+          "label": "II",
+          "count": 1
+        }
+      ]
+    }
+  },
+  {
+    "variant_id": "GATA3_T418A",
+    "hugo_symbol": "GATA3",
+    "protein_change": "T418A",
+    "sample_count": 1,
+    "matched_clinical_count": 1,
+    "age": {
+      "mean": 45,
+      "min": 45,
+      "max": 45
+    },
+    "age_class_distribution": {
+      "Younger": 1
+    },
+    "ihc_subtype_distribution": {
+      "Luminal A": 1
+    },
+    "class_ihc_distribution": {
+      "HR+/HER2-": 1
+    },
+    "pam50_distribution": {},
+    "grade_distribution": {
+      "II": 1
+    },
+    "histology_distribution": {
+      "IDC": 1
+    },
+    "highlights": {
+      "top_age_class": "Younger",
+      "top_ihc_subtype": "Luminal A",
+      "top_class_ihc": "HR+/HER2-",
+      "top_pam50": null
+    },
+    "top_distributions": {
+      "age_class": [
+        {
+          "label": "Younger",
+          "count": 1
+        }
+      ],
+      "ihc_subtype": [
+        {
+          "label": "Luminal A",
+          "count": 1
+        }
+      ],
+      "class_ihc": [
+        {
+          "label": "HR+/HER2-",
+          "count": 1
+        }
+      ],
+      "pam50": [],
+      "grade": [
+        {
+          "label": "II",
+          "count": 1
+        }
+      ]
+    }
+  },
+  {
+    "variant_id": "TP53_Y236N",
+    "hugo_symbol": "TP53",
+    "protein_change": "Y236N",
+    "sample_count": 1,
+    "matched_clinical_count": 1,
+    "age": {
+      "mean": 39,
+      "min": 39,
+      "max": 39
+    },
+    "age_class_distribution": {
+      "Younger": 1
+    },
+    "ihc_subtype_distribution": {
+      "Luminal A": 1
+    },
+    "class_ihc_distribution": {
+      "HR+/HER2-": 1
+    },
+    "pam50_distribution": {},
+    "grade_distribution": {},
+    "histology_distribution": {},
+    "highlights": {
+      "top_age_class": "Younger",
+      "top_ihc_subtype": "Luminal A",
+      "top_class_ihc": "HR+/HER2-",
+      "top_pam50": null
+    },
+    "top_distributions": {
+      "age_class": [
+        {
+          "label": "Younger",
+          "count": 1
+        }
+      ],
+      "ihc_subtype": [
+        {
+          "label": "Luminal A",
+          "count": 1
+        }
+      ],
+      "class_ihc": [
+        {
+          "label": "HR+/HER2-",
+          "count": 1
+        }
+      ],
+      "pam50": [],
+      "grade": []
+    }
+  },
+  {
+    "variant_id": "AKT1_L52R",
+    "hugo_symbol": "AKT1",
+    "protein_change": "L52R",
+    "sample_count": 1,
+    "matched_clinical_count": 1,
+    "age": {
+      "mean": 52,
+      "min": 52,
+      "max": 52
+    },
+    "age_class_distribution": {
+      "Older": 1
+    },
+    "ihc_subtype_distribution": {
+      "Luminal A": 1
+    },
+    "class_ihc_distribution": {
+      "HR+/HER2-": 1
+    },
+    "pam50_distribution": {},
+    "grade_distribution": {
+      "I": 1
+    },
+    "histology_distribution": {
+      "IDC": 1
+    },
+    "highlights": {
+      "top_age_class": "Older",
+      "top_ihc_subtype": "Luminal A",
+      "top_class_ihc": "HR+/HER2-",
+      "top_pam50": null
+    },
+    "top_distributions": {
+      "age_class": [
+        {
+          "label": "Older",
+          "count": 1
+        }
+      ],
+      "ihc_subtype": [
+        {
+          "label": "Luminal A",
+          "count": 1
+        }
+      ],
+      "class_ihc": [
+        {
+          "label": "HR+/HER2-",
+          "count": 1
+        }
+      ],
+      "pam50": [],
+      "grade": [
+        {
+          "label": "I",
+          "count": 1
+        }
+      ]
+    }
+  },
+  {
+    "variant_id": "TP53_R110L",
+    "hugo_symbol": "TP53",
+    "protein_change": "R110L",
+    "sample_count": 1,
+    "matched_clinical_count": 1,
+    "age": {
+      "mean": 53,
+      "min": 53,
+      "max": 53
+    },
+    "age_class_distribution": {
+      "Older": 1
+    },
+    "ihc_subtype_distribution": {
+      "Luminal A": 1
+    },
+    "class_ihc_distribution": {
+      "HR+/HER2-": 1
+    },
+    "pam50_distribution": {},
+    "grade_distribution": {
+      "II": 1
+    },
+    "histology_distribution": {
+      "IDC": 1
+    },
+    "highlights": {
+      "top_age_class": "Older",
+      "top_ihc_subtype": "Luminal A",
+      "top_class_ihc": "HR+/HER2-",
+      "top_pam50": null
+    },
+    "top_distributions": {
+      "age_class": [
+        {
+          "label": "Older",
+          "count": 1
+        }
+      ],
+      "ihc_subtype": [
+        {
+          "label": "Luminal A",
+          "count": 1
+        }
+      ],
+      "class_ihc": [
+        {
+          "label": "HR+/HER2-",
+          "count": 1
+        }
+      ],
+      "pam50": [],
+      "grade": [
+        {
+          "label": "II",
+          "count": 1
+        }
+      ]
+    }
+  },
+  {
+    "variant_id": "TP53_M246V",
+    "hugo_symbol": "TP53",
+    "protein_change": "M246V",
+    "sample_count": 1,
+    "matched_clinical_count": 1,
+    "age": {
+      "mean": 47,
+      "min": 47,
+      "max": 47
+    },
+    "age_class_distribution": {
+      "Older": 1
+    },
+    "ihc_subtype_distribution": {
+      "Luminal A": 1
+    },
+    "class_ihc_distribution": {
+      "HR+/HER2-": 1
+    },
+    "pam50_distribution": {},
+    "grade_distribution": {
+      "II": 1
+    },
+    "histology_distribution": {
+      "Other": 1
+    },
+    "highlights": {
+      "top_age_class": "Older",
+      "top_ihc_subtype": "Luminal A",
+      "top_class_ihc": "HR+/HER2-",
+      "top_pam50": null
+    },
+    "top_distributions": {
+      "age_class": [
+        {
+          "label": "Older",
+          "count": 1
+        }
+      ],
+      "ihc_subtype": [
+        {
+          "label": "Luminal A",
+          "count": 1
+        }
+      ],
+      "class_ihc": [
+        {
+          "label": "HR+/HER2-",
+          "count": 1
+        }
+      ],
+      "pam50": [],
+      "grade": [
+        {
+          "label": "II",
+          "count": 1
+        }
+      ]
+    }
+  },
+  {
+    "variant_id": "MAP3K1_E929Q",
+    "hugo_symbol": "MAP3K1",
+    "protein_change": "E929Q",
+    "sample_count": 1,
+    "matched_clinical_count": 1,
+    "age": {
+      "mean": 61,
+      "min": 61,
+      "max": 61
+    },
+    "age_class_distribution": {
+      "Older": 1
+    },
+    "ihc_subtype_distribution": {
+      "Luminal B": 1
+    },
+    "class_ihc_distribution": {
+      "HR+/HER2+": 1
+    },
+    "pam50_distribution": {},
+    "grade_distribution": {
+      "II": 1
+    },
+    "histology_distribution": {
+      "IDC": 1
+    },
+    "highlights": {
+      "top_age_class": "Older",
+      "top_ihc_subtype": "Luminal B",
+      "top_class_ihc": "HR+/HER2+",
+      "top_pam50": null
+    },
+    "top_distributions": {
+      "age_class": [
+        {
+          "label": "Older",
+          "count": 1
+        }
+      ],
+      "ihc_subtype": [
+        {
+          "label": "Luminal B",
+          "count": 1
+        }
+      ],
+      "class_ihc": [
+        {
+          "label": "HR+/HER2+",
+          "count": 1
+        }
+      ],
+      "pam50": [],
+      "grade": [
+        {
+          "label": "II",
+          "count": 1
+        }
+      ]
+    }
+  },
+  {
+    "variant_id": "TP53_C141Y",
+    "hugo_symbol": "TP53",
+    "protein_change": "C141Y",
+    "sample_count": 1,
+    "matched_clinical_count": 1,
+    "age": {
+      "mean": 61,
+      "min": 61,
+      "max": 61
+    },
+    "age_class_distribution": {
+      "Older": 1
+    },
+    "ihc_subtype_distribution": {
+      "Luminal B": 1
+    },
+    "class_ihc_distribution": {
+      "HR+/HER2+": 1
+    },
+    "pam50_distribution": {},
+    "grade_distribution": {
+      "II": 1
+    },
+    "histology_distribution": {
+      "IDC": 1
+    },
+    "highlights": {
+      "top_age_class": "Older",
+      "top_ihc_subtype": "Luminal B",
+      "top_class_ihc": "HR+/HER2+",
+      "top_pam50": null
+    },
+    "top_distributions": {
+      "age_class": [
+        {
+          "label": "Older",
+          "count": 1
+        }
+      ],
+      "ihc_subtype": [
+        {
+          "label": "Luminal B",
+          "count": 1
+        }
+      ],
+      "class_ihc": [
+        {
+          "label": "HR+/HER2+",
+          "count": 1
+        }
+      ],
+      "pam50": [],
+      "grade": [
+        {
+          "label": "II",
+          "count": 1
+        }
+      ]
+    }
+  },
+  {
+    "variant_id": "PIK3CA_H1047Y",
+    "hugo_symbol": "PIK3CA",
+    "protein_change": "H1047Y",
+    "sample_count": 1,
+    "matched_clinical_count": 1,
+    "age": {
+      "mean": 64,
+      "min": 64,
+      "max": 64
+    },
+    "age_class_distribution": {
+      "Older": 1
+    },
+    "ihc_subtype_distribution": {
+      "Luminal A": 1
+    },
+    "class_ihc_distribution": {
+      "HR+/HER2-": 1
+    },
+    "pam50_distribution": {},
+    "grade_distribution": {
+      "I": 1
+    },
+    "histology_distribution": {
+      "IDC": 1
+    },
+    "highlights": {
+      "top_age_class": "Older",
+      "top_ihc_subtype": "Luminal A",
+      "top_class_ihc": "HR+/HER2-",
+      "top_pam50": null
+    },
+    "top_distributions": {
+      "age_class": [
+        {
+          "label": "Older",
+          "count": 1
+        }
+      ],
+      "ihc_subtype": [
+        {
+          "label": "Luminal A",
+          "count": 1
+        }
+      ],
+      "class_ihc": [
+        {
+          "label": "HR+/HER2-",
+          "count": 1
+        }
+      ],
+      "pam50": [],
+      "grade": [
+        {
+          "label": "I",
+          "count": 1
+        }
+      ]
+    }
+  },
+  {
+    "variant_id": "TP53_C176S",
+    "hugo_symbol": "TP53",
+    "protein_change": "C176S",
+    "sample_count": 1,
+    "matched_clinical_count": 1,
+    "age": {
+      "mean": 49,
+      "min": 49,
+      "max": 49
+    },
+    "age_class_distribution": {
+      "Older": 1
+    },
+    "ihc_subtype_distribution": {
+      "Luminal A": 1
+    },
+    "class_ihc_distribution": {
+      "HR+/HER2-": 1
+    },
+    "pam50_distribution": {},
+    "grade_distribution": {},
+    "histology_distribution": {},
+    "highlights": {
+      "top_age_class": "Older",
+      "top_ihc_subtype": "Luminal A",
+      "top_class_ihc": "HR+/HER2-",
+      "top_pam50": null
+    },
+    "top_distributions": {
+      "age_class": [
+        {
+          "label": "Older",
+          "count": 1
+        }
+      ],
+      "ihc_subtype": [
+        {
+          "label": "Luminal A",
+          "count": 1
+        }
+      ],
+      "class_ihc": [
+        {
+          "label": "HR+/HER2-",
+          "count": 1
+        }
+      ],
+      "pam50": [],
+      "grade": []
+    }
+  },
+  {
+    "variant_id": "GATA3_M294K",
+    "hugo_symbol": "GATA3",
+    "protein_change": "M294K",
+    "sample_count": 1,
+    "matched_clinical_count": 1,
+    "age": {
+      "mean": 58,
+      "min": 58,
+      "max": 58
+    },
+    "age_class_distribution": {
+      "Older": 1
+    },
+    "ihc_subtype_distribution": {
+      "Luminal A": 1
+    },
+    "class_ihc_distribution": {
+      "HR+/HER2-": 1
+    },
+    "pam50_distribution": {
+      "LumA": 1
+    },
+    "grade_distribution": {
+      "II": 1
+    },
+    "histology_distribution": {
+      "IDC": 1
+    },
+    "highlights": {
+      "top_age_class": "Older",
+      "top_ihc_subtype": "Luminal A",
+      "top_class_ihc": "HR+/HER2-",
+      "top_pam50": "LumA"
+    },
+    "top_distributions": {
+      "age_class": [
+        {
+          "label": "Older",
+          "count": 1
+        }
+      ],
+      "ihc_subtype": [
+        {
+          "label": "Luminal A",
+          "count": 1
+        }
+      ],
+      "class_ihc": [
+        {
+          "label": "HR+/HER2-",
+          "count": 1
+        }
+      ],
+      "pam50": [
+        {
+          "label": "LumA",
+          "count": 1
+        }
+      ],
+      "grade": [
+        {
+          "label": "II",
+          "count": 1
+        }
+      ]
+    }
+  },
+  {
+    "variant_id": "PTEN_D297H",
+    "hugo_symbol": "PTEN",
+    "protein_change": "D297H",
+    "sample_count": 1,
+    "matched_clinical_count": 1,
+    "age": {
+      "mean": 58,
+      "min": 58,
+      "max": 58
+    },
+    "age_class_distribution": {
+      "Older": 1
+    },
+    "ihc_subtype_distribution": {
+      "Luminal A": 1
+    },
+    "class_ihc_distribution": {
+      "HR+/HER2-": 1
+    },
+    "pam50_distribution": {
+      "LumA": 1
+    },
+    "grade_distribution": {
+      "II": 1
+    },
+    "histology_distribution": {
+      "IDC": 1
+    },
+    "highlights": {
+      "top_age_class": "Older",
+      "top_ihc_subtype": "Luminal A",
+      "top_class_ihc": "HR+/HER2-",
+      "top_pam50": "LumA"
+    },
+    "top_distributions": {
+      "age_class": [
+        {
+          "label": "Older",
+          "count": 1
+        }
+      ],
+      "ihc_subtype": [
+        {
+          "label": "Luminal A",
+          "count": 1
+        }
+      ],
+      "class_ihc": [
+        {
+          "label": "HR+/HER2-",
+          "count": 1
+        }
+      ],
+      "pam50": [
+        {
+          "label": "LumA",
+          "count": 1
+        }
+      ],
+      "grade": [
+        {
+          "label": "II",
+          "count": 1
+        }
+      ]
+    }
+  },
+  {
+    "variant_id": "PIK3CA_E365K",
+    "hugo_symbol": "PIK3CA",
+    "protein_change": "E365K",
+    "sample_count": 1,
+    "matched_clinical_count": 1,
+    "age": {
+      "mean": 58,
+      "min": 58,
+      "max": 58
+    },
+    "age_class_distribution": {
+      "Older": 1
+    },
+    "ihc_subtype_distribution": {
+      "Luminal A": 1
+    },
+    "class_ihc_distribution": {
+      "HR+/HER2-": 1
+    },
+    "pam50_distribution": {
+      "LumA": 1
+    },
+    "grade_distribution": {
+      "II": 1
+    },
+    "histology_distribution": {
+      "IDC": 1
+    },
+    "highlights": {
+      "top_age_class": "Older",
+      "top_ihc_subtype": "Luminal A",
+      "top_class_ihc": "HR+/HER2-",
+      "top_pam50": "LumA"
+    },
+    "top_distributions": {
+      "age_class": [
+        {
+          "label": "Older",
+          "count": 1
+        }
+      ],
+      "ihc_subtype": [
+        {
+          "label": "Luminal A",
+          "count": 1
+        }
+      ],
+      "class_ihc": [
+        {
+          "label": "HR+/HER2-",
+          "count": 1
+        }
+      ],
+      "pam50": [
+        {
+          "label": "LumA",
+          "count": 1
+        }
+      ],
+      "grade": [
+        {
+          "label": "II",
+          "count": 1
+        }
+      ]
+    }
+  },
+  {
+    "variant_id": "PTEN_D326H",
+    "hugo_symbol": "PTEN",
+    "protein_change": "D326H",
+    "sample_count": 1,
+    "matched_clinical_count": 1,
+    "age": {
+      "mean": 58,
+      "min": 58,
+      "max": 58
+    },
+    "age_class_distribution": {
+      "Older": 1
+    },
+    "ihc_subtype_distribution": {
+      "Luminal A": 1
+    },
+    "class_ihc_distribution": {
+      "HR+/HER2-": 1
+    },
+    "pam50_distribution": {
+      "LumA": 1
+    },
+    "grade_distribution": {
+      "II": 1
+    },
+    "histology_distribution": {
+      "IDC": 1
+    },
+    "highlights": {
+      "top_age_class": "Older",
+      "top_ihc_subtype": "Luminal A",
+      "top_class_ihc": "HR+/HER2-",
+      "top_pam50": "LumA"
+    },
+    "top_distributions": {
+      "age_class": [
+        {
+          "label": "Older",
+          "count": 1
+        }
+      ],
+      "ihc_subtype": [
+        {
+          "label": "Luminal A",
+          "count": 1
+        }
+      ],
+      "class_ihc": [
+        {
+          "label": "HR+/HER2-",
+          "count": 1
+        }
+      ],
+      "pam50": [
+        {
+          "label": "LumA",
+          "count": 1
+        }
+      ],
+      "grade": [
+        {
+          "label": "II",
+          "count": 1
+        }
+      ]
+    }
+  },
+  {
+    "variant_id": "ERBB2_V777L",
+    "hugo_symbol": "ERBB2",
+    "protein_change": "V777L",
+    "sample_count": 1,
+    "matched_clinical_count": 1,
+    "age": {
+      "mean": 58,
+      "min": 58,
+      "max": 58
+    },
+    "age_class_distribution": {
+      "Older": 1
+    },
+    "ihc_subtype_distribution": {
+      "Luminal A": 1
+    },
+    "class_ihc_distribution": {
+      "HR+/HER2-": 1
+    },
+    "pam50_distribution": {
+      "LumA": 1
+    },
+    "grade_distribution": {
+      "II": 1
+    },
+    "histology_distribution": {
+      "IDC": 1
+    },
+    "highlights": {
+      "top_age_class": "Older",
+      "top_ihc_subtype": "Luminal A",
+      "top_class_ihc": "HR+/HER2-",
+      "top_pam50": "LumA"
+    },
+    "top_distributions": {
+      "age_class": [
+        {
+          "label": "Older",
+          "count": 1
+        }
+      ],
+      "ihc_subtype": [
+        {
+          "label": "Luminal A",
+          "count": 1
+        }
+      ],
+      "class_ihc": [
+        {
+          "label": "HR+/HER2-",
+          "count": 1
+        }
+      ],
+      "pam50": [
+        {
+          "label": "LumA",
+          "count": 1
+        }
+      ],
+      "grade": [
+        {
+          "label": "II",
+          "count": 1
+        }
+      ]
+    }
+  },
+  {
+    "variant_id": "TP53_L194H",
+    "hugo_symbol": "TP53",
+    "protein_change": "L194H",
+    "sample_count": 1,
+    "matched_clinical_count": 1,
+    "age": {
+      "mean": 37,
+      "min": 37,
+      "max": 37
+    },
+    "age_class_distribution": {
+      "Younger": 1
+    },
+    "ihc_subtype_distribution": {
+      "TN": 1
+    },
+    "class_ihc_distribution": {
+      "TN": 1
+    },
+    "pam50_distribution": {
+      "Basal": 1
+    },
+    "grade_distribution": {
+      "III": 1
+    },
+    "histology_distribution": {
+      "IDC": 1
+    },
+    "highlights": {
+      "top_age_class": "Younger",
+      "top_ihc_subtype": "TN",
+      "top_class_ihc": "TN",
+      "top_pam50": "Basal"
+    },
+    "top_distributions": {
+      "age_class": [
+        {
+          "label": "Younger",
+          "count": 1
+        }
+      ],
+      "ihc_subtype": [
+        {
+          "label": "TN",
+          "count": 1
+        }
+      ],
+      "class_ihc": [
+        {
+          "label": "TN",
+          "count": 1
+        }
+      ],
+      "pam50": [
+        {
+          "label": "Basal",
+          "count": 1
+        }
+      ],
+      "grade": [
+        {
+          "label": "III",
+          "count": 1
+        }
+      ]
+    }
+  },
+  {
+    "variant_id": "TP53_T256P",
+    "hugo_symbol": "TP53",
+    "protein_change": "T256P",
+    "sample_count": 1,
+    "matched_clinical_count": 1,
+    "age": {
+      "mean": 66,
+      "min": 66,
+      "max": 66
+    },
+    "age_class_distribution": {
+      "Older": 1
+    },
+    "ihc_subtype_distribution": {
+      "Her2-enriched": 1
+    },
+    "class_ihc_distribution": {
+      "HER2+": 1
+    },
+    "pam50_distribution": {
+      "Her2": 1
+    },
+    "grade_distribution": {
+      "II": 1
+    },
+    "histology_distribution": {
+      "IDC": 1
+    },
+    "highlights": {
+      "top_age_class": "Older",
+      "top_ihc_subtype": "Her2-enriched",
+      "top_class_ihc": "HER2+",
+      "top_pam50": "Her2"
+    },
+    "top_distributions": {
+      "age_class": [
+        {
+          "label": "Older",
+          "count": 1
+        }
+      ],
+      "ihc_subtype": [
+        {
+          "label": "Her2-enriched",
+          "count": 1
+        }
+      ],
+      "class_ihc": [
+        {
+          "label": "HER2+",
+          "count": 1
+        }
+      ],
+      "pam50": [
+        {
+          "label": "Her2",
+          "count": 1
+        }
+      ],
+      "grade": [
+        {
+          "label": "II",
+          "count": 1
+        }
+      ]
+    }
+  },
+  {
+    "variant_id": "PTEN_I28F",
+    "hugo_symbol": "PTEN",
+    "protein_change": "I28F",
+    "sample_count": 1,
+    "matched_clinical_count": 1,
+    "age": {
+      "mean": 47,
+      "min": 47,
+      "max": 47
+    },
+    "age_class_distribution": {
+      "Older": 1
+    },
+    "ihc_subtype_distribution": {
+      "Luminal A": 1
+    },
+    "class_ihc_distribution": {
+      "HR+/HER2-": 1
+    },
+    "pam50_distribution": {
+      "LumA": 1
+    },
+    "grade_distribution": {
+      "II": 1
+    },
+    "histology_distribution": {
+      "IDC": 1
+    },
+    "highlights": {
+      "top_age_class": "Older",
+      "top_ihc_subtype": "Luminal A",
+      "top_class_ihc": "HR+/HER2-",
+      "top_pam50": "LumA"
+    },
+    "top_distributions": {
+      "age_class": [
+        {
+          "label": "Older",
+          "count": 1
+        }
+      ],
+      "ihc_subtype": [
+        {
+          "label": "Luminal A",
+          "count": 1
+        }
+      ],
+      "class_ihc": [
+        {
+          "label": "HR+/HER2-",
+          "count": 1
+        }
+      ],
+      "pam50": [
+        {
+          "label": "LumA",
+          "count": 1
+        }
+      ],
+      "grade": [
+        {
+          "label": "II",
+          "count": 1
+        }
+      ]
+    }
+  },
+  {
+    "variant_id": "MAP3K1_M1442I",
+    "hugo_symbol": "MAP3K1",
+    "protein_change": "M1442I",
+    "sample_count": 1,
+    "matched_clinical_count": 1,
+    "age": {
+      "mean": 47,
+      "min": 47,
+      "max": 47
+    },
+    "age_class_distribution": {
+      "Older": 1
+    },
+    "ihc_subtype_distribution": {
+      "Luminal A": 1
+    },
+    "class_ihc_distribution": {
+      "HR+/HER2-": 1
+    },
+    "pam50_distribution": {
+      "LumA": 1
+    },
+    "grade_distribution": {
+      "II": 1
+    },
+    "histology_distribution": {
+      "IDC": 1
+    },
+    "highlights": {
+      "top_age_class": "Older",
+      "top_ihc_subtype": "Luminal A",
+      "top_class_ihc": "HR+/HER2-",
+      "top_pam50": "LumA"
+    },
+    "top_distributions": {
+      "age_class": [
+        {
+          "label": "Older",
+          "count": 1
+        }
+      ],
+      "ihc_subtype": [
+        {
+          "label": "Luminal A",
+          "count": 1
+        }
+      ],
+      "class_ihc": [
+        {
+          "label": "HR+/HER2-",
+          "count": 1
+        }
+      ],
+      "pam50": [
+        {
+          "label": "LumA",
+          "count": 1
+        }
+      ],
+      "grade": [
+        {
+          "label": "II",
+          "count": 1
+        }
+      ]
+    }
+  },
+  {
+    "variant_id": "PIK3CA_C378F",
+    "hugo_symbol": "PIK3CA",
+    "protein_change": "C378F",
+    "sample_count": 1,
+    "matched_clinical_count": 1,
+    "age": {
+      "mean": 54,
+      "min": 54,
+      "max": 54
+    },
+    "age_class_distribution": {
+      "Older": 1
+    },
+    "ihc_subtype_distribution": {
+      "Luminal A": 1
+    },
+    "class_ihc_distribution": {
+      "HR+/HER2-": 1
+    },
+    "pam50_distribution": {
+      "LumA": 1
+    },
+    "grade_distribution": {
+      "II": 1
+    },
+    "histology_distribution": {
+      "IDC": 1
+    },
+    "highlights": {
+      "top_age_class": "Older",
+      "top_ihc_subtype": "Luminal A",
+      "top_class_ihc": "HR+/HER2-",
+      "top_pam50": "LumA"
+    },
+    "top_distributions": {
+      "age_class": [
+        {
+          "label": "Older",
+          "count": 1
+        }
+      ],
+      "ihc_subtype": [
+        {
+          "label": "Luminal A",
+          "count": 1
+        }
+      ],
+      "class_ihc": [
+        {
+          "label": "HR+/HER2-",
+          "count": 1
+        }
+      ],
+      "pam50": [
+        {
+          "label": "LumA",
+          "count": 1
+        }
+      ],
+      "grade": [
+        {
+          "label": "II",
+          "count": 1
+        }
+      ]
+    }
+  }
+]

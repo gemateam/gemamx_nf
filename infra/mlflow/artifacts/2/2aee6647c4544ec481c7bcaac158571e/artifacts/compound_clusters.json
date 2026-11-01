@@ -1,0 +1,89 @@
+{
+  "clusters": {
+    "Olaparib": [
+      18
+    ],
+    "Abemaciclib": [
+      17
+    ],
+    "Palbociclib": [
+      1
+    ],
+    "Ribociclib": [
+      1
+    ],
+    "Idelalisib": [
+      16
+    ],
+    "Anastrozole": [
+      15
+    ],
+    "Letrozol": [
+      14
+    ],
+    "Exemestano": [
+      13
+    ],
+    "Tucatinib": [
+      12
+    ],
+    "Galunisertib": [
+      11
+    ],
+    "Defactinib": [
+      10
+    ],
+    "Pexidartinib": [
+      9
+    ],
+    "Epacadostat": [
+      8
+    ],
+    "Navoximod": [
+      7
+    ],
+    "BMS-986299": [
+      0
+    ],
+    "ADU-S100": [
+      0
+    ],
+    "Istradefylline": [
+      6
+    ],
+    "Quercetina": [
+      5
+    ],
+    "Curcumin": [
+      4
+    ],
+    "Resveratrol": [
+      3
+    ],
+    "Capsaicin": [
+      2
+    ]
+  },
+  "representatives": [
+    "ADU-S100",
+    "Ribociclib",
+    "Capsaicin",
+    "Resveratrol",
+    "Curcumin",
+    "Quercetina",
+    "Istradefylline",
+    "Navoximod",
+    "Epacadostat",
+    "Pexidartinib",
+    "Defactinib",
+    "Galunisertib",
+    "Tucatinib",
+    "Exemestano",
+    "Letrozol",
+    "Anastrozole",
+    "Idelalisib",
+    "Abemaciclib",
+    "Olaparib"
+  ],
+  "n_clusters": 19
+}

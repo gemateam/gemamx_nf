@@ -1,0 +1,28 @@
+{
+    "PIK3CA_H1047R": {
+        "Abemaciclib": -6.001,
+        "Alpelisib": -5.065,
+        "Buparlisib": -5.359,
+        "Capivasertib": -5.271,
+        "Copanlisib": -5.81,
+        "Everolimus": -4.056,
+        "Gedatolisib": -5.99,
+        "Palbociclib": -5.977,
+        "Pictilisib": -6.184,
+        "Ribociclib": -6.015,
+        "Taselisib": -4.85
+    },
+    "PIK3CA_WT": {
+        "Abemaciclib": -7.498,
+        "Alpelisib": -6.483,
+        "Buparlisib": -2.363,
+        "Capivasertib": -6.052,
+        "Copanlisib": -6.522,
+        "Everolimus": 20.85,
+        "Gedatolisib": 2.769,
+        "Palbociclib": -6.682,
+        "Pictilisib": -6.985,
+        "Ribociclib": -6.793,
+        "Taselisib": -5.527
+    }
+}

@@ -1,0 +1,2339 @@
+{
+  "AKT1_E17K": {
+    "Abemaciclib": {
+      "path": "v2/data/docking/complex/AKT1_E17K_Abemaciclib_complex.pdb",
+      "drug_safe": "Abemaciclib",
+      "affinity": -7.727
+    },
+    "Alpelisib": {
+      "path": "v2/data/docking/complex/AKT1_E17K_Alpelisib_complex.pdb",
+      "drug_safe": "Alpelisib",
+      "affinity": -7.967
+    },
+    "Buparlisib": {
+      "path": "v2/data/docking/complex/AKT1_E17K_Buparlisib_complex.pdb",
+      "drug_safe": "Buparlisib",
+      "affinity": -5.264
+    },
+    "Capivasertib": {
+      "path": "v2/data/docking/complex/AKT1_E17K_Capivasertib_complex.pdb",
+      "drug_safe": "Capivasertib",
+      "affinity": -6.373
+    },
+    "Copanlisib": {
+      "path": "v2/data/docking/complex/AKT1_E17K_Copanlisib_complex.pdb",
+      "drug_safe": "Copanlisib",
+      "affinity": -6.722
+    },
+    "Everolimus": {
+      "path": "v2/data/docking/complex/AKT1_E17K_Everolimus_complex.pdb",
+      "drug_safe": "Everolimus",
+      "affinity": -4.848
+    },
+    "Gedatolisib": {
+      "path": "v2/data/docking/complex/AKT1_E17K_Gedatolisib_complex.pdb",
+      "drug_safe": "Gedatolisib",
+      "affinity": -4.496
+    },
+    "Palbociclib": {
+      "path": "v2/data/docking/complex/AKT1_E17K_Palbociclib_complex.pdb",
+      "drug_safe": "Palbociclib",
+      "affinity": -7.708
+    },
+    "Pictilisib": {
+      "path": "v2/data/docking/complex/AKT1_E17K_Pictilisib_complex.pdb",
+      "drug_safe": "Pictilisib",
+      "affinity": -8.345
+    },
+    "Ribociclib": {
+      "path": "v2/data/docking/complex/AKT1_E17K_Ribociclib_complex.pdb",
+      "drug_safe": "Ribociclib",
+      "affinity": -6.399
+    },
+    "Taselisib": {
+      "path": "v2/data/docking/complex/AKT1_E17K_Taselisib_complex.pdb",
+      "drug_safe": "Taselisib",
+      "affinity": -7.187
+    }
+  },
+  "AKT1_L52R": {
+    "Abemaciclib": {
+      "path": "v2/data/docking/complex/AKT1_L52R_Abemaciclib_complex.pdb",
+      "drug_safe": "Abemaciclib",
+      "affinity": -8.421
+    },
+    "Alpelisib": {
+      "path": "v2/data/docking/complex/AKT1_L52R_Alpelisib_complex.pdb",
+      "drug_safe": "Alpelisib",
+      "affinity": -9.086
+    },
+    "Buparlisib": {
+      "path": "v2/data/docking/complex/AKT1_L52R_Buparlisib_complex.pdb",
+      "drug_safe": "Buparlisib",
+      "affinity": -5.243
+    },
+    "Capivasertib": {
+      "path": "v2/data/docking/complex/AKT1_L52R_Capivasertib_complex.pdb",
+      "drug_safe": "Capivasertib",
+      "affinity": -6.771
+    },
+    "Copanlisib": {
+      "path": "v2/data/docking/complex/AKT1_L52R_Copanlisib_complex.pdb",
+      "drug_safe": "Copanlisib",
+      "affinity": -7.114
+    },
+    "Everolimus": {
+      "path": "v2/data/docking/complex/AKT1_L52R_Everolimus_complex.pdb",
+      "drug_safe": "Everolimus",
+      "affinity": -6.645
+    },
+    "Gedatolisib": {
+      "path": "v2/data/docking/complex/AKT1_L52R_Gedatolisib_complex.pdb",
+      "drug_safe": "Gedatolisib",
+      "affinity": -5.672
+    },
+    "Palbociclib": {
+      "path": "v2/data/docking/complex/AKT1_L52R_Palbociclib_complex.pdb",
+      "drug_safe": "Palbociclib",
+      "affinity": -7.417
+    },
+    "Pictilisib": {
+      "path": "v2/data/docking/complex/AKT1_L52R_Pictilisib_complex.pdb",
+      "drug_safe": "Pictilisib",
+      "affinity": -9.069
+    },
+    "Ribociclib": {
+      "path": "v2/data/docking/complex/AKT1_L52R_Ribociclib_complex.pdb",
+      "drug_safe": "Ribociclib",
+      "affinity": -6.479
+    },
+    "Taselisib": {
+      "path": "v2/data/docking/complex/AKT1_L52R_Taselisib_complex.pdb",
+      "drug_safe": "Taselisib",
+      "affinity": -9.028
+    }
+  },
+  "ERBB2_S310F": {
+    "Abemaciclib": {
+      "path": "v2/data/docking/complex/ERBB2_S310F_Abemaciclib_complex.pdb",
+      "drug_safe": "Abemaciclib",
+      "affinity": -6.39
+    },
+    "Alpelisib": {
+      "path": "v2/data/docking/complex/ERBB2_S310F_Alpelisib_complex.pdb",
+      "drug_safe": "Alpelisib",
+      "affinity": -6.809
+    },
+    "Buparlisib": {
+      "path": "v2/data/docking/complex/ERBB2_S310F_Buparlisib_complex.pdb",
+      "drug_safe": "Buparlisib",
+      "affinity": -4.689
+    },
+    "Capivasertib": {
+      "path": "v2/data/docking/complex/ERBB2_S310F_Capivasertib_complex.pdb",
+      "drug_safe": "Capivasertib",
+      "affinity": -5.657
+    },
+    "Copanlisib": {
+      "path": "v2/data/docking/complex/ERBB2_S310F_Copanlisib_complex.pdb",
+      "drug_safe": "Copanlisib",
+      "affinity": -6.389
+    },
+    "Everolimus": {
+      "path": "v2/data/docking/complex/ERBB2_S310F_Everolimus_complex.pdb",
+      "drug_safe": "Everolimus",
+      "affinity": -4.847
+    },
+    "Gedatolisib": {
+      "path": "v2/data/docking/complex/ERBB2_S310F_Gedatolisib_complex.pdb",
+      "drug_safe": "Gedatolisib",
+      "affinity": -3.946
+    },
+    "Palbociclib": {
+      "path": "v2/data/docking/complex/ERBB2_S310F_Palbociclib_complex.pdb",
+      "drug_safe": "Palbociclib",
+      "affinity": -6.697
+    },
+    "Pictilisib": {
+      "path": "v2/data/docking/complex/ERBB2_S310F_Pictilisib_complex.pdb",
+      "drug_safe": "Pictilisib",
+      "affinity": -6.947
+    },
+    "Ribociclib": {
+      "path": "v2/data/docking/complex/ERBB2_S310F_Ribociclib_complex.pdb",
+      "drug_safe": "Ribociclib",
+      "affinity": -6.243
+    },
+    "Taselisib": {
+      "path": "v2/data/docking/complex/ERBB2_S310F_Taselisib_complex.pdb",
+      "drug_safe": "Taselisib",
+      "affinity": -6.019
+    }
+  },
+  "ERBB2_V777L": {
+    "Abemaciclib": {
+      "path": "v2/data/docking/complex/ERBB2_V777L_Abemaciclib_complex.pdb",
+      "drug_safe": "Abemaciclib",
+      "affinity": -6.296
+    },
+    "Alpelisib": {
+      "path": "v2/data/docking/complex/ERBB2_V777L_Alpelisib_complex.pdb",
+      "drug_safe": "Alpelisib",
+      "affinity": -7.071
+    },
+    "Buparlisib": {
+      "path": "v2/data/docking/complex/ERBB2_V777L_Buparlisib_complex.pdb",
+      "drug_safe": "Buparlisib",
+      "affinity": -4.44
+    },
+    "Capivasertib": {
+      "path": "v2/data/docking/complex/ERBB2_V777L_Capivasertib_complex.pdb",
+      "drug_safe": "Capivasertib",
+      "affinity": -6.468
+    },
+    "Copanlisib": {
+      "path": "v2/data/docking/complex/ERBB2_V777L_Copanlisib_complex.pdb",
+      "drug_safe": "Copanlisib",
+      "affinity": -6.351
+    },
+    "Everolimus": {
+      "path": "v2/data/docking/complex/ERBB2_V777L_Everolimus_complex.pdb",
+      "drug_safe": "Everolimus",
+      "affinity": -5.292
+    },
+    "Gedatolisib": {
+      "path": "v2/data/docking/complex/ERBB2_V777L_Gedatolisib_complex.pdb",
+      "drug_safe": "Gedatolisib",
+      "affinity": -4.626
+    },
+    "Palbociclib": {
+      "path": "v2/data/docking/complex/ERBB2_V777L_Palbociclib_complex.pdb",
+      "drug_safe": "Palbociclib",
+      "affinity": -5.974
+    },
+    "Pictilisib": {
+      "path": "v2/data/docking/complex/ERBB2_V777L_Pictilisib_complex.pdb",
+      "drug_safe": "Pictilisib",
+      "affinity": -7.411
+    },
+    "Ribociclib": {
+      "path": "v2/data/docking/complex/ERBB2_V777L_Ribociclib_complex.pdb",
+      "drug_safe": "Ribociclib",
+      "affinity": -5.761
+    },
+    "Taselisib": {
+      "path": "v2/data/docking/complex/ERBB2_V777L_Taselisib_complex.pdb",
+      "drug_safe": "Taselisib",
+      "affinity": -6.249
+    }
+  },
+  "GATA3_Q83L": {
+    "Abemaciclib": {
+      "path": "v2/data/docking/complex/GATA3_Q83L_Abemaciclib_complex.pdb",
+      "drug_safe": "Abemaciclib",
+      "affinity": -8.835
+    },
+    "Alpelisib": {
+      "path": "v2/data/docking/complex/GATA3_Q83L_Alpelisib_complex.pdb",
+      "drug_safe": "Alpelisib",
+      "affinity": -10.02
+    },
+    "Buparlisib": {
+      "path": "v2/data/docking/complex/GATA3_Q83L_Buparlisib_complex.pdb",
+      "drug_safe": "Buparlisib",
+      "affinity": -7.017
+    },
+    "Capivasertib": {
+      "path": "v2/data/docking/complex/GATA3_Q83L_Capivasertib_complex.pdb",
+      "drug_safe": "Capivasertib",
+      "affinity": -7.529
+    },
+    "Copanlisib": {
+      "path": "v2/data/docking/complex/GATA3_Q83L_Copanlisib_complex.pdb",
+      "drug_safe": "Copanlisib",
+      "affinity": -8.344
+    },
+    "Everolimus": {
+      "path": "v2/data/docking/complex/GATA3_Q83L_Everolimus_complex.pdb",
+      "drug_safe": "Everolimus",
+      "affinity": -7.074
+    },
+    "Gedatolisib": {
+      "path": "v2/data/docking/complex/GATA3_Q83L_Gedatolisib_complex.pdb",
+      "drug_safe": "Gedatolisib",
+      "affinity": -5.756
+    },
+    "Palbociclib": {
+      "path": "v2/data/docking/complex/GATA3_Q83L_Palbociclib_complex.pdb",
+      "drug_safe": "Palbociclib",
+      "affinity": -9.029
+    },
+    "Pictilisib": {
+      "path": "v2/data/docking/complex/GATA3_Q83L_Pictilisib_complex.pdb",
+      "drug_safe": "Pictilisib",
+      "affinity": -10.22
+    },
+    "Ribociclib": {
+      "path": "v2/data/docking/complex/GATA3_Q83L_Ribociclib_complex.pdb",
+      "drug_safe": "Ribociclib",
+      "affinity": -7.443
+    },
+    "Taselisib": {
+      "path": "v2/data/docking/complex/GATA3_Q83L_Taselisib_complex.pdb",
+      "drug_safe": "Taselisib",
+      "affinity": -9.045
+    }
+  },
+  "GATA3_S137L": {
+    "Abemaciclib": {
+      "path": "v2/data/docking/complex/GATA3_S137L_Abemaciclib_complex.pdb",
+      "drug_safe": "Abemaciclib",
+      "affinity": -7.841
+    },
+    "Alpelisib": {
+      "path": "v2/data/docking/complex/GATA3_S137L_Alpelisib_complex.pdb",
+      "drug_safe": "Alpelisib",
+      "affinity": -8.621
+    },
+    "Buparlisib": {
+      "path": "v2/data/docking/complex/GATA3_S137L_Buparlisib_complex.pdb",
+      "drug_safe": "Buparlisib",
+      "affinity": -7.1
+    },
+    "Capivasertib": {
+      "path": "v2/data/docking/complex/GATA3_S137L_Capivasertib_complex.pdb",
+      "drug_safe": "Capivasertib",
+      "affinity": -8.084
+    },
+    "Copanlisib": {
+      "path": "v2/data/docking/complex/GATA3_S137L_Copanlisib_complex.pdb",
+      "drug_safe": "Copanlisib",
+      "affinity": -8.47
+    },
+    "Everolimus": {
+      "path": "v2/data/docking/complex/GATA3_S137L_Everolimus_complex.pdb",
+      "drug_safe": "Everolimus",
+      "affinity": -6.116
+    },
+    "Gedatolisib": {
+      "path": "v2/data/docking/complex/GATA3_S137L_Gedatolisib_complex.pdb",
+      "drug_safe": "Gedatolisib",
+      "affinity": -4.652
+    },
+    "Palbociclib": {
+      "path": "v2/data/docking/complex/GATA3_S137L_Palbociclib_complex.pdb",
+      "drug_safe": "Palbociclib",
+      "affinity": -8.547
+    },
+    "Pictilisib": {
+      "path": "v2/data/docking/complex/GATA3_S137L_Pictilisib_complex.pdb",
+      "drug_safe": "Pictilisib",
+      "affinity": -9.348
+    },
+    "Ribociclib": {
+      "path": "v2/data/docking/complex/GATA3_S137L_Ribociclib_complex.pdb",
+      "drug_safe": "Ribociclib",
+      "affinity": -8.313
+    },
+    "Taselisib": {
+      "path": "v2/data/docking/complex/GATA3_S137L_Taselisib_complex.pdb",
+      "drug_safe": "Taselisib",
+      "affinity": -7.497
+    }
+  },
+  "GATA3_T418A": {
+    "Abemaciclib": {
+      "path": "v2/data/docking/complex/GATA3_T418A_Abemaciclib_complex.pdb",
+      "drug_safe": "Abemaciclib",
+      "affinity": -5.397
+    },
+    "Alpelisib": {
+      "path": "v2/data/docking/complex/GATA3_T418A_Alpelisib_complex.pdb",
+      "drug_safe": "Alpelisib",
+      "affinity": -5.283
+    },
+    "Buparlisib": {
+      "path": "v2/data/docking/complex/GATA3_T418A_Buparlisib_complex.pdb",
+      "drug_safe": "Buparlisib",
+      "affinity": -4.558
+    },
+    "Capivasertib": {
+      "path": "v2/data/docking/complex/GATA3_T418A_Capivasertib_complex.pdb",
+      "drug_safe": "Capivasertib",
+      "affinity": -4.968
+    },
+    "Copanlisib": {
+      "path": "v2/data/docking/complex/GATA3_T418A_Copanlisib_complex.pdb",
+      "drug_safe": "Copanlisib",
+      "affinity": -5.592
+    },
+    "Everolimus": {
+      "path": "v2/data/docking/complex/GATA3_T418A_Everolimus_complex.pdb",
+      "drug_safe": "Everolimus",
+      "affinity": -3.962
+    },
+    "Gedatolisib": {
+      "path": "v2/data/docking/complex/GATA3_T418A_Gedatolisib_complex.pdb",
+      "drug_safe": "Gedatolisib",
+      "affinity": -3.379
+    },
+    "Palbociclib": {
+      "path": "v2/data/docking/complex/GATA3_T418A_Palbociclib_complex.pdb",
+      "drug_safe": "Palbociclib",
+      "affinity": -6.048
+    },
+    "Pictilisib": {
+      "path": "v2/data/docking/complex/GATA3_T418A_Pictilisib_complex.pdb",
+      "drug_safe": "Pictilisib",
+      "affinity": -5.667
+    },
+    "Ribociclib": {
+      "path": "v2/data/docking/complex/GATA3_T418A_Ribociclib_complex.pdb",
+      "drug_safe": "Ribociclib",
+      "affinity": -4.714
+    },
+    "Taselisib": {
+      "path": "v2/data/docking/complex/GATA3_T418A_Taselisib_complex.pdb",
+      "drug_safe": "Taselisib",
+      "affinity": -5.422
+    }
+  },
+  "MAP3K1_M1442I": {
+    "Abemaciclib": {
+      "path": "v2/data/docking/complex/MAP3K1_M1442I_Abemaciclib_complex.pdb",
+      "drug_safe": "Abemaciclib",
+      "affinity": -6.037
+    },
+    "Alpelisib": {
+      "path": "v2/data/docking/complex/MAP3K1_M1442I_Alpelisib_complex.pdb",
+      "drug_safe": "Alpelisib",
+      "affinity": -7.065
+    },
+    "Buparlisib": {
+      "path": "v2/data/docking/complex/MAP3K1_M1442I_Buparlisib_complex.pdb",
+      "drug_safe": "Buparlisib",
+      "affinity": -4.462
+    },
+    "Capivasertib": {
+      "path": "v2/data/docking/complex/MAP3K1_M1442I_Capivasertib_complex.pdb",
+      "drug_safe": "Capivasertib",
+      "affinity": -6.145
+    },
+    "Copanlisib": {
+      "path": "v2/data/docking/complex/MAP3K1_M1442I_Copanlisib_complex.pdb",
+      "drug_safe": "Copanlisib",
+      "affinity": -7.232
+    },
+    "Everolimus": {
+      "path": "v2/data/docking/complex/MAP3K1_M1442I_Everolimus_complex.pdb",
+      "drug_safe": "Everolimus",
+      "affinity": -4.758
+    },
+    "Gedatolisib": {
+      "path": "v2/data/docking/complex/MAP3K1_M1442I_Gedatolisib_complex.pdb",
+      "drug_safe": "Gedatolisib",
+      "affinity": -4.352
+    },
+    "Palbociclib": {
+      "path": "v2/data/docking/complex/MAP3K1_M1442I_Palbociclib_complex.pdb",
+      "drug_safe": "Palbociclib",
+      "affinity": -7.162
+    },
+    "Pictilisib": {
+      "path": "v2/data/docking/complex/MAP3K1_M1442I_Pictilisib_complex.pdb",
+      "drug_safe": "Pictilisib",
+      "affinity": -6.553
+    },
+    "Ribociclib": {
+      "path": "v2/data/docking/complex/MAP3K1_M1442I_Ribociclib_complex.pdb",
+      "drug_safe": "Ribociclib",
+      "affinity": -5.703
+    },
+    "Taselisib": {
+      "path": "v2/data/docking/complex/MAP3K1_M1442I_Taselisib_complex.pdb",
+      "drug_safe": "Taselisib",
+      "affinity": -6.319
+    }
+  },
+  "PIK3CA_C378F": {
+    "Abemaciclib": {
+      "path": "v2/data/docking/complex/PIK3CA_C378F_Abemaciclib_complex.pdb",
+      "drug_safe": "Abemaciclib",
+      "affinity": -7.247
+    },
+    "Alpelisib": {
+      "path": "v2/data/docking/complex/PIK3CA_C378F_Alpelisib_complex.pdb",
+      "drug_safe": "Alpelisib",
+      "affinity": -7.741
+    },
+    "Buparlisib": {
+      "path": "v2/data/docking/complex/PIK3CA_C378F_Buparlisib_complex.pdb",
+      "drug_safe": "Buparlisib",
+      "affinity": -6.096
+    },
+    "Capivasertib": {
+      "path": "v2/data/docking/complex/PIK3CA_C378F_Capivasertib_complex.pdb",
+      "drug_safe": "Capivasertib",
+      "affinity": -7.202
+    },
+    "Copanlisib": {
+      "path": "v2/data/docking/complex/PIK3CA_C378F_Copanlisib_complex.pdb",
+      "drug_safe": "Copanlisib",
+      "affinity": -7.315
+    },
+    "Everolimus": {
+      "path": "v2/data/docking/complex/PIK3CA_C378F_Everolimus_complex.pdb",
+      "drug_safe": "Everolimus",
+      "affinity": -6.315
+    },
+    "Gedatolisib": {
+      "path": "v2/data/docking/complex/PIK3CA_C378F_Gedatolisib_complex.pdb",
+      "drug_safe": "Gedatolisib",
+      "affinity": -4.782
+    },
+    "Palbociclib": {
+      "path": "v2/data/docking/complex/PIK3CA_C378F_Palbociclib_complex.pdb",
+      "drug_safe": "Palbociclib",
+      "affinity": -7.531
+    },
+    "Pictilisib": {
+      "path": "v2/data/docking/complex/PIK3CA_C378F_Pictilisib_complex.pdb",
+      "drug_safe": "Pictilisib",
+      "affinity": -8.289
+    },
+    "Ribociclib": {
+      "path": "v2/data/docking/complex/PIK3CA_C378F_Ribociclib_complex.pdb",
+      "drug_safe": "Ribociclib",
+      "affinity": -6.706
+    },
+    "Taselisib": {
+      "path": "v2/data/docking/complex/PIK3CA_C378F_Taselisib_complex.pdb",
+      "drug_safe": "Taselisib",
+      "affinity": -6.721
+    }
+  },
+  "PIK3CA_C420R": {
+    "Abemaciclib": {
+      "path": "v2/data/docking/complex/PIK3CA_C420R_Abemaciclib_complex.pdb",
+      "drug_safe": "Abemaciclib",
+      "affinity": -8.042
+    },
+    "Alpelisib": {
+      "path": "v2/data/docking/complex/PIK3CA_C420R_Alpelisib_complex.pdb",
+      "drug_safe": "Alpelisib",
+      "affinity": -8.597
+    },
+    "Buparlisib": {
+      "path": "v2/data/docking/complex/PIK3CA_C420R_Buparlisib_complex.pdb",
+      "drug_safe": "Buparlisib",
+      "affinity": -6.036
+    },
+    "Capivasertib": {
+      "path": "v2/data/docking/complex/PIK3CA_C420R_Capivasertib_complex.pdb",
+      "drug_safe": "Capivasertib",
+      "affinity": -7.968
+    },
+    "Copanlisib": {
+      "path": "v2/data/docking/complex/PIK3CA_C420R_Copanlisib_complex.pdb",
+      "drug_safe": "Copanlisib",
+      "affinity": -7.667
+    },
+    "Everolimus": {
+      "path": "v2/data/docking/complex/PIK3CA_C420R_Everolimus_complex.pdb",
+      "drug_safe": "Everolimus",
+      "affinity": -6.404
+    },
+    "Gedatolisib": {
+      "path": "v2/data/docking/complex/PIK3CA_C420R_Gedatolisib_complex.pdb",
+      "drug_safe": "Gedatolisib",
+      "affinity": -4.79
+    },
+    "Palbociclib": {
+      "path": "v2/data/docking/complex/PIK3CA_C420R_Palbociclib_complex.pdb",
+      "drug_safe": "Palbociclib",
+      "affinity": -7.605
+    },
+    "Pictilisib": {
+      "path": "v2/data/docking/complex/PIK3CA_C420R_Pictilisib_complex.pdb",
+      "drug_safe": "Pictilisib",
+      "affinity": -9.052
+    },
+    "Ribociclib": {
+      "path": "v2/data/docking/complex/PIK3CA_C420R_Ribociclib_complex.pdb",
+      "drug_safe": "Ribociclib",
+      "affinity": -8.05
+    },
+    "Taselisib": {
+      "path": "v2/data/docking/complex/PIK3CA_C420R_Taselisib_complex.pdb",
+      "drug_safe": "Taselisib",
+      "affinity": -7.465
+    }
+  },
+  "PIK3CA_E245Q": {
+    "Abemaciclib": {
+      "path": "v2/data/docking/complex/PIK3CA_E245Q_Abemaciclib_complex.pdb",
+      "drug_safe": "Abemaciclib",
+      "affinity": -6.215
+    },
+    "Alpelisib": {
+      "path": "v2/data/docking/complex/PIK3CA_E245Q_Alpelisib_complex.pdb",
+      "drug_safe": "Alpelisib",
+      "affinity": -7.142
+    },
+    "Buparlisib": {
+      "path": "v2/data/docking/complex/PIK3CA_E245Q_Buparlisib_complex.pdb",
+      "drug_safe": "Buparlisib",
+      "affinity": -4.484
+    },
+    "Capivasertib": {
+      "path": "v2/data/docking/complex/PIK3CA_E245Q_Capivasertib_complex.pdb",
+      "drug_safe": "Capivasertib",
+      "affinity": -5.712
+    },
+    "Copanlisib": {
+      "path": "v2/data/docking/complex/PIK3CA_E245Q_Copanlisib_complex.pdb",
+      "drug_safe": "Copanlisib",
+      "affinity": -6.339
+    },
+    "Everolimus": {
+      "path": "v2/data/docking/complex/PIK3CA_E245Q_Everolimus_complex.pdb",
+      "drug_safe": "Everolimus",
+      "affinity": -4.729
+    },
+    "Gedatolisib": {
+      "path": "v2/data/docking/complex/PIK3CA_E245Q_Gedatolisib_complex.pdb",
+      "drug_safe": "Gedatolisib",
+      "affinity": -4.099
+    },
+    "Palbociclib": {
+      "path": "v2/data/docking/complex/PIK3CA_E245Q_Palbociclib_complex.pdb",
+      "drug_safe": "Palbociclib",
+      "affinity": -6.841
+    },
+    "Pictilisib": {
+      "path": "v2/data/docking/complex/PIK3CA_E245Q_Pictilisib_complex.pdb",
+      "drug_safe": "Pictilisib",
+      "affinity": -6.706
+    },
+    "Ribociclib": {
+      "path": "v2/data/docking/complex/PIK3CA_E245Q_Ribociclib_complex.pdb",
+      "drug_safe": "Ribociclib",
+      "affinity": -5.342
+    },
+    "Taselisib": {
+      "path": "v2/data/docking/complex/PIK3CA_E245Q_Taselisib_complex.pdb",
+      "drug_safe": "Taselisib",
+      "affinity": -5.838
+    }
+  },
+  "PIK3CA_E365K": {
+    "Abemaciclib": {
+      "path": "v2/data/docking/complex/PIK3CA_E365K_Abemaciclib_complex.pdb",
+      "drug_safe": "Abemaciclib",
+      "affinity": -7.462
+    },
+    "Alpelisib": {
+      "path": "v2/data/docking/complex/PIK3CA_E365K_Alpelisib_complex.pdb",
+      "drug_safe": "Alpelisib",
+      "affinity": -8.295
+    },
+    "Buparlisib": {
+      "path": "v2/data/docking/complex/PIK3CA_E365K_Buparlisib_complex.pdb",
+      "drug_safe": "Buparlisib",
+      "affinity": -5.689
+    },
+    "Capivasertib": {
+      "path": "v2/data/docking/complex/PIK3CA_E365K_Capivasertib_complex.pdb",
+      "drug_safe": "Capivasertib",
+      "affinity": -7.224
+    },
+    "Copanlisib": {
+      "path": "v2/data/docking/complex/PIK3CA_E365K_Copanlisib_complex.pdb",
+      "drug_safe": "Copanlisib",
+      "affinity": -7.927
+    },
+    "Everolimus": {
+      "path": "v2/data/docking/complex/PIK3CA_E365K_Everolimus_complex.pdb",
+      "drug_safe": "Everolimus",
+      "affinity": -6.06
+    },
+    "Gedatolisib": {
+      "path": "v2/data/docking/complex/PIK3CA_E365K_Gedatolisib_complex.pdb",
+      "drug_safe": "Gedatolisib",
+      "affinity": -4.639
+    },
+    "Palbociclib": {
+      "path": "v2/data/docking/complex/PIK3CA_E365K_Palbociclib_complex.pdb",
+      "drug_safe": "Palbociclib",
+      "affinity": -8.012
+    },
+    "Pictilisib": {
+      "path": "v2/data/docking/complex/PIK3CA_E365K_Pictilisib_complex.pdb",
+      "drug_safe": "Pictilisib",
+      "affinity": -8.355
+    },
+    "Ribociclib": {
+      "path": "v2/data/docking/complex/PIK3CA_E365K_Ribociclib_complex.pdb",
+      "drug_safe": "Ribociclib",
+      "affinity": -7.047
+    },
+    "Taselisib": {
+      "path": "v2/data/docking/complex/PIK3CA_E365K_Taselisib_complex.pdb",
+      "drug_safe": "Taselisib",
+      "affinity": -7.509
+    }
+  },
+  "PIK3CA_E453K": {
+    "Abemaciclib": {
+      "path": "v2/data/docking/complex/PIK3CA_E453K_Abemaciclib_complex.pdb",
+      "drug_safe": "Abemaciclib",
+      "affinity": -8.159
+    },
+    "Alpelisib": {
+      "path": "v2/data/docking/complex/PIK3CA_E453K_Alpelisib_complex.pdb",
+      "drug_safe": "Alpelisib",
+      "affinity": -8.776
+    },
+    "Buparlisib": {
+      "path": "v2/data/docking/complex/PIK3CA_E453K_Buparlisib_complex.pdb",
+      "drug_safe": "Buparlisib",
+      "affinity": -6.277
+    },
+    "Capivasertib": {
+      "path": "v2/data/docking/complex/PIK3CA_E453K_Capivasertib_complex.pdb",
+      "drug_safe": "Capivasertib",
+      "affinity": -7.217
+    },
+    "Copanlisib": {
+      "path": "v2/data/docking/complex/PIK3CA_E453K_Copanlisib_complex.pdb",
+      "drug_safe": "Copanlisib",
+      "affinity": -8.693
+    },
+    "Everolimus": {
+      "path": "v2/data/docking/complex/PIK3CA_E453K_Everolimus_complex.pdb",
+      "drug_safe": "Everolimus",
+      "affinity": -6.048
+    },
+    "Gedatolisib": {
+      "path": "v2/data/docking/complex/PIK3CA_E453K_Gedatolisib_complex.pdb",
+      "drug_safe": "Gedatolisib",
+      "affinity": -4.675
+    },
+    "Palbociclib": {
+      "path": "v2/data/docking/complex/PIK3CA_E453K_Palbociclib_complex.pdb",
+      "drug_safe": "Palbociclib",
+      "affinity": -7.37
+    },
+    "Pictilisib": {
+      "path": "v2/data/docking/complex/PIK3CA_E453K_Pictilisib_complex.pdb",
+      "drug_safe": "Pictilisib",
+      "affinity": -8.912
+    },
+    "Ribociclib": {
+      "path": "v2/data/docking/complex/PIK3CA_E453K_Ribociclib_complex.pdb",
+      "drug_safe": "Ribociclib",
+      "affinity": -7.014
+    },
+    "Taselisib": {
+      "path": "v2/data/docking/complex/PIK3CA_E453K_Taselisib_complex.pdb",
+      "drug_safe": "Taselisib",
+      "affinity": -7.828
+    }
+  },
+  "PIK3CA_E542K": {
+    "Abemaciclib": {
+      "path": "v2/data/docking/complex/PIK3CA_E542K_Abemaciclib_complex.pdb",
+      "drug_safe": "Abemaciclib",
+      "affinity": -6.526
+    },
+    "Alpelisib": {
+      "path": "v2/data/docking/complex/PIK3CA_E542K_Alpelisib_complex.pdb",
+      "drug_safe": "Alpelisib",
+      "affinity": -7.393
+    },
+    "Buparlisib": {
+      "path": "v2/data/docking/complex/PIK3CA_E542K_Buparlisib_complex.pdb",
+      "drug_safe": "Buparlisib",
+      "affinity": -4.758
+    },
+    "Capivasertib": {
+      "path": "v2/data/docking/complex/PIK3CA_E542K_Capivasertib_complex.pdb",
+      "drug_safe": "Capivasertib",
+      "affinity": -5.821
+    },
+    "Copanlisib": {
+      "path": "v2/data/docking/complex/PIK3CA_E542K_Copanlisib_complex.pdb",
+      "drug_safe": "Copanlisib",
+      "affinity": -7.454
+    },
+    "Everolimus": {
+      "path": "v2/data/docking/complex/PIK3CA_E542K_Everolimus_complex.pdb",
+      "drug_safe": "Everolimus",
+      "affinity": -5.553
+    },
+    "Gedatolisib": {
+      "path": "v2/data/docking/complex/PIK3CA_E542K_Gedatolisib_complex.pdb",
+      "drug_safe": "Gedatolisib",
+      "affinity": -6.139
+    },
+    "Palbociclib": {
+      "path": "v2/data/docking/complex/PIK3CA_E542K_Palbociclib_complex.pdb",
+      "drug_safe": "Palbociclib",
+      "affinity": -6.722
+    },
+    "Pictilisib": {
+      "path": "v2/data/docking/complex/PIK3CA_E542K_Pictilisib_complex.pdb",
+      "drug_safe": "Pictilisib",
+      "affinity": -8.21
+    },
+    "Ribociclib": {
+      "path": "v2/data/docking/complex/PIK3CA_E542K_Ribociclib_complex.pdb",
+      "drug_safe": "Ribociclib",
+      "affinity": -7.478
+    },
+    "Taselisib": {
+      "path": "v2/data/docking/complex/PIK3CA_E542K_Taselisib_complex.pdb",
+      "drug_safe": "Taselisib",
+      "affinity": -6.797
+    }
+  },
+  "PIK3CA_E542Q": {
+    "Abemaciclib": {
+      "path": "v2/data/docking/complex/PIK3CA_E542Q_Abemaciclib_complex.pdb",
+      "drug_safe": "Abemaciclib",
+      "affinity": -7.181
+    },
+    "Alpelisib": {
+      "path": "v2/data/docking/complex/PIK3CA_E542Q_Alpelisib_complex.pdb",
+      "drug_safe": "Alpelisib",
+      "affinity": -7.99
+    },
+    "Buparlisib": {
+      "path": "v2/data/docking/complex/PIK3CA_E542Q_Buparlisib_complex.pdb",
+      "drug_safe": "Buparlisib",
+      "affinity": -6.848
+    },
+    "Capivasertib": {
+      "path": "v2/data/docking/complex/PIK3CA_E542Q_Capivasertib_complex.pdb",
+      "drug_safe": "Capivasertib",
+      "affinity": -5.981
+    },
+    "Copanlisib": {
+      "path": "v2/data/docking/complex/PIK3CA_E542Q_Copanlisib_complex.pdb",
+      "drug_safe": "Copanlisib",
+      "affinity": -7.557
+    },
+    "Everolimus": {
+      "path": "v2/data/docking/complex/PIK3CA_E542Q_Everolimus_complex.pdb",
+      "drug_safe": "Everolimus",
+      "affinity": -5.389
+    },
+    "Gedatolisib": {
+      "path": "v2/data/docking/complex/PIK3CA_E542Q_Gedatolisib_complex.pdb",
+      "drug_safe": "Gedatolisib",
+      "affinity": -6.126
+    },
+    "Palbociclib": {
+      "path": "v2/data/docking/complex/PIK3CA_E542Q_Palbociclib_complex.pdb",
+      "drug_safe": "Palbociclib",
+      "affinity": -6.511
+    },
+    "Pictilisib": {
+      "path": "v2/data/docking/complex/PIK3CA_E542Q_Pictilisib_complex.pdb",
+      "drug_safe": "Pictilisib",
+      "affinity": -8.296
+    },
+    "Ribociclib": {
+      "path": "v2/data/docking/complex/PIK3CA_E542Q_Ribociclib_complex.pdb",
+      "drug_safe": "Ribociclib",
+      "affinity": -7.625
+    },
+    "Taselisib": {
+      "path": "v2/data/docking/complex/PIK3CA_E542Q_Taselisib_complex.pdb",
+      "drug_safe": "Taselisib",
+      "affinity": -7.144
+    }
+  },
+  "PIK3CA_E545G": {
+    "Abemaciclib": {
+      "path": "v2/data/docking/complex/PIK3CA_E545G_Abemaciclib_complex.pdb",
+      "drug_safe": "Abemaciclib",
+      "affinity": -7.613
+    },
+    "Alpelisib": {
+      "path": "v2/data/docking/complex/PIK3CA_E545G_Alpelisib_complex.pdb",
+      "drug_safe": "Alpelisib",
+      "affinity": -8.712
+    },
+    "Buparlisib": {
+      "path": "v2/data/docking/complex/PIK3CA_E545G_Buparlisib_complex.pdb",
+      "drug_safe": "Buparlisib",
+      "affinity": -7.067
+    },
+    "Capivasertib": {
+      "path": "v2/data/docking/complex/PIK3CA_E545G_Capivasertib_complex.pdb",
+      "drug_safe": "Capivasertib",
+      "affinity": -7.263
+    },
+    "Copanlisib": {
+      "path": "v2/data/docking/complex/PIK3CA_E545G_Copanlisib_complex.pdb",
+      "drug_safe": "Copanlisib",
+      "affinity": -7.384
+    },
+    "Everolimus": {
+      "path": "v2/data/docking/complex/PIK3CA_E545G_Everolimus_complex.pdb",
+      "drug_safe": "Everolimus",
+      "affinity": -6.781
+    },
+    "Gedatolisib": {
+      "path": "v2/data/docking/complex/PIK3CA_E545G_Gedatolisib_complex.pdb",
+      "drug_safe": "Gedatolisib",
+      "affinity": -6.255
+    },
+    "Palbociclib": {
+      "path": "v2/data/docking/complex/PIK3CA_E545G_Palbociclib_complex.pdb",
+      "drug_safe": "Palbociclib",
+      "affinity": -7.805
+    },
+    "Pictilisib": {
+      "path": "v2/data/docking/complex/PIK3CA_E545G_Pictilisib_complex.pdb",
+      "drug_safe": "Pictilisib",
+      "affinity": -9.417
+    },
+    "Ribociclib": {
+      "path": "v2/data/docking/complex/PIK3CA_E545G_Ribociclib_complex.pdb",
+      "drug_safe": "Ribociclib",
+      "affinity": -7.744
+    },
+    "Taselisib": {
+      "path": "v2/data/docking/complex/PIK3CA_E545G_Taselisib_complex.pdb",
+      "drug_safe": "Taselisib",
+      "affinity": -8.978
+    }
+  },
+  "PIK3CA_E545K": {
+    "Abemaciclib": {
+      "path": "v2/data/docking/complex/PIK3CA_E545K_Abemaciclib_complex.pdb",
+      "drug_safe": "Abemaciclib",
+      "affinity": -8.231
+    },
+    "Alpelisib": {
+      "path": "v2/data/docking/complex/PIK3CA_E545K_Alpelisib_complex.pdb",
+      "drug_safe": "Alpelisib",
+      "affinity": -8.636
+    },
+    "Buparlisib": {
+      "path": "v2/data/docking/complex/PIK3CA_E545K_Buparlisib_complex.pdb",
+      "drug_safe": "Buparlisib",
+      "affinity": -6.688
+    },
+    "Capivasertib": {
+      "path": "v2/data/docking/complex/PIK3CA_E545K_Capivasertib_complex.pdb",
+      "drug_safe": "Capivasertib",
+      "affinity": -8.262
+    },
+    "Copanlisib": {
+      "path": "v2/data/docking/complex/PIK3CA_E545K_Copanlisib_complex.pdb",
+      "drug_safe": "Copanlisib",
+      "affinity": -8.098
+    },
+    "Everolimus": {
+      "path": "v2/data/docking/complex/PIK3CA_E545K_Everolimus_complex.pdb",
+      "drug_safe": "Everolimus",
+      "affinity": -6.913
+    },
+    "Gedatolisib": {
+      "path": "v2/data/docking/complex/PIK3CA_E545K_Gedatolisib_complex.pdb",
+      "drug_safe": "Gedatolisib",
+      "affinity": -6.379
+    },
+    "Palbociclib": {
+      "path": "v2/data/docking/complex/PIK3CA_E545K_Palbociclib_complex.pdb",
+      "drug_safe": "Palbociclib",
+      "affinity": -7.923
+    },
+    "Pictilisib": {
+      "path": "v2/data/docking/complex/PIK3CA_E545K_Pictilisib_complex.pdb",
+      "drug_safe": "Pictilisib",
+      "affinity": -9.225
+    },
+    "Ribociclib": {
+      "path": "v2/data/docking/complex/PIK3CA_E545K_Ribociclib_complex.pdb",
+      "drug_safe": "Ribociclib",
+      "affinity": -8.252
+    },
+    "Taselisib": {
+      "path": "v2/data/docking/complex/PIK3CA_E545K_Taselisib_complex.pdb",
+      "drug_safe": "Taselisib",
+      "affinity": -8.419
+    }
+  },
+  "PIK3CA_H1047L": {
+    "Abemaciclib": {
+      "path": "v2/data/docking/complex/PIK3CA_H1047L_Abemaciclib_complex.pdb",
+      "drug_safe": "Abemaciclib",
+      "affinity": -6.607
+    },
+    "Alpelisib": {
+      "path": "v2/data/docking/complex/PIK3CA_H1047L_Alpelisib_complex.pdb",
+      "drug_safe": "Alpelisib",
+      "affinity": -7.461
+    },
+    "Buparlisib": {
+      "path": "v2/data/docking/complex/PIK3CA_H1047L_Buparlisib_complex.pdb",
+      "drug_safe": "Buparlisib",
+      "affinity": -5.116
+    },
+    "Capivasertib": {
+      "path": "v2/data/docking/complex/PIK3CA_H1047L_Capivasertib_complex.pdb",
+      "drug_safe": "Capivasertib",
+      "affinity": -6.611
+    },
+    "Copanlisib": {
+      "path": "v2/data/docking/complex/PIK3CA_H1047L_Copanlisib_complex.pdb",
+      "drug_safe": "Copanlisib",
+      "affinity": -7.376
+    },
+    "Everolimus": {
+      "path": "v2/data/docking/complex/PIK3CA_H1047L_Everolimus_complex.pdb",
+      "drug_safe": "Everolimus",
+      "affinity": -5.906
+    },
+    "Gedatolisib": {
+      "path": "v2/data/docking/complex/PIK3CA_H1047L_Gedatolisib_complex.pdb",
+      "drug_safe": "Gedatolisib",
+      "affinity": -6.294
+    },
+    "Palbociclib": {
+      "path": "v2/data/docking/complex/PIK3CA_H1047L_Palbociclib_complex.pdb",
+      "drug_safe": "Palbociclib",
+      "affinity": -6.502
+    },
+    "Pictilisib": {
+      "path": "v2/data/docking/complex/PIK3CA_H1047L_Pictilisib_complex.pdb",
+      "drug_safe": "Pictilisib",
+      "affinity": -7.772
+    },
+    "Ribociclib": {
+      "path": "v2/data/docking/complex/PIK3CA_H1047L_Ribociclib_complex.pdb",
+      "drug_safe": "Ribociclib",
+      "affinity": -6.518
+    },
+    "Taselisib": {
+      "path": "v2/data/docking/complex/PIK3CA_H1047L_Taselisib_complex.pdb",
+      "drug_safe": "Taselisib",
+      "affinity": -6.813
+    }
+  },
+  "PIK3CA_H1047R": {
+    "Abemaciclib": {
+      "path": "v2/data/docking/complex/PIK3CA_H1047R_Abemaciclib_complex.pdb",
+      "drug_safe": "Abemaciclib",
+      "affinity": -6.707
+    },
+    "Alpelisib": {
+      "path": "v2/data/docking/complex/PIK3CA_H1047R_Alpelisib_complex.pdb",
+      "drug_safe": "Alpelisib",
+      "affinity": -7.725
+    },
+    "Buparlisib": {
+      "path": "v2/data/docking/complex/PIK3CA_H1047R_Buparlisib_complex.pdb",
+      "drug_safe": "Buparlisib",
+      "affinity": -6.289
+    },
+    "Capivasertib": {
+      "path": "v2/data/docking/complex/PIK3CA_H1047R_Capivasertib_complex.pdb",
+      "drug_safe": "Capivasertib",
+      "affinity": -6.324
+    },
+    "Copanlisib": {
+      "path": "v2/data/docking/complex/PIK3CA_H1047R_Copanlisib_complex.pdb",
+      "drug_safe": "Copanlisib",
+      "affinity": -7.363
+    },
+    "Everolimus": {
+      "path": "v2/data/docking/complex/PIK3CA_H1047R_Everolimus_complex.pdb",
+      "drug_safe": "Everolimus",
+      "affinity": -5.901
+    },
+    "Gedatolisib": {
+      "path": "v2/data/docking/complex/PIK3CA_H1047R_Gedatolisib_complex.pdb",
+      "drug_safe": "Gedatolisib",
+      "affinity": -5.46
+    },
+    "Palbociclib": {
+      "path": "v2/data/docking/complex/PIK3CA_H1047R_Palbociclib_complex.pdb",
+      "drug_safe": "Palbociclib",
+      "affinity": -7.378
+    },
+    "Pictilisib": {
+      "path": "v2/data/docking/complex/PIK3CA_H1047R_Pictilisib_complex.pdb",
+      "drug_safe": "Pictilisib",
+      "affinity": -7.732
+    },
+    "Ribociclib": {
+      "path": "v2/data/docking/complex/PIK3CA_H1047R_Ribociclib_complex.pdb",
+      "drug_safe": "Ribociclib",
+      "affinity": -6.411
+    },
+    "Taselisib": {
+      "path": "v2/data/docking/complex/PIK3CA_H1047R_Taselisib_complex.pdb",
+      "drug_safe": "Taselisib",
+      "affinity": -7.164
+    }
+  },
+  "PIK3CA_H1047Y": {
+    "Abemaciclib": {
+      "path": "v2/data/docking/complex/PIK3CA_H1047Y_Abemaciclib_complex.pdb",
+      "drug_safe": "Abemaciclib",
+      "affinity": -6.652
+    },
+    "Alpelisib": {
+      "path": "v2/data/docking/complex/PIK3CA_H1047Y_Alpelisib_complex.pdb",
+      "drug_safe": "Alpelisib",
+      "affinity": -7.679
+    },
+    "Buparlisib": {
+      "path": "v2/data/docking/complex/PIK3CA_H1047Y_Buparlisib_complex.pdb",
+      "drug_safe": "Buparlisib",
+      "affinity": -4.929
+    },
+    "Capivasertib": {
+      "path": "v2/data/docking/complex/PIK3CA_H1047Y_Capivasertib_complex.pdb",
+      "drug_safe": "Capivasertib",
+      "affinity": -6.17
+    },
+    "Copanlisib": {
+      "path": "v2/data/docking/complex/PIK3CA_H1047Y_Copanlisib_complex.pdb",
+      "drug_safe": "Copanlisib",
+      "affinity": -7.124
+    },
+    "Everolimus": {
+      "path": "v2/data/docking/complex/PIK3CA_H1047Y_Everolimus_complex.pdb",
+      "drug_safe": "Everolimus",
+      "affinity": -5.714
+    },
+    "Gedatolisib": {
+      "path": "v2/data/docking/complex/PIK3CA_H1047Y_Gedatolisib_complex.pdb",
+      "drug_safe": "Gedatolisib",
+      "affinity": -5.166
+    },
+    "Palbociclib": {
+      "path": "v2/data/docking/complex/PIK3CA_H1047Y_Palbociclib_complex.pdb",
+      "drug_safe": "Palbociclib",
+      "affinity": -6.898
+    },
+    "Pictilisib": {
+      "path": "v2/data/docking/complex/PIK3CA_H1047Y_Pictilisib_complex.pdb",
+      "drug_safe": "Pictilisib",
+      "affinity": -7.8
+    },
+    "Ribociclib": {
+      "path": "v2/data/docking/complex/PIK3CA_H1047Y_Ribociclib_complex.pdb",
+      "drug_safe": "Ribociclib",
+      "affinity": -6.742
+    },
+    "Taselisib": {
+      "path": "v2/data/docking/complex/PIK3CA_H1047Y_Taselisib_complex.pdb",
+      "drug_safe": "Taselisib",
+      "affinity": -6.903
+    }
+  },
+  "PIK3CA_M1004I": {
+    "Abemaciclib": {
+      "path": "v2/data/docking/complex/PIK3CA_M1004I_Abemaciclib_complex.pdb",
+      "drug_safe": "Abemaciclib",
+      "affinity": -5.966
+    },
+    "Alpelisib": {
+      "path": "v2/data/docking/complex/PIK3CA_M1004I_Alpelisib_complex.pdb",
+      "drug_safe": "Alpelisib",
+      "affinity": -6.858
+    },
+    "Buparlisib": {
+      "path": "v2/data/docking/complex/PIK3CA_M1004I_Buparlisib_complex.pdb",
+      "drug_safe": "Buparlisib",
+      "affinity": -8.67
+    },
+    "Capivasertib": {
+      "path": "v2/data/docking/complex/PIK3CA_M1004I_Capivasertib_complex.pdb",
+      "drug_safe": "Capivasertib",
+      "affinity": -7.035
+    },
+    "Copanlisib": {
+      "path": "v2/data/docking/complex/PIK3CA_M1004I_Copanlisib_complex.pdb",
+      "drug_safe": "Copanlisib",
+      "affinity": -7.647
+    },
+    "Everolimus": {
+      "path": "v2/data/docking/complex/PIK3CA_M1004I_Everolimus_complex.pdb",
+      "drug_safe": "Everolimus",
+      "affinity": -5.863
+    },
+    "Gedatolisib": {
+      "path": "v2/data/docking/complex/PIK3CA_M1004I_Gedatolisib_complex.pdb",
+      "drug_safe": "Gedatolisib",
+      "affinity": -5.714
+    },
+    "Palbociclib": {
+      "path": "v2/data/docking/complex/PIK3CA_M1004I_Palbociclib_complex.pdb",
+      "drug_safe": "Palbociclib",
+      "affinity": -2.293
+    },
+    "Pictilisib": {
+      "path": "v2/data/docking/complex/PIK3CA_M1004I_Pictilisib_complex.pdb",
+      "drug_safe": "Pictilisib",
+      "affinity": -8.226
+    },
+    "Ribociclib": {
+      "path": "v2/data/docking/complex/PIK3CA_M1004I_Ribociclib_complex.pdb",
+      "drug_safe": "Ribociclib",
+      "affinity": -6.828
+    },
+    "Taselisib": {
+      "path": "v2/data/docking/complex/PIK3CA_M1004I_Taselisib_complex.pdb",
+      "drug_safe": "Taselisib",
+      "affinity": -7.488
+    }
+  },
+  "PTEN_D297H": {
+    "Abemaciclib": {
+      "path": "v2/data/docking/complex/PTEN_D297H_Abemaciclib_complex.pdb",
+      "drug_safe": "Abemaciclib",
+      "affinity": -8.344
+    },
+    "Alpelisib": {
+      "path": "v2/data/docking/complex/PTEN_D297H_Alpelisib_complex.pdb",
+      "drug_safe": "Alpelisib",
+      "affinity": -9.077
+    },
+    "Buparlisib": {
+      "path": "v2/data/docking/complex/PTEN_D297H_Buparlisib_complex.pdb",
+      "drug_safe": "Buparlisib",
+      "affinity": -6.777
+    },
+    "Capivasertib": {
+      "path": "v2/data/docking/complex/PTEN_D297H_Capivasertib_complex.pdb",
+      "drug_safe": "Capivasertib",
+      "affinity": -7.577
+    },
+    "Copanlisib": {
+      "path": "v2/data/docking/complex/PTEN_D297H_Copanlisib_complex.pdb",
+      "drug_safe": "Copanlisib",
+      "affinity": -8.791
+    },
+    "Everolimus": {
+      "path": "v2/data/docking/complex/PTEN_D297H_Everolimus_complex.pdb",
+      "drug_safe": "Everolimus",
+      "affinity": -6.969
+    },
+    "Gedatolisib": {
+      "path": "v2/data/docking/complex/PTEN_D297H_Gedatolisib_complex.pdb",
+      "drug_safe": "Gedatolisib",
+      "affinity": -5.286
+    },
+    "Palbociclib": {
+      "path": "v2/data/docking/complex/PTEN_D297H_Palbociclib_complex.pdb",
+      "drug_safe": "Palbociclib",
+      "affinity": -9.283
+    },
+    "Pictilisib": {
+      "path": "v2/data/docking/complex/PTEN_D297H_Pictilisib_complex.pdb",
+      "drug_safe": "Pictilisib",
+      "affinity": -9.455
+    },
+    "Ribociclib": {
+      "path": "v2/data/docking/complex/PTEN_D297H_Ribociclib_complex.pdb",
+      "drug_safe": "Ribociclib",
+      "affinity": -7.43
+    },
+    "Taselisib": {
+      "path": "v2/data/docking/complex/PTEN_D297H_Taselisib_complex.pdb",
+      "drug_safe": "Taselisib",
+      "affinity": -8.62
+    }
+  },
+  "PTEN_I28F": {
+    "Abemaciclib": {
+      "path": "v2/data/docking/complex/PTEN_I28F_Abemaciclib_complex.pdb",
+      "drug_safe": "Abemaciclib",
+      "affinity": -6.031
+    },
+    "Alpelisib": {
+      "path": "v2/data/docking/complex/PTEN_I28F_Alpelisib_complex.pdb",
+      "drug_safe": "Alpelisib",
+      "affinity": -6.008
+    },
+    "Buparlisib": {
+      "path": "v2/data/docking/complex/PTEN_I28F_Buparlisib_complex.pdb",
+      "drug_safe": "Buparlisib",
+      "affinity": -5.393
+    },
+    "Capivasertib": {
+      "path": "v2/data/docking/complex/PTEN_I28F_Capivasertib_complex.pdb",
+      "drug_safe": "Capivasertib",
+      "affinity": -6.168
+    },
+    "Copanlisib": {
+      "path": "v2/data/docking/complex/PTEN_I28F_Copanlisib_complex.pdb",
+      "drug_safe": "Copanlisib",
+      "affinity": -6.81
+    },
+    "Everolimus": {
+      "path": "v2/data/docking/complex/PTEN_I28F_Everolimus_complex.pdb",
+      "drug_safe": "Everolimus",
+      "affinity": -4.721
+    },
+    "Gedatolisib": {
+      "path": "v2/data/docking/complex/PTEN_I28F_Gedatolisib_complex.pdb",
+      "drug_safe": "Gedatolisib",
+      "affinity": -4.143
+    },
+    "Palbociclib": {
+      "path": "v2/data/docking/complex/PTEN_I28F_Palbociclib_complex.pdb",
+      "drug_safe": "Palbociclib",
+      "affinity": null
+    },
+    "Pictilisib": {
+      "path": "v2/data/docking/complex/PTEN_I28F_Pictilisib_complex.pdb",
+      "drug_safe": "Pictilisib",
+      "affinity": -6.027
+    },
+    "Ribociclib": {
+      "path": "v2/data/docking/complex/PTEN_I28F_Ribociclib_complex.pdb",
+      "drug_safe": "Ribociclib",
+      "affinity": -6.408
+    },
+    "Taselisib": {
+      "path": "v2/data/docking/complex/PTEN_I28F_Taselisib_complex.pdb",
+      "drug_safe": "Taselisib",
+      "affinity": -5.327
+    }
+  },
+  "PTEN_R159S": {
+    "Abemaciclib": {
+      "path": "v2/data/docking/complex/PTEN_R159S_Abemaciclib_complex.pdb",
+      "drug_safe": "Abemaciclib",
+      "affinity": -7.608
+    },
+    "Alpelisib": {
+      "path": "v2/data/docking/complex/PTEN_R159S_Alpelisib_complex.pdb",
+      "drug_safe": "Alpelisib",
+      "affinity": -8.142
+    },
+    "Buparlisib": {
+      "path": "v2/data/docking/complex/PTEN_R159S_Buparlisib_complex.pdb",
+      "drug_safe": "Buparlisib",
+      "affinity": -6.338
+    },
+    "Capivasertib": {
+      "path": "v2/data/docking/complex/PTEN_R159S_Capivasertib_complex.pdb",
+      "drug_safe": "Capivasertib",
+      "affinity": -6.713
+    },
+    "Copanlisib": {
+      "path": "v2/data/docking/complex/PTEN_R159S_Copanlisib_complex.pdb",
+      "drug_safe": "Copanlisib",
+      "affinity": -6.994
+    },
+    "Everolimus": {
+      "path": "v2/data/docking/complex/PTEN_R159S_Everolimus_complex.pdb",
+      "drug_safe": "Everolimus",
+      "affinity": -6.105
+    },
+    "Gedatolisib": {
+      "path": "v2/data/docking/complex/PTEN_R159S_Gedatolisib_complex.pdb",
+      "drug_safe": "Gedatolisib",
+      "affinity": -5.25
+    },
+    "Palbociclib": {
+      "path": "v2/data/docking/complex/PTEN_R159S_Palbociclib_complex.pdb",
+      "drug_safe": "Palbociclib",
+      "affinity": -7.836
+    },
+    "Pictilisib": {
+      "path": "v2/data/docking/complex/PTEN_R159S_Pictilisib_complex.pdb",
+      "drug_safe": "Pictilisib",
+      "affinity": -8.683
+    },
+    "Ribociclib": {
+      "path": "v2/data/docking/complex/PTEN_R159S_Ribociclib_complex.pdb",
+      "drug_safe": "Ribociclib",
+      "affinity": -6.595
+    },
+    "Taselisib": {
+      "path": "v2/data/docking/complex/PTEN_R159S_Taselisib_complex.pdb",
+      "drug_safe": "Taselisib",
+      "affinity": -7.457
+    }
+  },
+  "PTEN_R173H": {
+    "Abemaciclib": {
+      "path": "v2/data/docking/complex/PTEN_R173H_Abemaciclib_complex.pdb",
+      "drug_safe": "Abemaciclib",
+      "affinity": -7.01
+    },
+    "Alpelisib": {
+      "path": "v2/data/docking/complex/PTEN_R173H_Alpelisib_complex.pdb",
+      "drug_safe": "Alpelisib",
+      "affinity": -7.953
+    },
+    "Buparlisib": {
+      "path": "v2/data/docking/complex/PTEN_R173H_Buparlisib_complex.pdb",
+      "drug_safe": "Buparlisib",
+      "affinity": -5.333
+    },
+    "Capivasertib": {
+      "path": "v2/data/docking/complex/PTEN_R173H_Capivasertib_complex.pdb",
+      "drug_safe": "Capivasertib",
+      "affinity": -6.331
+    },
+    "Copanlisib": {
+      "path": "v2/data/docking/complex/PTEN_R173H_Copanlisib_complex.pdb",
+      "drug_safe": "Copanlisib",
+      "affinity": -6.07
+    },
+    "Everolimus": {
+      "path": "v2/data/docking/complex/PTEN_R173H_Everolimus_complex.pdb",
+      "drug_safe": "Everolimus",
+      "affinity": -5.446
+    },
+    "Gedatolisib": {
+      "path": "v2/data/docking/complex/PTEN_R173H_Gedatolisib_complex.pdb",
+      "drug_safe": "Gedatolisib",
+      "affinity": -4.672
+    },
+    "Palbociclib": {
+      "path": "v2/data/docking/complex/PTEN_R173H_Palbociclib_complex.pdb",
+      "drug_safe": "Palbociclib",
+      "affinity": -7.051
+    },
+    "Pictilisib": {
+      "path": "v2/data/docking/complex/PTEN_R173H_Pictilisib_complex.pdb",
+      "drug_safe": "Pictilisib",
+      "affinity": -7.763
+    },
+    "Ribociclib": {
+      "path": "v2/data/docking/complex/PTEN_R173H_Ribociclib_complex.pdb",
+      "drug_safe": "Ribociclib",
+      "affinity": -5.885
+    },
+    "Taselisib": {
+      "path": "v2/data/docking/complex/PTEN_R173H_Taselisib_complex.pdb",
+      "drug_safe": "Taselisib",
+      "affinity": -7.079
+    }
+  },
+  "TP53_C135F": {
+    "Abemaciclib": {
+      "path": "v2/data/docking/complex/TP53_C135F_Abemaciclib_complex.pdb",
+      "drug_safe": "Abemaciclib",
+      "affinity": -6.788
+    },
+    "Alpelisib": {
+      "path": "v2/data/docking/complex/TP53_C135F_Alpelisib_complex.pdb",
+      "drug_safe": "Alpelisib",
+      "affinity": -6.963
+    },
+    "Buparlisib": {
+      "path": "v2/data/docking/complex/TP53_C135F_Buparlisib_complex.pdb",
+      "drug_safe": "Buparlisib",
+      "affinity": -4.68
+    },
+    "Capivasertib": {
+      "path": "v2/data/docking/complex/TP53_C135F_Capivasertib_complex.pdb",
+      "drug_safe": "Capivasertib",
+      "affinity": -5.24
+    },
+    "Copanlisib": {
+      "path": "v2/data/docking/complex/TP53_C135F_Copanlisib_complex.pdb",
+      "drug_safe": "Copanlisib",
+      "affinity": -6.261
+    },
+    "Everolimus": {
+      "path": "v2/data/docking/complex/TP53_C135F_Everolimus_complex.pdb",
+      "drug_safe": "Everolimus",
+      "affinity": -5.347
+    },
+    "Gedatolisib": {
+      "path": "v2/data/docking/complex/TP53_C135F_Gedatolisib_complex.pdb",
+      "drug_safe": "Gedatolisib",
+      "affinity": -5.652
+    },
+    "Palbociclib": {
+      "path": "v2/data/docking/complex/TP53_C135F_Palbociclib_complex.pdb",
+      "drug_safe": "Palbociclib",
+      "affinity": -6.29
+    },
+    "Pictilisib": {
+      "path": "v2/data/docking/complex/TP53_C135F_Pictilisib_complex.pdb",
+      "drug_safe": "Pictilisib",
+      "affinity": -7.244
+    },
+    "Ribociclib": {
+      "path": "v2/data/docking/complex/TP53_C135F_Ribociclib_complex.pdb",
+      "drug_safe": "Ribociclib",
+      "affinity": -6.103
+    },
+    "Taselisib": {
+      "path": "v2/data/docking/complex/TP53_C135F_Taselisib_complex.pdb",
+      "drug_safe": "Taselisib",
+      "affinity": -6.08
+    }
+  },
+  "TP53_C141Y": {
+    "Abemaciclib": {
+      "path": "v2/data/docking/complex/TP53_C141Y_Abemaciclib_complex.pdb",
+      "drug_safe": "Abemaciclib",
+      "affinity": -7.333
+    },
+    "Alpelisib": {
+      "path": "v2/data/docking/complex/TP53_C141Y_Alpelisib_complex.pdb",
+      "drug_safe": "Alpelisib",
+      "affinity": -7.424
+    },
+    "Buparlisib": {
+      "path": "v2/data/docking/complex/TP53_C141Y_Buparlisib_complex.pdb",
+      "drug_safe": "Buparlisib",
+      "affinity": -5.248
+    },
+    "Capivasertib": {
+      "path": "v2/data/docking/complex/TP53_C141Y_Capivasertib_complex.pdb",
+      "drug_safe": "Capivasertib",
+      "affinity": -5.542
+    },
+    "Copanlisib": {
+      "path": "v2/data/docking/complex/TP53_C141Y_Copanlisib_complex.pdb",
+      "drug_safe": "Copanlisib",
+      "affinity": -7.19
+    },
+    "Everolimus": {
+      "path": "v2/data/docking/complex/TP53_C141Y_Everolimus_complex.pdb",
+      "drug_safe": "Everolimus",
+      "affinity": -5.318
+    },
+    "Gedatolisib": {
+      "path": "v2/data/docking/complex/TP53_C141Y_Gedatolisib_complex.pdb",
+      "drug_safe": "Gedatolisib",
+      "affinity": -5.133
+    },
+    "Palbociclib": {
+      "path": "v2/data/docking/complex/TP53_C141Y_Palbociclib_complex.pdb",
+      "drug_safe": "Palbociclib",
+      "affinity": -8.146
+    },
+    "Pictilisib": {
+      "path": "v2/data/docking/complex/TP53_C141Y_Pictilisib_complex.pdb",
+      "drug_safe": "Pictilisib",
+      "affinity": -6.952
+    },
+    "Ribociclib": {
+      "path": "v2/data/docking/complex/TP53_C141Y_Ribociclib_complex.pdb",
+      "drug_safe": "Ribociclib",
+      "affinity": -6.045
+    },
+    "Taselisib": {
+      "path": "v2/data/docking/complex/TP53_C141Y_Taselisib_complex.pdb",
+      "drug_safe": "Taselisib",
+      "affinity": -6.894
+    }
+  },
+  "TP53_C176S": {
+    "Abemaciclib": {
+      "path": "v2/data/docking/complex/TP53_C176S_Abemaciclib_complex.pdb",
+      "drug_safe": "Abemaciclib",
+      "affinity": -6.775
+    },
+    "Alpelisib": {
+      "path": "v2/data/docking/complex/TP53_C176S_Alpelisib_complex.pdb",
+      "drug_safe": "Alpelisib",
+      "affinity": -6.298
+    },
+    "Buparlisib": {
+      "path": "v2/data/docking/complex/TP53_C176S_Buparlisib_complex.pdb",
+      "drug_safe": "Buparlisib",
+      "affinity": -4.455
+    },
+    "Capivasertib": {
+      "path": "v2/data/docking/complex/TP53_C176S_Capivasertib_complex.pdb",
+      "drug_safe": "Capivasertib",
+      "affinity": -6.262
+    },
+    "Copanlisib": {
+      "path": "v2/data/docking/complex/TP53_C176S_Copanlisib_complex.pdb",
+      "drug_safe": "Copanlisib",
+      "affinity": -5.48
+    },
+    "Everolimus": {
+      "path": "v2/data/docking/complex/TP53_C176S_Everolimus_complex.pdb",
+      "drug_safe": "Everolimus",
+      "affinity": -5.397
+    },
+    "Gedatolisib": {
+      "path": "v2/data/docking/complex/TP53_C176S_Gedatolisib_complex.pdb",
+      "drug_safe": "Gedatolisib",
+      "affinity": -4.729
+    },
+    "Palbociclib": {
+      "path": "v2/data/docking/complex/TP53_C176S_Palbociclib_complex.pdb",
+      "drug_safe": "Palbociclib",
+      "affinity": -6.074
+    },
+    "Pictilisib": {
+      "path": "v2/data/docking/complex/TP53_C176S_Pictilisib_complex.pdb",
+      "drug_safe": "Pictilisib",
+      "affinity": -6.718
+    },
+    "Ribociclib": {
+      "path": "v2/data/docking/complex/TP53_C176S_Ribociclib_complex.pdb",
+      "drug_safe": "Ribociclib",
+      "affinity": -6.027
+    },
+    "Taselisib": {
+      "path": "v2/data/docking/complex/TP53_C176S_Taselisib_complex.pdb",
+      "drug_safe": "Taselisib",
+      "affinity": -6.23
+    }
+  },
+  "TP53_D57N": {
+    "Abemaciclib": {
+      "path": "v2/data/docking/complex/TP53_D57N_Abemaciclib_complex.pdb",
+      "drug_safe": "Abemaciclib",
+      "affinity": -9.261
+    },
+    "Alpelisib": {
+      "path": "v2/data/docking/complex/TP53_D57N_Alpelisib_complex.pdb",
+      "drug_safe": "Alpelisib",
+      "affinity": -9.549
+    },
+    "Buparlisib": {
+      "path": "v2/data/docking/complex/TP53_D57N_Buparlisib_complex.pdb",
+      "drug_safe": "Buparlisib",
+      "affinity": -7.732
+    },
+    "Capivasertib": {
+      "path": "v2/data/docking/complex/TP53_D57N_Capivasertib_complex.pdb",
+      "drug_safe": "Capivasertib",
+      "affinity": -8.089
+    },
+    "Copanlisib": {
+      "path": "v2/data/docking/complex/TP53_D57N_Copanlisib_complex.pdb",
+      "drug_safe": "Copanlisib",
+      "affinity": -8.213
+    },
+    "Everolimus": {
+      "path": "v2/data/docking/complex/TP53_D57N_Everolimus_complex.pdb",
+      "drug_safe": "Everolimus",
+      "affinity": -6.989
+    },
+    "Gedatolisib": {
+      "path": "v2/data/docking/complex/TP53_D57N_Gedatolisib_complex.pdb",
+      "drug_safe": "Gedatolisib",
+      "affinity": -5.287
+    },
+    "Palbociclib": {
+      "path": "v2/data/docking/complex/TP53_D57N_Palbociclib_complex.pdb",
+      "drug_safe": "Palbociclib",
+      "affinity": -9.082
+    },
+    "Pictilisib": {
+      "path": "v2/data/docking/complex/TP53_D57N_Pictilisib_complex.pdb",
+      "drug_safe": "Pictilisib",
+      "affinity": -10.2
+    },
+    "Ribociclib": {
+      "path": "v2/data/docking/complex/TP53_D57N_Ribociclib_complex.pdb",
+      "drug_safe": "Ribociclib",
+      "affinity": -8.487
+    },
+    "Taselisib": {
+      "path": "v2/data/docking/complex/TP53_D57N_Taselisib_complex.pdb",
+      "drug_safe": "Taselisib",
+      "affinity": -9.197
+    }
+  },
+  "TP53_E285K": {
+    "Abemaciclib": {
+      "path": "v2/data/docking/complex/TP53_E285K_Abemaciclib_complex.pdb",
+      "drug_safe": "Abemaciclib",
+      "affinity": -6.272
+    },
+    "Alpelisib": {
+      "path": "v2/data/docking/complex/TP53_E285K_Alpelisib_complex.pdb",
+      "drug_safe": "Alpelisib",
+      "affinity": -7.283
+    },
+    "Buparlisib": {
+      "path": "v2/data/docking/complex/TP53_E285K_Buparlisib_complex.pdb",
+      "drug_safe": "Buparlisib",
+      "affinity": -5.654
+    },
+    "Capivasertib": {
+      "path": "v2/data/docking/complex/TP53_E285K_Capivasertib_complex.pdb",
+      "drug_safe": "Capivasertib",
+      "affinity": -5.585
+    },
+    "Copanlisib": {
+      "path": "v2/data/docking/complex/TP53_E285K_Copanlisib_complex.pdb",
+      "drug_safe": "Copanlisib",
+      "affinity": -6.505
+    },
+    "Everolimus": {
+      "path": "v2/data/docking/complex/TP53_E285K_Everolimus_complex.pdb",
+      "drug_safe": "Everolimus",
+      "affinity": -5.492
+    },
+    "Gedatolisib": {
+      "path": "v2/data/docking/complex/TP53_E285K_Gedatolisib_complex.pdb",
+      "drug_safe": "Gedatolisib",
+      "affinity": -4.486
+    },
+    "Palbociclib": {
+      "path": "v2/data/docking/complex/TP53_E285K_Palbociclib_complex.pdb",
+      "drug_safe": "Palbociclib",
+      "affinity": -6.68
+    },
+    "Pictilisib": {
+      "path": "v2/data/docking/complex/TP53_E285K_Pictilisib_complex.pdb",
+      "drug_safe": "Pictilisib",
+      "affinity": -7.134
+    },
+    "Ribociclib": {
+      "path": "v2/data/docking/complex/TP53_E285K_Ribociclib_complex.pdb",
+      "drug_safe": "Ribociclib",
+      "affinity": -5.707
+    },
+    "Taselisib": {
+      "path": "v2/data/docking/complex/TP53_E285K_Taselisib_complex.pdb",
+      "drug_safe": "Taselisib",
+      "affinity": -6.657
+    }
+  },
+  "TP53_G245S": {
+    "Abemaciclib": {
+      "path": "v2/data/docking/complex/TP53_G245S_Abemaciclib_complex.pdb",
+      "drug_safe": "Abemaciclib",
+      "affinity": -7.518
+    },
+    "Alpelisib": {
+      "path": "v2/data/docking/complex/TP53_G245S_Alpelisib_complex.pdb",
+      "drug_safe": "Alpelisib",
+      "affinity": -8.091
+    },
+    "Buparlisib": {
+      "path": "v2/data/docking/complex/TP53_G245S_Buparlisib_complex.pdb",
+      "drug_safe": "Buparlisib",
+      "affinity": -5.555
+    },
+    "Capivasertib": {
+      "path": "v2/data/docking/complex/TP53_G245S_Capivasertib_complex.pdb",
+      "drug_safe": "Capivasertib",
+      "affinity": -7.123
+    },
+    "Copanlisib": {
+      "path": "v2/data/docking/complex/TP53_G245S_Copanlisib_complex.pdb",
+      "drug_safe": "Copanlisib",
+      "affinity": -6.193
+    },
+    "Everolimus": {
+      "path": "v2/data/docking/complex/TP53_G245S_Everolimus_complex.pdb",
+      "drug_safe": "Everolimus",
+      "affinity": -4.596
+    },
+    "Gedatolisib": {
+      "path": "v2/data/docking/complex/TP53_G245S_Gedatolisib_complex.pdb",
+      "drug_safe": "Gedatolisib",
+      "affinity": -4.73
+    },
+    "Palbociclib": {
+      "path": "v2/data/docking/complex/TP53_G245S_Palbociclib_complex.pdb",
+      "drug_safe": "Palbociclib",
+      "affinity": -6.319
+    },
+    "Pictilisib": {
+      "path": "v2/data/docking/complex/TP53_G245S_Pictilisib_complex.pdb",
+      "drug_safe": "Pictilisib",
+      "affinity": -6.835
+    },
+    "Ribociclib": {
+      "path": "v2/data/docking/complex/TP53_G245S_Ribociclib_complex.pdb",
+      "drug_safe": "Ribociclib",
+      "affinity": -5.753
+    },
+    "Taselisib": {
+      "path": "v2/data/docking/complex/TP53_G245S_Taselisib_complex.pdb",
+      "drug_safe": "Taselisib",
+      "affinity": -6.894
+    }
+  },
+  "TP53_G266E": {
+    "Abemaciclib": {
+      "path": "v2/data/docking/complex/TP53_G266E_Abemaciclib_complex.pdb",
+      "drug_safe": "Abemaciclib",
+      "affinity": -7.513
+    },
+    "Alpelisib": {
+      "path": "v2/data/docking/complex/TP53_G266E_Alpelisib_complex.pdb",
+      "drug_safe": "Alpelisib",
+      "affinity": -7.778
+    },
+    "Buparlisib": {
+      "path": "v2/data/docking/complex/TP53_G266E_Buparlisib_complex.pdb",
+      "drug_safe": "Buparlisib",
+      "affinity": -4.475
+    },
+    "Capivasertib": {
+      "path": "v2/data/docking/complex/TP53_G266E_Capivasertib_complex.pdb",
+      "drug_safe": "Capivasertib",
+      "affinity": -7.168
+    },
+    "Copanlisib": {
+      "path": "v2/data/docking/complex/TP53_G266E_Copanlisib_complex.pdb",
+      "drug_safe": "Copanlisib",
+      "affinity": -6.336
+    },
+    "Everolimus": {
+      "path": "v2/data/docking/complex/TP53_G266E_Everolimus_complex.pdb",
+      "drug_safe": "Everolimus",
+      "affinity": -4.9
+    },
+    "Gedatolisib": {
+      "path": "v2/data/docking/complex/TP53_G266E_Gedatolisib_complex.pdb",
+      "drug_safe": "Gedatolisib",
+      "affinity": -4.833
+    },
+    "Palbociclib": {
+      "path": "v2/data/docking/complex/TP53_G266E_Palbociclib_complex.pdb",
+      "drug_safe": "Palbociclib",
+      "affinity": -6.258
+    },
+    "Pictilisib": {
+      "path": "v2/data/docking/complex/TP53_G266E_Pictilisib_complex.pdb",
+      "drug_safe": "Pictilisib",
+      "affinity": -6.981
+    },
+    "Ribociclib": {
+      "path": "v2/data/docking/complex/TP53_G266E_Ribociclib_complex.pdb",
+      "drug_safe": "Ribociclib",
+      "affinity": -5.804
+    },
+    "Taselisib": {
+      "path": "v2/data/docking/complex/TP53_G266E_Taselisib_complex.pdb",
+      "drug_safe": "Taselisib",
+      "affinity": -6.897
+    }
+  },
+  "TP53_H179Y": {
+    "Abemaciclib": {
+      "path": "v2/data/docking/complex/TP53_H179Y_Abemaciclib_complex.pdb",
+      "drug_safe": "Abemaciclib",
+      "affinity": -6.583
+    },
+    "Alpelisib": {
+      "path": "v2/data/docking/complex/TP53_H179Y_Alpelisib_complex.pdb",
+      "drug_safe": "Alpelisib",
+      "affinity": -7.009
+    },
+    "Buparlisib": {
+      "path": "v2/data/docking/complex/TP53_H179Y_Buparlisib_complex.pdb",
+      "drug_safe": "Buparlisib",
+      "affinity": -5.236
+    },
+    "Capivasertib": {
+      "path": "v2/data/docking/complex/TP53_H179Y_Capivasertib_complex.pdb",
+      "drug_safe": "Capivasertib",
+      "affinity": -6.291
+    },
+    "Copanlisib": {
+      "path": "v2/data/docking/complex/TP53_H179Y_Copanlisib_complex.pdb",
+      "drug_safe": "Copanlisib",
+      "affinity": -6.141
+    },
+    "Everolimus": {
+      "path": "v2/data/docking/complex/TP53_H179Y_Everolimus_complex.pdb",
+      "drug_safe": "Everolimus",
+      "affinity": -5.145
+    },
+    "Gedatolisib": {
+      "path": "v2/data/docking/complex/TP53_H179Y_Gedatolisib_complex.pdb",
+      "drug_safe": "Gedatolisib",
+      "affinity": -4.662
+    },
+    "Palbociclib": {
+      "path": "v2/data/docking/complex/TP53_H179Y_Palbociclib_complex.pdb",
+      "drug_safe": "Palbociclib",
+      "affinity": -5.986
+    },
+    "Pictilisib": {
+      "path": "v2/data/docking/complex/TP53_H179Y_Pictilisib_complex.pdb",
+      "drug_safe": "Pictilisib",
+      "affinity": -6.721
+    },
+    "Ribociclib": {
+      "path": "v2/data/docking/complex/TP53_H179Y_Ribociclib_complex.pdb",
+      "drug_safe": "Ribociclib",
+      "affinity": -6.198
+    },
+    "Taselisib": {
+      "path": "v2/data/docking/complex/TP53_H179Y_Taselisib_complex.pdb",
+      "drug_safe": "Taselisib",
+      "affinity": -6.459
+    }
+  },
+  "TP53_I195T": {
+    "Abemaciclib": {
+      "path": "v2/data/docking/complex/TP53_I195T_Abemaciclib_complex.pdb",
+      "drug_safe": "Abemaciclib",
+      "affinity": -6.844
+    },
+    "Alpelisib": {
+      "path": "v2/data/docking/complex/TP53_I195T_Alpelisib_complex.pdb",
+      "drug_safe": "Alpelisib",
+      "affinity": -6.375
+    },
+    "Buparlisib": {
+      "path": "v2/data/docking/complex/TP53_I195T_Buparlisib_complex.pdb",
+      "drug_safe": "Buparlisib",
+      "affinity": -4.952
+    },
+    "Capivasertib": {
+      "path": "v2/data/docking/complex/TP53_I195T_Capivasertib_complex.pdb",
+      "drug_safe": "Capivasertib",
+      "affinity": -6.446
+    },
+    "Copanlisib": {
+      "path": "v2/data/docking/complex/TP53_I195T_Copanlisib_complex.pdb",
+      "drug_safe": "Copanlisib",
+      "affinity": -5.765
+    },
+    "Everolimus": {
+      "path": "v2/data/docking/complex/TP53_I195T_Everolimus_complex.pdb",
+      "drug_safe": "Everolimus",
+      "affinity": -4.673
+    },
+    "Gedatolisib": {
+      "path": "v2/data/docking/complex/TP53_I195T_Gedatolisib_complex.pdb",
+      "drug_safe": "Gedatolisib",
+      "affinity": -4.77
+    },
+    "Palbociclib": {
+      "path": "v2/data/docking/complex/TP53_I195T_Palbociclib_complex.pdb",
+      "drug_safe": "Palbociclib",
+      "affinity": -6.072
+    },
+    "Pictilisib": {
+      "path": "v2/data/docking/complex/TP53_I195T_Pictilisib_complex.pdb",
+      "drug_safe": "Pictilisib",
+      "affinity": -6.868
+    },
+    "Ribociclib": {
+      "path": "v2/data/docking/complex/TP53_I195T_Ribociclib_complex.pdb",
+      "drug_safe": "Ribociclib",
+      "affinity": -6.21
+    },
+    "Taselisib": {
+      "path": "v2/data/docking/complex/TP53_I195T_Taselisib_complex.pdb",
+      "drug_safe": "Taselisib",
+      "affinity": -6.054
+    }
+  },
+  "TP53_L194H": {
+    "Abemaciclib": {
+      "path": "v2/data/docking/complex/TP53_L194H_Abemaciclib_complex.pdb",
+      "drug_safe": "Abemaciclib",
+      "affinity": -6.914
+    },
+    "Alpelisib": {
+      "path": "v2/data/docking/complex/TP53_L194H_Alpelisib_complex.pdb",
+      "drug_safe": "Alpelisib",
+      "affinity": -6.329
+    },
+    "Buparlisib": {
+      "path": "v2/data/docking/complex/TP53_L194H_Buparlisib_complex.pdb",
+      "drug_safe": "Buparlisib",
+      "affinity": -5.019
+    },
+    "Capivasertib": {
+      "path": "v2/data/docking/complex/TP53_L194H_Capivasertib_complex.pdb",
+      "drug_safe": "Capivasertib",
+      "affinity": -6.323
+    },
+    "Copanlisib": {
+      "path": "v2/data/docking/complex/TP53_L194H_Copanlisib_complex.pdb",
+      "drug_safe": "Copanlisib",
+      "affinity": -6.056
+    },
+    "Everolimus": {
+      "path": "v2/data/docking/complex/TP53_L194H_Everolimus_complex.pdb",
+      "drug_safe": "Everolimus",
+      "affinity": -4.872
+    },
+    "Gedatolisib": {
+      "path": "v2/data/docking/complex/TP53_L194H_Gedatolisib_complex.pdb",
+      "drug_safe": "Gedatolisib",
+      "affinity": -4.444
+    },
+    "Palbociclib": {
+      "path": "v2/data/docking/complex/TP53_L194H_Palbociclib_complex.pdb",
+      "drug_safe": "Palbociclib",
+      "affinity": -5.992
+    },
+    "Pictilisib": {
+      "path": "v2/data/docking/complex/TP53_L194H_Pictilisib_complex.pdb",
+      "drug_safe": "Pictilisib",
+      "affinity": -6.818
+    },
+    "Ribociclib": {
+      "path": "v2/data/docking/complex/TP53_L194H_Ribociclib_complex.pdb",
+      "drug_safe": "Ribociclib",
+      "affinity": -6.103
+    },
+    "Taselisib": {
+      "path": "v2/data/docking/complex/TP53_L194H_Taselisib_complex.pdb",
+      "drug_safe": "Taselisib",
+      "affinity": -6.355
+    }
+  },
+  "TP53_M246V": {
+    "Abemaciclib": {
+      "path": "v2/data/docking/complex/TP53_M246V_Abemaciclib_complex.pdb",
+      "drug_safe": "Abemaciclib",
+      "affinity": -7.086
+    },
+    "Alpelisib": {
+      "path": "v2/data/docking/complex/TP53_M246V_Alpelisib_complex.pdb",
+      "drug_safe": "Alpelisib",
+      "affinity": -7.697
+    },
+    "Buparlisib": {
+      "path": "v2/data/docking/complex/TP53_M246V_Buparlisib_complex.pdb",
+      "drug_safe": "Buparlisib",
+      "affinity": -5.131
+    },
+    "Capivasertib": {
+      "path": "v2/data/docking/complex/TP53_M246V_Capivasertib_complex.pdb",
+      "drug_safe": "Capivasertib",
+      "affinity": -6.059
+    },
+    "Copanlisib": {
+      "path": "v2/data/docking/complex/TP53_M246V_Copanlisib_complex.pdb",
+      "drug_safe": "Copanlisib",
+      "affinity": -5.79
+    },
+    "Everolimus": {
+      "path": "v2/data/docking/complex/TP53_M246V_Everolimus_complex.pdb",
+      "drug_safe": "Everolimus",
+      "affinity": -4.711
+    },
+    "Gedatolisib": {
+      "path": "v2/data/docking/complex/TP53_M246V_Gedatolisib_complex.pdb",
+      "drug_safe": "Gedatolisib",
+      "affinity": -4.77
+    },
+    "Palbociclib": {
+      "path": "v2/data/docking/complex/TP53_M246V_Palbociclib_complex.pdb",
+      "drug_safe": "Palbociclib",
+      "affinity": -6.403
+    },
+    "Pictilisib": {
+      "path": "v2/data/docking/complex/TP53_M246V_Pictilisib_complex.pdb",
+      "drug_safe": "Pictilisib",
+      "affinity": -6.803
+    },
+    "Ribociclib": {
+      "path": "v2/data/docking/complex/TP53_M246V_Ribociclib_complex.pdb",
+      "drug_safe": "Ribociclib",
+      "affinity": -6.184
+    },
+    "Taselisib": {
+      "path": "v2/data/docking/complex/TP53_M246V_Taselisib_complex.pdb",
+      "drug_safe": "Taselisib",
+      "affinity": -6.393
+    }
+  },
+  "TP53_R110L": {
+    "Abemaciclib": {
+      "path": "v2/data/docking/complex/TP53_R110L_Abemaciclib_complex.pdb",
+      "drug_safe": "Abemaciclib",
+      "affinity": -6.772
+    },
+    "Alpelisib": {
+      "path": "v2/data/docking/complex/TP53_R110L_Alpelisib_complex.pdb",
+      "drug_safe": "Alpelisib",
+      "affinity": -6.971
+    },
+    "Buparlisib": {
+      "path": "v2/data/docking/complex/TP53_R110L_Buparlisib_complex.pdb",
+      "drug_safe": "Buparlisib",
+      "affinity": -5.558
+    },
+    "Capivasertib": {
+      "path": "v2/data/docking/complex/TP53_R110L_Capivasertib_complex.pdb",
+      "drug_safe": "Capivasertib",
+      "affinity": -6.18
+    },
+    "Copanlisib": {
+      "path": "v2/data/docking/complex/TP53_R110L_Copanlisib_complex.pdb",
+      "drug_safe": "Copanlisib",
+      "affinity": -6.354
+    },
+    "Everolimus": {
+      "path": "v2/data/docking/complex/TP53_R110L_Everolimus_complex.pdb",
+      "drug_safe": "Everolimus",
+      "affinity": -5.689
+    },
+    "Gedatolisib": {
+      "path": "v2/data/docking/complex/TP53_R110L_Gedatolisib_complex.pdb",
+      "drug_safe": "Gedatolisib",
+      "affinity": -5.698
+    },
+    "Palbociclib": {
+      "path": "v2/data/docking/complex/TP53_R110L_Palbociclib_complex.pdb",
+      "drug_safe": "Palbociclib",
+      "affinity": -6.338
+    },
+    "Pictilisib": {
+      "path": "v2/data/docking/complex/TP53_R110L_Pictilisib_complex.pdb",
+      "drug_safe": "Pictilisib",
+      "affinity": -7.898
+    },
+    "Ribociclib": {
+      "path": "v2/data/docking/complex/TP53_R110L_Ribociclib_complex.pdb",
+      "drug_safe": "Ribociclib",
+      "affinity": -5.666
+    },
+    "Taselisib": {
+      "path": "v2/data/docking/complex/TP53_R110L_Taselisib_complex.pdb",
+      "drug_safe": "Taselisib",
+      "affinity": -7.015
+    }
+  },
+  "TP53_R175H": {
+    "Abemaciclib": {
+      "path": "v2/data/docking/complex/TP53_R175H_Abemaciclib_complex.pdb",
+      "drug_safe": "Abemaciclib",
+      "affinity": -6.875
+    },
+    "Alpelisib": {
+      "path": "v2/data/docking/complex/TP53_R175H_Alpelisib_complex.pdb",
+      "drug_safe": "Alpelisib",
+      "affinity": -6.63
+    },
+    "Buparlisib": {
+      "path": "v2/data/docking/complex/TP53_R175H_Buparlisib_complex.pdb",
+      "drug_safe": "Buparlisib",
+      "affinity": -5.042
+    },
+    "Capivasertib": {
+      "path": "v2/data/docking/complex/TP53_R175H_Capivasertib_complex.pdb",
+      "drug_safe": "Capivasertib",
+      "affinity": -6.373
+    },
+    "Copanlisib": {
+      "path": "v2/data/docking/complex/TP53_R175H_Copanlisib_complex.pdb",
+      "drug_safe": "Copanlisib",
+      "affinity": -6.073
+    },
+    "Everolimus": {
+      "path": "v2/data/docking/complex/TP53_R175H_Everolimus_complex.pdb",
+      "drug_safe": "Everolimus",
+      "affinity": -5.433
+    },
+    "Gedatolisib": {
+      "path": "v2/data/docking/complex/TP53_R175H_Gedatolisib_complex.pdb",
+      "drug_safe": "Gedatolisib",
+      "affinity": -4.722
+    },
+    "Palbociclib": {
+      "path": "v2/data/docking/complex/TP53_R175H_Palbociclib_complex.pdb",
+      "drug_safe": "Palbociclib",
+      "affinity": -6.637
+    },
+    "Pictilisib": {
+      "path": "v2/data/docking/complex/TP53_R175H_Pictilisib_complex.pdb",
+      "drug_safe": "Pictilisib",
+      "affinity": -6.519
+    },
+    "Ribociclib": {
+      "path": "v2/data/docking/complex/TP53_R175H_Ribociclib_complex.pdb",
+      "drug_safe": "Ribociclib",
+      "affinity": -6.462
+    },
+    "Taselisib": {
+      "path": "v2/data/docking/complex/TP53_R175H_Taselisib_complex.pdb",
+      "drug_safe": "Taselisib",
+      "affinity": -5.589
+    }
+  },
+  "TP53_R273C": {
+    "Abemaciclib": {
+      "path": "v2/data/docking/complex/TP53_R273C_Abemaciclib_complex.pdb",
+      "drug_safe": "Abemaciclib",
+      "affinity": -6.155
+    },
+    "Alpelisib": {
+      "path": "v2/data/docking/complex/TP53_R273C_Alpelisib_complex.pdb",
+      "drug_safe": "Alpelisib",
+      "affinity": -6.954
+    },
+    "Buparlisib": {
+      "path": "v2/data/docking/complex/TP53_R273C_Buparlisib_complex.pdb",
+      "drug_safe": "Buparlisib",
+      "affinity": -5.354
+    },
+    "Capivasertib": {
+      "path": "v2/data/docking/complex/TP53_R273C_Capivasertib_complex.pdb",
+      "drug_safe": "Capivasertib",
+      "affinity": -6.018
+    },
+    "Copanlisib": {
+      "path": "v2/data/docking/complex/TP53_R273C_Copanlisib_complex.pdb",
+      "drug_safe": "Copanlisib",
+      "affinity": -6.663
+    },
+    "Everolimus": {
+      "path": "v2/data/docking/complex/TP53_R273C_Everolimus_complex.pdb",
+      "drug_safe": "Everolimus",
+      "affinity": -5.397
+    },
+    "Gedatolisib": {
+      "path": "v2/data/docking/complex/TP53_R273C_Gedatolisib_complex.pdb",
+      "drug_safe": "Gedatolisib",
+      "affinity": -5.245
+    },
+    "Palbociclib": {
+      "path": "v2/data/docking/complex/TP53_R273C_Palbociclib_complex.pdb",
+      "drug_safe": "Palbociclib",
+      "affinity": -6.553
+    },
+    "Pictilisib": {
+      "path": "v2/data/docking/complex/TP53_R273C_Pictilisib_complex.pdb",
+      "drug_safe": "Pictilisib",
+      "affinity": -7.114
+    },
+    "Ribociclib": {
+      "path": "v2/data/docking/complex/TP53_R273C_Ribociclib_complex.pdb",
+      "drug_safe": "Ribociclib",
+      "affinity": -5.855
+    },
+    "Taselisib": {
+      "path": "v2/data/docking/complex/TP53_R273C_Taselisib_complex.pdb",
+      "drug_safe": "Taselisib",
+      "affinity": -5.35
+    }
+  },
+  "TP53_R273H": {
+    "Abemaciclib": {
+      "path": "v2/data/docking/complex/TP53_R273H_Abemaciclib_complex.pdb",
+      "drug_safe": "Abemaciclib",
+      "affinity": -6.235
+    },
+    "Alpelisib": {
+      "path": "v2/data/docking/complex/TP53_R273H_Alpelisib_complex.pdb",
+      "drug_safe": "Alpelisib",
+      "affinity": -6.941
+    },
+    "Buparlisib": {
+      "path": "v2/data/docking/complex/TP53_R273H_Buparlisib_complex.pdb",
+      "drug_safe": "Buparlisib",
+      "affinity": -5.265
+    },
+    "Capivasertib": {
+      "path": "v2/data/docking/complex/TP53_R273H_Capivasertib_complex.pdb",
+      "drug_safe": "Capivasertib",
+      "affinity": -6.441
+    },
+    "Copanlisib": {
+      "path": "v2/data/docking/complex/TP53_R273H_Copanlisib_complex.pdb",
+      "drug_safe": "Copanlisib",
+      "affinity": -7.199
+    },
+    "Everolimus": {
+      "path": "v2/data/docking/complex/TP53_R273H_Everolimus_complex.pdb",
+      "drug_safe": "Everolimus",
+      "affinity": -5.379
+    },
+    "Gedatolisib": {
+      "path": "v2/data/docking/complex/TP53_R273H_Gedatolisib_complex.pdb",
+      "drug_safe": "Gedatolisib",
+      "affinity": -5.485
+    },
+    "Palbociclib": {
+      "path": "v2/data/docking/complex/TP53_R273H_Palbociclib_complex.pdb",
+      "drug_safe": "Palbociclib",
+      "affinity": -6.297
+    },
+    "Pictilisib": {
+      "path": "v2/data/docking/complex/TP53_R273H_Pictilisib_complex.pdb",
+      "drug_safe": "Pictilisib",
+      "affinity": -7.07
+    },
+    "Ribociclib": {
+      "path": "v2/data/docking/complex/TP53_R273H_Ribociclib_complex.pdb",
+      "drug_safe": "Ribociclib",
+      "affinity": -5.91
+    },
+    "Taselisib": {
+      "path": "v2/data/docking/complex/TP53_R273H_Taselisib_complex.pdb",
+      "drug_safe": "Taselisib",
+      "affinity": -5.752
+    }
+  },
+  "TP53_T256P": {
+    "Abemaciclib": {
+      "path": "v2/data/docking/complex/TP53_T256P_Abemaciclib_complex.pdb",
+      "drug_safe": "Abemaciclib",
+      "affinity": -7.486
+    },
+    "Alpelisib": {
+      "path": "v2/data/docking/complex/TP53_T256P_Alpelisib_complex.pdb",
+      "drug_safe": "Alpelisib",
+      "affinity": -7.615
+    },
+    "Buparlisib": {
+      "path": "v2/data/docking/complex/TP53_T256P_Buparlisib_complex.pdb",
+      "drug_safe": "Buparlisib",
+      "affinity": -5.229
+    },
+    "Capivasertib": {
+      "path": "v2/data/docking/complex/TP53_T256P_Capivasertib_complex.pdb",
+      "drug_safe": "Capivasertib",
+      "affinity": -7.11
+    },
+    "Copanlisib": {
+      "path": "v2/data/docking/complex/TP53_T256P_Copanlisib_complex.pdb",
+      "drug_safe": "Copanlisib",
+      "affinity": -6.414
+    },
+    "Everolimus": {
+      "path": "v2/data/docking/complex/TP53_T256P_Everolimus_complex.pdb",
+      "drug_safe": "Everolimus",
+      "affinity": -4.806
+    },
+    "Gedatolisib": {
+      "path": "v2/data/docking/complex/TP53_T256P_Gedatolisib_complex.pdb",
+      "drug_safe": "Gedatolisib",
+      "affinity": -4.582
+    },
+    "Palbociclib": {
+      "path": "v2/data/docking/complex/TP53_T256P_Palbociclib_complex.pdb",
+      "drug_safe": "Palbociclib",
+      "affinity": -7.02
+    },
+    "Pictilisib": {
+      "path": "v2/data/docking/complex/TP53_T256P_Pictilisib_complex.pdb",
+      "drug_safe": "Pictilisib",
+      "affinity": -6.725
+    },
+    "Ribociclib": {
+      "path": "v2/data/docking/complex/TP53_T256P_Ribociclib_complex.pdb",
+      "drug_safe": "Ribociclib",
+      "affinity": -5.756
+    },
+    "Taselisib": {
+      "path": "v2/data/docking/complex/TP53_T256P_Taselisib_complex.pdb",
+      "drug_safe": "Taselisib",
+      "affinity": -7.07
+    }
+  }
+}

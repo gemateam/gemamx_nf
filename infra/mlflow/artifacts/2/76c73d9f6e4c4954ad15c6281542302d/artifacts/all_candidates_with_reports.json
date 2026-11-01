@@ -1,0 +1,522 @@
+[
+  {
+    "combination_id": "C2S-MX-0160",
+    "drug_a": "Berberine",
+    "drug_b": "Niraparib",
+    "third_agent": null,
+    "target_strategy": "metabolic_modulation + parp_chemo_immuno",
+    "cold_tumor_subtype": "Claudin-low / Immune-excluded",
+    "c2s_score": 61.5,
+    "tier": 2,
+    "components": {
+      "C1_immune_coverage": 0.5,
+      "C2_synergy_score": 0.2,
+      "C3_safety_score": 1.0,
+      "C4_novelty_score": 1.0,
+      "C5_clinical_feasibility": 0.4
+    },
+    "novelty_statement": "Combinaci\u00f3n Berberine + Niraparib \u2014 metabolic_modulation + parp_chemo_immuno",
+    "docking_results": {},
+    "experimental_roadmap": [
+      "Validaci\u00f3n sinergia: l\u00edneas TNBC fr\u00edas (MDA-MB-231, HS578T)",
+      "Evaluaci\u00f3n Berberine + Niraparib en cocultivo tumor-PBMC",
+      "Modelo murino: 4T1 cold variant \u2014 supervivencia + infiltrado inmune"
+    ],
+    "references_similar": [],
+    "generated_by": "GEMAGENTICDI v1.0 \u2014 GEN-MAMA-MX C2S-Scale"
+  },
+  {
+    "combination_id": "C2S-MX-0161",
+    "drug_a": "Berberine",
+    "drug_b": "Olaparib",
+    "third_agent": null,
+    "target_strategy": "metabolic_modulation + parp_chemo_immuno",
+    "cold_tumor_subtype": "Claudin-low / Immune-excluded",
+    "c2s_score": 61.5,
+    "tier": 2,
+    "components": {
+      "C1_immune_coverage": 0.5,
+      "C2_synergy_score": 0.2,
+      "C3_safety_score": 1.0,
+      "C4_novelty_score": 1.0,
+      "C5_clinical_feasibility": 0.4
+    },
+    "novelty_statement": "Combinaci\u00f3n Berberine + Olaparib \u2014 metabolic_modulation + parp_chemo_immuno",
+    "docking_results": {},
+    "experimental_roadmap": [
+      "Validaci\u00f3n sinergia: l\u00edneas TNBC fr\u00edas (MDA-MB-231, HS578T)",
+      "Evaluaci\u00f3n Berberine + Olaparib en cocultivo tumor-PBMC",
+      "Modelo murino: 4T1 cold variant \u2014 supervivencia + infiltrado inmune"
+    ],
+    "references_similar": [],
+    "generated_by": "GEMAGENTICDI v1.0 \u2014 GEN-MAMA-MX C2S-Scale"
+  },
+  {
+    "combination_id": "C2S-MX-0169",
+    "drug_a": "Berberine",
+    "drug_b": "Talazoparib",
+    "third_agent": null,
+    "target_strategy": "metabolic_modulation + parp_chemo_immuno",
+    "cold_tumor_subtype": "Claudin-low / Immune-excluded",
+    "c2s_score": 61.5,
+    "tier": 2,
+    "components": {
+      "C1_immune_coverage": 0.5,
+      "C2_synergy_score": 0.2,
+      "C3_safety_score": 1.0,
+      "C4_novelty_score": 1.0,
+      "C5_clinical_feasibility": 0.4
+    },
+    "novelty_statement": "Combinaci\u00f3n Berberine + Talazoparib \u2014 metabolic_modulation + parp_chemo_immuno",
+    "docking_results": {},
+    "experimental_roadmap": [
+      "Validaci\u00f3n sinergia: l\u00edneas TNBC fr\u00edas (MDA-MB-231, HS578T)",
+      "Evaluaci\u00f3n Berberine + Talazoparib en cocultivo tumor-PBMC",
+      "Modelo murino: 4T1 cold variant \u2014 supervivencia + infiltrado inmune"
+    ],
+    "references_similar": [],
+    "generated_by": "GEMAGENTICDI v1.0 \u2014 GEN-MAMA-MX C2S-Scale"
+  },
+  {
+    "combination_id": "C2S-MX-0224",
+    "drug_a": "Defactinib",
+    "drug_b": "Galunisertib",
+    "third_agent": null,
+    "target_strategy": "tgfbeta_reversal + tgfbeta_reversal",
+    "cold_tumor_subtype": "Claudin-low / Immune-excluded",
+    "c2s_score": 59.6,
+    "tier": 2,
+    "components": {
+      "C1_immune_coverage": 0.375,
+      "C2_synergy_score": 0.25,
+      "C3_safety_score": 1.0,
+      "C4_novelty_score": 1.0,
+      "C5_clinical_feasibility": 0.4
+    },
+    "novelty_statement": "Combinaci\u00f3n Defactinib + Galunisertib \u2014 tgfbeta_reversal + tgfbeta_reversal",
+    "docking_results": {},
+    "experimental_roadmap": [
+      "Validaci\u00f3n sinergia: l\u00edneas TNBC fr\u00edas (MDA-MB-231, HS578T)",
+      "Evaluaci\u00f3n Defactinib + Galunisertib en cocultivo tumor-PBMC",
+      "Modelo murino: 4T1 cold variant \u2014 supervivencia + infiltrado inmune"
+    ],
+    "references_similar": [],
+    "generated_by": "GEMAGENTICDI v1.0 \u2014 GEN-MAMA-MX C2S-Scale"
+  },
+  {
+    "combination_id": "C2S-MX-0152",
+    "drug_a": "Berberine",
+    "drug_b": "Galunisertib",
+    "third_agent": null,
+    "target_strategy": "metabolic_modulation + tgfbeta_reversal",
+    "cold_tumor_subtype": "Claudin-low / Immune-excluded",
+    "c2s_score": 56.5,
+    "tier": 2,
+    "components": {
+      "C1_immune_coverage": 0.5,
+      "C2_synergy_score": 0.0,
+      "C3_safety_score": 1.0,
+      "C4_novelty_score": 1.0,
+      "C5_clinical_feasibility": 0.4
+    },
+    "novelty_statement": "Combinaci\u00f3n Berberine + Galunisertib \u2014 metabolic_modulation + tgfbeta_reversal",
+    "docking_results": {},
+    "experimental_roadmap": [
+      "Validaci\u00f3n sinergia: l\u00edneas TNBC fr\u00edas (MDA-MB-231, HS578T)",
+      "Evaluaci\u00f3n Berberine + Galunisertib en cocultivo tumor-PBMC",
+      "Modelo murino: 4T1 cold variant \u2014 supervivencia + infiltrado inmune"
+    ],
+    "references_similar": [],
+    "generated_by": "GEMAGENTICDI v1.0 \u2014 GEN-MAMA-MX C2S-Scale"
+  },
+  {
+    "combination_id": "C2S-MX-0165",
+    "drug_a": "Berberine",
+    "drug_b": "Resveratrol",
+    "third_agent": null,
+    "target_strategy": "metabolic_modulation + metabolic_modulation",
+    "cold_tumor_subtype": "Claudin-low / Immune-excluded",
+    "c2s_score": 56.5,
+    "tier": 2,
+    "components": {
+      "C1_immune_coverage": 0.25,
+      "C2_synergy_score": 0.25,
+      "C3_safety_score": 1.0,
+      "C4_novelty_score": 1.0,
+      "C5_clinical_feasibility": 0.4
+    },
+    "novelty_statement": "Combinaci\u00f3n Berberine + Resveratrol \u2014 metabolic_modulation + metabolic_modulation",
+    "docking_results": {},
+    "experimental_roadmap": [
+      "Validaci\u00f3n sinergia: l\u00edneas TNBC fr\u00edas (MDA-MB-231, HS578T)",
+      "Evaluaci\u00f3n Berberine + Resveratrol en cocultivo tumor-PBMC",
+      "Modelo murino: 4T1 cold variant \u2014 supervivencia + infiltrado inmune"
+    ],
+    "references_similar": [],
+    "generated_by": "GEMAGENTICDI v1.0 \u2014 GEN-MAMA-MX C2S-Scale"
+  },
+  {
+    "combination_id": "C2S-MX-0314",
+    "drug_a": "Galunisertib",
+    "drug_b": "Niraparib",
+    "third_agent": null,
+    "target_strategy": "tgfbeta_reversal + parp_chemo_immuno",
+    "cold_tumor_subtype": "Claudin-low / Immune-excluded",
+    "c2s_score": 56.5,
+    "tier": 2,
+    "components": {
+      "C1_immune_coverage": 0.5,
+      "C2_synergy_score": 0.0,
+      "C3_safety_score": 1.0,
+      "C4_novelty_score": 1.0,
+      "C5_clinical_feasibility": 0.4
+    },
+    "novelty_statement": "Combinaci\u00f3n Galunisertib + Niraparib \u2014 tgfbeta_reversal + parp_chemo_immuno",
+    "docking_results": {},
+    "experimental_roadmap": [
+      "Validaci\u00f3n sinergia: l\u00edneas TNBC fr\u00edas (MDA-MB-231, HS578T)",
+      "Evaluaci\u00f3n Galunisertib + Niraparib en cocultivo tumor-PBMC",
+      "Modelo murino: 4T1 cold variant \u2014 supervivencia + infiltrado inmune"
+    ],
+    "references_similar": [],
+    "generated_by": "GEMAGENTICDI v1.0 \u2014 GEN-MAMA-MX C2S-Scale"
+  },
+  {
+    "combination_id": "C2S-MX-0315",
+    "drug_a": "Galunisertib",
+    "drug_b": "Olaparib",
+    "third_agent": null,
+    "target_strategy": "tgfbeta_reversal + parp_chemo_immuno",
+    "cold_tumor_subtype": "Claudin-low / Immune-excluded",
+    "c2s_score": 56.5,
+    "tier": 2,
+    "components": {
+      "C1_immune_coverage": 0.5,
+      "C2_synergy_score": 0.0,
+      "C3_safety_score": 1.0,
+      "C4_novelty_score": 1.0,
+      "C5_clinical_feasibility": 0.4
+    },
+    "novelty_statement": "Combinaci\u00f3n Galunisertib + Olaparib \u2014 tgfbeta_reversal + parp_chemo_immuno",
+    "docking_results": {},
+    "experimental_roadmap": [
+      "Validaci\u00f3n sinergia: l\u00edneas TNBC fr\u00edas (MDA-MB-231, HS578T)",
+      "Evaluaci\u00f3n Galunisertib + Olaparib en cocultivo tumor-PBMC",
+      "Modelo murino: 4T1 cold variant \u2014 supervivencia + infiltrado inmune"
+    ],
+    "references_similar": [],
+    "generated_by": "GEMAGENTICDI v1.0 \u2014 GEN-MAMA-MX C2S-Scale"
+  },
+  {
+    "combination_id": "C2S-MX-0323",
+    "drug_a": "Galunisertib",
+    "drug_b": "Talazoparib",
+    "third_agent": null,
+    "target_strategy": "tgfbeta_reversal + parp_chemo_immuno",
+    "cold_tumor_subtype": "Claudin-low / Immune-excluded",
+    "c2s_score": 56.5,
+    "tier": 2,
+    "components": {
+      "C1_immune_coverage": 0.5,
+      "C2_synergy_score": 0.0,
+      "C3_safety_score": 1.0,
+      "C4_novelty_score": 1.0,
+      "C5_clinical_feasibility": 0.4
+    },
+    "novelty_statement": "Combinaci\u00f3n Galunisertib + Talazoparib \u2014 tgfbeta_reversal + parp_chemo_immuno",
+    "docking_results": {},
+    "experimental_roadmap": [
+      "Validaci\u00f3n sinergia: l\u00edneas TNBC fr\u00edas (MDA-MB-231, HS578T)",
+      "Evaluaci\u00f3n Galunisertib + Talazoparib en cocultivo tumor-PBMC",
+      "Modelo murino: 4T1 cold variant \u2014 supervivencia + infiltrado inmune"
+    ],
+    "references_similar": [],
+    "generated_by": "GEMAGENTICDI v1.0 \u2014 GEN-MAMA-MX C2S-Scale"
+  },
+  {
+    "combination_id": "C2S-MX-0435",
+    "drug_a": "Niraparib",
+    "drug_b": "Resveratrol",
+    "third_agent": null,
+    "target_strategy": "parp_chemo_immuno + metabolic_modulation",
+    "cold_tumor_subtype": "Claudin-low / Immune-excluded",
+    "c2s_score": 56.5,
+    "tier": 2,
+    "components": {
+      "C1_immune_coverage": 0.25,
+      "C2_synergy_score": 0.25,
+      "C3_safety_score": 1.0,
+      "C4_novelty_score": 1.0,
+      "C5_clinical_feasibility": 0.4
+    },
+    "novelty_statement": "Combinaci\u00f3n Niraparib + Resveratrol \u2014 parp_chemo_immuno + metabolic_modulation",
+    "docking_results": {},
+    "experimental_roadmap": [
+      "Validaci\u00f3n sinergia: l\u00edneas TNBC fr\u00edas (MDA-MB-231, HS578T)",
+      "Evaluaci\u00f3n Niraparib + Resveratrol en cocultivo tumor-PBMC",
+      "Modelo murino: 4T1 cold variant \u2014 supervivencia + infiltrado inmune"
+    ],
+    "references_similar": [],
+    "generated_by": "GEMAGENTICDI v1.0 \u2014 GEN-MAMA-MX C2S-Scale"
+  },
+  {
+    "combination_id": "C2S-MX-0445",
+    "drug_a": "Olaparib",
+    "drug_b": "Resveratrol",
+    "third_agent": null,
+    "target_strategy": "parp_chemo_immuno + metabolic_modulation",
+    "cold_tumor_subtype": "Claudin-low / Immune-excluded",
+    "c2s_score": 56.5,
+    "tier": 2,
+    "components": {
+      "C1_immune_coverage": 0.25,
+      "C2_synergy_score": 0.25,
+      "C3_safety_score": 1.0,
+      "C4_novelty_score": 1.0,
+      "C5_clinical_feasibility": 0.4
+    },
+    "novelty_statement": "Combinaci\u00f3n Olaparib + Resveratrol \u2014 parp_chemo_immuno + metabolic_modulation",
+    "docking_results": {},
+    "experimental_roadmap": [
+      "Validaci\u00f3n sinergia: l\u00edneas TNBC fr\u00edas (MDA-MB-231, HS578T)",
+      "Evaluaci\u00f3n Olaparib + Resveratrol en cocultivo tumor-PBMC",
+      "Modelo murino: 4T1 cold variant \u2014 supervivencia + infiltrado inmune"
+    ],
+    "references_similar": [],
+    "generated_by": "GEMAGENTICDI v1.0 \u2014 GEN-MAMA-MX C2S-Scale"
+  },
+  {
+    "combination_id": "C2S-MX-0479",
+    "drug_a": "Resveratrol",
+    "drug_b": "Talazoparib",
+    "third_agent": null,
+    "target_strategy": "metabolic_modulation + parp_chemo_immuno",
+    "cold_tumor_subtype": "Claudin-low / Immune-excluded",
+    "c2s_score": 56.5,
+    "tier": 2,
+    "components": {
+      "C1_immune_coverage": 0.25,
+      "C2_synergy_score": 0.25,
+      "C3_safety_score": 1.0,
+      "C4_novelty_score": 1.0,
+      "C5_clinical_feasibility": 0.4
+    },
+    "novelty_statement": "Combinaci\u00f3n Resveratrol + Talazoparib \u2014 metabolic_modulation + parp_chemo_immuno",
+    "docking_results": {},
+    "experimental_roadmap": [
+      "Validaci\u00f3n sinergia: l\u00edneas TNBC fr\u00edas (MDA-MB-231, HS578T)",
+      "Evaluaci\u00f3n Resveratrol + Talazoparib en cocultivo tumor-PBMC",
+      "Modelo murino: 4T1 cold variant \u2014 supervivencia + infiltrado inmune"
+    ],
+    "references_similar": [],
+    "generated_by": "GEMAGENTICDI v1.0 \u2014 GEN-MAMA-MX C2S-Scale"
+  },
+  {
+    "combination_id": "C2S-MX-0147",
+    "drug_a": "Berberine",
+    "drug_b": "Curcumin",
+    "third_agent": null,
+    "target_strategy": "metabolic_modulation + sting_activation",
+    "cold_tumor_subtype": "Claudin-low / Immune-excluded",
+    "c2s_score": 53.6,
+    "tier": 2,
+    "components": {
+      "C1_immune_coverage": 0.375,
+      "C2_synergy_score": 0.25,
+      "C3_safety_score": 0.7,
+      "C4_novelty_score": 1.0,
+      "C5_clinical_feasibility": 0.4
+    },
+    "novelty_statement": "Combinaci\u00f3n Berberine + Curcumin \u2014 metabolic_modulation + sting_activation",
+    "docking_results": {},
+    "experimental_roadmap": [
+      "Validaci\u00f3n sinergia: l\u00edneas TNBC fr\u00edas (MDA-MB-231, HS578T)",
+      "Evaluaci\u00f3n Berberine + Curcumin en cocultivo tumor-PBMC",
+      "Modelo murino: 4T1 cold variant \u2014 supervivencia + infiltrado inmune"
+    ],
+    "references_similar": [],
+    "generated_by": "GEMAGENTICDI v1.0 \u2014 GEN-MAMA-MX C2S-Scale"
+  },
+  {
+    "combination_id": "C2S-MX-0148",
+    "drug_a": "Berberine",
+    "drug_b": "Defactinib",
+    "third_agent": null,
+    "target_strategy": "metabolic_modulation + tgfbeta_reversal",
+    "cold_tumor_subtype": "Claudin-low / Immune-excluded",
+    "c2s_score": 53.4,
+    "tier": 2,
+    "components": {
+      "C1_immune_coverage": 0.375,
+      "C2_synergy_score": 0.0,
+      "C3_safety_score": 1.0,
+      "C4_novelty_score": 1.0,
+      "C5_clinical_feasibility": 0.4
+    },
+    "novelty_statement": "Combinaci\u00f3n Berberine + Defactinib \u2014 metabolic_modulation + tgfbeta_reversal",
+    "docking_results": {},
+    "experimental_roadmap": [
+      "Validaci\u00f3n sinergia: l\u00edneas TNBC fr\u00edas (MDA-MB-231, HS578T)",
+      "Evaluaci\u00f3n Berberine + Defactinib en cocultivo tumor-PBMC",
+      "Modelo murino: 4T1 cold variant \u2014 supervivencia + infiltrado inmune"
+    ],
+    "references_similar": [],
+    "generated_by": "GEMAGENTICDI v1.0 \u2014 GEN-MAMA-MX C2S-Scale"
+  },
+  {
+    "combination_id": "C2S-MX-0151",
+    "drug_a": "Berberine",
+    "drug_b": "Fianlimab",
+    "third_agent": null,
+    "target_strategy": "metabolic_modulation + alt_checkpoints",
+    "cold_tumor_subtype": "Claudin-low / Immune-excluded",
+    "c2s_score": 53.4,
+    "tier": 2,
+    "components": {
+      "C1_immune_coverage": 0.375,
+      "C2_synergy_score": 0.0,
+      "C3_safety_score": 1.0,
+      "C4_novelty_score": 1.0,
+      "C5_clinical_feasibility": 0.4
+    },
+    "novelty_statement": "Combinaci\u00f3n Berberine + Fianlimab \u2014 metabolic_modulation + alt_checkpoints",
+    "docking_results": {},
+    "experimental_roadmap": [
+      "Validaci\u00f3n sinergia: l\u00edneas TNBC fr\u00edas (MDA-MB-231, HS578T)",
+      "Evaluaci\u00f3n Berberine + Fianlimab en cocultivo tumor-PBMC",
+      "Modelo murino: 4T1 cold variant \u2014 supervivencia + infiltrado inmune"
+    ],
+    "references_similar": [],
+    "generated_by": "GEMAGENTICDI v1.0 \u2014 GEN-MAMA-MX C2S-Scale"
+  },
+  {
+    "combination_id": "C2S-MX-0157",
+    "drug_a": "Berberine",
+    "drug_b": "Magrolimab",
+    "third_agent": null,
+    "target_strategy": "metabolic_modulation + macrophage_repolarization",
+    "cold_tumor_subtype": "Claudin-low / Immune-excluded",
+    "c2s_score": 53.4,
+    "tier": 2,
+    "components": {
+      "C1_immune_coverage": 0.375,
+      "C2_synergy_score": 0.0,
+      "C3_safety_score": 1.0,
+      "C4_novelty_score": 1.0,
+      "C5_clinical_feasibility": 0.4
+    },
+    "novelty_statement": "Combinaci\u00f3n Berberine + Magrolimab \u2014 metabolic_modulation + macrophage_repolarization",
+    "docking_results": {},
+    "experimental_roadmap": [
+      "Validaci\u00f3n sinergia: l\u00edneas TNBC fr\u00edas (MDA-MB-231, HS578T)",
+      "Evaluaci\u00f3n Berberine + Magrolimab en cocultivo tumor-PBMC",
+      "Modelo murino: 4T1 cold variant \u2014 supervivencia + infiltrado inmune"
+    ],
+    "references_similar": [],
+    "generated_by": "GEMAGENTICDI v1.0 \u2014 GEN-MAMA-MX C2S-Scale"
+  },
+  {
+    "combination_id": "C2S-MX-0163",
+    "drug_a": "Berberine",
+    "drug_b": "Pexidartinib",
+    "third_agent": null,
+    "target_strategy": "metabolic_modulation + macrophage_repolarization",
+    "cold_tumor_subtype": "Claudin-low / Immune-excluded",
+    "c2s_score": 53.4,
+    "tier": 2,
+    "components": {
+      "C1_immune_coverage": 0.375,
+      "C2_synergy_score": 0.0,
+      "C3_safety_score": 1.0,
+      "C4_novelty_score": 1.0,
+      "C5_clinical_feasibility": 0.4
+    },
+    "novelty_statement": "Combinaci\u00f3n Berberine + Pexidartinib \u2014 metabolic_modulation + macrophage_repolarization",
+    "docking_results": {},
+    "experimental_roadmap": [
+      "Validaci\u00f3n sinergia: l\u00edneas TNBC fr\u00edas (MDA-MB-231, HS578T)",
+      "Evaluaci\u00f3n Berberine + Pexidartinib en cocultivo tumor-PBMC",
+      "Modelo murino: 4T1 cold variant \u2014 supervivencia + infiltrado inmune"
+    ],
+    "references_similar": [],
+    "generated_by": "GEMAGENTICDI v1.0 \u2014 GEN-MAMA-MX C2S-Scale"
+  },
+  {
+    "combination_id": "C2S-MX-0167",
+    "drug_a": "Berberine",
+    "drug_b": "Sabatolimab",
+    "third_agent": null,
+    "target_strategy": "metabolic_modulation + alt_checkpoints",
+    "cold_tumor_subtype": "Claudin-low / Immune-excluded",
+    "c2s_score": 53.4,
+    "tier": 2,
+    "components": {
+      "C1_immune_coverage": 0.375,
+      "C2_synergy_score": 0.0,
+      "C3_safety_score": 1.0,
+      "C4_novelty_score": 1.0,
+      "C5_clinical_feasibility": 0.4
+    },
+    "novelty_statement": "Combinaci\u00f3n Berberine + Sabatolimab \u2014 metabolic_modulation + alt_checkpoints",
+    "docking_results": {},
+    "experimental_roadmap": [
+      "Validaci\u00f3n sinergia: l\u00edneas TNBC fr\u00edas (MDA-MB-231, HS578T)",
+      "Evaluaci\u00f3n Berberine + Sabatolimab en cocultivo tumor-PBMC",
+      "Modelo murino: 4T1 cold variant \u2014 supervivencia + infiltrado inmune"
+    ],
+    "references_similar": [],
+    "generated_by": "GEMAGENTICDI v1.0 \u2014 GEN-MAMA-MX C2S-Scale"
+  },
+  {
+    "combination_id": "C2S-MX-0170",
+    "drug_a": "Berberine",
+    "drug_b": "Tiragolumab",
+    "third_agent": null,
+    "target_strategy": "metabolic_modulation + alt_checkpoints",
+    "cold_tumor_subtype": "Claudin-low / Immune-excluded",
+    "c2s_score": 53.4,
+    "tier": 2,
+    "components": {
+      "C1_immune_coverage": 0.375,
+      "C2_synergy_score": 0.0,
+      "C3_safety_score": 1.0,
+      "C4_novelty_score": 1.0,
+      "C5_clinical_feasibility": 0.4
+    },
+    "novelty_statement": "Combinaci\u00f3n Berberine + Tiragolumab \u2014 metabolic_modulation + alt_checkpoints",
+    "docking_results": {},
+    "experimental_roadmap": [
+      "Validaci\u00f3n sinergia: l\u00edneas TNBC fr\u00edas (MDA-MB-231, HS578T)",
+      "Evaluaci\u00f3n Berberine + Tiragolumab en cocultivo tumor-PBMC",
+      "Modelo murino: 4T1 cold variant \u2014 supervivencia + infiltrado inmune"
+    ],
+    "references_similar": [],
+    "generated_by": "GEMAGENTICDI v1.0 \u2014 GEN-MAMA-MX C2S-Scale"
+  },
+  {
+    "combination_id": "C2S-MX-0232",
+    "drug_a": "Defactinib",
+    "drug_b": "Niraparib",
+    "third_agent": null,
+    "target_strategy": "tgfbeta_reversal + parp_chemo_immuno",
+    "cold_tumor_subtype": "Claudin-low / Immune-excluded",
+    "c2s_score": 53.4,
+    "tier": 2,
+    "components": {
+      "C1_immune_coverage": 0.375,
+      "C2_synergy_score": 0.0,
+      "C3_safety_score": 1.0,
+      "C4_novelty_score": 1.0,
+      "C5_clinical_feasibility": 0.4
+    },
+    "novelty_statement": "Combinaci\u00f3n Defactinib + Niraparib \u2014 tgfbeta_reversal + parp_chemo_immuno",
+    "docking_results": {},
+    "experimental_roadmap": [
+      "Validaci\u00f3n sinergia: l\u00edneas TNBC fr\u00edas (MDA-MB-231, HS578T)",
+      "Evaluaci\u00f3n Defactinib + Niraparib en cocultivo tumor-PBMC",
+      "Modelo murino: 4T1 cold variant \u2014 supervivencia + infiltrado inmune"
+    ],
+    "references_similar": [],
+    "generated_by": "GEMAGENTICDI v1.0 \u2014 GEN-MAMA-MX C2S-Scale"
+  }
+]

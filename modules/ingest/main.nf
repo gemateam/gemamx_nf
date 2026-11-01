@@ -16,12 +16,15 @@ process INGEST {
     script:
     def snapshot_arg = (mutations_json && mutations_json != [] && mutations_json.toString() != 'null') \
         ? "--mutations-json ${mutations_json}" : ""
+    def total_samples_arg = params.containsKey('total_samples') && params.total_samples \
+        ? "--total-samples ${params.total_samples}" : ""
     """
     ingest_cbioportal.py \\
         --study "${params.study_id}" \\
         --genes "${params.genes}" \\
         --max-variants ${params.max_variants} \\
         ${snapshot_arg} \\
+        ${total_samples_arg} \\
         --outdir .
 
     build_stats.py \\

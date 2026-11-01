@@ -184,8 +184,12 @@ async function onVariantChange(variantId, manifest, metrics) {
   renderMetrics(variantId, metrics);
   renderRMSD(variantId, metrics);
 
-  const wtKey  = variantId.split('_')[0] + '_WT';
-  const wtPath  = manifest?.[wtKey]     ?? null;
+  const gene = variantId.split('_')[0];
+
+  // Soportar ambas convenciones: v1 "PIK3CA_WT" y v2 "WT__PIK3CA_H1047R"
+  const wtKeyV1 = `${gene}_WT`;
+  const wtKeyV2 = `WT__${variantId}`;
+  const wtPath  = manifest?.[wtKeyV2] ?? manifest?.[wtKeyV1] ?? null;
   const mutPath = manifest?.[variantId] ?? null;
   const pos     = modelMutPos(variantId, metrics);
 
