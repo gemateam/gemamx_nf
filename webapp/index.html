@@ -23,13 +23,13 @@
     <span class="brand-sub" id="brand-sub">Genomic Analysis of Mammary Cancer</span>
   </div>
   <ul class="nav-links">
-    <li><a href="#" data-view="dashboard"  class="nav-link active">Dashboard</a></li>
-    <li><a href="#" data-view="pipeline"   class="nav-link">Pipeline Status</a></li>
-    <li><a href="#" data-view="explore"    class="nav-link">Exploración</a></li>
+    
+    <li><a href="#" data-view="pipeline"   class="nav-link active">Pipeline Status</a></li>
+    <li><a href="#" data-view="explore"    class="nav-link">Exploración de Datasets</a></li>
     <li><a href="#" data-view="analysis"   class="nav-link">Análisis</a></li>
     <li><a href="#" data-view="structural" class="nav-link">Estructuras 3D</a></li>
     <li><a href="#" data-view="docking"    class="nav-link">Docking</a></li>
-    <li><a href="#" data-view="clinical"   class="nav-link nav-link--v2" id="nav-clinical" style="display:none">Clínico</a></li>
+    
     <li><a href="#" data-view="report"     class="nav-link">Reporte</a></li>
   </ul>
   <div class="run-selector">
@@ -43,55 +43,11 @@
 <!-- ═══════════════════════════ MAIN ═══════════════════════════ -->
 <main id="app">
 
-  <!-- ── DASHBOARD ────────────────────────────────────────────── -->
-  <section id="view-dashboard" class="view active">
-    <div class="section-header">
-      <h1>Dashboard General</h1>
-      <p class="subtitle" id="dashboard-subtitle">Resumen de variantes, estructuras y afinidades de docking</p>
-    </div>
-
-    <div class="kpi-grid" id="kpi-grid">
-      <div class="kpi-card"><div class="kpi-value" id="kpi-total">—</div><div class="kpi-label">Variantes analizadas</div></div>
-      <div class="kpi-card"><div class="kpi-value" id="kpi-hotspot">—</div><div class="kpi-label">Hotspot #1</div></div>
-      <div class="kpi-card"><div class="kpi-value" id="kpi-structs">—</div><div class="kpi-label">Estructuras 3D</div></div>
-      <div class="kpi-card"><div class="kpi-value" id="kpi-affinity">—</div><div class="kpi-label">Mejor afinidad (kcal/mol)</div></div>
-    </div>
-
-    <div class="card-grid">
-      <div class="card">
-        <h2>Top Variantes por Frecuencia</h2>
-        <div id="chart-top-variants"></div>
-      </div>
-      <div class="card">
-        <h2>Distribución por Clasificación</h2>
-        <div id="chart-classification"></div>
-      </div>
-    </div>
-
-    <div class="card full-width">
-      <h2>Tabla de Variantes Priorizadas</h2>
-      <div class="table-controls">
-        <input type="text" id="filter-variants" placeholder="Filtrar por gen o variante…" />
-      </div>
-      <div class="table-wrapper">
-        <table id="table-variants">
-          <thead>
-            <tr>
-              <th>#</th><th>Gen</th><th>Variante</th><th>Frecuencia</th>
-              <th>Cohorte %</th><th>Cromosoma</th><th>Clasificación</th>
-            </tr>
-          </thead>
-          <tbody id="tbody-variants"></tbody>
-        </table>
-      </div>
-    </div>
-  </section>
-
-  <!-- ── EXPLORACIÓN ──────────────────────────────────────────── -->
+  <!-- ── EXPLORACIÓN ── -->
   <section id="view-explore" class="view">
 
     <div class="section-header">
-      <h1 id="explore-title">Exploración de Variantes</h1>
+      <h1 id="explore-title">Exploración de Datasets</h1>
     </div>
 
     <!-- Filtros -->
@@ -149,12 +105,22 @@
 
   </section>
 
-  <!-- ── ANÁLISIS ──────────────────────────────────────────────── -->
+  <!-- ── ANÁLISIS Y PERFIL CLÍNICO ──────────────────────────────── -->
   <section id="view-analysis" class="view">
     <div class="section-header">
-      <h1>Análisis Mutacional</h1>
-      <p class="subtitle" id="analysis-subtitle">Distribuciones y estadísticas del cohorte</p>
+      <h1 id="analysis-title">Análisis Genómico y Clínico</h1>
+      <p class="subtitle" id="analysis-subtitle">Distribuciones y estadísticas de la cohorte activa</p>
     </div>
+
+    <!-- KPIs del cohorte y clínicos (cuando apliquen) -->
+    <div class="kpi-grid" id="clinical-kpi-grid" style="display:none;margin-bottom:1.5rem;">
+      <div class="kpi-card"><div class="kpi-value" id="cl-kpi-samples">—</div><div class="kpi-label">Muestras Clínicas</div></div>
+      <div class="kpi-card"><div class="kpi-value" id="cl-kpi-wes">—</div><div class="kpi-label">Con WES</div></div>
+      <div class="kpi-card"><div class="kpi-value" id="cl-kpi-age">—</div><div class="kpi-label">Edad Media</div></div>
+      <div class="kpi-card"><div class="kpi-value" id="cl-kpi-luma">—</div><div class="kpi-label">Luminal A (%)</div></div>
+    </div>
+
+    <!-- Gráficas Mutacionales -->
     <div class="card-grid">
       <div class="card">
         <h2>Frecuencia por Gen (Top 20)</h2>
@@ -165,9 +131,55 @@
         <div id="chart-type-dist"></div>
       </div>
     </div>
+
     <div class="card full-width">
       <h2>Estadísticas del Cohorte</h2>
       <div class="stats-grid" id="stats-cohort"></div>
+    </div>
+
+    <!-- Sección Clínica integrada (se activa reactivamente en V2) -->
+    <div id="clinical-integrated-section" style="display:none;margin-top:2rem;">
+      <div class="card-grid">
+        <div class="card">
+          <h2>Subtipo IHC (FUCAM)</h2>
+          <div id="chart-ihc-dist"></div>
+        </div>
+        <div class="card">
+          <h2>Subtipo PAM50</h2>
+          <div id="chart-pam50-dist"></div>
+        </div>
+      </div>
+
+      <!-- Datasets GEO -->
+      <div class="card full-width" id="geo-datasets-card">
+        <h2>Datasets GEO Asociados</h2>
+        <div id="geo-datasets-grid"></div>
+      </div>
+
+      <!-- Tabla variante × perfil clínico -->
+      <div class="card full-width">
+        <h2>Perfil Clínico por Variante (Romero-Córdoba HM)</h2>
+        <div class="table-controls">
+          <input type="text" id="filter-clinical-variant" placeholder="Filtrar por gen o variante…" />
+        </div>
+        <div class="table-wrapper">
+          <table id="table-clinical">
+            <thead>
+              <tr>
+                <th>Variante</th>
+                <th>Frecuencia</th>
+                <th>Muestras clínicas</th>
+                <th>Edad media</th>
+                <th>Top IHC</th>
+                <th>Top PAM50</th>
+                <th>Top Histología</th>
+                <th>Clasificación</th>
+              </tr>
+            </thead>
+            <tbody id="tbody-clinical"></tbody>
+          </table>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -313,7 +325,7 @@
   </section>
 
   <!-- ── PIPELINE STATUS ──────────────────────────────────────── -->
-  <section id="view-pipeline" class="view">
+  <section id="view-pipeline" class="view active">
 
     <!-- Header con run activo -->
     <div class="ps-header">
@@ -425,73 +437,7 @@
 
   </section>
 
-  <!-- ── CLÍNICO (v2 Romero) ──────────────────────────────────── -->
-  <section id="view-clinical" class="view">
-    <div class="section-header">
-      <h1>Análisis Clínico</h1>
-      <p class="subtitle" id="clinical-subtitle">Cohorte Romero-Córdoba 2021 · FUCAM/HM · Mujeres mexicanas con cáncer de mama</p>
-    </div>
 
-    <!-- KPIs clínicos -->
-    <div class="kpi-grid" id="clinical-kpi-grid">
-      <div class="kpi-card"><div class="kpi-value" id="cl-kpi-samples">—</div><div class="kpi-label">Muestras</div></div>
-      <div class="kpi-card"><div class="kpi-value" id="cl-kpi-wes">—</div><div class="kpi-label">Con WES</div></div>
-      <div class="kpi-card"><div class="kpi-value" id="cl-kpi-age">—</div><div class="kpi-label">Edad media</div></div>
-      <div class="kpi-card"><div class="kpi-value" id="cl-kpi-luma">—</div><div class="kpi-label">Luminal A (%)</div></div>
-    </div>
-
-    <!-- Distribución IHC + PAM50 -->
-    <div class="card-grid">
-      <div class="card">
-        <h2>Subtipo IHC</h2>
-        <div id="chart-ihc-dist"></div>
-      </div>
-      <div class="card">
-        <h2>Subtipo PAM50</h2>
-        <div id="chart-pam50-dist"></div>
-      </div>
-    </div>
-
-    <!-- Datasets GEO -->
-    <div class="card full-width" id="geo-datasets-card">
-      <h2>Datasets GEO asociados</h2>
-      <div id="geo-datasets-grid"></div>
-    </div>
-
-    <!-- Tabla variante × perfil clínico -->
-    <div class="card full-width">
-      <h2>Perfil clínico por variante</h2>
-      <div class="table-controls">
-        <input type="text" id="filter-clinical-variant" placeholder="Filtrar por gen o variante…" />
-      </div>
-      <div class="table-wrapper">
-        <table id="table-clinical">
-          <thead>
-            <tr>
-              <th>Variante</th>
-              <th>Frecuencia</th>
-              <th>Muestras clínicas</th>
-              <th>Edad media</th>
-              <th>Top IHC</th>
-              <th>Top PAM50</th>
-              <th>Top Histología</th>
-              <th>Clasificación</th>
-            </tr>
-          </thead>
-          <tbody id="tbody-clinical"></tbody>
-        </table>
-      </div>
-    </div>
-
-    <!-- Nota de fuente -->
-    <div class="card full-width">
-      <p class="explore-epic-note">
-        Fuente: Romero-Córdoba et al., Nature Communications 2021 (doi:10.1038/s41467-021-22478-1) · 
-        FUCAM (Fundación Mexicana para la Prevención Oportuna del Cáncer de Mama) · 
-        GEO: <a href="https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE87049" target="_blank" rel="noopener" style="color:var(--teal-light)">GSE87049</a>
-      </p>
-    </div>
-  </section>
 
 </main>
 
@@ -502,7 +448,6 @@
 </footer>
 
 <script src="js/app.js"    type="module"></script>
-<script src="js/dashboard.js" type="module"></script>
 <script src="js/analysis.js"  type="module"></script>
 <script src="js/structural.js" type="module"></script>
 <script src="js/docking.js"   type="module"></script>

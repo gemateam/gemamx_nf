@@ -97,6 +97,15 @@ def ensure_experiment(client, name: str) -> str:
     return client.create_experiment(name, artifact_location="mlflow-artifacts:/")
 
 
+STAGE_CODE_MAP = {
+    "ingest": "https://github.com/gemateam/gemamx_nf/blob/main/bin/ingest_romero.py",
+    "fasta": "https://github.com/gemateam/gemamx_nf/blob/main/bin/fetch_fasta.py",
+    "structures": "https://github.com/gemateam/gemamx_nf/blob/main/bin/predict_structure.py",
+    "docking": "https://github.com/gemateam/gemamx_nf/blob/main/bin/run_vina.py",
+    "metrics": "https://github.com/gemateam/gemamx_nf/blob/main/bin/align_wt_mut.py",
+    "publish": "https://github.com/gemateam/gemamx_nf/blob/main/bin/build_jsons.py",
+}
+
 def log_stage(mlflow, client, experiment_id: str, run_name: str,
               stage: str, params: dict[str, str], metrics: dict[str, float],
               artifacts: list[str], tags: dict[str, str],
@@ -105,11 +114,14 @@ def log_stage(mlflow, client, experiment_id: str, run_name: str,
     if existing is not None:
         return existing.info.run_id, False
 
+    source_url = STAGE_CODE_MAP.get(stage, "https://github.com/gemateam/gemamx_nf")
     stage_tags = {
         **tags,
         "gemamx.stage": stage,
         "gemamx.pipeline": "gemamx_nf",
         "gemamx.contract": "v1",
+        "gemamx.source_code": source_url,
+        "mlflow.source.name": source_url,
     }
     with mlflow.start_run(run_name=f"{run_name}-{stage}", experiment_id=experiment_id,
                           nested=True, tags=stage_tags) as child:
@@ -172,12 +184,15 @@ def main() -> int:
     structural = load_optional(args.structural_metrics)
     vina = load_optional(args.vina_affinities)
 
+    workflow_file = "main_v2.nf" if "romero" in run_name.lower() or "v2" in args.experiment.lower() else "main.nf"
     base_tags = {
         "gemamx.pipeline": "gemamx_nf",
         "gemamx.contract": "v1",
         "gemamx.run_name": run_name,
         "gemamx.git_commit": args.git_commit or "unknown",
         "gemamx.tracking_uri": args.tracking_uri,
+        "gemamx.source_code": f"https://github.com/gemateam/gemamx_nf/blob/main/{workflow_file}",
+        "mlflow.source.name": f"https://github.com/gemateam/gemamx_nf/blob/main/{workflow_file}",
     }
 
     try:

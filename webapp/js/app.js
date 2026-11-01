@@ -95,7 +95,7 @@ export const PLOTLY_LAYOUT = {
 };
 
 // ── Navegación SPA ─────────────────────────────────────────────────────────
-const VIEWS = ['dashboard','analysis','structural','docking','report','pipeline','explore','clinical'];
+const VIEWS = ['pipeline','explore','analysis','structural','docking','report'];
 
 // ── Detección de versión del pipeline ─────────────────────────────────────
 export function isV2() {
@@ -108,7 +108,7 @@ const loaders = {};
 export function registerLoader(view, fn) { loaders[view] = fn; }
 
 // Vista activa actualmente
-let activeView = 'dashboard';
+let activeView = 'pipeline';
 
 function activateView(name) {
   VIEWS.forEach(v => {
@@ -187,11 +187,7 @@ export async function updateGlobalHeader() {
     brandSub.textContent = 'Genomic Analysis of Mammary Cancer · ' + datasetName;
   }
 
-  // Dashboard subtitle
-  const dashSub = document.getElementById('dashboard-subtitle');
-  if (dashSub) {
-    dashSub.textContent = 'Resumen de variantes, estructuras y afinidades de docking — ' + datasetName;
-  }
+
 
   // Explore title
   const expTitle = document.getElementById('explore-title');
@@ -242,7 +238,7 @@ function switchRun(path) {
     clinicalTab.style.display = isRomero ? '' : 'none';
     // Si estamos en la vista clínica y cambiamos a v1, volver a dashboard
     if (!isRomero && activeView === 'clinical') {
-      activateView('dashboard');
+      activateView('pipeline');
     }
   }
 
@@ -284,5 +280,5 @@ document.addEventListener('DOMContentLoaded', () => {
   updateGlobalHeader();
 
   // Vista inicial
-  activateView('dashboard');
+  activateView('pipeline');
 });

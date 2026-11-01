@@ -17,12 +17,22 @@ const state = { loaded: false };
 registerReloadFlag('pipeline', state);
 
 // ── Etapas del pipeline ────────────────────────────────────────────────────
-const STAGES = [
-  { id: 'M1', label: 'GDC API\nIngestion',        key: 'mutations' },
-  { id: 'M2', label: 'Variant\nPrioritization',   key: 'variants'  },
-  { id: 'M3', label: 'Structural\nPrediction',     key: 'structures'},
-  { id: 'M4', label: 'Vina\nDocking',              key: 'docking'   },
-  { id: 'M5', label: 'Final\nReport',              key: 'report'    },
+const GITHUB_REPO = 'https://github.com/gemateam/gemamx_nf/blob/main';
+
+const STAGES_V1 = [
+  { id: 'M1', label: 'GDC Ingestion',      key: 'mutations',  file: 'bin/ingest_cbioportal.py' },
+  { id: 'M2', label: 'Prioritization',     key: 'variants',   file: 'modules/ingest/main.nf' },
+  { id: 'M3', label: '3D Prediction',      key: 'structures', file: 'bin/predict_structure.py' },
+  { id: 'M4', label: 'Vina Docking',       key: 'docking',    file: 'bin/run_vina.py' },
+  { id: 'M5', label: 'Contract & MLflow',  key: 'report',     file: 'bin/build_jsons.py' },
+];
+
+const STAGES_V2 = [
+  { id: 'M1', label: 'WES Ingest Romero',  key: 'mutations',  file: 'bin/ingest_romero.py' },
+  { id: 'M2', label: 'Clinical & ACMG',    key: 'variants',   file: 'bin/extract_clinical_romero.py' },
+  { id: 'M3', label: 'Boltz-1 / AF 3D',    key: 'structures', file: 'bin/predict_structure.py' },
+  { id: 'M4', label: 'AutoDock Vina',      key: 'docking',    file: 'bin/run_vina.py' },
+  { id: 'M5', label: 'Summary & MLflow',   key: 'report',     file: 'bin/build_clinical_summary.py' },
 ];
 
 // ── Helpers ────────────────────────────────────────────────────────────────
@@ -198,21 +208,29 @@ async function loadPipeline() {
   const dockPct = totalPossible > 0 ? Math.round((variantsWithDocking / totalPossible) * 100) : 0;
   stageLabel.docking_partial = `${dockPct}%`;
 
+  const isRomero = (pipelineVersion === 'GEMAMX-V2-ROMERO') || runName.includes('romero');
+  const activeStages = isRomero ? STAGES_V2 : STAGES_V1;
+
   const timelineEl = document.getElementById('ps-timeline');
   if (timelineEl) {
-    timelineEl.innerHTML = STAGES.map((s, i) => {
+    timelineEl.innerHTML = activeStages.map((s, i) => {
       const status = stageStatus[s.key] ?? 'pending';
       const labelText = s.key === 'docking' && status === 'partial'
         ? stageLabel.docking_partial
         : stageLabel[status];
       const cls = `ps-stage ps-stage--${status}`;
-      const lines = s.label.split('\n');
+      const codeUrl = `${GITHUB_REPO}/${s.file}`;
       return `
         <div class="${cls}">
           <div class="ps-stage-node">${s.id}</div>
-          <div class="ps-stage-label">${lines[0]}<br><span>${lines[1] ?? ''}</span></div>
+          <div class="ps-stage-label">
+            ${s.label}<br>
+            <a href="${codeUrl}" target="_blank" rel="noopener" class="ps-code-link" title="Ver código fuente de este paso en GitHub">
+              ⚡ ${s.file.split('/').pop()} ↗
+            </a>
+          </div>
           <div class="ps-stage-status">${labelText}</div>
-          ${i < STAGES.length - 1 ? '<div class="ps-stage-connector"></div>' : ''}
+          ${i < activeStages.length - 1 ? '<div class="ps-stage-connector"></div>' : ''}
         </div>`;
     }).join('');
   }
@@ -248,18 +266,48 @@ async function loadPipeline() {
   if (mlflowBlock) {
     const trackingUri = params.mlflow_tracking_uri ?? '—';
     const experiment  = params.mlflow_experiment ?? '—';
+
+    // Resolver ID de experimento y URL de la corrida en MLflow UI
+    const expId = (experiment === 'GEMAMX-V2-ROMERO' || runName.includes('romero')) ? '5' : '4';
+    const mlflowLocalUi = 'http://localhost:5000';
+    const mlflowExpUrl = `${mlflowLocalUi}/#/experiments/${expId}`;
+
+    // Obtener run_id padre si existe en manifiesto o mapeo
+    const parentRunId = runManifest?.parent_run_id || (runName === 'romero_v2_20261101_041237' ? '741bcd33b5544bed8278614c8fae7d6d' : (runName === 'distraught_celsius' ? 'ae00292c43e4433da43924b03882c395' : ''));
+    const mlflowRunUrl = parentRunId ? `${mlflowLocalUi}/#/experiments/${expId}/runs/${parentRunId}` : mlflowExpUrl;
+
     mlflowBlock.innerHTML = `
       <div class="ps-mlflow-row">
         <span class="ps-mlflow-label">Experiment</span>
-        <span class="ps-mlflow-value ps-accent">${experiment}</span>
+        <span class="ps-mlflow-value ps-accent">
+          <a href="${mlflowExpUrl}" target="_blank" rel="noopener" class="ps-mlflow-link" title="Abrir experimento en MLflow">
+            ${experiment} ↗
+          </a>
+        </span>
       </div>
       <div class="ps-mlflow-row">
         <span class="ps-mlflow-label">Run name</span>
-        <span class="ps-mlflow-value">${runName}</span>
+        <span class="ps-mlflow-value">
+          <a href="${mlflowRunUrl}" target="_blank" rel="noopener" class="ps-mlflow-run-link" style="color:var(--teal-light);font-weight:600;text-decoration:underline;" title="Abrir corrida activa en MLflow UI">
+            ${runName} ↗
+          </a>
+        </span>
+      </div>
+      <div class="ps-mlflow-row">
+        <span class="ps-mlflow-label">MLflow UI</span>
+        <span class="ps-mlflow-value">
+          <a href="${mlflowRunUrl}" target="_blank" rel="noopener" class="ps-mlflow-btn" style="display:inline-block;padding:3px 10px;background:var(--teal);color:#021013;font-size:.78rem;font-weight:700;border-radius:4px;text-decoration:none;">
+            🚀 Ver corrida en MLflow
+          </a>
+        </span>
       </div>
       <div class="ps-mlflow-row">
         <span class="ps-mlflow-label">Tracking URI</span>
-        <span class="ps-mlflow-value ps-mono">${trackingUri}</span>
+        <span class="ps-mlflow-value ps-mono">
+          <a href="${mlflowLocalUi}" target="_blank" rel="noopener" style="color:#94a3b8;text-decoration:none;">
+            http://localhost:5000 ↗
+          </a>
+        </span>
       </div>
       <div class="ps-mlflow-row">
         <span class="ps-mlflow-label">Published</span>
