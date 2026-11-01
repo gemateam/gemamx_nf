@@ -96,9 +96,9 @@ function buildVariantTable(rawMutations, topVariants, manifest, metrics) {
     const key     = `${entry.hugo_symbol}_${entry.protein_change}`;
     const topData = topMap.get(key) ?? {};
     const metricM = metrics?.[key] ?? {};
-    const gene    = id.split('_')[0];
+    const gene    = key.split('_')[0];
     const wtKeyV1 = `${gene}_WT`;
-    const wtKeyV2 = `WT__${id}`;
+    const wtKeyV2 = `WT__${key}`;
     const hasWT   = !!(manifest?.[wtKeyV2] ?? manifest?.[wtKeyV1]);
     const hasMUT  = !!(manifest?.[key]);
 
