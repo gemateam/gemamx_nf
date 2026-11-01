@@ -20,7 +20,7 @@
 <nav class="navbar">
   <div class="navbar-brand">
     <span class="brand-gema">GEMA</span><span class="brand-mx">MX</span>
-    <span class="brand-sub">Genomic Analysis of Mammary Cancer · TCGA-BRCA</span>
+    <span class="brand-sub" id="brand-sub">Genomic Analysis of Mammary Cancer</span>
   </div>
   <ul class="nav-links">
     <li><a href="#" data-view="dashboard"  class="nav-link active">Dashboard</a></li>
@@ -47,7 +47,7 @@
   <section id="view-dashboard" class="view active">
     <div class="section-header">
       <h1>Dashboard General</h1>
-      <p class="subtitle">Resumen de variantes, estructuras y afinidades de docking — TCGA-BRCA</p>
+      <p class="subtitle" id="dashboard-subtitle">Resumen de variantes, estructuras y afinidades de docking</p>
     </div>
 
     <div class="kpi-grid" id="kpi-grid">
@@ -91,7 +91,7 @@
   <section id="view-explore" class="view">
 
     <div class="section-header">
-      <h1>Exploración TCGA</h1>
+      <h1 id="explore-title">Exploración de Variantes</h1>
     </div>
 
     <!-- Filtros -->
@@ -153,7 +153,7 @@
   <section id="view-analysis" class="view">
     <div class="section-header">
       <h1>Análisis Mutacional</h1>
-      <p class="subtitle">Distribuciones y estadísticas del cohorte TCGA-BRCA</p>
+      <p class="subtitle" id="analysis-subtitle">Distribuciones y estadísticas del cohorte</p>
     </div>
     <div class="card-grid">
       <div class="card">
@@ -319,11 +319,11 @@
     <div class="ps-header">
       <div class="ps-title-block">
         <h1>Pipeline Status</h1>
-        <p class="subtitle">Resumen ejecutivo del proyecto GEMA MX sobre la cohorte TCGA-BRCA.</p>
+        <p class="subtitle" id="pipeline-subtitle">Resumen ejecutivo del proyecto GEMA MX sobre la cohorte activa.</p>
       </div>
       <div class="ps-run-badge">
         <span class="ps-run-dot"></span>
-        <span id="ps-dataset-label">Dataset: TCGA-BRCA</span>
+        <span id="ps-dataset-label">Dataset: —</span>
         <span class="ps-run-chip" id="ps-run-chip">—</span>
       </div>
     </div>
@@ -497,7 +497,7 @@
 
 <!-- ═════════════════════════ FOOTER ═════════════════════════ -->
 <footer class="footer">
-  <span>GEMA MX · Pipeline V1 · TCGA-BRCA · Universidad de Sonora</span>
+  <span id="footer-brand">GEMA MX · Universidad de Sonora</span>
   <span id="footer-run"></span>
 </footer>
 

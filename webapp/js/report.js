@@ -177,7 +177,7 @@ function renderSynthesis(v, m, drugs) {
 
   if (v) {
     lines.push(`La variante <strong>${v.hugo_symbol} ${v.protein_change}</strong> 
-      fue detectada en <strong>${v.frequency}</strong> muestras del cohorte TCGA-BRCA 
+      fue detectada en <strong>${v.frequency}</strong> muestras de la cohorte analizada 
       (${fmt(v.cohort_percentage)}%), clasificada como 
       <span class="badge ${badgeClass(v.classification)}">${v.classification}</span>.`);
   }

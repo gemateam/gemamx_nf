@@ -169,6 +169,59 @@ async function populateRunSelector() {
   sel.addEventListener('change', () => switchRun(sel.value));
 }
 
+
+export async function updateGlobalHeader() {
+  const [manifest, stats] = await Promise.all([
+    loadJSON(DATA.runManifest()),
+    loadJSON(DATA.mutationStats())
+  ]);
+
+  const isV2Run = isV2() || manifest?.params?.mlflow_experiment === 'GEMAMX-V2-ROMERO';
+  const datasetName = isV2Run
+    ? (stats?.dataset ?? 'Romero-Córdoba 2021 HM (FUCAM)')
+    : (manifest?.params?.study_id?.toUpperCase() ?? 'TCGA-BRCA');
+
+  // Navbar brand sub
+  const brandSub = document.getElementById('brand-sub');
+  if (brandSub) {
+    brandSub.textContent = 'Genomic Analysis of Mammary Cancer · ' + datasetName;
+  }
+
+  // Dashboard subtitle
+  const dashSub = document.getElementById('dashboard-subtitle');
+  if (dashSub) {
+    dashSub.textContent = 'Resumen de variantes, estructuras y afinidades de docking — ' + datasetName;
+  }
+
+  // Explore title
+  const expTitle = document.getElementById('explore-title');
+  if (expTitle) {
+    expTitle.textContent = isV2Run ? 'Exploración Romero HM' : 'Exploración TCGA';
+  }
+
+  // Analysis subtitle
+  const anaSub = document.getElementById('analysis-subtitle');
+  if (anaSub) {
+    anaSub.textContent = 'Distribuciones y estadísticas de la cohorte ' + datasetName;
+  }
+
+  // Pipeline status subtitle & label
+  const pipeSub = document.getElementById('pipeline-subtitle');
+  if (pipeSub) {
+    pipeSub.textContent = 'Resumen ejecutivo del proyecto GEMA MX sobre la cohorte ' + datasetName + '.';
+  }
+  const datasetLabel = document.getElementById('ps-dataset-label');
+  if (datasetLabel) {
+    datasetLabel.textContent = 'Dataset: ' + datasetName + ' activo';
+  }
+
+  // Footer brand
+  const footerBrand = document.getElementById('footer-brand');
+  if (footerBrand) {
+    footerBrand.textContent = 'GEMA MX · ' + (isV2Run ? 'Pipeline V2 · Romero HM' : 'Pipeline V1 · TCGA-BRCA') + ' · Universidad de Sonora';
+  }
+}
+
 function switchRun(path) {
   // Actualizar BASE_PATH global
   BASE_PATH = path;
@@ -178,6 +231,9 @@ function switchRun(path) {
 
   // Resetear flags de carga de cada módulo
   Object.values(reloadFlags).forEach(f => { f.loaded = false; });
+
+  // Actualizar cabeceras globales y textos de cohorte
+  updateGlobalHeader();
 
   // Mostrar/ocultar tab Clínico según pipeline version
   const clinicalTab = document.getElementById('nav-clinical');
@@ -223,6 +279,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Poblar selector de corridas
   populateRunSelector();
+
+  // Actualizar textos globales dinámicos de cohorte
+  updateGlobalHeader();
 
   // Vista inicial
   activateView('dashboard');

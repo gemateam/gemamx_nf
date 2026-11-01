@@ -246,7 +246,7 @@ export async function renderDrugSources(geneSymbol, variantName, drugs) {
       <div class="ds-desc">
         Fases clínicas y mecanismo de acción actualizados en tiempo real.
         <br><span style="color:#94a3b8;font-size:.78rem;">
-          ${fda4Count} fármacos con fase 4 (aprobación) en TCGA-BRCA · EBI EMBL-EBI
+          ${fda4Count} fármacos con fase 4 (aprobación) en el catálogo · EBI EMBL-EBI
         </span>
       </div>
       <div class="ds-tags">
