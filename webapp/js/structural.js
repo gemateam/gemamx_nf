@@ -13,38 +13,28 @@ import { DATA, loadJSON, fmt, registerLoader, registerReloadFlag } from './app.j
 const state = { loaded: false };
 registerReloadFlag('structural', state);
 
-// ── Cargar estructura en un visor Web Component ───────────────────────────
+// ── Cargar estructura en un visor iframe ─────────────────────────────────
+// Cada iframe corre su propia instancia de Molstar en contexto aislado,
+// eliminando la colisión del registro global de símbolos.
 function loadStructure(viewerId, structPath, mutPos) {
-  const el = document.getElementById(viewerId);
-  if (!el || !structPath) return;
+  const iframe = document.getElementById(viewerId);
+  if (!iframe || !structPath) return;
 
   const format = structPath.endsWith('.cif') ? 'mmcif' : 'pdb';
 
-  // Establecer todos los atributos de una vez.
-  // El Web Component observa custom-data-url como trigger de recarga;
-  // los demás atributos deben estar presentes antes de esa asignación.
-  el.setAttribute('bg-color-r',          '10');
-  el.setAttribute('bg-color-g',          '10');
-  el.setAttribute('bg-color-b',          '20');
-  el.setAttribute('hide-controls',       'false');
-  el.setAttribute('select-interaction',  'false');
-  el.setAttribute('pdbe-link',           'false');
-  el.setAttribute('sequence-panel',      'false');
-  el.setAttribute('custom-data-format',  format);
-  el.setAttribute('custom-data-url',     structPath); // trigger de carga — último
+  // Convertir la ruta relativa a URL absoluta para postMessage cross-origin
+  const absoluteUrl = new URL(structPath, window.location.href).href;
 
-  // Highlight del residuo mutado via evento load del componente
-  if (mutPos) {
-    const onLoad = () => {
-      try {
-        el.viewerInstance?.visual.select({
-          data: [{ residue_number: mutPos, color: { r: 255, g: 100, b: 50 }, focus: true }],
-          nonSelectedColor: null,
-        });
-      } catch (_) { /* decorativo */ }
-      el.removeEventListener('load', onLoad);
-    };
-    el.addEventListener('load', onLoad);
+  const send = () => iframe.contentWindow?.postMessage(
+    { type: 'loadStructure', url: absoluteUrl, format, mutPos: mutPos ?? null },
+    window.location.origin
+  );
+
+  // Si el iframe ya cargó su documento, enviar de inmediato; si no, esperar load
+  if (iframe.contentDocument?.readyState === 'complete') {
+    send();
+  } else {
+    iframe.addEventListener('load', send, { once: true });
   }
 }
 

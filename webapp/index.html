@@ -6,9 +6,8 @@
   <title>GEMA MX — Genomic Analysis of Mammary Cancer</title>
   <link rel="icon" type="image/svg+xml" href="favicon.svg" />
   <link rel="stylesheet" href="css/style.css" />
-  <!-- PDBe Molstar v3.10 — Web Component. En v3.10+ moleculeId y customData son opcionales. -->
-  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/pdbe-molstar@3.10.0/build/pdbe-molstar.css" />
-  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/pdbe-molstar@3.10.0/build/pdbe-molstar-component.js"></script>
+  <!-- PDBe Molstar carga en iframes separados (molstar-viewer.html) para evitar
+       colisión del registro global de símbolos con múltiples instancias. -->
   <!-- Plotly.js -->
   <script src="https://cdn.jsdelivr.net/npm/plotly.js-dist@2.32.0/plotly.min.js"></script>
 </head>
@@ -121,11 +120,17 @@
     <div class="card-grid">
       <div class="card viewer-card">
         <h2>Wild-Type (WT)</h2>
-        <pdbe-molstar id="viewer-wt" class="molstar-viewer"></pdbe-molstar>
+        <iframe id="viewer-wt" src="molstar-viewer.html"
+                class="molstar-viewer" title="Visor WT"
+                sandbox="allow-scripts allow-same-origin">
+        </iframe>
       </div>
       <div class="card viewer-card">
         <h2>Mutado (MUT)</h2>
-        <pdbe-molstar id="viewer-mut" class="molstar-viewer"></pdbe-molstar>
+        <iframe id="viewer-mut" src="molstar-viewer.html"
+                class="molstar-viewer" title="Visor MUT"
+                sandbox="allow-scripts allow-same-origin">
+        </iframe>
       </div>
     </div>
 
