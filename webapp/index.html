@@ -6,9 +6,9 @@
   <title>GEMA MX — Genomic Analysis of Mammary Cancer</title>
   <link rel="icon" type="image/svg+xml" href="favicon.svg" />
   <link rel="stylesheet" href="css/style.css" />
-  <!-- PDBe Molstar v3.2 -->
+  <!-- PDBe Molstar v3.2 — Web Component (múltiples instancias sin conflictos) -->
   <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/pdbe-molstar@3.2.0/build/pdbe-molstar.css" />
-  <script src="https://cdn.jsdelivr.net/npm/pdbe-molstar@3.2.0/build/pdbe-molstar-plugin.js"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/pdbe-molstar@3.2.0/build/pdbe-molstar-component.js"></script>
   <!-- Plotly.js -->
   <script src="https://cdn.jsdelivr.net/npm/plotly.js-dist@2.32.0/plotly.min.js"></script>
 </head>
@@ -121,11 +121,25 @@
     <div class="card-grid">
       <div class="card viewer-card">
         <h2>Wild-Type (WT)</h2>
-        <div id="viewer-wt" class="molstar-viewer"></div>
+        <pdbe-molstar id="viewer-wt"
+          bg-color-r="10" bg-color-g="10" bg-color-b="20"
+          hide-controls="false"
+          select-interaction="false"
+          pdbe-link="false"
+          sequence-panel="false"
+          class="molstar-viewer">
+        </pdbe-molstar>
       </div>
       <div class="card viewer-card">
         <h2>Mutado (MUT)</h2>
-        <div id="viewer-mut" class="molstar-viewer"></div>
+        <pdbe-molstar id="viewer-mut"
+          bg-color-r="10" bg-color-g="10" bg-color-b="20"
+          hide-controls="false"
+          select-interaction="false"
+          pdbe-link="false"
+          sequence-panel="false"
+          class="molstar-viewer">
+        </pdbe-molstar>
       </div>
     </div>
 
