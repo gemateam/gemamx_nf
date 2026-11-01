@@ -12,7 +12,10 @@ Soporta dos pipelines bioinformáticos complementarios:
 
 Incluye una **WebApp interactiva SPA (8 vistas dinámicas)** con selector reactivo de corridas, visores macromoleculares 3D ([PDBe Molstar](https://github.com/PDBeurope/pdbe-molstar)) y enriquecimiento en vivo con [ChEMBL](https://www.ebi.ac.uk/chembl/) y [CiViC](https://civicdb.org).
 
-![Arquitectura GEMA MX](docs/architecture.png)
+> 🏛️ **Diagrama de Arquitectura Interactivo en Vivo**:  
+> Puedes consultar el diagrama de arquitectura interactivo (con zoom, pan y trazabilidad de componentes) siempre actualizado en:  
+> 🔗 **[https://gemateam.github.io/gemamx_nf/architecture.html](https://gemateam.github.io/gemamx_nf/architecture.html)**  
+> *(O abrir directamente el archivo local [`docs/architecture.html`](docs/architecture.html) en cualquier navegador)*
 
 ---
 
@@ -128,8 +131,8 @@ gemamx_nf/
 │   ├── gpu/                    # gemamx-gpu:1.0.0
 │   └── docking/                # gemamx-nf-docking:1.0.0
 ├── docs/                       # Documentación y diagramas
-│   ├── architecture.html       # Diagrama de arquitectura interactivo (Archify)
-│   └── architecture.png        # Render de alta resolución del diagrama
+│   ├── index.html              # Portal de documentación en GitHub Pages
+│   └── architecture.html       # Diagrama de arquitectura interactivo (Archify)
 ├── infra/                      # Almacén de infraestructura autónoma
 │   ├── mlflow/                 # Artefactos y volúmenes de MLflow
 │   └── postgres-init/          # Scripts de inicialización SQL
