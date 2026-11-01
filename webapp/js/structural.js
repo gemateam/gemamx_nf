@@ -8,12 +8,23 @@
  *    (cambio de corrida) para evitar la doble inicialización de Molstar
  *    que produce "Symbol already added".
  */
-import { DATA, loadJSON, fmt, registerLoader, registerReloadFlag } from './app.js';
+import { DATA, loadJSON, fmt, registerLoader, registerReloadFlag, BASE_PATH } from './app.js';
 
 const state = { loaded: false };
 registerReloadFlag('structural', state);
 let pluginWT  = null;
 let pluginMUT = null;
+
+// ── Resolver rutas del manifest contra el árbol de datos activo ───────────
+// El contrato guarda las estructuras como "data/structures/<archivo>".
+// Con BASE_PATH = "data" la URL es directa; con una corrida histórica
+// ("runs/<run>/data") hay que reescribir el prefijo o se cargarían las
+// estructuras de la corrida vigente.
+function structUrl(path) {
+  if (!path) return null;
+  const prefix = 'data/';
+  return path.startsWith(prefix) ? `${BASE_PATH}/${path.slice(prefix.length)}` : path;
+}
 
 // ── Inicializar visor y cargar estructura inicial ─────────────────────────
 function createViewer(containerId, structPath) {
@@ -21,14 +32,15 @@ function createViewer(containerId, structPath) {
   if (!el) return Promise.resolve(null);
 
   const plugin = new PDBeMolstarPlugin();
-  const format = (structPath ?? '').endsWith('.cif') ? 'mmcif' : 'pdb';
+  const url = structUrl(structPath);
+  const format = (url ?? '').endsWith('.cif') ? 'mmcif' : 'pdb';
 
   const ready = new Promise((resolve) => {
     plugin.events.loadComplete.subscribe(() => resolve(plugin));
   });
 
   plugin.render(el, {
-    customData:        structPath ? { url: structPath, format, binary: false } : undefined,
+    customData:        url ? { url, format, binary: false } : undefined,
     bgColor:           { r: 10, g: 10, b: 20 },
     hideControls:      false,
     selectInteraction: false,
@@ -47,9 +59,10 @@ function createViewer(containerId, structPath) {
 async function loadStructure(plugin, structPath, mutPos) {
   if (!plugin || !structPath) return;
   try {
-    const format = structPath.endsWith('.cif') ? 'mmcif' : 'pdb';
+    const url = structUrl(structPath);
+    const format = url.endsWith('.cif') ? 'mmcif' : 'pdb';
     await plugin.visual.update({
-      customData: { url: structPath, format, binary: false },
+      customData: { url, format, binary: false },
       bgColor:    { r: 10, g: 10, b: 20 },
     });
     if (mutPos) {
