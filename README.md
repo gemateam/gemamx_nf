@@ -8,7 +8,7 @@ Pipeline bioinformático completo para el análisis genómico de cáncer de mama
 Cubre desde la ingesta de datos del GDC hasta docking molecular con AutoDock Vina, con una
 webapp interactiva para exploración de resultados y conexión en vivo a ChEMBL y CiViC.
 
-![Arquitectura GEMA MX](docs/architecture.html)
+![Arquitectura GEMA MX](docs/architecture.png)
 
 ---
 
