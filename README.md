@@ -10,7 +10,7 @@ Soporta dos pipelines bioinformáticos complementarios:
 - **V1 (TCGA-BRCA)**: Ingesta pública del GDC/NCI, priorización ACMG, predicción estructural y docking molecular con AutoDock Vina.
 - **V2 (Romero-Córdoba 2021 HM)**: Cohorte clínica de mujeres hispanas/mexicanas del FUCAM (*Nature Communications 2021*), incorporando WES, subclasificación clínica (IHC: Luminal A/B, HER2+, TNBC; PAM50: LumA, LumB, Basal, Her2, Normal) y catálogo de fármacos optimizado para México.
 
-Incluye una **WebApp interactiva SPA (8 vistas dinámicas)** con selector reactivo de corridas, visores macromoleculares 3D ([PDBe Molstar](https://github.com/PDBeurope/pdbe-molstar)) y enriquecimiento en vivo con [ChEMBL](https://www.ebi.ac.uk/chembl/) y [CiViC](https://civicdb.org).
+Incluye una **WebApp interactiva SPA (6 vistas dinámicas e integradas)** con selector reactivo de corridas, visor modal del snapshot de código real ejecutado por corrida, visores macromoleculares 3D ([PDBe Molstar](https://github.com/PDBeurope/pdbe-molstar)) y enriquecimiento en vivo con [ChEMBL](https://www.ebi.ac.uk/chembl/) y [CiViC](https://civicdb.org).
 
 > 🏛️ **Diagrama de Arquitectura Interactivo en Vivo**:  
 > Puedes consultar el diagrama de arquitectura interactivo (con zoom, pan y trazabilidad de componentes) siempre actualizado en:  
@@ -30,7 +30,7 @@ Incluye una **WebApp interactiva SPA (8 vistas dinámicas)** con selector reacti
    - [Pipeline V1 (TCGA-BRCA)](#pipeline-v1-tcga-brca)
    - [Pipeline V2 (Romero-Córdoba 2021 HM)](#pipeline-v2-romero-córdoba-2021-hm)
 7. [Servicios Docker y MLflow](#7-servicios-docker-y-mlflow)
-8. [WebApp Interactiva (8 Vistas)](#8-webapp-interactiva-8-vistas)
+8. [WebApp Interactiva (6 Vistas Integradas)](#8-webapp-interactiva-6-vistas-integradas)
 9. [Referencias y Tecnologías](#9-referencias-y-tecnologías)
 10. [Licencia y Créditos](#10-licencia-y-créditos)
 
@@ -71,7 +71,7 @@ El sistema implementa una arquitectura desacoplada en cuatro capas principales:
 | **Modelado 3D** | Boltz-1 / AlphaFold / ESMFold | Boltz-1 / AlphaFold / PDB precomputados |
 | **Docking Molecular** | AutoDock Vina 1.2.3 (11 fármacos) | AutoDock Vina 1.2.3 (11 fármacos curados) |
 | **Experimento [MLflow](https://mlflow.org/)** | `GEMAMX-V1-NF` | `GEMAMX-V2-ROMERO` |
-| **Módulo Clínico Web** | Oculto / No aplicable | Activo (pestaña dedicada en WebApp) |
+| **Módulo Clínico Web** | Oculto / No aplicable | Integrado directamente en la vista **Análisis** |
 
 ---
 
@@ -227,18 +227,16 @@ services:
 
 ---
 
-## 8. WebApp Interactiva (8 Vistas)
+## 8. WebApp Interactiva (6 Vistas Integradas)
 
-La WebApp está disponible en **`http://localhost:8080`**. Al cambiar de corrida en el selector superior (`#sel-run`), la aplicación conmuta reactivamente todas las vistas:
+La WebApp está disponible en **`http://localhost:8080`**. Al cambiar de corrida en el selector superior (`#sel-run`), la aplicación conmuta reactivamente todas las vistas y actualiza los títulos y métricas en función del pipeline activo (TCGA-BRCA o Romero HM):
 
-1. **Dashboard General**: KPIs de variantes analizadas, hotspot #1, estructuras 3D generadas y mejor afinidad global.
-2. **Pipeline Status**: Trazabilidad del flujo de trabajo, parámetros de ejecución y estado de sincronización con [MLflow](https://mlflow.org/).
-3. **Exploración**: Tabla paginada y filtrable de mutaciones somáticas (frecuencias, clasificaciones de patogenicidad y enlaces directos a visores 3D).
-4. **Análisis Mutacional**: Gráficas interactivas con Plotly de distribución por gen y tipos de mutación (missense, frameshift, nonsense).
-5. **Estructuras 3D**: Visores sincronizados con [PDBe Molstar](https://github.com/PDBeurope/pdbe-molstar) para inspeccionar Wild-Type (WT) vs Mutado (MUT), pLDDT y RMSD por región.
-6. **Docking Molecular**: Ranking de los 11 fármacos evaluados en AutoDock Vina, deltas de afinidad $\Delta = \text{MUT} - \text{WT}$, panel de disponibilidad en México y visualización 3D del complejo receptor-ligando.
-7. **Análisis Clínico (V2)**: Distribución de subtipos moleculares (IHC y PAM50), rangos de edad y correlación directa variante × clínica de la cohorte Romero-Córdoba 2021.
-8. **Reporte por Variante**: Ficha técnica descargable de impacto clínico, estructural y farmacológico para oncología de precisión.
+1. **Pipeline Status (Vista Principal)**: Trazabilidad completa del flujo Nextflow (M1-M5), resumen de parámetros, enlace directo a la corrida en [MLflow](https://mlflow.org/) local (`http://localhost:5000`) y **visor modal interactivo con el código fuente real ejecutado** en cada etapa.
+2. **Exploración de Datasets**: Tabla dinámica y filtrable de mutaciones somáticas (frecuencias, porcentajes de cohorte, clasificaciones ACMG/Hotspot y botones interactivos para inspeccionar estructuras WT y MUT). Sincronizada dinámicamente con los insumos del pipeline seleccionado.
+3. **Análisis (Genómico y Clínico Integrado)**: Vista unificada que combina las distribuciones de variantes por gen/tipo con el módulo clínico FUCAM cuando la corrida corresponde a V2 (IHC: Luminal A/B, HER2+, TNBC; PAM50: LumA, LumB, Basal, Her2, Normal; rangos de edad y correlación por variante).
+4. **Estructuras 3D**: Visores moleculares interactivos con [PDBe Molstar](https://github.com/PDBeurope/pdbe-molstar) para comparar Wild-Type (WT) vs Mutado (MUT), inspeccionar scores de confianza pLDDT y métricas de RMSD activo.
+5. **Docking Molecular**: Evaluación y ranking de afinidad para los 11 fármacos antineoplásicos con AutoDock Vina, cálculo de deltas $\Delta = \text{MUT} - \text{WT}$, panel de disponibilidad en México y visualización 3D del complejo receptor-ligando.
+6. **Reporte por Variante**: Ficha técnica descargable de impacto clínico, estructural y farmacológico para oncología de precisión y medicina personalizada.
 
 ---
 
