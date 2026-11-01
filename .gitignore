@@ -5,8 +5,9 @@ work/
 .nf/
 
 # Resultados publicados (se regeneran con el pipeline)
-results/
-data/
+/results/
+/data/
+infra/mlflow/mlartifacts/
 
 # Entornos locales
 venv/

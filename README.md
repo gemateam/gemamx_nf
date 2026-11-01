@@ -161,15 +161,18 @@ Ambos pipelines están implementados bajo la especificación [Nextflow DSL2](htt
 
 ### Pipeline V1 (TCGA-BRCA)
 
-Ejecuta el flujo para la cohorte internacional TCGA-BRCA:
+Ejecuta el flujo para la cohorte internacional TCGA-BRCA utilizando los insumos incluidos en el repositorio (`tests/reference/`):
 
 ```bash
-# Modo de prueba con datos precalculados (rápido, sin GPU)
+# Modo de prueba con datos precalculados e insumos del repo (rápido, sin GPU)
 nextflow run main.nf -profile test
 
-# Modo producción con CPU
+# Modo producción con CPU usando el snapshot de mutaciones y catálogo de fármacos del repo
 nextflow run main.nf \
   --study_id brca_tcga \
+  --mutations_json tests/reference/mutations_snapshot.json \
+  --structures_dir tests/reference/structures \
+  --drug_catalog assets/drug_catalog.csv \
   --genes "PIK3CA,TP53,AKT1,ERBB2" \
   --max_variants 3 \
   --structures_mode precomputed \
@@ -182,11 +185,17 @@ nextflow run main.nf -resume -profile cpu
 
 ### Pipeline V2 (Romero-Córdoba 2021 HM)
 
-Ejecuta el flujo para la cohorte de pacientes mexicanas con integración clínica:
+Ejecuta el flujo para la cohorte de pacientes mexicanas con integración clínica, utilizando los insumos oficiales del estudio (*Nature Comms 2021*) incluidos en `tests/reference/romero_v2/`:
 
 ```bash
-# Ejecutar pipeline V2 completo
+# Ejecutar pipeline V2 completo con los insumos directos del repo
 nextflow run main_v2.nf \
+  --romero_maf tests/reference/romero_v2/raw/41467_2021_22478_MOESM8_ESM.xlsx \
+  --romero_drivers tests/reference/romero_v2/raw/41467_2021_22478_MOESM9_ESM.xlsx \
+  --romero_clinical tests/reference/romero_v2/raw/41467_2021_22478_MOESM4_ESM.xlsx \
+  --fasta_dir tests/reference/romero_v2/fasta \
+  --structures_dir tests/reference/romero_v2/structures \
+  --drug_catalog assets/drug_catalog.csv \
   --genes "PIK3CA,TP53,AKT1,ERBB2,PTEN,GATA3,MAP3K1" \
   --max_variants 1 \
   --structures_mode precomputed \

@@ -1,0 +1,45 @@
+AutoDock Vina v1.2.3
+#################################################################
+# If you used AutoDock Vina in your work, please cite:          #
+#                                                               #
+# J. Eberhardt, D. Santos-Martins, A. F. Tillack, and S. Forli  #
+# AutoDock Vina 1.2.0: New Docking Methods, Expanded Force      #
+# Field, and Python Bindings, J. Chem. Inf. Model. (2021)       #
+# DOI 10.1021/acs.jcim.1c00203                                  #
+#                                                               #
+# O. Trott, A. J. Olson,                                        #
+# AutoDock Vina: improving the speed and accuracy of docking    #
+# with a new scoring function, efficient optimization and       #
+# multithreading, J. Comp. Chem. (2010)                         #
+# DOI 10.1002/jcc.21334                                         #
+#                                                               #
+# Please see https://github.com/ccsb-scripps/AutoDock-Vina for  #
+# more information.                                             #
+#################################################################
+
+Scoring function : vina
+Rigid receptor: D:\ProyectosIA\GEMAMX\v2\data\docking\receptors\PIK3CA_H1047Y.pdbqt
+Ligand: D:\ProyectosIA\GEMAMX\v2\data\docking\ligands\Abemaciclib.pdbqt
+Grid center: X -0.906 Y 1.382 Z -0.832
+Grid size  : X 25 Y 25 Z 25
+Grid space : 0.375
+Exhaustiveness: 8
+CPU: 0
+Verbosity: 1
+
+Computing Vina grid ... done.
+Performing docking (random seed: -95770714) ... 
+0%   10   20   30   40   50   60   70   80   90   100%
+|----|----|----|----|----|----|----|----|----|----|
+***************************************************
+
+mode |   affinity | dist from best mode
+     | (kcal/mol) | rmsd l.b.| rmsd u.b.
+-----+------------+----------+----------
+   1       -6.652          0          0
+   2       -6.358      2.641      8.855
+   3        -6.28      1.985      3.002
+   4       -6.274      3.914      6.202
+   5       -6.155      2.673      4.274
+
+WARNING: At low exhaustiveness, it may be impossible to utilize all CPUs.
