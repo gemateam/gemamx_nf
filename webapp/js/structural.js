@@ -20,11 +20,20 @@ function loadStructure(viewerId, structPath, mutPos) {
 
   const format = structPath.endsWith('.cif') ? 'mmcif' : 'pdb';
 
-  // El Web Component se re-renderiza al cambiar estos atributos
-  el.setAttribute('custom-data-url',    structPath);
-  el.setAttribute('custom-data-format', format);
+  // Establecer todos los atributos de una vez.
+  // El Web Component observa custom-data-url como trigger de recarga;
+  // los demás atributos deben estar presentes antes de esa asignación.
+  el.setAttribute('bg-color-r',          '10');
+  el.setAttribute('bg-color-g',          '10');
+  el.setAttribute('bg-color-b',          '20');
+  el.setAttribute('hide-controls',       'false');
+  el.setAttribute('select-interaction',  'false');
+  el.setAttribute('pdbe-link',           'false');
+  el.setAttribute('sequence-panel',      'false');
+  el.setAttribute('custom-data-format',  format);
+  el.setAttribute('custom-data-url',     structPath); // trigger de carga — último
 
-  // Highlight del residuo mutado via evento del componente
+  // Highlight del residuo mutado via evento load del componente
   if (mutPos) {
     const onLoad = () => {
       try {
@@ -32,7 +41,7 @@ function loadStructure(viewerId, structPath, mutPos) {
           data: [{ residue_number: mutPos, color: { r: 255, g: 100, b: 50 }, focus: true }],
           nonSelectedColor: null,
         });
-      } catch (_) { /* decorativo — no bloquear */ }
+      } catch (_) { /* decorativo */ }
       el.removeEventListener('load', onLoad);
     };
     el.addEventListener('load', onLoad);
