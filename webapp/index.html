@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>GEMA MX — Genomic Analysis of Mammary Cancer</title>
   <link rel="icon" type="image/svg+xml" href="favicon.svg" />
-  <link rel="stylesheet" href="css/style.css?v=20261102d" />
+  <link rel="stylesheet" href="css/style.css?v=20261103c" />
   <!-- PDBe Molstar JS Plugin (una sola carga; viewers en divs directos) -->
   <link rel="stylesheet" type="text/css"
     href="https://cdn.jsdelivr.net/npm/pdbe-molstar@3.2.0/build/pdbe-molstar.css" />
@@ -463,19 +463,74 @@
 
 </main>
 
+<!-- ═══════════ VISOR 3D GRANDE — proteína y complejos con fármacos ═══════════ -->
+<div id="exp-structure-modal" class="exp-modal" hidden aria-hidden="true">
+  <div class="exp-modal-backdrop" data-exp-modal-close></div>
+  <div class="exp-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="exp-modal-title">
+    <header class="exp-modal-head">
+      <div class="exp-modal-heading">
+        <p class="exp-modal-kicker">Visualización 3D · proteína y acoplamientos</p>
+        <h3 id="exp-modal-title">—</h3>
+        <p id="exp-modal-sub" class="exp-modal-sub"></p>
+      </div>
+      <button class="exp-modal-close" type="button" data-exp-modal-close aria-label="Cerrar visor">✕</button>
+    </header>
+
+    <div class="exp-modal-body">
+      <div class="exp-modal-canvas-wrap">
+        <div id="exp-modal-molstar" class="exp-molstar exp-molstar--modal"></div>
+        <p class="exp-modal-legend">
+          Arcoíris N→C (violeta → rojo) · residuo mutado en <b class="lg-mut">rojo</b> ·
+          ligando en <b class="lg-lig">naranja</b>. Arrastra para rotar; usa la rueda para acercar.
+        </p>
+      </div>
+
+      <aside class="exp-modal-panel">
+        <section class="exp-modal-section">
+          <h4>Modelo</h4>
+          <div id="exp-modal-models" class="exp-modal-optrow"></div>
+        </section>
+
+        <section class="exp-modal-section">
+          <h4>Representación</h4>
+          <div id="exp-modal-styles" class="exp-modal-optrow"></div>
+        </section>
+
+        <section class="exp-modal-section exp-modal-checks">
+          <label class="exp-modal-check">
+            <input type="checkbox" id="exp-modal-mutres" checked> Resaltar residuo mutado
+          </label>
+          <label class="exp-modal-check">
+            <input type="checkbox" id="exp-modal-ligand" checked> Resaltar ligando
+          </label>
+          <div class="exp-modal-optrow exp-modal-focusrow">
+            <button class="exp-modal-opt" type="button" data-modal-focus-mut>Centrar mutación</button>
+            <button class="exp-modal-opt" type="button" data-modal-focus-ligand>Centrar ligando</button>
+          </div>
+        </section>
+
+        <section class="exp-modal-section exp-modal-inhibitors">
+          <h4>Inhibidores <span class="exp-section-hint">kcal/mol</span></h4>
+          <div id="exp-modal-inhibitor-list" class="exp-modal-inhibitor-list"></div>
+        </section>
+      </aside>
+    </div>
+  </div>
+</div>
+
 <!-- ═════════════════════════ FOOTER ═════════════════════════ -->
 <footer class="footer">
   <span id="footer-brand">GEMA MX · Universidad de Sonora</span>
   <span id="footer-run"></span>
 </footer>
 
-<script src="js/app.js?v=20261102d"    type="module"></script>
-<script src="js/analysis.js?v=20261102d"  type="module"></script>
-<script src="js/structural.js?v=20261102d" type="module"></script>
-<script src="js/docking.js?v=20261102d"   type="module"></script>
-<script src="js/report.js?v=20261102d"    type="module"></script>
-<script src="js/pipeline.js?v=20261102d"  type="module"></script>
-<script src="js/explore.js?v=20261102d"   type="module"></script>
-<script src="js/clinical.js?v=20261102d"  type="module"></script>
+<script src="js/app.js?v=20261103c"    type="module"></script>
+<script src="js/analysis.js?v=20261103c"  type="module"></script>
+<script src="js/structural.js?v=20261103c" type="module"></script>
+<script src="js/docking.js?v=20261103c"   type="module"></script>
+<script src="js/report.js?v=20261103c"    type="module"></script>
+<script src="js/pipeline.js?v=20261103c"  type="module"></script>
+<script src="js/explore.js?v=20261103c"   type="module"></script>
+<script src="js/clinical.js?v=20261103c"  type="module"></script>
 </body>
 </html>

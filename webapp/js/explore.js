@@ -11,7 +11,7 @@
  * Al pulsar WT o MUT navega a Estructuras 3D con la variante pre-seleccionada.
  */
 import {
-  DATA, loadJSON, fmt, contractUrl, registerLoader, registerReloadFlag,
+  DATA, loadJSON, fmt, contractUrl, BASE_PATH, registerLoader, registerReloadFlag,
 } from './app.js';
 import {
   getProteinInfo, fetchProteinInfo, proteinDisplayName,
@@ -85,7 +85,7 @@ function resolveStructures(gene, proteinChange, manifest) {
 }
 
 // ── Construir tabla completa desde raw_mutations ───────────────────────────
-function buildVariantTable(rawMutations, topVariants, manifest, metrics) {
+function buildVariantTable(rawMutations, topVariants, manifest, metrics, affinities) {
   // Agregar raw_mutations por (hugo_symbol + protein_change)
   const aggMap = new Map();
   (rawMutations ?? []).forEach(m => {
@@ -128,6 +128,12 @@ function buildVariantTable(rawMutations, topVariants, manifest, metrics) {
     const gene    = key.split('_')[0];
     const structures = resolveStructures(entry.hugo_symbol, entry.protein_change, manifest);
 
+    // Docking: afinidades MUT de la variante y WT canónico del gen.
+    const mutAffinity = affinities?.[key] ?? metricM.vina_scores ?? {};
+    const wtAffinity  = affinities?.[`${gene}_WT`]
+      ?? affinities?.[`${gene}_WT_${entry.protein_change}`]
+      ?? null;
+
     return {
       key,
       hugo_symbol:    entry.hugo_symbol,
@@ -146,7 +152,10 @@ function buildVariantTable(rawMutations, topVariants, manifest, metrics) {
       mut_plddt:      metricM.mut_plddt ?? null,
       best_drug:      metricM.best_vina_drug ?? null,
       best_score:     metricM.best_vina_score ?? null,
+      mut_residue:    metricM.mutation_resseq_model ?? null,
+      docking:        { mut: mutAffinity, wt: wtAffinity },
     };
+
   });
 
   // Ordenar: primero las priorizadas (tienen rank), luego por frecuencia
@@ -261,6 +270,134 @@ function infoSections(p) {
   return (html || `<p class="exp-detail-empty">Sin ficha detallada disponible para este gen.</p>`) + source;
 }
 
+// ── Inhibidores (docking) dentro de la ficha ──────────────────────────────
+function dockingSectionHTML(v) {
+  const mut = v.docking?.mut ?? {};
+  const wt  = v.docking?.wt ?? null;
+  const drugs = Object.keys(mut).sort((a, b) => (mut[a] ?? 0) - (mut[b] ?? 0));
+  if (!drugs.length) return '';
+
+  const deltaCell = (mutScore, wtScore) => {
+    if (mutScore == null || wtScore == null) return '<td class="exp-docking-delta">—</td>';
+    const diff = mutScore - wtScore;
+    const cls = diff <= -0.15 ? 'is-better' : diff >= 0.15 ? 'is-worse' : 'is-neutral';
+    const sign = diff > 0 ? '+' : '';
+    return `<td class="exp-docking-delta ${cls}">${sign}${diff.toFixed(2)}</td>`;
+  };
+
+  const rows = drugs.map(drug => {
+    const mutScore = mut[drug];
+    const wtScore  = wt?.[drug] ?? null;
+    const active = v.best_drug === drug ? ' is-best' : '';
+    return `
+      <tr class="exp-docking-row${active}">
+        <td class="exp-docking-drug">
+          ${esc(drug)}${v.best_drug === drug ? ' <span class="exp-docking-best">mejor</span>' : ''}
+        </td>
+        <td class="exp-docking-score">${fmt(wtScore)}</td>
+        <td class="exp-docking-score">${fmt(mutScore)}</td>
+        ${deltaCell(mutScore, wtScore)}
+        <td class="exp-docking-action">
+          <button class="exp-pose-btn" data-detail-pose="${esc(drug)}"
+                  title="Ver ${esc(drug)} acoplado a ${esc(v.hugo_symbol)} ${esc(v.protein_change)}">Ver 3D</button>
+        </td>
+      </tr>`;
+  }).join('');
+
+  const wtNote = wt
+    ? 'WT canónico del gen'
+    : 'sin docking de WT en esta corrida';
+
+  return `
+    <div class="exp-detail-section exp-docking">
+      <h4>Inhibidores <span class="exp-section-hint">docking molecular · kcal/mol</span></h4>
+      <div class="exp-docking-table-wrap">
+        <table class="exp-docking-table">
+          <thead>
+            <tr>
+              <th>Inhibidor</th>
+              <th title="${wtNote}">WT</th>
+              <th>MUT</th>
+              <th title="MUT − WT">Δ</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>${rows}</tbody>
+        </table>
+      </div>
+      <p class="exp-docking-note">
+        Más negativo = mayor afinidad. Δ &lt; 0 indica que el mutante une mejor el fármaco
+        (referencia: ${wtNote}). «Ver 3D» abre el complejo proteína–ligando de AutoDock Vina.
+      </p>
+      <button class="exp-docking-chart-btn" data-docking-chart>
+        Ver gráfica WT vs MUT
+      </button>
+      <div class="exp-docking-chart" data-docking-chart-box hidden></div>
+    </div>`;
+}
+
+function renderDockingChart(box, v) {
+  if (!box || typeof Plotly === 'undefined') return;
+  const mut = v.docking?.mut ?? {};
+  const wt  = v.docking?.wt ?? {};
+  const drugs = Object.keys(mut)
+    .sort((a, b) => (mut[a] ?? 0) - (mut[b] ?? 0))
+    .reverse();  // Plotly dibuja las categorías de abajo hacia arriba
+
+  const traces = [
+    {
+      type: 'bar', orientation: 'h', name: 'WT',
+      y: drugs, x: drugs.map(d => wt[d] ?? null),
+      marker: { color: '#60a5fa' },
+      hovertemplate: '<b>%{y}</b><br>WT: %{x:.2f} kcal/mol<extra></extra>',
+    },
+    {
+      type: 'bar', orientation: 'h', name: 'MUT',
+      y: drugs, x: drugs.map(d => mut[d] ?? null),
+      marker: { color: '#14b8a6' },
+      hovertemplate: '<b>%{y}</b><br>MUT: %{x:.2f} kcal/mol<extra></extra>',
+    },
+  ];
+
+  Plotly.newPlot(box, traces, {
+    paper_bgcolor: 'transparent',
+    plot_bgcolor: 'transparent',
+    font: { color: '#cbd5e1', size: 10 },
+    margin: { l: 92, r: 12, t: 8, b: 34 },
+    barmode: 'group',
+    bargap: .25,
+    bargroupgap: .08,
+    height: Math.max(220, drugs.length * 26 + 60),
+    xaxis: {
+      title: { text: 'kcal/mol', font: { size: 9 } },
+      gridcolor: 'rgba(148,163,184,.15)',
+      zerolinecolor: 'rgba(148,163,184,.3)',
+      tickfont: { size: 9 },
+    },
+    yaxis: { automargin: true, tickfont: { size: 9 } },
+    legend: { orientation: 'h', x: 0, y: 1.06, font: { size: 9 } },
+  }, { displayModeBar: false, responsive: true });
+}
+
+function toggleDockingChart(button) {
+  const detail = button.closest('.exp-detail');
+  const v = _rowsByKey.get(detail?.dataset.detailKey);
+  const box = detail?.querySelector('[data-docking-chart-box]');
+  if (!v || !box) return;
+
+  if (!box.hidden) {
+    box.hidden = true;
+    button.textContent = 'Ver gráfica WT vs MUT';
+    if (typeof Plotly !== 'undefined') {
+      try { Plotly.purge(box); } catch (_) { /* noop */ }
+    }
+    return;
+  }
+  box.hidden = false;
+  button.textContent = 'Ocultar gráfica';
+  renderDockingChart(box, v);
+}
+
 function infoPanelHTML(v, p) {
   const color = geneColor(v.hugo_symbol);
   const chips = [
@@ -292,7 +429,7 @@ function infoPanelHTML(v, p) {
         <div class="exp-detail-chips">${chips}</div>
       </div>
     </div>
-    <div class="exp-detail-body">${infoSections(p)}</div>
+    <div class="exp-detail-body">${infoSections(p)}${dockingSectionHTML(v)}</div>
     <div class="exp-detail-variant">
       <span>Variante <b class="exp-mono">${esc(v.protein_change)}</b></span>
       <span>Frecuencia <b>${v.frequency}</b> · cohorte <b>${v.cohort_pct.toFixed(1)}%</b></span>
@@ -323,11 +460,16 @@ function detailRowHTML(v) {
         <div class="exp-detail-viewer">
           <div class="exp-detail-viewer-head">
             <span class="exp-detail-viewer-title">Estructura de la proteína</span>
-            ${structureToggleHTML(v, defaultKind)}
+            <div class="exp-detail-viewer-actions">
+              ${structureToggleHTML(v, defaultKind)}
+              <button class="exp-open-viewer-btn" data-open-viewer
+                      title="Abrir el visor 3D grande con inhibidores">⤢ Visor</button>
+            </div>
           </div>
           <div class="exp-molstar" data-exp-molstar></div>
           <p class="exp-detail-legend">
-            Coloreado arcoíris de N a C (azul → rojo). Arrastra para rotar y usa la rueda para acercar.
+            Coloreado arcoíris de N a C (azul → rojo). Abre el visor para superponer el
+            residuo mutado y probar los inhibidores acoplados.
           </p>
         </div>
       </div>
@@ -344,6 +486,11 @@ function disposeDetailViewer() {
 }
 
 function closeDetail() {
+  if (typeof Plotly !== 'undefined') {
+    document.querySelectorAll('#exp-tbody [data-docking-chart-box]').forEach(el => {
+      try { Plotly.purge(el); } catch (_) { /* noop */ }
+    });
+  }
   document.querySelectorAll('#exp-tbody tr.exp-detail-row').forEach(el => el.remove());
   document.querySelectorAll('#exp-tbody tr.exp-row--open').forEach(el => {
     el.classList.remove('exp-row--open');
@@ -426,10 +573,9 @@ function collectResidueIds(viewer) {
   return ids;
 }
 
-async function applyRainbow(viewer) {
-  await waitForStructure(viewer);
+function rainbowSelectionData(viewer) {
   const ids = collectResidueIds(viewer);
-  if (!ids.length) return;
+  if (!ids.length) return [];
 
   const bins = Math.min(24, ids.length);
   const per = Math.ceil(ids.length / bins);
@@ -445,6 +591,13 @@ async function applyRainbow(viewer) {
       focus: false,
     });
   }
+  return data;
+}
+
+async function applyRainbow(viewer) {
+  await waitForStructure(viewer);
+  const data = rainbowSelectionData(viewer);
+  if (!data.length) return;
 
   try {
     await viewer.visual.clearSelection?.();
@@ -580,6 +733,402 @@ function toggleDetail(row, button) {
   }
 }
 
+// ── Visor 3D grande (estilo «Open structure viewer») ──────────────────────
+const modalState = {
+  open: false,
+  variantKey: null,
+  model: 'mut',
+  style: 'cartoon',
+  target: null,          // null = estructura; { drug } = complejo con ligando
+  highlightMut: true,
+  highlightLigand: true,
+  viewer: null,
+  token: 0,
+};
+const modalComplexCache = new Map();
+
+function getModalVariant() {
+  return modalState.variantKey ? _rowsByKey.get(modalState.variantKey) : null;
+}
+
+async function modalHead(url) {
+  if (modalComplexCache.has(url)) return modalComplexCache.get(url);
+  let ok = false;
+  try {
+    ok = (await fetch(url, { method: 'HEAD' })).ok;
+  } catch (_) {
+    ok = false;
+  }
+  modalComplexCache.set(url, ok);
+  return ok;
+}
+
+// Los complejos V2.1 se publican como <variante>_x_<fármaco>_complex.pdb; las
+// corridas V1/V2.0 usan <variante>_<fármaco>_complex.pdb. Se prueban ambas.
+async function resolveModalComplex(v, model, drug) {
+  const variantKey = model === 'wt' ? `${v.hugo_symbol}_WT` : v.key;
+  const drugSafe   = drug.replace(/ /g, '_');
+  const candidates = [
+    `${BASE_PATH}/docking/complex/${variantKey}_x_${drugSafe}_complex.pdb`,
+    `${BASE_PATH}/docking/complex/${variantKey}_${drugSafe}_complex.pdb`,
+  ];
+  for (const url of candidates) {
+    if (await modalHead(url)) return url;
+  }
+  return null;
+}
+
+function renderModalControls() {
+  const v = getModalVariant();
+  if (!v) return;
+
+  const models = document.getElementById('exp-modal-models');
+  if (models) {
+    const btn = (kind, label) => `
+      <button class="exp-modal-opt ${modalState.model === kind ? 'is-active' : ''}"
+              data-modal-model="${kind}" ${v.structures[kind] ? '' : 'disabled'}
+              title="Ver la estructura ${label}">${label}</button>`;
+    models.innerHTML = btn('wt', 'WT') + btn('mut', 'MUT');
+  }
+
+  const styles = document.getElementById('exp-modal-styles');
+  if (styles) {
+    const options = [
+      ['cartoon', 'Cartoon'],
+      ['ball-and-stick', 'Bolas y varillas'],
+      ['molecular-surface', 'Superficie'],
+    ];
+    styles.innerHTML = options.map(([value, label]) => `
+      <button class="exp-modal-opt ${modalState.style === value ? 'is-active' : ''}"
+              data-modal-style="${value}">${label}</button>`).join('');
+  }
+
+  const mutCb = document.getElementById('exp-modal-mutres');
+  if (mutCb) {
+    mutCb.disabled = v.mut_residue == null;
+    mutCb.checked = modalState.highlightMut && v.mut_residue != null;
+  }
+  const ligCb = document.getElementById('exp-modal-ligand');
+  if (ligCb) {
+    ligCb.disabled = !modalState.target?.drug;
+    ligCb.checked = modalState.highlightLigand;
+  }
+  const focusLig = document.querySelector('[data-modal-focus-ligand]');
+  if (focusLig) focusLig.disabled = !modalState.target?.drug;
+  const focusMut = document.querySelector('[data-modal-focus-mut]');
+  if (focusMut) focusMut.disabled = v.mut_residue == null;
+}
+
+function renderModalInhibitors(v) {
+  const box = document.getElementById('exp-modal-inhibitor-list');
+  if (!box) return;
+
+  const mut = v.docking?.mut ?? {};
+  const wt  = v.docking?.wt ?? {};
+  const drugs = Object.keys(mut).sort((a, b) => (mut[a] ?? 0) - (mut[b] ?? 0));
+  if (!drugs.length) {
+    box.innerHTML = '<p class="exp-modal-empty">Sin datos de docking para esta variante.</p>';
+    return;
+  }
+
+  const activeDrug = modalState.target?.drug ?? null;
+  const clear = activeDrug
+    ? `<button class="exp-modal-clear" data-modal-clear-ligand>✕ Quitar ligando</button>`
+    : '';
+
+  box.innerHTML = clear + drugs.map(drug => {
+    const mutScore = mut[drug];
+    const wtScore  = wt[drug];
+    const diff = (mutScore != null && wtScore != null) ? mutScore - wtScore : null;
+    const deltaCls = diff == null ? '' : diff <= -0.15 ? 'is-better' : diff >= 0.15 ? 'is-worse' : 'is-neutral';
+    const deltaTxt = diff == null ? '—' : `${diff > 0 ? '+' : ''}${diff.toFixed(2)}`;
+    return `
+      <button class="exp-modal-inh ${activeDrug === drug ? 'is-active' : ''}"
+              data-modal-inh="${esc(drug)}"
+              title="Cargar ${esc(drug)} acoplado a ${esc(v.hugo_symbol)} ${esc(v.protein_change)}">
+        <span class="exp-modal-inh-name">${esc(drug)}</span>
+        <span class="exp-modal-inh-scores">
+          <span><b>WT</b> ${fmt(wtScore)}</span>
+          <span><b>MUT</b> ${fmt(mutScore)}</span>
+          <span class="exp-modal-inh-delta ${deltaCls}">Δ ${deltaTxt}</span>
+        </span>
+      </button>`;
+  }).join('');
+}
+
+function updateModalSubtitle(isComplex) {
+  const v = getModalVariant();
+  const sub = document.getElementById('exp-modal-sub');
+  if (!v || !sub) return;
+  const kindLabel = modalState.model === 'wt' ? 'WT' : 'MUT';
+  sub.textContent = isComplex && modalState.target?.drug
+    ? `Complejo ${kindLabel} · ${modalState.target.drug} (pose 1 de AutoDock Vina)`
+    : `Estructura ${kindLabel} · ${v.hugo_symbol} ${v.protein_change} (plegada con ESMFold)`;
+}
+
+async function applyModalStyle() {
+  const viewer = modalState.viewer;
+  if (!viewer?.visual) return;
+  try {
+    await viewer.visual.update({ visual: { style: modalState.style } });
+  } catch (e) {
+    console.warn('[Explore] No se pudo cambiar la representación 3D:', e);
+  }
+}
+
+async function applyModalAppearance() {
+  const viewer = modalState.viewer;
+  const v = getModalVariant();
+  if (!viewer || !v) return;
+
+  await waitForStructure(viewer);
+
+  try { await viewer.visual.clearHighlight?.(); } catch (_) { /* noop */ }
+  const data = rainbowSelectionData(viewer);
+  const isComplex = !!modalState.target?.drug;
+
+  // El residuo mutado se pinta al final para que gane sobre el arcoíris.
+  if (modalState.highlightMut && v.mut_residue != null) {
+    data.push({
+      start_residue_number: v.mut_residue,
+      end_residue_number: v.mut_residue,
+      color: { r: 239, g: 68, b: 68 },
+      focus: false,
+    });
+  }
+  if (isComplex && modalState.highlightLigand) {
+    data.push({ label_comp_id: 'LIG', color: { r: 251, g: 146, b: 60 }, focus: false });
+  }
+
+  try { await viewer.visual.clearSelection?.(); } catch (_) { /* noop */ }
+  if (data.length) {
+    try {
+      await viewer.visual.select({ data, nonSelectedColor: null });
+    } catch (e) {
+      console.warn('[Explore] No se pudo aplicar el coloreado del visor:', e);
+    }
+  }
+}
+
+async function loadModalTarget({ resetCamera = true } = {}) {
+  const v = getModalVariant();
+  if (!v) return;
+
+  const container = document.getElementById('exp-modal-molstar');
+  if (!container) return;
+
+  let url = null;
+  let format = 'pdb';
+  let isComplex = false;
+
+  if (modalState.target?.drug) {
+    url = await resolveModalComplex(v, modalState.model, modalState.target.drug);
+    if (url) {
+      isComplex = true;
+    } else {
+      modalState.target = null;
+    }
+  }
+
+  if (!url) {
+    if (!v.structures[modalState.model]) {
+      modalState.model = v.structures.mut ? 'mut' : 'wt';
+    }
+    url = v.structures[modalState.model];
+    if (url) format = structureFormat(url);
+  }
+
+  if (!url) {
+    container.innerHTML = '<div class="exp-molstar-empty">No hay estructura 3D publicada para esta variante.</div>';
+    modalState.target = null;
+    renderModalControls();
+    return;
+  }
+  if (typeof PDBeMolstarPlugin === 'undefined') {
+    container.innerHTML = '<div class="exp-molstar-empty">El visor 3D no está disponible (PDBe Mol* no cargó).</div>';
+    return;
+  }
+
+  renderModalControls();
+  renderModalInhibitors(v);
+  updateModalSubtitle(isComplex);
+
+  const token = ++modalState.token;
+  try {
+    if (!modalState.viewer) {
+      container.innerHTML = '';
+      const plugin = new PDBeMolstarPlugin();
+      modalState.viewer = plugin;
+      await plugin.render(container, {
+        customData: { url, format },
+        bgColor: { r: 10, g: 15, b: 30 },
+        hideControls: true,
+        landscape: true,
+        pdbeLink: false,
+        sequencePanel: false,
+        lighting: 'matte',
+      });
+    } else {
+      await modalState.viewer.visual.update({ customData: { url, format } }, true);
+    }
+    if (token !== modalState.token) return;
+
+    await waitForStructure(modalState.viewer);
+    await applyModalStyle();
+    await applyModalAppearance();
+    if (resetCamera) {
+      try { await modalState.viewer.visual.reset({ camera: true }); } catch (_) { /* noop */ }
+    }
+  } catch (e) {
+    console.warn('[Explore] Error en el visor 3D grande:', e);
+    if (token === modalState.token) {
+      container.innerHTML = '<div class="exp-molstar-empty">No se pudo cargar la estructura 3D.</div>';
+      disposeModalViewer();
+    }
+  }
+}
+
+function disposeModalViewer() {
+  const viewer = modalState.viewer;
+  modalState.viewer = null;
+  if (!viewer) return;
+  try { viewer.plugin?.dispose?.(); } catch (_) { /* noop */ }
+  try { viewer.dispose?.(); } catch (_) { /* noop */ }
+}
+
+function openStructureModal(v, opts = {}) {
+  const modal = document.getElementById('exp-structure-modal');
+  if (!modal || !v) return;
+
+  modalState.open = true;
+  modalState.variantKey = v.key;
+  modalState.model = opts.model ?? (v.structures.wt ? 'wt' : 'mut');
+  if (!v.structures[modalState.model]) modalState.model = v.structures.mut ? 'mut' : 'wt';
+  modalState.style = 'cartoon';
+  modalState.target = opts.drug ? { drug: opts.drug } : null;
+  modalState.highlightMut = true;
+  modalState.highlightLigand = true;
+
+  const title = document.getElementById('exp-modal-title');
+  if (title) title.textContent = `${v.protein.name} · ${v.hugo_symbol} ${v.protein_change}`;
+
+  modal.hidden = false;
+  document.body.classList.add('exp-modal-open');
+  renderModalControls();
+  renderModalInhibitors(v);
+  updateModalSubtitle(!!modalState.target);
+
+  // Esperar a que el diálogo tenga layout antes de crear el canvas WebGL.
+  requestAnimationFrame(() => {
+    loadModalTarget({ resetCamera: true });
+  });
+}
+
+function closeStructureModal() {
+  const modal = document.getElementById('exp-structure-modal');
+  if (!modal) return;
+  modalState.open = false;
+  modalState.token++;
+  modalState.target = null;
+  modal.hidden = true;
+  document.body.classList.remove('exp-modal-open');
+  disposeModalViewer();
+  const container = document.getElementById('exp-modal-molstar');
+  if (container) container.innerHTML = '';
+}
+
+function initStructureModal() {
+  const modal = document.getElementById('exp-structure-modal');
+  if (!modal) return;
+
+  modal.addEventListener('click', e => {
+    if (e.target.closest('[data-exp-modal-close]')) {
+      closeStructureModal();
+      return;
+    }
+
+    const modelBtn = e.target.closest('[data-modal-model]');
+    if (modelBtn && !modelBtn.disabled) {
+      if (modalState.model === modelBtn.dataset.modalModel && !modalState.target) return;
+      modalState.model = modelBtn.dataset.modalModel;
+      modalState.target = null;
+      renderModalControls();
+      const v = getModalVariant();
+      if (v) renderModalInhibitors(v);
+      loadModalTarget({ resetCamera: true });
+      return;
+    }
+
+    const styleBtn = e.target.closest('[data-modal-style]');
+    if (styleBtn) {
+      modalState.style = styleBtn.dataset.modalStyle;
+      renderModalControls();
+      applyModalStyle().then(() => applyModalAppearance());
+      return;
+    }
+
+    const inhBtn = e.target.closest('[data-modal-inh]');
+    if (inhBtn) {
+      const v = getModalVariant();
+      const drug = inhBtn.dataset.modalInh;
+      if (!v || !drug) return;
+      // Sin docking de WT para este fármaco, el complejo se muestra en MUT.
+      if (modalState.model === 'wt' && v.docking?.wt?.[drug] == null) {
+        modalState.model = 'mut';
+      }
+      modalState.target = { drug };
+      loadModalTarget({ resetCamera: true });
+      return;
+    }
+
+    if (e.target.closest('[data-modal-clear-ligand]')) {
+      modalState.target = null;
+      loadModalTarget({ resetCamera: true });
+      return;
+    }
+
+    if (e.target.closest('[data-modal-focus-mut]')) {
+      const v = getModalVariant();
+      if (v?.mut_residue != null && modalState.viewer?.visual) {
+        try {
+          modalState.viewer.visual.highlight({
+            data: [{
+              start_residue_number: v.mut_residue,
+              end_residue_number: v.mut_residue,
+            }],
+            focus: true,
+          });
+        } catch (_) { /* noop */ }
+      }
+      return;
+    }
+
+    if (e.target.closest('[data-modal-focus-ligand]')) {
+      if (modalState.target?.drug && modalState.viewer?.visual) {
+        try {
+          modalState.viewer.visual.highlight({
+            data: [{ label_comp_id: 'LIG' }],
+            focus: true,
+          });
+        } catch (_) { /* noop */ }
+      }
+    }
+  });
+
+  modal.querySelector('#exp-modal-mutres')?.addEventListener('change', e => {
+    modalState.highlightMut = e.target.checked;
+    applyModalAppearance();
+  });
+  modal.querySelector('#exp-modal-ligand')?.addEventListener('change', e => {
+    modalState.highlightLigand = e.target.checked;
+    applyModalAppearance();
+  });
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && modalState.open) closeStructureModal();
+  });
+}
+
 // Colores por gen (consistente con la imagen de referencia)
 const GENE_COLORS = {
   PIK3CA: '#38bdf8', TP53:   '#f87171', ERBB2:  '#60a5fa',
@@ -662,6 +1211,37 @@ function handleTableClick(e) {
     return;
   }
 
+  // Abrir el visor 3D grande desde la ficha
+  const openViewer = e.target.closest('[data-open-viewer]');
+  if (openViewer) {
+    e.preventDefault();
+    const detail = openViewer.closest('.exp-detail');
+    const v = _rowsByKey.get(detail?.dataset.detailKey);
+    if (v) {
+      const kind = detail.querySelector('.exp-detail-struct-btn.is-active')?.dataset.detailStruct;
+      openStructureModal(v, { model: kind });
+    }
+    return;
+  }
+
+  // Ver en 3D un inhibidor acoplado (ficha)
+  const poseBtn = e.target.closest('[data-detail-pose]');
+  if (poseBtn) {
+    e.preventDefault();
+    const detail = poseBtn.closest('.exp-detail');
+    const v = _rowsByKey.get(detail?.dataset.detailKey);
+    if (v) openStructureModal(v, { model: 'mut', drug: poseBtn.dataset.detailPose });
+    return;
+  }
+
+  // Gráfica WT vs MUT de la sección de inhibidores
+  const chartBtn = e.target.closest('[data-docking-chart]');
+  if (chartBtn) {
+    e.preventDefault();
+    toggleDockingChart(chartBtn);
+    return;
+  }
+
   // Botones WT/MUT de la fila: navegar a Estructuras 3D
   handleStructClick(e);
 }
@@ -671,13 +1251,16 @@ async function loadExplore() {
   if (state.loaded) return;
   state.loaded = true;
   closeDetail();
+  closeStructureModal();
+  modalComplexCache.clear();
 
-  const [rawMutations, topVariants, manifest, metrics, runManifest] = await Promise.all([
+  const [rawMutations, topVariants, manifest, metrics, runManifest, affinities] = await Promise.all([
     loadJSON(DATA.rawMutations()),
     loadJSON(DATA.topVariants()),
     loadJSON(DATA.manifestStructures()),
     loadJSON(DATA.structuralMetrics()),
     loadJSON(DATA.runManifest()),
+    loadJSON(DATA.vinaAffinities()),
   ]);
 
   // Nota de épica con datos reales del pipeline
@@ -693,7 +1276,7 @@ async function loadExplore() {
   }
 
   // Construir tabla
-  _allRows   = buildVariantTable(rawMutations, topVariants, manifest, metrics);
+  _allRows   = buildVariantTable(rawMutations, topVariants, manifest, metrics, affinities);
   _rowsByKey = new Map(_allRows.map(r => [r.key, r]));
   _maxFreq   = Math.max(..._allRows.map(r => r.frequency), 1);
   _totalRows = _allRows.length;
@@ -721,3 +1304,4 @@ async function loadExplore() {
 }
 
 registerLoader('explore', loadExplore);
+initStructureModal();
