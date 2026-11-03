@@ -1,0 +1,353 @@
+{
+  "AKT3": {
+    "fetched": "2026-11-02",
+    "file": "AKT3_AF.cif",
+    "model_url": "https://alphafold.ebi.ac.uk/files/AF-Q9Y243-F1-model_v6.cif",
+    "plddt": 82.06,
+    "source": "AlphaFold DB",
+    "uniprot": "Q9Y243",
+    "version": 6
+  },
+  "ALK": {
+    "fetched": "2026-11-02",
+    "file": "ALK_AF.cif",
+    "model_url": "https://alphafold.ebi.ac.uk/files/AF-Q9UM73-F1-model_v6.cif",
+    "plddt": 68.19,
+    "source": "AlphaFold DB",
+    "uniprot": "Q9UM73",
+    "version": 6
+  },
+  "ANTXR1": {
+    "fetched": "2026-11-02",
+    "file": "ANTXR1_AF.cif",
+    "model_url": "https://alphafold.ebi.ac.uk/files/AF-Q9H6X2-F1-model_v6.cif",
+    "plddt": 72.44,
+    "source": "AlphaFold DB",
+    "uniprot": "Q9H6X2",
+    "version": 6
+  },
+  "BCL2": {
+    "fetched": "2026-11-02",
+    "file": "BCL2_AF.cif",
+    "model_url": "https://alphafold.ebi.ac.uk/files/AF-P10415-F1-model_v6.cif",
+    "plddt": 72.0,
+    "source": "AlphaFold DB",
+    "uniprot": "P10415",
+    "version": 6
+  },
+  "BCOR": {
+    "fetched": "2026-11-02",
+    "file": "BCOR_AF.cif",
+    "model_url": "https://alphafold.ebi.ac.uk/files/AF-Q6W2J9-F1-model_v6.cif",
+    "plddt": 39.66,
+    "source": "AlphaFold DB",
+    "uniprot": "Q6W2J9",
+    "version": 6
+  },
+  "CLASP1": {
+    "fetched": "2026-11-02",
+    "file": "CLASP1_AF.cif",
+    "model_url": "https://alphafold.ebi.ac.uk/files/AF-Q7Z460-F1-model_v6.cif",
+    "plddt": 68.38,
+    "source": "AlphaFold DB",
+    "uniprot": "Q7Z460",
+    "version": 6
+  },
+  "DDR2": {
+    "fetched": "2026-11-02",
+    "file": "DDR2_AF.cif",
+    "model_url": "https://alphafold.ebi.ac.uk/files/AF-Q16832-F1-model_v6.cif",
+    "plddt": 75.81,
+    "source": "AlphaFold DB",
+    "uniprot": "Q16832",
+    "version": 6
+  },
+  "EGFR": {
+    "fetched": "2026-11-02",
+    "file": "EGFR_AF.cif",
+    "model_url": "https://alphafold.ebi.ac.uk/files/AF-P00533-F1-model_v6.cif",
+    "plddt": 75.94,
+    "source": "AlphaFold DB",
+    "uniprot": "P00533",
+    "version": 6
+  },
+  "EPHA3": {
+    "fetched": "2026-11-02",
+    "file": "EPHA3_AF.cif",
+    "model_url": "https://alphafold.ebi.ac.uk/files/AF-P29320-F1-model_v6.cif",
+    "plddt": 80.75,
+    "source": "AlphaFold DB",
+    "uniprot": "P29320",
+    "version": 6
+  },
+  "EPHA4": {
+    "fetched": "2026-11-02",
+    "file": "EPHA4_AF.cif",
+    "model_url": "https://alphafold.ebi.ac.uk/files/AF-P54764-F1-model_v6.cif",
+    "plddt": 83.5,
+    "source": "AlphaFold DB",
+    "uniprot": "P54764",
+    "version": 6
+  },
+  "EPHA5": {
+    "fetched": "2026-11-02",
+    "file": "EPHA5_AF.cif",
+    "model_url": "https://alphafold.ebi.ac.uk/files/AF-P54756-F1-model_v6.cif",
+    "plddt": 79.38,
+    "source": "AlphaFold DB",
+    "uniprot": "P54756",
+    "version": 6
+  },
+  "EPHA6": {
+    "fetched": "2026-11-02",
+    "file": "EPHA6_AF.cif",
+    "model_url": "https://alphafold.ebi.ac.uk/files/AF-Q9UF33-F1-model_v6.cif",
+    "plddt": 78.44,
+    "source": "AlphaFold DB",
+    "uniprot": "Q9UF33",
+    "version": 6
+  },
+  "EPHA7": {
+    "fetched": "2026-11-02",
+    "file": "EPHA7_AF.cif",
+    "model_url": "https://alphafold.ebi.ac.uk/files/AF-Q15375-F1-model_v6.cif",
+    "plddt": 81.94,
+    "source": "AlphaFold DB",
+    "uniprot": "Q15375",
+    "version": 6
+  },
+  "EPHB1": {
+    "fetched": "2026-11-02",
+    "file": "EPHB1_AF.cif",
+    "model_url": "https://alphafold.ebi.ac.uk/files/AF-P54762-F1-model_v6.cif",
+    "plddt": 83.62,
+    "source": "AlphaFold DB",
+    "uniprot": "P54762",
+    "version": 6
+  },
+  "EPHB2": {
+    "fetched": "2026-11-02",
+    "file": "EPHB2_AF.cif",
+    "model_url": "https://alphafold.ebi.ac.uk/files/AF-P29323-F1-model_v6.cif",
+    "plddt": 80.0,
+    "source": "AlphaFold DB",
+    "uniprot": "P29323",
+    "version": 6
+  },
+  "ERBB4": {
+    "fetched": "2026-11-02",
+    "file": "ERBB4_AF.cif",
+    "model_url": "https://alphafold.ebi.ac.uk/files/AF-Q15303-F1-model_v6.cif",
+    "plddt": 73.12,
+    "source": "AlphaFold DB",
+    "uniprot": "Q15303",
+    "version": 6
+  },
+  "ERG": {
+    "fetched": "2026-11-02",
+    "file": "ERG_AF.cif",
+    "model_url": "https://alphafold.ebi.ac.uk/files/AF-P11308-F1-model_v6.cif",
+    "plddt": 59.34,
+    "source": "AlphaFold DB",
+    "uniprot": "P11308",
+    "version": 6
+  },
+  "ETV6": {
+    "fetched": "2026-11-02",
+    "file": "ETV6_AF.cif",
+    "model_url": "https://alphafold.ebi.ac.uk/files/AF-P41212-F1-model_v6.cif",
+    "plddt": 61.81,
+    "source": "AlphaFold DB",
+    "uniprot": "P41212",
+    "version": 6
+  },
+  "FBXW7": {
+    "fetched": "2026-11-02",
+    "file": "FBXW7_AF.cif",
+    "model_url": "https://alphafold.ebi.ac.uk/files/AF-Q969H0-F1-model_v6.cif",
+    "plddt": 77.0,
+    "source": "AlphaFold DB",
+    "uniprot": "Q969H0",
+    "version": 6
+  },
+  "FER": {
+    "fetched": "2026-11-02",
+    "file": "FER_AF.cif",
+    "model_url": "https://alphafold.ebi.ac.uk/files/AF-P16591-F1-model_v6.cif",
+    "plddt": 87.94,
+    "source": "AlphaFold DB",
+    "uniprot": "P16591",
+    "version": 6
+  },
+  "FIP1L1": {
+    "fetched": "2026-11-02",
+    "file": "FIP1L1_AF.cif",
+    "model_url": "https://alphafold.ebi.ac.uk/files/AF-Q6UN15-F1-model_v6.cif",
+    "plddt": 55.09,
+    "source": "AlphaFold DB",
+    "uniprot": "Q6UN15",
+    "version": 6
+  },
+  "FLT1": {
+    "fetched": "2026-11-02",
+    "file": "FLT1_AF.cif",
+    "model_url": "https://alphafold.ebi.ac.uk/files/AF-P17948-F1-model_v6.cif",
+    "plddt": 72.62,
+    "source": "AlphaFold DB",
+    "uniprot": "P17948",
+    "version": 6
+  },
+  "FYN": {
+    "fetched": "2026-11-02",
+    "file": "FYN_AF.cif",
+    "model_url": "https://alphafold.ebi.ac.uk/files/AF-P06241-F1-model_v6.cif",
+    "plddt": 80.81,
+    "source": "AlphaFold DB",
+    "uniprot": "P06241",
+    "version": 6
+  },
+  "IGF1R": {
+    "fetched": "2026-11-02",
+    "file": "IGF1R_AF.cif",
+    "model_url": "https://alphafold.ebi.ac.uk/files/AF-P08069-F1-model_v6.cif",
+    "plddt": 78.0,
+    "source": "AlphaFold DB",
+    "uniprot": "P08069",
+    "version": 6
+  },
+  "KCNQ1": {
+    "fetched": "2026-11-02",
+    "file": "KCNQ1_AF.cif",
+    "model_url": "https://alphafold.ebi.ac.uk/files/AF-P51787-F1-model_v6.cif",
+    "plddt": 67.75,
+    "source": "AlphaFold DB",
+    "uniprot": "P51787",
+    "version": 6
+  },
+  "LYN": {
+    "fetched": "2026-11-02",
+    "file": "LYN_AF.cif",
+    "model_url": "https://alphafold.ebi.ac.uk/files/AF-P07948-F1-model_v6.cif",
+    "plddt": 83.12,
+    "source": "AlphaFold DB",
+    "uniprot": "P07948",
+    "version": 6
+  },
+  "MAGI1": {
+    "fetched": "2026-11-02",
+    "file": "MAGI1_AF.cif",
+    "model_url": "https://alphafold.ebi.ac.uk/files/AF-Q96QZ7-F1-model_v6.cif",
+    "plddt": 59.91,
+    "source": "AlphaFold DB",
+    "uniprot": "Q96QZ7",
+    "version": 6
+  },
+  "MAST2": {
+    "fetched": "2026-11-02",
+    "file": "MAST2_AF.cif",
+    "model_url": "https://alphafold.ebi.ac.uk/files/AF-Q6P0Q8-F1-model_v6.cif",
+    "plddt": 50.06,
+    "source": "AlphaFold DB",
+    "uniprot": "Q6P0Q8",
+    "version": 6
+  },
+  "MET": {
+    "fetched": "2026-11-02",
+    "file": "MET_AF.cif",
+    "model_url": "https://alphafold.ebi.ac.uk/files/AF-P08581-F1-model_v6.cif",
+    "plddt": 79.25,
+    "source": "AlphaFold DB",
+    "uniprot": "P08581",
+    "version": 6
+  },
+  "NF1": {
+    "fetched": "2026-11-02",
+    "file": "NF1_AF.cif",
+    "model_url": "https://alphafold.ebi.ac.uk/files/AF-P21359-5-F1-model_v6.cif",
+    "plddt": 87.19,
+    "source": "AlphaFold DB",
+    "uniprot": "P21359",
+    "version": 6
+  },
+  "NTRK2": {
+    "fetched": "2026-11-02",
+    "file": "NTRK2_AF.cif",
+    "model_url": "https://alphafold.ebi.ac.uk/files/AF-Q16620-F1-model_v6.cif",
+    "plddt": 77.0,
+    "source": "AlphaFold DB",
+    "uniprot": "Q16620",
+    "version": 6
+  },
+  "NTRK3": {
+    "fetched": "2026-11-02",
+    "file": "NTRK3_AF.cif",
+    "model_url": "https://alphafold.ebi.ac.uk/files/AF-Q16288-F1-model_v6.cif",
+    "plddt": 76.81,
+    "source": "AlphaFold DB",
+    "uniprot": "Q16288",
+    "version": 6
+  },
+  "PTK2": {
+    "fetched": "2026-11-02",
+    "file": "PTK2_AF.cif",
+    "model_url": "https://alphafold.ebi.ac.uk/files/AF-Q05397-F1-model_v6.cif",
+    "plddt": 74.5,
+    "source": "AlphaFold DB",
+    "uniprot": "Q05397",
+    "version": 6
+  },
+  "ROR1": {
+    "fetched": "2026-11-02",
+    "file": "ROR1_AF.cif",
+    "model_url": "https://alphafold.ebi.ac.uk/files/AF-Q01973-F1-model_v6.cif",
+    "plddt": 68.19,
+    "source": "AlphaFold DB",
+    "uniprot": "Q01973",
+    "version": 6
+  },
+  "ROR2": {
+    "fetched": "2026-11-02",
+    "file": "ROR2_AF.cif",
+    "model_url": "https://alphafold.ebi.ac.uk/files/AF-Q01974-F1-model_v6.cif",
+    "plddt": 68.31,
+    "source": "AlphaFold DB",
+    "uniprot": "Q01974",
+    "version": 6
+  },
+  "RUNX1": {
+    "fetched": "2026-11-02",
+    "file": "RUNX1_AF.cif",
+    "model_url": "https://alphafold.ebi.ac.uk/files/AF-Q01196-F1-model_v6.cif",
+    "plddt": 61.0,
+    "source": "AlphaFold DB",
+    "uniprot": "Q01196",
+    "version": 6
+  },
+  "TCF7L2": {
+    "fetched": "2026-11-02",
+    "file": "TCF7L2_AF.cif",
+    "model_url": "https://alphafold.ebi.ac.uk/files/AF-Q9NQB0-F1-model_v6.cif",
+    "plddt": 53.0,
+    "source": "AlphaFold DB",
+    "uniprot": "Q9NQB0",
+    "version": 6
+  },
+  "TP53": {
+    "fetched": "2026-11-02",
+    "file": "TP53_AF.cif",
+    "model_url": "https://alphafold.ebi.ac.uk/files/AF-P04637-F1-model_v6.cif",
+    "plddt": 75.06,
+    "source": "AlphaFold DB",
+    "uniprot": "P04637",
+    "version": 6
+  },
+  "ZBED4": {
+    "fetched": "2026-11-02",
+    "file": "ZBED4_AF.cif",
+    "model_url": "https://alphafold.ebi.ac.uk/files/AF-O75132-F1-model_v6.cif",
+    "plddt": 66.69,
+    "source": "AlphaFold DB",
+    "uniprot": "O75132",
+    "version": 6
+  }
+}
