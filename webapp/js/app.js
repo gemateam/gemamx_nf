@@ -32,6 +32,9 @@ export const DATA = {
   clinicalMetadata:     () => dataUrl('clinical_metadata.json'),
   variantClinicalSummary: () => dataUrl('variant_clinical_summary.json'),
   romeroGeoSummary:     () => dataUrl('romero_geo_summary.json'),
+  // Modelos AlphaFold DB de genes sin estructura propia: independiente de la
+  // corrida activa (no depende de BASE_PATH).
+  externalStructures:   () => 'external/index.json',
 };
 
 // ── Catálogo de fármacos (targets y estado, sin red) ──────────────────────

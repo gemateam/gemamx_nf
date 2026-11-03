@@ -76,6 +76,8 @@ services:
       - ./results/data:/usr/share/nginx/html/data:ro
       # Historial de corridas → ruta separada para evitar conflicto de mounts
       - ./results/runs:/usr/share/nginx/html/runs:ro
+      # Modelos AlphaFold DB para genes sin estructura propia (bin/fetch_external_structures.py)
+      - ./structures/external:/usr/share/nginx/html/external:ro
     healthcheck:
       test: ["CMD", "wget", "-qO-", "http://127.0.0.1/health"]
       interval: 30s

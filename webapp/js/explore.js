@@ -65,27 +65,38 @@ function genomicPos(chr, pos) {
   return `Chr${chr}:${Number(pos).toLocaleString('en-US')}`;
 }
 
+// Posición del residuo en una variante tipo «R1275Q» (numeración UniProt, la
+// misma que usan los modelos AlphaFold DB de secuencia completa).
+function mutationPosition(proteinChange) {
+  const m = /^[A-Z*](\d+)/.exec(proteinChange ?? '');
+  return m ? Number(m[1]) : null;
+}
+
 // Resolver estructura WT/MUT publicada para una variante.
 // Orden WT: WT específico de la variante (V2.1) → alias canónico del gen →
 // estructura WT antigua (V1/V2.0). Las rutas del contrato se reescriben para
 // que funcionen también al navegar a una corrida histórica.
-function resolveStructures(gene, proteinChange, manifest) {
+// Si la corrida no trae ninguna estructura del gen, se usa el modelo WT de
+// AlphaFold DB descargado con bin/fetch_external_structures.py (índice `external`).
+function resolveStructures(gene, proteinChange, manifest, external) {
   const key = `${gene}_${proteinChange}`;
   const wtRaw = manifest?.[`${gene}_WT_${proteinChange}`]
     ?? manifest?.[`${gene}_WT`]
     ?? manifest?.[`WT__${key}`]
     ?? null;
   const mutRaw = manifest?.[key] ?? null;
+  const ext = (!wtRaw && !mutRaw) ? (external?.[gene] ?? null) : null;
   return {
-    wt:  contractUrl(wtRaw),
+    wt:  ext ? `external/${ext.file}` : contractUrl(wtRaw),
     mut: contractUrl(mutRaw),
     wtKey:  wtRaw,
     mutKey: mutRaw,
+    external: ext,
   };
 }
 
 // ── Construir tabla completa desde raw_mutations ───────────────────────────
-function buildVariantTable(rawMutations, topVariants, manifest, metrics, affinities) {
+function buildVariantTable(rawMutations, topVariants, manifest, metrics, affinities, external) {
   // Agregar raw_mutations por (hugo_symbol + protein_change)
   const aggMap = new Map();
   (rawMutations ?? []).forEach(m => {
@@ -126,7 +137,7 @@ function buildVariantTable(rawMutations, topVariants, manifest, metrics, affinit
     const topData = topMap.get(key) ?? {};
     const metricM = metrics?.[key] ?? {};
     const gene    = key.split('_')[0];
-    const structures = resolveStructures(entry.hugo_symbol, entry.protein_change, manifest);
+    const structures = resolveStructures(entry.hugo_symbol, entry.protein_change, manifest, external);
 
     // Docking: afinidades MUT de la variante y WT canónico del gen.
     const mutAffinity = affinities?.[key] ?? metricM.vina_scores ?? {};
@@ -145,14 +156,17 @@ function buildVariantTable(rawMutations, topVariants, manifest, metrics, affinit
       cohort_pct:     (entry.frequency / totalSamples) * 100,
       classification: topData.classification ?? 'Hotspot',
       rank:           topData.rank ?? (idx + 1),
-      hasWT:          !!structures.wt,
+      // Los botones WT/MUT de la fila navegan a Estructuras 3D, que solo conoce
+      // las estructuras del pipeline: un modelo externo se ve desde «Selección».
+      hasWT:          !!structures.wt && !structures.external,
       hasMUT:         !!structures.mut,
       structures,
-      wt_plddt:       metricM.wt_plddt ?? null,
+      wt_plddt:       metricM.wt_plddt ?? structures.external?.plddt ?? null,
       mut_plddt:      metricM.mut_plddt ?? null,
       best_drug:      metricM.best_vina_drug ?? null,
       best_score:     metricM.best_vina_score ?? null,
-      mut_residue:    metricM.mutation_resseq_model ?? null,
+      mut_residue:    metricM.mutation_resseq_model
+                      ?? (structures.external ? mutationPosition(entry.protein_change) : null),
       docking:        { mut: mutAffinity, wt: wtAffinity },
     };
 
@@ -468,8 +482,11 @@ function detailRowHTML(v) {
           </div>
           <div class="exp-molstar" data-exp-molstar></div>
           <p class="exp-detail-legend">
-            Coloreado arcoíris de N a C (azul → rojo). Abre el visor para superponer el
-            residuo mutado y probar los inhibidores acoplados.
+            ${v.structures.external
+              ? `Modelo WT de AlphaFold DB (UniProt ${esc(v.structures.external.uniprot)}), coloreado arcoíris de N a C.
+                 La variante ${esc(v.protein_change)} no se modeló en el pipeline: en el visor grande se marca su posición sobre el WT.`
+              : `Coloreado arcoíris de N a C (azul → rojo). Abre el visor para superponer el
+                 residuo mutado y probar los inhibidores acoplados.`}
           </p>
         </div>
       </div>
@@ -861,6 +878,10 @@ function updateModalSubtitle(isComplex) {
   const sub = document.getElementById('exp-modal-sub');
   if (!v || !sub) return;
   const kindLabel = modalState.model === 'wt' ? 'WT' : 'MUT';
+  if (!isComplex && v.structures.external) {
+    sub.textContent = `Modelo AlphaFold DB (WT) · ${v.hugo_symbol} ${v.protein_change} (posición marcada en rojo)`;
+    return;
+  }
   sub.textContent = isComplex && modalState.target?.drug
     ? `Complejo ${kindLabel} · ${modalState.target.drug} (pose 1 de AutoDock Vina)`
     : `Estructura ${kindLabel} · ${v.hugo_symbol} ${v.protein_change} (plegada con ESMFold)`;
@@ -1254,13 +1275,14 @@ async function loadExplore() {
   closeStructureModal();
   modalComplexCache.clear();
 
-  const [rawMutations, topVariants, manifest, metrics, runManifest, affinities] = await Promise.all([
+  const [rawMutations, topVariants, manifest, metrics, runManifest, affinities, external] = await Promise.all([
     loadJSON(DATA.rawMutations()),
     loadJSON(DATA.topVariants()),
     loadJSON(DATA.manifestStructures()),
     loadJSON(DATA.structuralMetrics()),
     loadJSON(DATA.runManifest()),
     loadJSON(DATA.vinaAffinities()),
+    loadJSON(DATA.externalStructures()),
   ]);
 
   // Nota de épica con datos reales del pipeline
@@ -1276,7 +1298,7 @@ async function loadExplore() {
   }
 
   // Construir tabla
-  _allRows   = buildVariantTable(rawMutations, topVariants, manifest, metrics, affinities);
+  _allRows   = buildVariantTable(rawMutations, topVariants, manifest, metrics, affinities, external);
   _rowsByKey = new Map(_allRows.map(r => [r.key, r]));
   _maxFreq   = Math.max(..._allRows.map(r => r.frequency), 1);
   _totalRows = _allRows.length;
