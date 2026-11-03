@@ -74,8 +74,15 @@ def main() -> int:
     parser = argparse.ArgumentParser(description="Calcula el centro de la caja de docking")
     parser.add_argument("--receptor", required=True, help="receptor PDBQT")
     parser.add_argument("--out", required=True, help="box.json de salida")
-    parser.add_argument("--mode", choices=("mutation", "centroid", "binding-site"),
+    parser.add_argument("--mode", choices=("mutation", "centroid", "binding-site", "site-residues"),
                         default="mutation")
+    parser.add_argument("--site-residues",
+                        help="residuos proteicos del sitio de union separados por ';' "
+                             "(mode=site-residues); se traducen al resSeq del modelo")
+    parser.add_argument("--on-missing", choices=("fail", "centroid"), default="fail",
+                        help="mode=site-residues cuando el modelo no cubre el sitio: "
+                             "fail (por defecto) o centroid (explícito; queda registrado "
+                             "en el box.json como site_covered=false)")
     parser.add_argument("--meta", help="sidecar de PREDICT_STRUCTURE "
                                        "(mutation_pos, model_start, expected_aa)")
     parser.add_argument("--mutation-pos", type=int, help="posición 1-based en la proteína")
@@ -115,7 +122,55 @@ def main() -> int:
     if args.meta:
         result["meta"] = Path(args.meta).name
 
-    if args.mode == "binding-site":
+    if args.mode == "site-residues":
+        if not args.site_residues:
+            die("mode=site-residues requiere --site-residues")
+        wanted = [int(v) for v in args.site_residues.replace(",", ";").split(";") if v.strip()]
+        if args.model_start < 1:
+            die(f"--model-start inválido: {args.model_start}")
+        rng = residue_range(receptor)
+        if not rng:
+            die(f"el receptor no tiene residuos: {receptor.name}")
+        coords = []
+        missing = []
+        for pos in wanted:
+            resseq = rng[0] + (pos - args.model_start)
+            atoms = read_residue_atoms(receptor, resseq)
+            if not atoms:
+                missing.append(pos)
+                continue
+            coords.extend((a[0], a[1], a[2]) for a in atoms)
+        # Sin fallback silencioso: por defecto, si el fragmento no cubre el sitio, se falla.
+        # Con --on-missing centroid el fallback es explícito y queda registrado.
+        if missing and args.on_missing == "fail":
+            die(f"{receptor.name}: el modelo (proteína {args.model_start}.. con resSeq "
+                f"{rng[0]}..{rng[1]}) no contiene los residuos del sitio {missing}. "
+                "El fragmento no cubre el bolsillo; usa un dominio completo.")
+        if missing:
+            cx, cy, cz, n = centroid(receptor)
+            result.update(
+                center_x=round(cx, 3),
+                center_y=round(cy, 3),
+                center_z=round(cz, 3),
+                site_residues=wanted,
+                site_covered=False,
+                site_missing_residues=missing,
+                fallback="centroid",
+                model_start=args.model_start,
+                atoms_used=n,
+            )
+        else:
+            n = len(coords)
+            result.update(
+                center_x=round(sum(c[0] for c in coords) / n, 3),
+                center_y=round(sum(c[1] for c in coords) / n, 3),
+                center_z=round(sum(c[2] for c in coords) / n, 3),
+                site_residues=wanted,
+                site_covered=True,
+                model_start=args.model_start,
+                atoms_used=n,
+            )
+    elif args.mode == "binding-site":
         if not args.center:
             die("mode=binding-site requiere --center X Y Z")
         cx, cy, cz = args.center

@@ -118,6 +118,28 @@
           "description": "Criterio para centrar la caja de docking.",
           "help_text": "mutation: residuo mutado (aplica offset de fragmento). binding_site: centro del sitio de unión si está anotado. centroid: centro de masa del receptor."
         },
+        "binding_sites": {
+          "type": "string",
+          "description": "CSV de sitios de unión por gen (gene,site_name,residues,...). Con box_center_mode=binding_site centra la caja en esos residuos.",
+          "help_text": "Los residuos usan la numeración canónica de UniProt y se traducen al resSeq del modelo con model_start del sidecar."
+        },
+        "binding_site_name": {
+          "type": "string",
+          "default": "ATP_pocket",
+          "description": "Nombre del sitio a usar de binding_sites."
+        },
+        "site_on_missing": {
+          "type": "string",
+          "default": "fail",
+          "enum": ["fail", "centroid"],
+          "description": "Qué hacer si el fragmento estructural no cubre los residuos del sitio.",
+          "help_text": "fail: detiene la corrida (recomendado). centroid: usa el centroide del fragmento y lo registra como site_covered=false."
+        },
+        "target_drug_map": {
+          "type": "string",
+          "description": "CSV gene,drug,role. Si se indica, solo se dockean los pares fármaco-diana listados y solo las dianas con pares.",
+          "help_text": "role: on_target | off_target_control. Sin este parámetro se dockea el producto cartesiano receptores × fármacos (V1/V2)."
+        },
         "vina_seed": {
           "type": "integer",
           "default": 42,
@@ -148,6 +170,24 @@
           "default": "GEMAMX-V1-NF",
           "pattern": "^[A-Za-z0-9._-]+$",
           "description": "Experimento MLflow donde se registra la corrida."
+        },
+        "mlflow_host_uri": {
+          "type": "string",
+          "default": "http://localhost:5000",
+          "description": "URI de MLflow para subir los reportes HTML desde el host.",
+          "help_text": "bin/nf_reports_hook.sh se lanza en workflow.onComplete; si el host tiene el cliente mlflow sube los reportes con esta URI."
+        },
+        "mlflow_docker_uri": {
+          "type": "string",
+          "default": "http://gemamx_mlflow:5000",
+          "description": "URI de MLflow vista desde el contenedor CPU (fallback de subida de reportes).",
+          "help_text": "Se usa cuando el host no tiene el cliente mlflow; el hook corre upload_nf_reports.py dentro de params.image_cpu en la red mlflow_docker_network. Con --profile platform-net se usa http://mlflow:5000."
+        },
+        "mlflow_docker_network": {
+          "type": "string",
+          "default": "gemamx_net",
+          "description": "Red Docker donde el contenedor CPU alcanza al servidor MLflow.",
+          "help_text": "Por defecto, la red del docker-compose de este repo; con --profile platform-net se usa gemacont_default."
         }
       }
     },

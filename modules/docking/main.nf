@@ -1,3 +1,43 @@
+/*
+ * Helpers V2.1 — CSV de assets/ leídos en el orquestador (sin cambiar la aridad
+ * de las tuplas de los procesos, así main.nf (V1) no se ve afectado).
+ *
+ *   loadSites(path, site_name)  -> [gene: "802;836;..."]
+ *   loadPairing(path)           -> [gene: [drug: role]]
+ */
+def splitCsvLine(String line) {
+    // Coma fuera de comillas; quita comillas envolventes.
+    return line.split(/,(?=(?:[^"]*"[^"]*")*[^"]*$)/, -1).collect { it.trim().replaceAll(/^"|"$/, '') }
+}
+
+def parseCsv(String path) {
+    def f = new File(path)
+    if (!f.isFile()) {
+        error "No existe el CSV: ${path}"
+    }
+    def lines = f.readLines('UTF-8').findAll { it.trim() }
+    def header = splitCsvLine(lines[0])
+    return lines.tail().collect { l ->
+        def vals = splitCsvLine(l)
+        if (vals.size() != header.size()) {
+            error "CSV ${path}: fila con ${vals.size()} columnas, se esperaban ${header.size()}: ${l}"
+        }
+        [header, vals].transpose().collectEntries { k, v -> [(k): v] }
+    }
+}
+
+def loadSites(String path, String siteName) {
+    return parseCsv(path).findAll { it.site_name == siteName }.collectEntries { [(it.gene): it.residues] }
+}
+
+def loadPairing(String path) {
+    def pairing = [:]
+    parseCsv(path).each { r ->
+        pairing.computeIfAbsent(r.gene, { k -> [:] }).put(r.drug, r.role)
+    }
+    return pairing
+}
+
 process PREP_LIGAND {
     tag "${drug}"
     container "${params.image_docking}"
@@ -62,20 +102,34 @@ process DOCK_CENTER {
     tuple val(target_id), path(receptor_pdbqt), path("${target_id}_box.json"), emit: target_box
 
     script:
-    def mode = (params.box_center_mode == 'mutation' && target_id.endsWith('_WT')) ? 'centroid' : params.box_center_mode
-    def meta_arg = mode == 'mutation' ? "--meta ${meta_json}" : ""
+    def gene = target_id.tokenize('_')[0]
+    def mode_args
+    if (params.box_center_mode == 'binding_site') {
+        // V2.1: centro = centroide de los residuos del bolsillo de la diana.
+        if (!params.binding_sites) {
+            error "box_center_mode=binding_site requiere --binding_sites (CSV gene,site_name,residues,...)"
+        }
+        def residues = loadSites(params.binding_sites.toString(), params.binding_site_name)[gene]
+        if (!residues) {
+            error "binding_sites no define el sitio '${params.binding_site_name}' para ${gene} (${target_id})"
+        }
+        mode_args = "--mode site-residues --site-residues '${residues}' --meta ${meta_json} --on-missing ${params.site_on_missing}"
+    } else {
+        def mode = (params.box_center_mode == 'mutation' && target_id.endsWith('_WT')) ? 'centroid' : params.box_center_mode
+        def meta_arg = mode == 'mutation' ? "--meta ${meta_json}" : ""
+        mode_args = "--mode ${mode} ${meta_arg}"
+    }
     """
     dock_center.py \\
         --receptor "${receptor_pdbqt}" \\
-        --mode "${mode}" \\
-        ${meta_arg} \\
+        ${mode_args} \\
         --box-size ${params.box_size} \\
         --out "${target_id}_box.json"
     """
 
     stub:
     """
-    echo '{"center":[10.0, 10.0, 10.0],"box_size":${params.box_size},"mode":"${params.box_center_mode}"}' > "${target_id}_box.json"
+    echo '{"center_x":10.0,"center_y":10.0,"center_z":10.0,"box_size":${params.box_size},"mode":"${params.box_center_mode}"}' > "${target_id}_box.json"
     """
 }
 
@@ -92,6 +146,12 @@ process RUN_VINA {
     path "${target_id}_x_${drug}_complex.pdb", emit: vina_complex_pdb
 
     script:
+    // V2.1: rol del par (on_target | off_target_control) y trazabilidad del sitio.
+    // Sin target_drug_map / binding_site los argumentos quedan vacíos (V1 intacto).
+    def gene = target_id.tokenize('_')[0]
+    def role = params.target_drug_map ? (loadPairing(params.target_drug_map.toString())[gene]?.get(drug) ?: '') : ''
+    def role_arg = role ? "--role ${role}" : ""
+    def box_arg = (params.box_center_mode == 'binding_site') ? "--box-json ${box_json}" : ""
     """
     CENTER=\$(python3 -c "import json; b=json.load(open('${box_json}')); print(f\\"{b['center_x']} {b['center_y']} {b['center_z']}\\")")
 
@@ -107,6 +167,8 @@ process RUN_VINA {
         --timeout ${params.vina_timeout_sec} \\
         --variant "${target_id}" \\
         --drug "${drug}" \\
+        ${role_arg} \\
+        ${box_arg} \\
         --out "${target_id}_x_${drug}_out.pdbqt" \\
         --log "${target_id}_x_${drug}_vina.log" \\
         --summary "${target_id}_x_${drug}_summary.json"

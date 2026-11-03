@@ -1,0 +1,14 @@
+gene,drug,role,notes
+PIK3CA,Alpelisib,on_target,PI3Ka selectivo
+PIK3CA,Taselisib,on_target,PI3Ka selectivo
+PIK3CA,Pictilisib,on_target,Pan-PI3K
+PIK3CA,Buparlisib,on_target,Pan-PI3K
+PIK3CA,Copanlisib,on_target,Pan-PI3K
+PIK3CA,Gedatolisib,on_target,PI3K/mTOR
+AKT1,Capivasertib,on_target,AKT1/2/3
+AKT1,Alpelisib,off_target_control,control: PI3K inhibidor contra AKT1
+ERBB2,Alpelisib,off_target_control,control: sin actividad HER2 esperada
+PIK3CA,Palbociclib,off_target_control,control: inhibidor CDK4/6 contra PI3Ka
+PIK3CA,Abemaciclib,off_target_control,control: inhibidor CDK4/6 contra PI3Ka
+PIK3CA,Ribociclib,off_target_control,control: inhibidor CDK4/6 contra PI3Ka
+PIK3CA,Everolimus,off_target_control,control: allosterico mTOR; no compite por el ATP de PI3Ka

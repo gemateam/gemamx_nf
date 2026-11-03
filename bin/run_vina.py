@@ -17,7 +17,7 @@ import time
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from gemamx_common import die, write_json  # noqa: E402
+from gemamx_common import die, read_json, write_json  # noqa: E402
 from parse_vina import parse_log  # noqa: E402
 
 
@@ -47,6 +47,8 @@ def main() -> int:
     parser.add_argument("--vina", default="vina", help="ejecutable de Vina")
     parser.add_argument("--variant", help="clave de variante (p. ej. PIK3CA_H1047R)")
     parser.add_argument("--drug", help="nombre del fármaco")
+    parser.add_argument("--role", help="rol del par en target_drug_map (on_target | off_target_control)")
+    parser.add_argument("--box-json", help="box.json de DOCK_CENTER (registra box_mode y site_covered)")
     args = parser.parse_args()
 
     for label, path in (("receptor", args.receptor), ("ligando", args.ligand)):
@@ -119,6 +121,14 @@ def main() -> int:
         "vina_version": vina_version(args.vina),
         "elapsed_sec": elapsed,
     }
+    if args.role:
+        summary["role"] = args.role
+    if args.box_json:
+        box = read_json(args.box_json)
+        if isinstance(box, dict):
+            summary["box_mode"] = box.get("mode")
+            if "site_covered" in box:
+                summary["site_covered"] = box["site_covered"]
     write_json(args.summary, summary, sort_keys=True)
     print(f"OK {Path(args.receptor).stem} vs {Path(args.ligand).stem}: "
           f"{parsed['best_affinity']} kcal/mol ({len(parsed['modes'])} poses)")

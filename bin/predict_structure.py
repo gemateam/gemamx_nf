@@ -163,18 +163,31 @@ def main() -> int:
     parser.add_argument("--model-start", type=int,
                         help="primer residuo proteico del modelo (precomputed; "
                              "por defecto, sidecar hermano o primer resSeq)")
+    parser.add_argument("--wt-for", metavar="PROTEIN_CHANGE",
+                        help="V2.1: este WT es el par de la variante indicada (p. ej. E542K). "
+                             "Centra la ventana en esa posición, valida que el residuo WT "
+                             "coincida y registra `wt_for` en el sidecar. Solo con --role wt.")
     parser.add_argument("--out-cif", help="ruta de salida mmCIF adicional (para la webapp)")
     parser.add_argument("--window", type=int, default=180)
     parser.add_argument("--window-center", type=int,
-                        help="posición proteica sobre la que centrar la ventana "
-                             "de ESMFold en WT (por defecto, la mutación)")
+                        help="V2.1: posición proteica sobre la que centrar la ventana de "
+                             "ESMFold. Tiene prioridad sobre la posición de la mutación, "
+                             "para poder cubrir a la vez el bolsillo y el sitio mutado.")
     parser.add_argument("--timeout", type=int, default=300)
     parser.add_argument("--retries", type=int, default=3)
     args = parser.parse_args()
 
     gene = args.gene.strip().upper()
     change = args.protein_change.strip().upper()
-    mutation = None if change == "WT" else parse_mutation(change)
+    wt_for = args.wt_for.strip().upper() if args.wt_for else None
+    if wt_for and args.role != "wt":
+        die("--wt-for solo es válido con --role wt")
+    if wt_for:
+        # WT por variante: protein_change sigue siendo "WT", pero la posición y
+        # el residuo esperado vienen de la variante que acompaña.
+        mutation = parse_mutation(wt_for)
+    else:
+        mutation = None if change == "WT" else parse_mutation(change)
     mutation_pos = mutation[1] if mutation else None
 
     _, sequence = read_fasta(args.fasta)
@@ -191,6 +204,8 @@ def main() -> int:
         "fasta_length": len(sequence),
         "fasta_sha256": sha256_text(sequence),
     }
+    if wt_for:
+        meta["wt_for"] = f"{gene}_{wt_for}"
     model_start: int | None = None
 
     if args.backend == "esmfold":
@@ -201,7 +216,9 @@ def main() -> int:
             # WT no tiene posición de mutación propia: se centra la ventana en
             # --window-center (la del evento que se compara) para que WT y MUT
             # cubran la misma región y el RMSD sea comparable.
-            center = mutation_pos if mutation_pos is not None else args.window_center
+            # V2.1: si se pasa --window-center explícito, manda sobre la posición
+            # de la mutación, para que el fragmento cubra el bolsillo de docking.
+            center = args.window_center if args.window_center is not None else mutation_pos
             if center is None:
                 die(f"{gene}: secuencia de {len(sequence)} aa sin posición de mutación "
                     f"ni --window-center para recortar la ventana")
@@ -217,7 +234,11 @@ def main() -> int:
         structure_text = fold_with_esmfold(model_seq, args.timeout, args.retries)
         out.write_text(structure_text, encoding="ascii", newline="\n")
         meta.update(model_start=model_start, model_end=model_end,
-                    model_length=len(model_seq), source="ESMFold API")
+                    model_length=len(model_seq), source="ESMFold API",
+                    window_center=(center if len(sequence) > ESMFOLD_LIMIT else None),
+                    window=args.window,
+                    mutation_in_model=(None if mutation_pos is None
+                                       else model_start <= mutation_pos <= model_end))
     else:
         if not args.structure:
             die("backend=precomputed requiere --structure")
@@ -233,6 +254,7 @@ def main() -> int:
         )
 
     residues = load_ca(out)
+
     positions = [r["resseq"] for r in residues]
     observed_start, observed_end = min(positions), max(positions)
 

@@ -11,8 +11,11 @@
  * Al pulsar WT o MUT navega a Estructuras 3D con la variante pre-seleccionada.
  */
 import {
-  DATA, loadJSON, fmt, registerLoader, registerReloadFlag,
+  DATA, loadJSON, fmt, contractUrl, registerLoader, registerReloadFlag,
 } from './app.js';
+import {
+  getProteinInfo, fetchProteinInfo, proteinDisplayName,
+} from './proteins.js';
 
 const state = { loaded: false };
 registerReloadFlag('explore', state);
@@ -36,6 +39,13 @@ function clsLabel(cls) {
     .replace('patogÃ©nica', 'patogénica');
 }
 
+// Escape mínimo para valores que vienen de JSON
+function esc(value) {
+  return String(value ?? '').replace(/[&<>"']/g, c => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;',
+  }[c]));
+}
+
 // Barra de frecuencia proporcional al máximo
 function freqBar(freq, maxFreq) {
   const pct = maxFreq > 0 ? Math.min((freq / maxFreq) * 100, 100) : 0;
@@ -53,6 +63,25 @@ function freqBar(freq, maxFreq) {
 function genomicPos(chr, pos) {
   if (!chr || chr === '?' || !pos || pos === 0) return 'Chr?:0';
   return `Chr${chr}:${Number(pos).toLocaleString('en-US')}`;
+}
+
+// Resolver estructura WT/MUT publicada para una variante.
+// Orden WT: WT específico de la variante (V2.1) → alias canónico del gen →
+// estructura WT antigua (V1/V2.0). Las rutas del contrato se reescriben para
+// que funcionen también al navegar a una corrida histórica.
+function resolveStructures(gene, proteinChange, manifest) {
+  const key = `${gene}_${proteinChange}`;
+  const wtRaw = manifest?.[`${gene}_WT_${proteinChange}`]
+    ?? manifest?.[`${gene}_WT`]
+    ?? manifest?.[`WT__${key}`]
+    ?? null;
+  const mutRaw = manifest?.[key] ?? null;
+  return {
+    wt:  contractUrl(wtRaw),
+    mut: contractUrl(mutRaw),
+    wtKey:  wtRaw,
+    mutKey: mutRaw,
+  };
 }
 
 // ── Construir tabla completa desde raw_mutations ───────────────────────────
@@ -97,23 +126,22 @@ function buildVariantTable(rawMutations, topVariants, manifest, metrics) {
     const topData = topMap.get(key) ?? {};
     const metricM = metrics?.[key] ?? {};
     const gene    = key.split('_')[0];
-    const wtKeyV1 = `${gene}_WT`;
-    const wtKeyV2 = `WT__${key}`;
-    const hasWT   = !!(manifest?.[wtKeyV2] ?? manifest?.[wtKeyV1]);
-    const hasMUT  = !!(manifest?.[key]);
+    const structures = resolveStructures(entry.hugo_symbol, entry.protein_change, manifest);
 
     return {
       key,
       hugo_symbol:    entry.hugo_symbol,
       protein_change: entry.protein_change,
+      protein:        getProteinInfo(entry.hugo_symbol),
       chromosome:     entry.chromosome,
       start_position: entry.start_position,
       frequency:      entry.frequency,
       cohort_pct:     (entry.frequency / totalSamples) * 100,
       classification: topData.classification ?? 'Hotspot',
       rank:           topData.rank ?? (idx + 1),
-      hasWT,
-      hasMUT,
+      hasWT:          !!structures.wt,
+      hasMUT:         !!structures.mut,
+      structures,
       wt_plddt:       metricM.wt_plddt ?? null,
       mut_plddt:      metricM.mut_plddt ?? null,
       best_drug:      metricM.best_vina_drug ?? null,
@@ -145,7 +173,7 @@ function renderRows(rows) {
   if (badge) badge.textContent = `MOSTRANDO: ${rows.length} / ${_totalRows}`;
 
   if (!rows.length) {
-    tbody.innerHTML = `<tr><td colspan="8" class="no-data">Sin variantes para los filtros aplicados.</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="10" class="no-data">Sin variantes para los filtros aplicados.</td></tr>`;
     return;
   }
 
@@ -154,6 +182,7 @@ function renderRows(rows) {
     const badgeCls = clsBadge(v.classification);
     const gPos   = genomicPos(v.chromosome, v.start_position);
     const pct    = v.cohort_pct.toFixed(1);
+    const p      = v.protein;
 
     // Botones WT / MUT
     const wtBtn  = v.hasWT
@@ -174,22 +203,381 @@ function renderRows(rows) {
       : '';
 
     return `
-      <tr class="exp-row" ${metricTip}>
+      <tr class="exp-row" data-row-key="${esc(v.key)}" ${metricTip}>
         <td class="exp-rank">${v.rank}</td>
         <td>
           <span class="exp-gene-badge"
                 style="background:${geneColor(v.hugo_symbol)}22;color:${geneColor(v.hugo_symbol)};border-color:${geneColor(v.hugo_symbol)}55;">
-            ${v.hugo_symbol}
+            ${esc(v.hugo_symbol)}
           </span>
         </td>
-        <td class="exp-mono">${v.protein_change}</td>
+        <td class="exp-protein-cell">
+          <span class="exp-protein-name">${esc(p.name)}</span>
+          ${p.type ? `<span class="exp-protein-type">${esc(p.type)}</span>` : ''}
+        </td>
+        <td class="exp-mono">${esc(v.protein_change)}</td>
         <td>${freqBar(v.frequency, _maxFreq)}</td>
         <td class="exp-pct">${pct}%</td>
         <td class="exp-mono exp-pos">${gPos}</td>
-        <td><span class="badge ${badgeCls}">${cls}</span></td>
+        <td><span class="badge ${badgeCls}">${esc(cls)}</span></td>
         <td class="exp-struct-btns">${wtBtn}${mutBtn}</td>
+        <td class="exp-select-cell">
+          <button class="exp-select-btn" data-select-key="${esc(v.key)}"
+                  aria-expanded="false" title="Ver ficha de ${esc(p.name)} y estructura 3D">
+            <span>Selección</span><span class="exp-select-caret">▾</span>
+          </button>
+        </td>
       </tr>`;
   }).join('');
+}
+
+// ── Ficha expandible «Selección» ──────────────────────────────────────────
+let _rowsByKey = new Map();
+let detailViewer = null;
+let detailViewerToken = 0;
+let openDetailKey = null;
+
+function infoSections(p) {
+  if (p.pending) {
+    return `<div class="exp-detail-loading">Buscando información de ${esc(p.name)} en UniProt…</div>`;
+  }
+  if (p.unknown) {
+    return `<p class="exp-detail-empty">El gen no está identificado en la anotación de esta corrida, por lo que no hay ficha de proteína disponible.</p>`;
+  }
+  const section = (title, text) => text
+    ? `<div class="exp-detail-section"><h4>${title}</h4><p>${esc(text)}</p></div>`
+    : '';
+  const html = [
+    section('Función', p.function),
+    section('Función catalítica', p.catalytic),
+    section('Regulación', p.regulation),
+    section('Localización subcelular', p.localization),
+    section('Relevancia en cáncer de mama', p.disease),
+    section('Dominios', p.domains),
+  ].join('');
+  const source = p.source === 'UniProt'
+    ? `<p class="exp-detail-source">Resumen recuperado de UniProt (texto original en inglés).</p>`
+    : '';
+  return (html || `<p class="exp-detail-empty">Sin ficha detallada disponible para este gen.</p>`) + source;
+}
+
+function infoPanelHTML(v, p) {
+  const color = geneColor(v.hugo_symbol);
+  const chips = [
+    p.length ? `<span class="exp-detail-chip">${p.length} aa</span>` : '',
+    p.type ? `<span class="exp-detail-chip">${esc(p.type)}</span>` : '',
+    p.uniprot
+      ? `<a class="exp-detail-chip exp-detail-chip--link"
+            href="https://www.uniprot.org/uniprotkb/${esc(p.uniprot)}"
+            target="_blank" rel="noopener">UniProt ${esc(p.uniprot)} ↗</a>`
+      : '',
+  ].join('');
+  const best = v.best_drug
+    ? `<span>Mejor fármaco <b>${esc(v.best_drug)}</b>${v.best_score ? ` · ${fmt(v.best_score)} kcal/mol` : ''}</span>`
+    : '';
+  const plddt = v.wt_plddt
+    ? `<span>pLDDT WT <b>${fmt(v.wt_plddt)}</b> · MUT <b>${fmt(v.mut_plddt)}</b></span>`
+    : '';
+
+  return `
+    <div class="exp-detail-hero">
+      <span class="exp-detail-gene"
+            style="background:${color}22;color:${color};border-color:${color}55;">
+        ${esc(v.hugo_symbol)}
+      </span>
+      <div class="exp-detail-heading">
+        <h3 class="exp-detail-title">${esc(p.name)}
+          <span class="exp-detail-full">${esc(p.fullName)}</span>
+        </h3>
+        <div class="exp-detail-chips">${chips}</div>
+      </div>
+    </div>
+    <div class="exp-detail-body">${infoSections(p)}</div>
+    <div class="exp-detail-variant">
+      <span>Variante <b class="exp-mono">${esc(v.protein_change)}</b></span>
+      <span>Frecuencia <b>${v.frequency}</b> · cohorte <b>${v.cohort_pct.toFixed(1)}%</b></span>
+      <span>Clasificación <b>${esc(clsLabel(v.classification))}</b></span>
+      ${plddt}${best}
+    </div>`;
+}
+
+function structureToggleHTML(v, activeKind) {
+  const { wt, mut } = v.structures;
+  if (!wt && !mut) return '';
+  const btn = (kind, label, url) => url
+    ? `<button class="exp-detail-struct-btn exp-detail-struct-btn--${kind}
+          ${kind === activeKind ? 'is-active' : ''}"
+          data-detail-struct="${kind}">${label}</button>`
+    : '';
+  return `<div class="exp-detail-struct-toggle">${btn('wt', 'WT', wt)}${btn('mut', 'MUT', mut)}</div>`;
+}
+
+function detailRowHTML(v) {
+  const defaultKind = v.structures.wt ? 'wt' : 'mut';
+  return `
+    <td colspan="10">
+      <div class="exp-detail" data-detail-key="${esc(v.key)}">
+        <div class="exp-detail-info" data-detail-info>
+          ${infoPanelHTML(v, v.protein)}
+        </div>
+        <div class="exp-detail-viewer">
+          <div class="exp-detail-viewer-head">
+            <span class="exp-detail-viewer-title">Estructura de la proteína</span>
+            ${structureToggleHTML(v, defaultKind)}
+          </div>
+          <div class="exp-molstar" data-exp-molstar></div>
+          <p class="exp-detail-legend">
+            Coloreado arcoíris de N a C (azul → rojo). Arrastra para rotar y usa la rueda para acercar.
+          </p>
+        </div>
+      </div>
+    </td>`;
+}
+
+function disposeDetailViewer() {
+  const viewer = detailViewer;
+  detailViewer = null;
+  detailViewerToken++;
+  if (!viewer) return;
+  try { viewer.plugin?.dispose?.(); } catch (_) { /* noop */ }
+  try { viewer.dispose?.(); } catch (_) { /* noop */ }
+}
+
+function closeDetail() {
+  document.querySelectorAll('#exp-tbody tr.exp-detail-row').forEach(el => el.remove());
+  document.querySelectorAll('#exp-tbody tr.exp-row--open').forEach(el => {
+    el.classList.remove('exp-row--open');
+  });
+  document.querySelectorAll('#exp-tbody .exp-select-btn').forEach(btn => {
+    btn.setAttribute('aria-expanded', 'false');
+    btn.classList.remove('exp-select-btn--open');
+    const label = btn.querySelector('span');
+    if (label) label.textContent = 'Selección';
+  });
+  disposeDetailViewer();
+  openDetailKey = null;
+}
+
+function structureFormat(url) {
+  return url.endsWith('.cif') ? 'mmcif' : 'pdb';
+}
+
+// ── Arcoíris N→C ──────────────────────────────────────────────────────────
+// El tema `sequence-id` de Mol* necesita metadatos de entidad que los CIF de
+// ESMFold no traen, así que se colorea por tramos de residuos con
+// `visual.select`. Es el mismo helper que ya usa la vista de Estructuras 3D.
+function rainbowColor(t) {
+  // Matiz 270° (violeta/azul) → 0° (rojo)
+  const h = 270 - 270 * t;
+  const s = 0.8;
+  const l = 0.55;
+  const c = (1 - Math.abs(2 * l - 1)) * s;
+  const x = c * (1 - Math.abs(((h / 60) % 2) - 1));
+  const m = l - c / 2;
+  let r = 0, g = 0, b = 0;
+  if      (h < 60)  [r, g, b] = [c, x, 0];
+  else if (h < 120) [r, g, b] = [x, c, 0];
+  else if (h < 180) [r, g, b] = [0, c, x];
+  else if (h < 240) [r, g, b] = [0, x, c];
+  else if (h < 300) [r, g, b] = [x, 0, c];
+  else              [r, g, b] = [c, 0, x];
+  return {
+    r: Math.round((r + m) * 255),
+    g: Math.round((g + m) * 255),
+    b: Math.round((b + m) * 255),
+  };
+}
+
+// La jerarquía puede tardar en poblarse tras render(); esperar antes de colorear.
+function structureReady(viewer) {
+  const structures = viewer?.plugin?.managers?.structure?.hierarchy?.current?.structures ?? [];
+  return structures.length > 0
+    && (structures[0]?.cell?.obj?.data?.models?.length ?? 0) > 0;
+}
+
+async function waitForStructure(viewer, timeout = 8000) {
+  const t0 = performance.now();
+  while (performance.now() - t0 < timeout) {
+    if (structureReady(viewer)) return true;
+    await new Promise(resolve => setTimeout(resolve, 100));
+  }
+  return structureReady(viewer);
+}
+
+function collectResidueIds(viewer) {
+  const structures = viewer?.plugin?.managers?.structure?.hierarchy?.current?.structures ?? [];
+  const model = structures[0]?.cell?.obj?.data?.models?.[0];
+  const residues = model?.atomicHierarchy?.residues;
+  const rowCount = residues?._rowCount ?? 0;
+  const ids = [];
+  if (rowCount > 0 && residues?.auth_seq_id?.value) {
+    const seen = new Set();
+    for (let i = 0; i < rowCount; i++) {
+      const id = residues.auth_seq_id.value(i);
+      if (id == null || seen.has(id)) continue;
+      seen.add(id);
+      ids.push(id);
+    }
+  }
+  if (!ids.length) {
+    const len = model?.sequence?.byEntityKey?.[0]?.sequence?.length ?? 0;
+    for (let i = 1; i <= len; i++) ids.push(i);
+  }
+  return ids;
+}
+
+async function applyRainbow(viewer) {
+  await waitForStructure(viewer);
+  const ids = collectResidueIds(viewer);
+  if (!ids.length) return;
+
+  const bins = Math.min(24, ids.length);
+  const per = Math.ceil(ids.length / bins);
+  const data = [];
+  for (let i = 0; i < bins; i++) {
+    const start = ids[i * per];
+    if (start === undefined) break;
+    const end = ids[Math.min((i + 1) * per - 1, ids.length - 1)];
+    data.push({
+      start_residue_number: start,
+      end_residue_number: end,
+      color: rainbowColor(bins > 1 ? i / (bins - 1) : 0),
+      focus: false,
+    });
+  }
+
+  try {
+    await viewer.visual.clearSelection?.();
+    await viewer.visual.select({ data, nonSelectedColor: null });
+  } catch (e) {
+    console.warn('[Explore] No se pudo aplicar el coloreado arcoíris:', e);
+  }
+}
+
+async function mountDetailViewer(detailTr, v, kind) {
+  const container = detailTr.querySelector('[data-exp-molstar]');
+  if (!container) return;
+
+  const url = v.structures[kind];
+  container.innerHTML = '';
+
+  if (!url) {
+    container.innerHTML = '<div class="exp-molstar-empty">No hay estructura 3D publicada para esta variante.</div>';
+    return;
+  }
+  if (typeof PDBeMolstarPlugin === 'undefined') {
+    container.innerHTML = '<div class="exp-molstar-empty">El visor 3D no está disponible (PDBe Mol* no cargó).</div>';
+    return;
+  }
+
+  disposeDetailViewer();
+  const token = detailViewerToken;
+  const plugin = new PDBeMolstarPlugin();
+  detailViewer = plugin;
+
+  try {
+    await plugin.render(container, {
+      customData: { url, format: structureFormat(url) },
+      bgColor: { r: 15, g: 23, b: 42 },
+      hideControls: true,
+      landscape: true,
+      pdbeLink: false,
+      sequencePanel: false,
+      lighting: 'matte',
+    });
+    if (token !== detailViewerToken) return;
+    await applyRainbow(plugin);
+    // Ajustar la cámara al tamaño real de la celda tras el montaje
+    try { await plugin.visual.reset({ camera: true }); } catch (_) { /* noop */ }
+  } catch (e) {
+    console.warn('[Explore] No se pudo mostrar la estructura:', e);
+    if (token === detailViewerToken) {
+      container.innerHTML = '<div class="exp-molstar-empty">No se pudo cargar la estructura 3D.</div>';
+    }
+  }
+}
+
+async function switchDetailStructure(button) {
+  const detail = button.closest('.exp-detail');
+  const detailTr = button.closest('tr.exp-detail-row');
+  const v = _rowsByKey.get(detail?.dataset.detailKey);
+  const kind = button.dataset.detailStruct;
+  if (!v || !detailTr || !kind) return;
+
+  detail.querySelectorAll('.exp-detail-struct-btn').forEach(btn => {
+    btn.classList.toggle('is-active', btn === button);
+  });
+
+  const url = v.structures[kind];
+  if (!url) return;
+
+  if (detailViewer?.visual) {
+    const token = detailViewerToken;
+    try {
+      await detailViewer.visual.update({
+        customData: { url, format: structureFormat(url) },
+      }, true);
+      if (token !== detailViewerToken) return;
+      await applyRainbow(detailViewer);
+      try { await detailViewer.visual.reset({ camera: true }); } catch (_) { /* noop */ }
+      return;
+    } catch (e) {
+      console.warn('[Explore] Falló el cambio de estructura, se recarga el visor:', e);
+    }
+  }
+  await mountDetailViewer(detailTr, v, kind);
+}
+
+function toggleDetail(row, button) {
+  const key = row.dataset.rowKey;
+  if (!key) return;
+
+  // Cerrar si ya está abierta la misma fila
+  if (openDetailKey === key) {
+    closeDetail();
+    return;
+  }
+  closeDetail();
+
+  const v = _rowsByKey.get(key);
+  if (!v) return;
+
+  const detailTr = document.createElement('tr');
+  detailTr.className = 'exp-detail-row';
+  detailTr.innerHTML = detailRowHTML(v);
+  row.after(detailTr);
+
+  row.classList.add('exp-row--open');
+  button.setAttribute('aria-expanded', 'true');
+  button.classList.add('exp-select-btn--open');
+  const label = button.querySelector('span');
+  if (label) label.textContent = 'Cerrar';
+  openDetailKey = key;
+
+  requestAnimationFrame(() => {
+    detailTr.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
+    // La tabla puede estar desplazada a la derecha (el botón «Selección» vive
+    // en la última columna): devolver el scroll al inicio para que la ficha
+    // no aparezca recortada por la izquierda.
+    const wrapper = detailTr.closest('.explore-table-wrapper');
+    if (wrapper) wrapper.scrollLeft = 0;
+    mountDetailViewer(detailTr, v, v.structures.wt ? 'wt' : 'mut');
+  });
+
+  // Ficha UniProt para genes sin texto curado
+  if (v.protein.pending) {
+    fetchProteinInfo(v.hugo_symbol).then(info => {
+      if (openDetailKey !== key) return;
+      if (!info) {
+        // Sin red o sin entrada revisada: se muestra una ficha mínima.
+        info = { ...getProteinInfo(v.hugo_symbol), pending: false };
+        info.fullName = info.fullName || v.hugo_symbol;
+      }
+      v.protein = info;
+      const panel = detailTr.querySelector('[data-detail-info]');
+      if (panel) panel.innerHTML = infoPanelHTML(v, info);
+    });
+  }
 }
 
 // Colores por gen (consistente con la imagen de referencia)
@@ -206,6 +594,10 @@ function geneColor(gene) {
 
 // ── Filtrado reactivo ─────────────────────────────────────────────────────
 function applyFilters() {
+  // Cualquier cambio de filtro reconstruye la tabla: se cierra la ficha abierta
+  // para no dejar un visor huérfano.
+  closeDetail();
+
   const geneQ    = (document.getElementById('exp-search-gene')?.value   ?? '').toLowerCase().trim();
   const variantQ = (document.getElementById('exp-search-variant')?.value ?? '').toLowerCase().trim();
   const classQ   = (document.getElementById('exp-filter-class')?.value   ?? '').toLowerCase();
@@ -251,10 +643,34 @@ function handleStructClick(e) {
   document.querySelector('[data-view="structural"]')?.click();
 }
 
+// ── Delegación de clicks de la tabla ──────────────────────────────────────
+function handleTableClick(e) {
+  // Botón «Selección»: abre/cierra la ficha
+  const selectBtn = e.target.closest('[data-select-key]');
+  if (selectBtn) {
+    e.preventDefault();
+    const row = selectBtn.closest('tr.exp-row');
+    if (row) toggleDetail(row, selectBtn);
+    return;
+  }
+
+  // Toggle WT/MUT dentro de la ficha
+  const structToggle = e.target.closest('[data-detail-struct]');
+  if (structToggle) {
+    e.preventDefault();
+    switchDetailStructure(structToggle);
+    return;
+  }
+
+  // Botones WT/MUT de la fila: navegar a Estructuras 3D
+  handleStructClick(e);
+}
+
 // ── Loader principal ──────────────────────────────────────────────────────
 async function loadExplore() {
   if (state.loaded) return;
   state.loaded = true;
+  closeDetail();
 
   const [rawMutations, topVariants, manifest, metrics, runManifest] = await Promise.all([
     loadJSON(DATA.rawMutations()),
@@ -278,14 +694,12 @@ async function loadExplore() {
 
   // Construir tabla
   _allRows   = buildVariantTable(rawMutations, topVariants, manifest, metrics);
+  _rowsByKey = new Map(_allRows.map(r => [r.key, r]));
   _maxFreq   = Math.max(..._allRows.map(r => r.frequency), 1);
   _totalRows = _allRows.length;
 
-  renderRows(_allRows);
-
-  // Actualizar badge inicial
-  const badge = document.getElementById('exp-count-badge');
-  if (badge) badge.textContent = `MOSTRANDO: ${_allRows.length} / ${_allRows.length}`;
+  // Respetar los filtros que el usuario ya tenía al cambiar de corrida.
+  applyFilters();
 
   // Listeners de filtros (una sola vez)
   const filterIds = ['exp-search-gene', 'exp-search-variant', 'exp-filter-class'];
@@ -298,10 +712,10 @@ async function loadExplore() {
     }
   });
 
-  // Listener de clicks en botones WT/MUT (delegado en tbody)
+  // Listener de clicks: botones WT/MUT y ficha «Selección» (delegado en tbody)
   const tbody = document.getElementById('exp-tbody');
   if (tbody && !tbody.dataset.listenerAttached) {
-    tbody.addEventListener('click', handleStructClick);
+    tbody.addEventListener('click', handleTableClick);
     tbody.dataset.listenerAttached = 'true';
   }
 }

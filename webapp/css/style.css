@@ -472,7 +472,7 @@ tbody tr:hover { background: rgba(13,148,136,.1); }
 /* ── Tabla wrapper ────────────────────────────────────────── */
 .explore-table-wrapper { overflow-x: auto; }
 
-#exp-table { width: 100%; border-collapse: collapse; }
+#exp-table { width: 100%; min-width: 1180px; border-collapse: collapse; }
 
 #exp-table thead th {
   font-size: .7rem;
@@ -480,7 +480,7 @@ tbody tr:hover { background: rgba(13,148,136,.1); }
   letter-spacing: .08em;
   text-transform: uppercase;
   color: var(--text-muted);
-  padding: .6rem 1rem;
+  padding: .6rem .7rem;
   text-align: left;
   border-bottom: 1px solid var(--border);
   white-space: nowrap;
@@ -490,7 +490,7 @@ tbody tr:hover { background: rgba(13,148,136,.1); }
   transition: background .15s;
 }
 .exp-row:hover { background: rgba(255,255,255,.03); }
-.exp-row td { padding: .7rem 1rem; vertical-align: middle; }
+.exp-row td { padding: .7rem .7rem; vertical-align: middle; }
 
 /* ── Rank ─────────────────────────────────────────────────── */
 .exp-rank {
@@ -580,6 +580,226 @@ tbody tr:hover { background: rgba(13,148,136,.1); }
   border-color: rgba(255,255,255,.1);
   color: rgba(255,255,255,.2);
   cursor: not-allowed;
+}
+
+/* ── Columna PROTEÍNA ─────────────────────────────────────── */
+.exp-protein-cell { min-width: 135px; max-width: 220px; }
+.exp-protein-name {
+  display: block;
+  font-size: .85rem;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.25;
+}
+.exp-protein-type {
+  display: block;
+  font-size: .67rem;
+  color: var(--text-muted);
+  margin-top: .12rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ── Botón SELECCIÓN ──────────────────────────────────────── */
+.exp-select-cell { white-space: nowrap; }
+.exp-select-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: .35rem;
+  font-size: .7rem;
+  font-weight: 700;
+  letter-spacing: .04em;
+  padding: .28rem .7rem;
+  border-radius: 999px;
+  border: 1px solid rgba(20,184,166,.55);
+  background: rgba(13,148,136,.1);
+  color: var(--teal-light);
+  cursor: pointer;
+  transition: background .15s, color .15s, border-color .15s;
+}
+.exp-select-btn:hover {
+  background: rgba(13,148,136,.28);
+  border-color: var(--teal-light);
+  color: #fff;
+}
+.exp-select-btn--open {
+  background: var(--teal);
+  border-color: var(--teal);
+  color: #fff;
+}
+.exp-select-caret {
+  font-size: .6rem;
+  transition: transform .2s ease;
+}
+.exp-select-btn--open .exp-select-caret { transform: rotate(180deg); }
+.exp-row--open { background: rgba(20,184,166,.07); }
+
+/* ── Ficha expandida ─────────────────────────────────────── */
+.exp-detail-row > td {
+  padding: 0 !important;
+  background: #0b1220;
+  border-bottom: 1px solid rgba(20,184,166,.25);
+}
+.exp-detail {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(320px, .95fr);
+  gap: 1.25rem;
+  padding: 1.2rem 1.25rem 1.35rem;
+  text-align: left;
+}
+@media (max-width: 980px) {
+  .exp-detail { grid-template-columns: 1fr; }
+}
+.exp-detail-info { min-width: 0; }
+.exp-detail-hero {
+  display: flex;
+  gap: .75rem;
+  align-items: flex-start;
+  margin-bottom: .85rem;
+}
+.exp-detail-gene {
+  flex: 0 0 auto;
+  font-size: .72rem;
+  font-weight: 800;
+  padding: .25rem .6rem;
+  border-radius: 4px;
+  border: 1px solid;
+  letter-spacing: .04em;
+}
+.exp-detail-heading { min-width: 0; }
+.exp-detail-title {
+  font-size: 1.02rem;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.3;
+}
+.exp-detail-full {
+  display: block;
+  font-size: .77rem;
+  font-weight: 400;
+  color: var(--text-muted);
+  margin-top: .15rem;
+}
+.exp-detail-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .35rem;
+  margin-top: .45rem;
+}
+.exp-detail-chip {
+  font-size: .67rem;
+  padding: .15rem .5rem;
+  border-radius: 999px;
+  background: rgba(148,163,184,.12);
+  border: 1px solid rgba(148,163,184,.25);
+  color: #cbd5e1;
+  text-decoration: none;
+}
+.exp-detail-chip--link:hover {
+  border-color: var(--teal-light);
+  color: var(--teal-light);
+}
+.exp-detail-body { display: grid; gap: .65rem; }
+.exp-detail-section h4 {
+  font-size: .68rem;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--teal-light);
+  margin-bottom: .18rem;
+}
+.exp-detail-section p {
+  font-size: .795rem;
+  line-height: 1.55;
+  color: #cbd5e1;
+}
+.exp-detail-source {
+  font-size: .67rem;
+  color: var(--text-muted);
+  font-style: italic;
+}
+.exp-detail-loading,
+.exp-detail-empty {
+  font-size: .8rem;
+  color: var(--text-muted);
+  padding: .75rem;
+  border: 1px dashed var(--border);
+  border-radius: 6px;
+}
+.exp-detail-variant {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .45rem 1rem;
+  margin-top: .9rem;
+  padding-top: .75rem;
+  border-top: 1px solid rgba(255,255,255,.07);
+  font-size: .72rem;
+  color: var(--text-muted);
+}
+.exp-detail-variant b { color: var(--text); font-weight: 700; }
+
+/* Visor 3D de la ficha */
+.exp-detail-viewer {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+.exp-detail-viewer-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: .5rem;
+  margin-bottom: .4rem;
+}
+.exp-detail-viewer-title {
+  font-size: .68rem;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+.exp-detail-struct-toggle { display: flex; gap: .25rem; }
+.exp-detail-struct-btn {
+  font-size: .66rem;
+  font-weight: 700;
+  padding: .2rem .55rem;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all .15s;
+}
+.exp-detail-struct-btn:hover { border-color: var(--teal-light); color: var(--text); }
+.exp-detail-struct-btn.is-active {
+  background: rgba(20,184,166,.18);
+  border-color: var(--teal);
+  color: var(--teal-light);
+}
+.exp-molstar {
+  position: relative;
+  width: 100%;
+  height: 340px;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #0f172a;
+  border: 1px solid var(--border);
+}
+.exp-molstar-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding: 1rem;
+  text-align: center;
+  font-size: .8rem;
+  color: var(--text-muted);
+}
+.exp-detail-legend {
+  font-size: .66rem;
+  color: var(--text-muted);
+  margin-top: .4rem;
 }
 
 

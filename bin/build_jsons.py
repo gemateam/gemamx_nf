@@ -83,7 +83,13 @@ def main() -> int:
         change = meta.get("protein_change", "WT")
         if not gene:
             die(f"meta sin gene: {meta_path}")
-        key = f"{gene}_WT" if meta.get("role") == "wt" else f"{gene}_{change}"
+        # V2.1: un WT por variante lleva `wt_for` ("GEN_CAMBIO") y se registra como
+        # GEN_WT_CAMBIO. Sin `wt_for` (V1/V2) la clave sigue siendo GEN_WT.
+        wt_for = meta.get("wt_for")
+        if meta.get("role") == "wt":
+            key = f"{gene}_WT_{wt_for.split('_', 1)[1]}" if wt_for else f"{gene}_WT"
+        else:
+            key = f"{gene}_{change}"
         structure_file = meta.get("structure_file")
         if not structure_file:
             die(f"meta sin structure_file: {meta_path}")
@@ -123,6 +129,7 @@ def main() -> int:
     order = load_catalog_order(args.catalog)
     order_index = {name: i for i, name in enumerate(order)}
     vina_by_variant: dict[str, dict[str, float]] = {}
+    roles_by_variant: dict[str, dict[str, dict]] = {}   # aditivo: rol del par y cobertura del sitio
     poses_out = outdir / "docking" / "results"
     for summary_path in args.vina:
         summary = read_json(summary_path)
@@ -132,6 +139,13 @@ def main() -> int:
         if not variant or not drug or score is None:
             die(f"resumen de Vina incompleto: {summary_path}")
         vina_by_variant.setdefault(variant, {})[drug] = round(float(score), 3)
+        if summary.get("role"):
+            info = {"role": summary["role"]}
+            if summary.get("box_mode"):
+                info["box_mode"] = summary["box_mode"]
+            if "site_covered" in summary:
+                info["site_covered"] = summary["site_covered"]
+            roles_by_variant.setdefault(variant, {})[drug] = info
         pose_name = summary.get("out_pdbqt")
         if pose_name:
             pose_path = Path(summary_path).with_name(pose_name)
@@ -162,16 +176,29 @@ def main() -> int:
             key=lambda kv: (order_index.get(kv[0], len(order_index)), kv[0]),
         ))
 
+    # V2.1: alias canónico GEN_WT -> WT de la primera variante priorizada del gen
+    # (es el que se dockea y el que lee la webapp). No sobrescribe un GEN_WT real.
+    for row in top:
+        gene_ = row["hugo_symbol"]
+        per_variant = f"{gene_}_WT_{row['protein_change']}"
+        if manifest.get(f"{gene_}_WT") is None and manifest.get(per_variant):
+            manifest[f"{gene_}_WT"] = manifest[per_variant]
+            if per_variant in plddt:
+                plddt[f"{gene_}_WT"] = plddt[per_variant]
+
     for variant, rmsd in sorted(rmsd_by_variant.items()):
         gene = rmsd["gene"]
         scores = affinities.get(variant, {})
+        wt_key = f"{gene}_WT_{rmsd['protein_change']}"
         entry = {
-            "wt_plddt": plddt.get(f"{gene}_WT"),
+            "wt_plddt": plddt.get(wt_key, plddt.get(f"{gene}_WT")),
             "mut_plddt": plddt.get(variant),
             "rmsd_global": rmsd["rmsd_global"],
             "rmsd_active": rmsd["rmsd_active"],
             "rmsd_regions": rmsd.get("rmsd_regions", []),
         }
+        if wt_key in manifest:
+            entry["wt_structure"] = wt_key
         if variant in mut_resseq:
             entry["mutation_resseq_model"] = mut_resseq[variant]
         if scores:
@@ -189,6 +216,9 @@ def main() -> int:
 
     write_json(outdir / "structural_metrics.json", metrics, sort_keys=True)
     write_json(outdir / "docking" / "vina_affinities.json", affinities, sort_keys=True)
+    if roles_by_variant:
+        # No altera el contrato vina_affinities.json: archivo hermano opcional.
+        write_json(outdir / "docking" / "vina_roles.json", roles_by_variant, sort_keys=True)
     write_json(outdir / "manifest_structures.json", manifest, sort_keys=True)
 
     # Copias byte a byte de los JSON de ingesta/estadística

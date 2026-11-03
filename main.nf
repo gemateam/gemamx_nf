@@ -208,4 +208,42 @@ workflow {
             .mix(BUILD_JSONS.out.vina_affinities)
             .collect()
     )
+
+    /*
+     * Subida automática de los reportes HTML (report, timeline, dag) al run padre
+     * de MLflow. Se lanza al terminar la corrida, en segundo plano, porque Nextflow
+     * escribe los HTML justo después de este punto; bin/nf_reports_hook.sh espera
+     * a que existan y los adjunta al run con `upload_nf_reports.py`.
+     *
+     * Los reportes ya están activos en nextflow.config, así que cualquier
+     * `nextflow run ...` deja los HTML adjuntos sin flags ni wrappers.
+     * (En la sintaxis estricta de Nextflow 26+, el handler va dentro del workflow.)
+     */
+    workflow.onComplete = {
+        if (workflow.stubRun) {
+            log.info 'stub-run: no se suben reportes a MLflow'
+        } else {
+            try {
+                def outDir  = new File(params.outdir.toString()).absolutePath
+                def infoDir = new File(outDir, 'pipeline_info')
+                infoDir.mkdirs()
+                def cmd = ['bash', "${projectDir}/bin/nf_reports_hook.sh".toString(),
+                           '--outdir', outDir,
+                           '--run-name', workflow.runName,
+                           '--experiment', params.mlflow_experiment,
+                           '--host-uri', params.mlflow_host_uri,
+                           '--docker-uri', params.mlflow_docker_uri,
+                           '--docker-network', params.mlflow_docker_network,
+                           '--image', params.image_cpu,
+                           '--bin', "${projectDir}/bin".toString()]
+                def pb = new ProcessBuilder(cmd)
+                pb.redirectErrorStream(true)
+                pb.redirectOutput(ProcessBuilder.Redirect.appendTo(new File(infoDir, 'upload.log')))
+                pb.start()
+                log.info "Reportes HTML -> MLflow: subida en segundo plano (${workflow.runName})"
+            } catch (Exception e) {
+                log.warn "No se pudo lanzar la subida de reportes a MLflow: ${e.message}"
+            }
+        }
+    }
 }

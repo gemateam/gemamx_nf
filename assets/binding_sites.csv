@@ -1,0 +1,4 @@
+gene,site_name,residues,reference,notes
+PIK3CA,ATP_pocket,"802;836;851;854;933",UniProt P42336 numeracion canonica,"K802 (Lys catalitica), Y836, V851 (bisagra), V854, D933 (DFG). VERIFICAR contra el cristal de PI3Ka con alpelisib (p. ej. 4JPS) antes de usar en produccion."
+AKT1,ATP_pocket,"179;230;234;292",UniProt P31749 numeracion canonica,"K179 (Lys catalitica), A230 (bisagra), M281/D292 (DFG). VERIFICAR contra el cristal de AKT1 con capivasertib (p. ej. 4GV1) antes de usar en produccion."
+ERBB2,ATP_pocket,"753;798;801;863",UniProt P04626 numeracion canonica,"K753 (Lys catalitica), T798 (gatekeeper), M801 (bisagra), D863 (DFG). VERIFICAR contra un cristal de HER2 con inhibidor (p. ej. 3PP0)."

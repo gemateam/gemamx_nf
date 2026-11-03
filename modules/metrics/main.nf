@@ -40,6 +40,7 @@ process BUILD_JSONS {
     path "stage/data/structures/*",       optional: true, emit: structures_out
     path "stage/data/docking/results/*",  optional: true, emit: poses_out
     path "stage/data/docking/complex/*",  optional: true, emit: complexes_out
+    path "stage/data/docking/vina_roles.json", optional: true, emit: vina_roles_out
     // Archivos V2 extras (clínico, GEO summaries) — opcionales
     path "stage/data/variant_clinical_summary.json", optional: true, emit: clinical_summary_out
     path "stage/data/clinical_metadata.json",        optional: true, emit: clinical_metadata_out
