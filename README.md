@@ -183,6 +183,8 @@ gemamx_nf/
 ├── docs/                       # Documentación y diagramas
 │   ├── index.html              # Portal de documentación en GitHub Pages
 │   ├── architecture.html       # Diagrama de arquitectura interactivo (Archify)
+│   ├── V2_1.md                 # Contrato y diferencias de V2.1
+│   ├── LEGACY_MAP.md           # Origen del código y auditoría de rutas
 │   └── PIPELINES_RELACIONADOS.md # Pipelines Nextflow y herramientas relacionadas
 ├── infra/                      # Almacén de infraestructura autónoma
 │   ├── mlflow/                 # Artefactos y volúmenes de MLflow
@@ -211,6 +213,13 @@ gemamx_nf/
     ├── css/style.css           # Tema oscuro bioinformático
     └── js/                     # Módulos reactivos (app, dashboard, clinical, etc.)
 ```
+
+**Repositorio autocontenido.** Código, configuración, contenedores y documentación no
+dependen de otros proyectos ni de rutas del host: los únicos recursos externos son APIs
+públicas (cBioPortal, UniProt, ChEMBL, CiViC, AlphaFold DB) y CDN para la WebApp. Las rutas
+absolutas que aparecen en `tests/reference/` e `infra/mlflow/` son metadatos históricos de
+corridas ya ejecutadas, no se resuelven en ejecución (ver
+[`docs/LEGACY_MAP.md`](docs/LEGACY_MAP.md#5-auditoría-de-rutas-absolutas-2026-11-03)).
 
 ---
 
