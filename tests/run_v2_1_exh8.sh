@@ -35,8 +35,9 @@ EXPERIMENT="${MLFLOW_EXPERIMENT:-GEMAMX-V2_1-EXH8}"
 MAX_VARIANTS="${MAX_VARIANTS:-3}"
 EXHAUSTIVENESS="${EXHAUSTIVENESS:-8}"
 HOST_URI="${MLFLOW_HOST_URI:-http://localhost:5000}"
-# Con exhaustiveness=8 un par Vina puede pasar de 30 min (límite por defecto de
-# RUN_VINA en nextflow.config y vina_timeout_sec=1800 del perfil romero-v2).
+# Con exhaustiveness=8 un par Vina puede pasar de 30 min. nextflow.config ya
+# fija RUN_VINA time='4h' y vina_timeout_sec=12600 cuando exhaustiveness>=8;
+# VINA_PROC_TIME/VINA_TIMEOUT_SEC permiten ajustarlo sin tocar el repo.
 # VINA_TIMEOUT_SEC (límite interno de Vina) debe ser menor que VINA_PROC_TIME.
 VINA_PROC_TIME="${VINA_PROC_TIME:-4h}"
 VINA_TIMEOUT_SEC="${VINA_TIMEOUT_SEC:-12600}"
