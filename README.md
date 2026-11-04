@@ -29,6 +29,7 @@ Incluye una **WebApp interactiva SPA (6 vistas dinámicas e integradas)** con se
 6. [Ejecución del Pipeline](#6-ejecución-del-pipeline)
    - [Pipeline V1 (TCGA-BRCA)](#pipeline-v1-tcga-brca)
    - [Pipeline V2 (Romero-Córdoba 2021 HM)](#pipeline-v2-romero-córdoba-2021-hm)
+   - [Pipeline V2.1 (un WT por variante · solo CPU)](#pipeline-v21-un-wt-por-variante--solo-cpu)
 7. [Servicios Docker y MLflow](#7-servicios-docker-y-mlflow)
 8. [WebApp Interactiva (6 Vistas Integradas)](#8-webapp-interactiva-6-vistas-integradas)
 9. [Pipelines Nextflow y Herramientas Relacionadas](#9-pipelines-nextflow-y-herramientas-relacionadas)
@@ -78,8 +79,9 @@ El sistema implementa una arquitectura desacoplada en cuatro capas principales:
 ### V2.0 vs V2.1
 
 `main_v2_1.nf` es un **entrypoint independiente**: `main_v2.nf` (V2.0) no cambia de
-comportamiento y ambos comparten los mismos módulos. V2.1 no agrega un paso nuevo, corrige
-los supuestos que en V2.0 producían métricas inválidas o cómputo innecesario.
+comportamiento y ambos comparten los mismos módulos. V2.1 añade dos procesos de plegado
+(`PREDICT_STRUCTURE_WT_PAIR` / `PREDICT_STRUCTURE_MUT_PAIR`) y corrige los supuestos que en
+V2.0 producían métricas inválidas o cómputo innecesario.
 
 | Aspecto | V2.0 (`main_v2.nf`) | V2.1 (`main_v2_1.nf`) |
 |---|---|---|
