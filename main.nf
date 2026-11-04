@@ -114,14 +114,14 @@ workflow {
 
     PREDICT_STRUCTURE_MUT(ch_mut_struct_input)
 
-    // Alineamiento WT vs MUT: cross por gene
-    // cross produce: [[gene, wt_pdb, wt_meta], [gene, pc, mut_pdb, mut_meta]]
+    // Alineamiento WT vs MUT: emparejar por GEN, no producto cartesiano.
+    // `.cross()` generaba además pares WT(A)×MUT(B); ALIGN_WT_MUT abortaba con
+    // "genes distintos" (bin/align_wt_mut.py:66). `combine(by: 0)` da una WT por
+    // gen × sus variantes, que es el mismo patrón que usa FETCH_FASTA_MUT arriba.
     def ch_align_input = PREDICT_STRUCTURE_WT.out.wt_struct
-        .cross(PREDICT_STRUCTURE_MUT.out.mut_struct)
-        .map { wt, mut ->
-            // wt  = [gene, wt_pdb, wt_meta]
-            // mut = [gene, pc, mut_pdb, mut_meta]
-            tuple(wt[0], mut[1], wt[1], wt[2], mut[2], mut[3])
+        .combine(PREDICT_STRUCTURE_MUT.out.mut_struct, by: 0)
+        .map { gene, wt_pdb, wt_meta, pc, mut_pdb, mut_meta ->
+            tuple(gene, pc, wt_pdb, wt_meta, mut_pdb, mut_meta)
         }
 
     ALIGN_WT_MUT(ch_align_input)
