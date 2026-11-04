@@ -39,6 +39,9 @@ from collections.abc import Sequence
 from pathlib import Path
 import xml.etree.ElementTree as ET
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from gemamx_common import die  # noqa: E402
+
 # ── Constantes ────────────────────────────────────────────────────────────────
 KEY_GENES = [
     "PIK3CA", "TP53", "ERBB2", "BRCA1", "BRCA2",
@@ -312,6 +315,8 @@ def main() -> int:
         maf_path, "HM maf", header_row=2,
         required=("Hugo Symbol", "Chromosome", "Start Position",
                   "Reference Allele", "Tumor Seq Allele2", "Variant Classification"))
+    if not hm_maf_rows:
+        die(f"el MAF no tiene filas de datos: {maf_path.name} (hoja 'HM maf')")
     print(f"Leyendo drivers: {drivers_path.name}")
     driver_rows  = sheet_to_dicts(
         drivers_path, "Driver mutation in HM", header_row=3,
@@ -413,6 +418,15 @@ def main() -> int:
             "rank":              rank,
             "dataset":           args.dataset,
         })
+
+    # Un contrato vacío no es un resultado: si no se priorizó nada, publicarlo
+    # reemplazaría los datos vigentes de la app con listas vacías (PUBLISH copia
+    # con overwrite sobre results/data). Mejor fallar aquí, sin escribir nada.
+    if not top_variants:
+        die(f"no quedó ninguna variante priorizada: {len(raw_mutations)} mutaciones "
+            f"leídas, {len(counts)} combinaciones gen+cambio y {len(key_genes)} genes "
+            f"pedidos en --genes. Revisa el filtro de genes o la cohorte; "
+            f"no se escribe ningún contrato.")
 
     # ── Estadísticas (contadores acumulados en la pasada anterior) ────────────
     stats = {

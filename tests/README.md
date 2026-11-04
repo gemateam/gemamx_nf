@@ -100,7 +100,10 @@ compartido por `INGEST_ROMERO` y `EXTRACT_CLINICAL`:
 - da clave posicional (`_col_<n>`) a las columnas sin nombre —el clínico tiene
   tres— y rechaza dos columnas con el mismo nombre;
 - en la capa clínica (`clean`), convierte los marcadores en `None` pero
-  **conserva el cero**: `0` embarazos es un dato, no un valor ausente.
+  **conserva el cero**: `0` embarazos es un dato, no un valor ausente;
+- una ingesta sin variantes priorizadas falla con código 1 sin escribir nada, y
+  `build_jsons.py` rechaza un `top_variants.json` vacío: es la guarda que impide
+  reemplazar los datos vigentes de `results/data` con listas vacías.
 
 El directorio temporal se crea con los permisos por defecto del padre, no con
 `tempfile.mkdtemp()` (modo `0700`): en Windows ese modo puede dejar el directorio

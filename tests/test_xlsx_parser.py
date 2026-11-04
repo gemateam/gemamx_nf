@@ -26,6 +26,8 @@ from __future__ import annotations
 
 import sys
 import shutil
+import contextlib
+import io
 import tempfile
 import zipfile
 from pathlib import Path
@@ -34,7 +36,9 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "bin"))
 
 from ingest_romero import cell_text, sheet_to_dicts  # noqa: E402
+import build_jsons as bj                             # noqa: E402
 import extract_clinical_romero as ecr                # noqa: E402
+import ingest_romero as ir                           # noqa: E402
 
 MAIN_NS = "http://schemas.openxmlformats.org/spreadsheetml/2006/main"
 REL_NS  = "http://schemas.openxmlformats.org/officeDocument/2006/relationships"
@@ -112,8 +116,13 @@ def col_letters(index: int) -> str:
     return letters
 
 
-def build_minimal_xlsx(path: Path, header: list[str], data: list[list[str]]) -> None:
-    """XLSX mínimo con la cabecera en la fila 1 y celdas de texto."""
+def build_minimal_xlsx(path: Path, header: list[str], data: list[list[str]], *,
+                       sheet: str = "Hoja", header_at: int = 1) -> None:
+    """XLSX mínimo con celdas de texto y la cabecera en `header_at`.
+
+    `header_at` es el número de fila de Excel: las filas anteriores se escriben
+    vacías pero presentes, como en los suplementarios reales.
+    """
     values: list[str] = []
 
     def shared_id(text: str) -> int:
@@ -121,23 +130,29 @@ def build_minimal_xlsx(path: Path, header: list[str], data: list[list[str]]) -> 
             values.append(text)
         return values.index(text)
 
+    filas: list[str] = [f'<row r="{i}"/>' for i in range(1, header_at)]
     grid = [header] + data
-    body = "".join(
+    filas += [
         f'<row r="{r}">' + "".join(
             f'<c r="{col_letters(i)}{r}" t="s"><v>{shared_id(v)}</v></c>'
             for i, v in enumerate(row)) + "</row>"
-        for r, row in enumerate(grid, 1))
+        for r, row in enumerate(grid, header_at)]
+    body = "".join(filas)
     sst = (f'<?xml version="1.0" encoding="UTF-8"?>'
            f'<sst xmlns="{MAIN_NS}" count="{len(values)}" '
            f'uniqueCount="{len(values)}">'
            + "".join(f"<si><t>{v}</t></si>" for v in values) + "</sst>")
-    sheet = (f'<?xml version="1.0" encoding="UTF-8"?>'
-             f'<worksheet xmlns="{MAIN_NS}"><sheetData>{body}</sheetData></worksheet>')
+    sheet_xml = (f'<?xml version="1.0" encoding="UTF-8"?>'
+                 f'<worksheet xmlns="{MAIN_NS}"><sheetData>{body}</sheetData></worksheet>')
+    workbook = (f'<?xml version="1.0" encoding="UTF-8"?>'
+                f'<workbook xmlns="{MAIN_NS}" xmlns:r="{REL_NS}">'
+                f'<sheets><sheet name="{sheet}" sheetId="1" r:id="rId1"/></sheets>'
+                f'</workbook>')
     with zipfile.ZipFile(path, "w") as zf:
-        zf.writestr("xl/workbook.xml", WORKBOOK)
+        zf.writestr("xl/workbook.xml", workbook)
         zf.writestr("xl/_rels/workbook.xml.rels", RELS)
         zf.writestr("xl/sharedStrings.xml", sst)
-        zf.writestr("xl/worksheets/sheet1.xml", sheet)
+        zf.writestr("xl/worksheets/sheet1.xml", sheet_xml)
 
 
 def build_xlsx(path: Path) -> None:
@@ -221,6 +236,65 @@ def main() -> int:
               "una columna sin nombre recibe clave posicional y no se pierde")
         check(sin_nombre["_col_2"] == "B",
               "el dato de la columna sin nombre se conserva")
+
+        print("> Contrato vacío: la ingesta y build_jsons fallan sin escribir nada")
+        maf = tmpdir / "maf.xlsx"
+        build_minimal_xlsx(
+            maf,
+            header=["Hugo Symbol", "Chromosome", "Start Position", "End Position",
+                    "Variant Classification", "Variant Type", "Reference Allele",
+                    "Tumor Seq Allele1", "Tumor Seq Allele2",
+                    "Tumor Sample Barcode", "Center"],
+            data=[["PIK3CA", "3", "178952085", "178952086", "Missense_Mutation",
+                   "SNP", "C", "C", "T", "S1", "FUCAM"]],
+            sheet="HM maf", header_at=2)
+        drv = tmpdir / "drv.xlsx"
+        build_minimal_xlsx(
+            drv,
+            header=["Gene", "gdna", "cdna", "Exon", "Protein", "Protein change",
+                    "Driver", "Consequence", "Disrupting driver mut prediction",
+                    "Gene role mutation", "Known variant reference"],
+            data=[["PIK3CA", "chr3:g.178952085C>T", "c.3140A>G", "21",
+                   "p.His1047Arg", "H/R", "Yes", "missense", "", "Oncogene", ""]],
+            sheet="Driver mutation in HM", header_at=3)
+
+        out = tmpdir / "contrato_vacio"
+        argv = sys.argv
+        err = io.StringIO()
+        sys.argv = ["ingest_romero.py", "--maf", str(maf), "--drivers", str(drv),
+                    "--outdir", str(out), "--genes", "AKT1", "--max-variants", "5"]
+        try:
+            with contextlib.redirect_stderr(err):
+                ir.main()
+            raise AssertionError("la ingesta debía fallar sin variantes priorizadas")
+        except SystemExit as exc:
+            check(exc.code == 1, "sin variantes priorizadas: sale con código 1")
+            check("no quedó ninguna variante priorizada" in err.getvalue(),
+                  "sin variantes priorizadas: mensaje explicativo")
+        finally:
+            sys.argv = argv
+        check(not (out / "top_variants.json").exists(),
+              "sin variantes priorizadas: no se escribe ningún contrato")
+
+        vacio = tmpdir / "top_vacio.json"
+        vacio.write_text("[]", encoding="utf-8")
+        raw = tmpdir / "raw.json"
+        raw.write_text("[]", encoding="utf-8")
+        stats = tmpdir / "stats.json"
+        stats.write_text("{}", encoding="utf-8")
+        err = io.StringIO()
+        sys.argv = ["build_jsons.py", "--top", str(vacio), "--raw", str(raw),
+                    "--stats", str(stats), "--outdir", str(tmpdir / "bj")]
+        try:
+            with contextlib.redirect_stderr(err):
+                bj.main()
+            raise AssertionError("build_jsons debía rechazar un top vacío")
+        except SystemExit as exc:
+            check(exc.code == 1, "build_jsons: un top vacío sale con código 1")
+            check("top_variants vacío" in err.getvalue(),
+                  "build_jsons: un top vacío se rechaza con mensaje")
+        finally:
+            sys.argv = argv
     finally:
         shutil.rmtree(tmpdir, ignore_errors=True)
 

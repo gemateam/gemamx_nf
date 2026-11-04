@@ -56,6 +56,10 @@ def main() -> int:
     top = read_json(args.top)
     if not isinstance(top, list):
         die(f"top_variants inválido: {args.top}")
+    if not top:
+        # Igual que en la ingesta: publicar un contrato sin variantes reemplaza
+        # en results/data lo que la app está sirviendo hoy.
+        die(f"top_variants vacío: {args.top} no tiene variantes que publicar")
 
     # --- estructuras: pLDDT, manifest, copia al contrato y mutation_resseq_model --
     structures_out = outdir / "structures"
