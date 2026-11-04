@@ -233,7 +233,7 @@ Ejecuta el flujo para la cohorte internacional TCGA-BRCA utilizando los insumos 
 
 ```bash
 # Modo de prueba con datos precalculados e insumos del repo (rápido, sin GPU)
-nextflow run main.nf -profile test
+nextflow run main.nf -profile docker,test
 
 # Modo producción con CPU usando el snapshot de mutaciones y catálogo de fármacos del repo
 nextflow run main.nf \
@@ -245,34 +245,46 @@ nextflow run main.nf \
   --max_variants 3 \
   --structures_mode precomputed \
   --exhaustiveness 8 \
-  -profile cpu
+  -profile docker
 
 # Reanudar ejecución previa
-nextflow run main.nf -resume -profile cpu
+nextflow run main.nf -resume -profile docker
 ```
+
+> `-profile docker` es necesario en todas las invocaciones: los procesos declaran sus contenedores
+> (`gemamx-cpu:1.0.0`, `gemamx-nf-docking:1.0.0`) y sin ese perfil Nextflow los ejecutaría en el
+> host. El perfil `test` no activa Docker por sí solo, por eso va como `docker,test`.
+> Ambos perfiles escriben en `results/` (mismo `outdir` que producción); si solo quieres validar
+> sin tocar el contrato vigente, haz respaldo de `results/data` antes.
 
 ### Pipeline V2 (Romero-Córdoba 2021 HM)
 
-Ejecuta el flujo para la cohorte de pacientes mexicanas con integración clínica, utilizando los insumos oficiales del estudio (*Nature Comms 2021*) incluidos en `tests/reference/romero_v2/`:
+Ejecuta el flujo para la cohorte de pacientes mexicanas con integración clínica, utilizando los insumos oficiales del estudio (*Nature Comms 2021*) incluidos en `tests/reference/romero_v2/`.
+
+El perfil `romero-v2` ya fija los insumos dentro del repo (`romero_maf`, `romero_drivers`,
+`romero_clinical`, `fasta_dir`, `structures_dir`, `drug_catalog`, `genes` y `max_variants`), así
+que **no hace falta pasar rutas por CLI**:
 
 ```bash
-# Ejecutar pipeline V2 completo con los insumos directos del repo
-nextflow run main_v2.nf \
-  --romero_maf tests/reference/romero_v2/raw/41467_2021_22478_MOESM8_ESM.xlsx \
-  --romero_drivers tests/reference/romero_v2/raw/41467_2021_22478_MOESM9_ESM.xlsx \
-  --romero_clinical tests/reference/romero_v2/raw/41467_2021_22478_MOESM4_ESM.xlsx \
-  --fasta_dir tests/reference/romero_v2/fasta \
-  --structures_dir tests/reference/romero_v2/structures \
-  --drug_catalog assets/drug_catalog.csv \
-  --genes "PIK3CA,TP53,AKT1,ERBB2,PTEN,GATA3,MAP3K1" \
-  --max_variants 1 \
-  --structures_mode precomputed \
-  --exhaustiveness 1 \
-  -profile romero-v2
+# Cohorte completa (49 variantes) — ejecución canónica
+nextflow run main_v2.nf -profile docker,romero-v2
 
-# O mediante el script auxiliar
+# Equivalente con el wrapper: añade -name, archiva en results/runs/<run>/,
+# actualiza runs/index.json, sube los reportes HTML a MLflow y levanta la webapp
 bash run_pipeline_v2.sh
+
+# Prueba rápida aislada (2 variantes, outdir results/smoke, sin tocar results/data)
+bash tests/run_smoke_v2.sh
 ```
+
+> `-profile docker` **no es opcional**: los procesos declaran sus contenedores
+> (`gemamx-cpu:1.0.0`, `gemamx-nf-docking:1.0.0`) y, sin ese perfil, Nextflow los ejecuta
+> nativamente en el host y falla al no encontrar Vina, Open Babel, RDKit ni Meeko.
+>
+> Para sobrescribir un valor concreto (p. ej. limitar variantes) se puede añadir
+> `--max_variants 2` después del `-profile`; el resto de rutas se heredan del perfil.
+> Los reportes `report.html`, `timeline.html`, `trace.tsv` y `dag.html` se generan siempre
+> en `<outdir>/pipeline_info/` (ver `nextflow.config`).
 
 ### Pipeline V2.1 (un WT por variante · solo CPU)
 
