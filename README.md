@@ -22,7 +22,7 @@ Incluye una **WebApp interactiva SPA (6 vistas dinámicas e integradas)** con se
 ## Tabla de contenidos
 
 1. [Arquitectura del Sistema](#1-arquitectura-del-sistema)
-2. [Pipelines V1 y V2](#2-pipelines-v1-y-v2)
+2. [Pipelines V1, V2 y V2.1](#2-pipelines-v1-v2-y-v21)
 3. [Requisitos e Infraestructura](#3-requisitos-e-infraestructura)
 4. [Instalación Rápida](#4-instalación-rápida)
 5. [Estructura del Proyecto](#5-estructura-del-proyecto)
@@ -62,7 +62,7 @@ El sistema implementa una arquitectura desacoplada en cuatro capas principales:
 
 ---
 
-## 2. Pipelines V1 y V2
+## 2. Pipelines V1, V2 y V2.1
 
 | Característica | Pipeline V1 (`main.nf`) | Pipeline V2 (`main_v2.nf`) |
 |---|---|---|
@@ -74,6 +74,47 @@ El sistema implementa una arquitectura desacoplada en cuatro capas principales:
 | **Docking Molecular** | AutoDock Vina 1.2.3 (11 fármacos) | AutoDock Vina 1.2.3 (11 fármacos curados) |
 | **Experimento [MLflow](https://mlflow.org/)** | `GEMAMX-V1-NF` | `GEMAMX-V2-ROMERO` |
 | **Módulo Clínico Web** | Oculto / No aplicable | Integrado directamente en la vista **Análisis** |
+
+### V2.0 vs V2.1
+
+`main_v2_1.nf` es un **entrypoint independiente**: `main_v2.nf` (V2.0) no cambia de
+comportamiento y ambos comparten los mismos módulos. V2.1 no agrega un paso nuevo, corrige
+los supuestos que en V2.0 producían métricas inválidas o cómputo innecesario.
+
+| Aspecto | V2.0 (`main_v2.nf`) | V2.1 (`main_v2_1.nf`) |
+|---|---|---|
+| **WT por variante** | Un solo WT por gen; todas las variantes del gen se alinean contra él | Un WT por variante (`<GEN>_WT_<CAMBIO>`), plegado en la misma región que su mutación |
+| **RMSD WT/MUT** | 15–20 Å (o error «0 residuos CA en común») cuando la variante cae fuera de la ventana del WT | 0.1–0.8 Å (medido: PIK3CA_H1047R 0.303 Å, PIK3CA_E542K 0.125 Å, AKT1_E17K 0.837 Å) |
+| **Ventana de plegado** | Centrada en la mutación | Cubre mutación **y** bolsillo (`foldWindow()`), con la misma ventana para WT y MUT |
+| **Caja de docking** | Centrada en la mutación | Centroide de los residuos del bolsillo (`assets/binding_sites.csv`, `box_center_mode=binding_site`) |
+| **Pares a acoplar** | Producto cartesiano gen × 11 fármacos | Solo los pares de `assets/target_drug_map.csv`, con `role` (`on_target` / `off_target_control`) |
+| **Backend estructural** | Boltz-1 / AlphaFold / precomputadas | Solo CPU: `precomputed` o `esmfold`; `boltz` se rechaza al inicio |
+| **Cobertura del sitio** | No se evalúa | `site_on_missing` (`fail` \| `centroid`) y `site_covered` en `vina_roles.json` |
+| **Salidas** | `vina_affinities.json` | Añade `vina_roles.json` y `wt_structure` en `structural_metrics.json` (contrato aditivo) |
+
+**Mejoras concretas**
+
+1. **RMSD válido.** Al plegar un WT por variante, cada comparación WT/MUT ocurre sobre la
+   misma región. Es la corrección de fondo: sin ella, el RMSD de variantes como PIK3CA_E542K
+   no era interpretable.
+2. **Docking con sentido biológico.** La caja se centra en el bolsillo ATP y no en la mutación,
+   de modo que el ligando se acopla donde realmente se une. El par se marca como `on_target`
+   o `off_target_control`.
+3. **Menos cómputo inútil.** Se elimina el producto cartesiano: TP53, PTEN, GATA3 y MAP3K1
+   quedan fuera por no tener bolsillo farmacológico mapeado. Además, solo se acopla el WT
+   canónico de cada gen (el de menor `rank`); el resto de WT se usa únicamente para el RMSD.
+4. **Trazabilidad.** `<GEN>_WT` se conserva como alias canónico, de modo que la WebApp sigue
+   leyendo el mismo contrato sin cambios, y `wt_structure` deja explícito qué WT se usó.
+5. **Límites de tiempo coherentes.** `RUN_VINA` declara `time = '1h'` con `exhaustiveness=1` y
+   `4h` con `exhaustiveness≥8`; el perfil `v2_1` fija `vina_timeout_sec = 12600` (3.5 h). El
+   timeout interno de Vina siempre dispara antes que el del scheduler, así que en YUCA el
+   error es diagnosticable en lugar de un *job killed* sin traza.
+
+**Limitación conocida.** Los fixtures actuales se plegaron con la ventana de V2 y no contienen
+el bolsillo completo: con `site_on_missing=fail` la producción aborta hasta regenerarlos, y
+PIK3CA_E542K no puede cubrirlo porque mutación y bolsillo quedan a más de 388 aa. La prueba de
+humo usa `site_on_missing=centroid` y registra `site_covered=false`. Detalle completo en
+[`docs/V2_1.md`](docs/V2_1.md).
 
 ---
 
@@ -227,13 +268,19 @@ bash run_pipeline_v2.sh
 Corrige el WT único por gen de V2 (cada variante se compara contra su propio WT),
 centra el plegado en una ventana que cubre bolsillo y mutación, y limita el docking
 a los pares de `assets/target_drug_map.csv`. `main_v2.nf` no se modifica.
+Comparativa completa en [V2.0 vs V2.1](#v20-vs-v21).
 
 ```bash
 nextflow run main_v2_1.nf -profile docker,romero-v2,v2_1
 
-# Prueba de humo aislada (3 variantes, 34 pares)
+# Prueba de humo aislada (3 variantes)
 bash tests/run_smoke_v2_1.sh -stub-run
 ```
+
+> **Límites de tiempo**: `RUN_VINA` declara `time = '1h'` con `exhaustiveness=1` y `4h`
+> con `exhaustiveness≥8`; el perfil `v2_1` fija `vina_timeout_sec = 12600` (3.5 h). El
+> `time` de Nextflow solo lo aplica el scheduler (SLURM/SGE/PBS): en el executor local
+> el corte real lo da el timeout interno de Vina.
 
 Detalles, contrato y limitación de cobertura de los fragmentos: `docs/V2_1.md`.
 
