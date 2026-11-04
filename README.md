@@ -156,6 +156,10 @@ gemamx_nf/
 ├── results/
 │   ├── data/                   # Contrato de datos vigente servido a la WebApp
 │   └── runs/                   # Histórico de corridas archivadas con index.json
+├── structures/
+│   └── external/               # Modelos AlphaFold DB para genes sin estructura en la corrida
+│       ├── <GEN>_AF.cif        # modelo mmCIF de la secuencia completa
+│       └── index.json          # gen → archivo, UniProt, pLDDT y versión
 ├── tests/reference/            # Insumos de referencia y datos preprocesados
 │   ├── romero_v2/              # Archivos MOESM crudos, WES y fasta V2
 │   └── structures/             # PDBs y predicciones validadas
@@ -250,6 +254,7 @@ services:
 - **Construcción de imágenes**: `gemamx-mlflow:1.0.0` se construye desde `containers/mlflow/Dockerfile` (MLflow 2.19.0 + driver PostgreSQL + parche de la UI) y `gemamx-webapp:1.0.0` desde `webapp/Dockerfile`. Las imágenes de los procesos Nextflow se construyen desde `containers/cpu/Dockerfile` (`gemamx-cpu:1.0.0`: Biopython, RDKit, Meeko, Open Babel, Vina y MLflow) y `containers/docking/Dockerfile` (`gemamx-nf-docking:1.0.0`). Para reconstruirlas: `docker compose build mlflow webapp` y `docker compose --profile images build cpu-base docking`; para levantar el stack usando lo recién construido: `docker compose up -d --build`. La imagen GPU (`gemamx-gpu:1.0.0`) queda fuera de este flujo porque requiere una base CUDA/ROCm que no se construye en CPU.
 - **Reportes Nextflow automáticos**: `nextflow.config` genera `report.html`, `timeline.html`, `trace.tsv` y `dag.html` en `<outdir>/pipeline_info/`, y `workflow.onComplete` lanza `bin/nf_reports_hook.sh` para adjuntarlos al run padre de MLflow. No hacen falta flags ni wrappers; el log de la subida queda en `<outdir>/pipeline_info/upload.log`. Los `-stub-run` se omiten.
 - **Independencia de Entorno**: El stack no depende de contenedores externos ni servicios en la nube de pago para la persistencia.
+- **Estructuras externas (AlphaFold DB)**: los genes del explorador que no tienen estructura en la corrida vigente (p. ej. `ERBB4`) usan el modelo WT de AlphaFold DB. Se descargan una sola vez con `python3 bin/fetch_external_structures.py --genes ERBB4` y quedan en `structures/external/` (`<GEN>_AF.cif` + `index.json`). La WebApp monta esa carpeta como `/external` y la usa como respaldo en la ficha y en el visor 3D; no depende de `results/` ni se pierde al relanzar el pipeline. Para refrescar todos los genes sin estructura de la corrida: `python3 bin/fetch_external_structures.py --from-data --top 40`.
 
 ---
 
@@ -258,7 +263,7 @@ services:
 La WebApp está disponible en **`http://localhost:8080`**. Al cambiar de corrida en el selector superior (`#sel-run`), la aplicación conmuta reactivamente todas las vistas y actualiza los títulos y métricas en función del pipeline activo (TCGA-BRCA o Romero HM):
 
 1. **Pipeline Status (Vista Principal)**: Trazabilidad completa del flujo Nextflow (M1-M5), resumen de parámetros, enlace directo a la corrida en [MLflow](https://mlflow.org/) local (`http://localhost:5000`) y **visor modal interactivo con el código fuente real ejecutado** en cada etapa.
-2. **Exploración de Datasets**: Tabla dinámica y filtrable de mutaciones somáticas (frecuencias, porcentajes de cohorte, clasificaciones ACMG/Hotspot y botones interactivos para inspeccionar estructuras WT y MUT). La columna **PROTEÍNA** muestra el nombre funcional del gen y el botón **Selección** abre una ficha en español con función, regulación, dominios y relevancia clínica; incluye la tabla de **inhibidores con afinidades WT/MUT, Δ y gráfica comparativa**, además de un **visor 3D grande** con la proteína coloreada N→C, el residuo mutado resaltado y el acoplamiento de cada fármaco (pose de AutoDock Vina). Sincronizada dinámicamente con los insumos del pipeline seleccionado.
+2. **Exploración de Datasets**: Tabla dinámica y filtrable de mutaciones somáticas (frecuencias, porcentajes de cohorte, clasificaciones ACMG/Hotspot y botones interactivos para inspeccionar estructuras WT y MUT). La columna **PROTEÍNA** muestra el nombre funcional del gen y el botón **Selección** abre una ficha en español con función, regulación, dominios y relevancia clínica; incluye la tabla de **inhibidores con afinidades WT/MUT, Δ y gráfica comparativa**, además de un **visor 3D grande** con la proteína coloreada N→C, el residuo mutado resaltado y el acoplamiento de cada fármaco (pose de AutoDock Vina). Si la corrida no trae estructura para el gen (p. ej. ERBB4), la ficha usa el modelo WT de AlphaFold DB de `structures/external/` y lo indica en el visor. Sincronizada dinámicamente con los insumos del pipeline seleccionado.
 3. **Análisis (Genómico y Clínico Integrado)**: Vista unificada que combina las distribuciones de variantes por gen/tipo con el módulo clínico FUCAM cuando la corrida corresponde a V2 (IHC: Luminal A/B, HER2+, TNBC; PAM50: LumA, LumB, Basal, Her2, Normal; rangos de edad y correlación por variante).
 4. **Estructuras 3D**: Visores moleculares interactivos con [PDBe Molstar](https://github.com/PDBeurope/pdbe-molstar) para comparar Wild-Type (WT) vs Mutado (MUT), inspeccionar scores de confianza pLDDT y métricas de RMSD activo.
 5. **Docking Molecular**: Evaluación y ranking de afinidad para los 11 fármacos antineoplásicos con AutoDock Vina, cálculo de deltas $\Delta = \text{MUT} - \text{WT}$, panel de disponibilidad en México y visualización 3D del complejo receptor-ligando.

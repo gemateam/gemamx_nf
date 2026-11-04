@@ -46,6 +46,12 @@ function esc(value) {
   }[c]));
 }
 
+// Etiqueta legible de la variante: evita mostrar "GEN null" cuando el
+// registro crudo no trae cambio proteico.
+function variantLabel(v) {
+  return v.protein_change ? `${v.hugo_symbol} ${v.protein_change}` : v.hugo_symbol;
+}
+
 // Barra de frecuencia proporcional al máximo
 function freqBar(freq, maxFreq) {
   const pct = maxFreq > 0 ? Math.min((freq / maxFreq) * 100, 100) : 0;
@@ -445,7 +451,7 @@ function infoPanelHTML(v, p) {
     </div>
     <div class="exp-detail-body">${infoSections(p)}${dockingSectionHTML(v)}</div>
     <div class="exp-detail-variant">
-      <span>Variante <b class="exp-mono">${esc(v.protein_change)}</b></span>
+      <span>Variante <b class="exp-mono">${esc(v.protein_change || '—')}</b></span>
       <span>Frecuencia <b>${v.frequency}</b> · cohorte <b>${v.cohort_pct.toFixed(1)}%</b></span>
       <span>Clasificación <b>${esc(clsLabel(v.classification))}</b></span>
       ${plddt}${best}
@@ -484,7 +490,9 @@ function detailRowHTML(v) {
           <p class="exp-detail-legend">
             ${v.structures.external
               ? `Modelo WT de AlphaFold DB (UniProt ${esc(v.structures.external.uniprot)}), coloreado arcoíris de N a C.
-                 La variante ${esc(v.protein_change)} no se modeló en el pipeline: en el visor grande se marca su posición sobre el WT.`
+                 ${v.protein_change
+                   ? `La variante ${esc(v.protein_change)} no se modeló en el pipeline: en el visor grande se marca su posición sobre el WT.`
+                   : 'La variante no se modeló en el pipeline; el visor muestra el WT completo.'}`
               : `Coloreado arcoíris de N a C (azul → rojo). Abre el visor para superponer el
                  residuo mutado y probar los inhibidores acoplados.`}
           </p>
@@ -878,13 +886,16 @@ function updateModalSubtitle(isComplex) {
   const sub = document.getElementById('exp-modal-sub');
   if (!v || !sub) return;
   const kindLabel = modalState.model === 'wt' ? 'WT' : 'MUT';
+  const label = variantLabel(v);
   if (!isComplex && v.structures.external) {
-    sub.textContent = `Modelo AlphaFold DB (WT) · ${v.hugo_symbol} ${v.protein_change} (posición marcada en rojo)`;
+    sub.textContent = v.protein_change
+      ? `Modelo AlphaFold DB (WT) · ${label} (posición marcada en rojo)`
+      : 'Modelo AlphaFold DB (WT) · estructura completa';
     return;
   }
   sub.textContent = isComplex && modalState.target?.drug
     ? `Complejo ${kindLabel} · ${modalState.target.drug} (pose 1 de AutoDock Vina)`
-    : `Estructura ${kindLabel} · ${v.hugo_symbol} ${v.protein_change} (plegada con ESMFold)`;
+    : `Estructura ${kindLabel} · ${label} (plegada con ESMFold)`;
 }
 
 async function applyModalStyle() {
@@ -1031,7 +1042,7 @@ function openStructureModal(v, opts = {}) {
   modalState.highlightLigand = true;
 
   const title = document.getElementById('exp-modal-title');
-  if (title) title.textContent = `${v.protein.name} · ${v.hugo_symbol} ${v.protein_change}`;
+  if (title) title.textContent = `${v.protein.name} · ${variantLabel(v)}`;
 
   modal.hidden = false;
   document.body.classList.add('exp-modal-open');

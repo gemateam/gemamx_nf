@@ -135,7 +135,7 @@
     "version": 6
   },
   "ERBB4": {
-    "fetched": "2026-11-02",
+    "fetched": "2026-11-03",
     "file": "ERBB4_AF.cif",
     "model_url": "https://alphafold.ebi.ac.uk/files/AF-Q15303-F1-model_v6.cif",
     "plddt": 73.12,
