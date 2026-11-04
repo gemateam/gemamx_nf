@@ -38,6 +38,9 @@ services:
 
   # ── Servidor MLflow ────────────────────────────────────────────────────
   mlflow:
+    build:
+      context: .
+      dockerfile: containers/mlflow/Dockerfile
     image: gemamx-mlflow:1.0.0
     container_name: gemamx_mlflow
     restart: unless-stopped
