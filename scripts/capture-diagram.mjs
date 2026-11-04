@@ -11,9 +11,11 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const htmlPath = path.resolve(__dirname, '../docs/architecture.html');
 const outPath  = path.resolve(__dirname, '../docs/architecture.png');
 
+// Usa el Chrome administrado por Puppeteer. Si se necesita un binario
+// concreto, se puede indicar con CHROME_PATH sin editar el script.
 const browser = await puppeteer.launch({
   headless: true,
-  executablePath: 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
+  ...(process.env.CHROME_PATH ? { executablePath: process.env.CHROME_PATH } : {}),
   args: ['--no-sandbox', '--disable-setuid-sandbox'],
 });
 
