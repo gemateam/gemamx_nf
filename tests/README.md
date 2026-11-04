@@ -108,3 +108,21 @@ compartido por `INGEST_ROMERO` y `EXTRACT_CLINICAL`:
 El directorio temporal se crea con los permisos por defecto del padre, no con
 `tempfile.mkdtemp()` (modo `0700`): en Windows ese modo puede dejar el directorio
 sin permisos heredados e inaccesible incluso para quien lo creó.
+
+## 5. Filtro de la tabla de exploración (WebApp)
+
+```bash
+node tests/test_variant_filter.mjs
+```
+
+Sin navegador ni jsdom: `webapp/js/variant-filter.js` no toca el DOM. Comprueba:
+
+- el filtro por defecto deja fuera las filas sin `protein_change` (en el contrato
+  actual, **67 de 11 233** filas tienen cambio proteico);
+- buscar por variante **no lanza** aunque haya filas con `protein_change` nulo,
+  que era el `TypeError` que rompía la vista;
+- los filtros por gen, variante y clasificación, sin distinguir mayúsculas;
+- que al desactivar «Solo codificantes» entran todas las filas.
+
+El interruptor `#exp-only-coding` está en la barra de filtros de la vista
+Exploración y el contador `MOSTRANDO: x / y` usa el denominador del ámbito activo.

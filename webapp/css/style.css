@@ -449,6 +449,27 @@ tbody tr:hover { background: rgba(13,148,136,.1); }
 }
 .explore-select:focus { border-color: var(--teal); }
 
+/* Interruptor «Solo codificantes»: mismo marco que los inputs del explorador */
+.explore-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+  background: var(--bg-input);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: .55rem .85rem;
+  font-size: .875rem;
+  cursor: pointer;
+  user-select: none;
+}
+.explore-toggle:hover { border-color: var(--teal); }
+.explore-toggle input {
+  accent-color: var(--teal);
+  cursor: pointer;
+  margin: 0;
+}
+
 .explore-count-badge {
   font-size: .72rem;
   font-weight: 700;

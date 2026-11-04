@@ -16,6 +16,7 @@ import {
 import {
   getProteinInfo, fetchProteinInfo, proteinDisplayName,
 } from './proteins.js';
+import { filterVariants, countCoding } from './variant-filter.js';
 
 const state = { loaded: false };
 registerReloadFlag('explore', state);
@@ -193,16 +194,25 @@ function buildVariantTable(rawMutations, topVariants, manifest, metrics, affinit
 let _allRows = [];
 let _maxFreq = 1;
 let _totalRows = 0;
+let _codingRows = 0;
 
-function renderRows(rows) {
+function renderRows(rows, { onlyCoding = true } = {}) {
   const tbody = document.getElementById('exp-tbody');
   const badge = document.getElementById('exp-count-badge');
   if (!tbody) return;
 
-  if (badge) badge.textContent = `MOSTRANDO: ${rows.length} / ${_totalRows}`;
+  // El denominador refleja el ámbito activo: con el filtro por defecto sólo
+  // compiten las variantes con cambio proteico, no las 11k mutaciones crudas.
+  if (badge) {
+    badge.textContent = `MOSTRANDO: ${rows.length} / ${onlyCoding ? _codingRows : _totalRows}`;
+    badge.title = onlyCoding
+      ? 'Variantes con cambio proteico (filtro por defecto)'
+      : 'Todas las mutaciones de la corrida';
+  }
 
   if (!rows.length) {
-    tbody.innerHTML = `<tr><td colspan="10" class="no-data">Sin variantes para los filtros aplicados.</td></tr>`;
+    const hint = onlyCoding ? ' Prueba a desactivar «Solo codificantes».' : '';
+    tbody.innerHTML = `<tr><td colspan="10" class="no-data">Sin variantes para los filtros aplicados.${hint}</td></tr>`;
     return;
   }
 
@@ -223,7 +233,7 @@ function renderRows(rows) {
     const mutBtn = v.hasMUT
       ? `<button class="exp-struct-btn exp-struct-btn--mut"
             data-variant-key="${v.key}" data-struct-type="mut"
-            title="Ver estructura Mutada de ${v.hugo_symbol} ${v.protein_change}">MUT</button>`
+            title="Ver estructura Mutada de ${esc(variantLabel(v))}">MUT</button>`
       : `<button class="exp-struct-btn exp-struct-btn--disabled" disabled title="Sin estructura MUT">MUT</button>`;
 
     // Tooltip con métricas si existen
@@ -244,7 +254,7 @@ function renderRows(rows) {
           <span class="exp-protein-name">${esc(p.name)}</span>
           ${p.type ? `<span class="exp-protein-type">${esc(p.type)}</span>` : ''}
         </td>
-        <td class="exp-mono">${esc(v.protein_change)}</td>
+        <td class="exp-mono">${esc(v.protein_change ?? '—')}</td>
         <td>${freqBar(v.frequency, _maxFreq)}</td>
         <td class="exp-pct">${pct}%</td>
         <td class="exp-mono exp-pos">${gPos}</td>
@@ -319,7 +329,7 @@ function dockingSectionHTML(v) {
         ${deltaCell(mutScore, wtScore)}
         <td class="exp-docking-action">
           <button class="exp-pose-btn" data-detail-pose="${esc(drug)}"
-                  title="Ver ${esc(drug)} acoplado a ${esc(v.hugo_symbol)} ${esc(v.protein_change)}">Ver 3D</button>
+                  title="Ver ${esc(drug)} acoplado a ${esc(variantLabel(v))}">Ver 3D</button>
         </td>
       </tr>`;
   }).join('');
@@ -870,7 +880,7 @@ function renderModalInhibitors(v) {
     return `
       <button class="exp-modal-inh ${activeDrug === drug ? 'is-active' : ''}"
               data-modal-inh="${esc(drug)}"
-              title="Cargar ${esc(drug)} acoplado a ${esc(v.hugo_symbol)} ${esc(v.protein_change)}">
+              title="Cargar ${esc(drug)} acoplado a ${esc(variantLabel(v))}">
         <span class="exp-modal-inh-name">${esc(drug)}</span>
         <span class="exp-modal-inh-scores">
           <span><b>WT</b> ${fmt(wtScore)}</span>
@@ -1179,24 +1189,16 @@ function applyFilters() {
   // para no dejar un visor huérfano.
   closeDetail();
 
-  const geneQ    = (document.getElementById('exp-search-gene')?.value   ?? '').toLowerCase().trim();
-  const variantQ = (document.getElementById('exp-search-variant')?.value ?? '').toLowerCase().trim();
-  const classQ   = (document.getElementById('exp-filter-class')?.value   ?? '').toLowerCase();
+  const geneQ    = document.getElementById('exp-search-gene')?.value   ?? '';
+  const variantQ = document.getElementById('exp-search-variant')?.value ?? '';
+  const classQ   = document.getElementById('exp-filter-class')?.value   ?? '';
+  // Por defecto sólo se listan mutaciones con cambio proteico: las ~28k crudas
+  // incluyen intrónicas e intergénicas, sin proteína ni estructura que mostrar.
+  const onlyCoding = document.getElementById('exp-only-coding')?.checked ?? true;
 
-  const filtered = _allRows.filter(v => {
-    if (geneQ    && !v.hugo_symbol.toLowerCase().includes(geneQ))       return false;
-    if (variantQ && !v.protein_change.toLowerCase().includes(variantQ)) return false;
-    if (classQ) {
-      const cls = v.classification?.toLowerCase() ?? '';
-      if (classQ === 'patog'    && !cls.includes('patog'))   return false;
-      if (classQ === 'hotspot'  && !cls.includes('hotspot')) return false;
-      if (classQ === 'vus'      && !cls.includes('vus'))     return false;
-      if (classQ === 'baja'     && !cls.includes('baja'))    return false;
-    }
-    return true;
-  });
+  const filtered = filterVariants(_allRows, { geneQ, variantQ, classQ, onlyCoding });
 
-  renderRows(filtered);
+  renderRows(filtered, { onlyCoding });
 }
 
 // ── Navegación al visor estructural ───────────────────────────────────────
@@ -1313,12 +1315,14 @@ async function loadExplore() {
   _rowsByKey = new Map(_allRows.map(r => [r.key, r]));
   _maxFreq   = Math.max(..._allRows.map(r => r.frequency), 1);
   _totalRows = _allRows.length;
+  _codingRows = countCoding(_allRows);
 
   // Respetar los filtros que el usuario ya tenía al cambiar de corrida.
   applyFilters();
 
   // Listeners de filtros (una sola vez)
-  const filterIds = ['exp-search-gene', 'exp-search-variant', 'exp-filter-class'];
+  const filterIds = ['exp-search-gene', 'exp-search-variant', 'exp-filter-class',
+                     'exp-only-coding'];
   filterIds.forEach(id => {
     const el = document.getElementById(id);
     if (el && !el.dataset.listenerAttached) {
