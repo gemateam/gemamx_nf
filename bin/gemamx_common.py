@@ -59,11 +59,19 @@ def read_json(path: str | Path) -> object:
         die(f"JSON inválido en {path}: {exc}")
 
 
-def write_json(path: str | Path, data: object, sort_keys: bool = False) -> None:
-    """Escribe JSON determinista (UTF-8, sin escapar acentos, salto final)."""
+def write_json(path: str | Path, data: object, sort_keys: bool = False,
+               indent: int | None = 4) -> None:
+    """Escribe JSON determinista (UTF-8, sin escapar acentos, salto final).
+
+    `indent=None` produce JSON compacto (mismo contenido, menos bytes).
+    """
     path = Path(path)
     path.parent.mkdir(parents=True, exist_ok=True)
-    text = json.dumps(data, indent=4, ensure_ascii=False, sort_keys=sort_keys)
+    if indent is None:
+        text = json.dumps(data, ensure_ascii=False, sort_keys=sort_keys,
+                          separators=(",", ":"))
+    else:
+        text = json.dumps(data, indent=indent, ensure_ascii=False, sort_keys=sort_keys)
     path.write_text(text + "\n", encoding="utf-8")
 
 

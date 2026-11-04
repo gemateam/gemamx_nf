@@ -208,8 +208,14 @@ def main() -> int:
 
     driver_lookup = build_driver_lookup(driver_rows)
 
-    # ── M1: normalización ─────────────────────────────────────────────────────
+    # ── M1+M2: normalización, priorización y estadísticas en una sola pasada ──
     raw_mutations: list[dict] = []
+    samples: set[str] = set()
+    gene_counts: Counter = Counter()
+    type_counts: Counter = Counter()
+    counts: dict[tuple, dict] = defaultdict(
+        lambda: {"frequency": 0, "chromosome": "?", "start_position": 0})
+
     for row in hm_maf_rows:
         gene  = str(row.get("Hugo Symbol", "")).strip()
         chrom = str(row.get("Chromosome", "")).strip()
@@ -219,12 +225,16 @@ def main() -> int:
                  or str(row.get("Tumor Seq Allele1", "")).strip())
         driver = driver_lookup.get((gene, chrom, start, ref, alt), {})
 
+        classification = str(row.get("Variant Classification", "")).strip()
+        sample_id      = str(row.get("Tumor Sample Barcode", "")).strip()
+        protein_change = driver.get("protein_change")
+
         raw_mutations.append({
             "hugo_symbol":            gene,
-            "variant_classification": str(row.get("Variant Classification", "")).strip(),
+            "variant_classification": classification,
             "variant_type":           str(row.get("Variant Type", "")).strip(),
-            "protein_change":         driver.get("protein_change"),
-            "sample_id":              str(row.get("Tumor Sample Barcode", "")).strip(),
+            "protein_change":         protein_change,
+            "sample_id":              sample_id,
             "chromosome":             chrom,
             "start_position":         start,
             "end_position":           parse_int(row.get("End Position", 0)),
@@ -238,25 +248,25 @@ def main() -> int:
             "dataset":                args.dataset,
         })
 
-    total_samples = len({m["sample_id"] for m in raw_mutations if m.get("sample_id")})
+        if sample_id:
+            samples.add(sample_id)
+        if gene:
+            gene_counts[gene] += 1
+        if classification:
+            type_counts[classification] += 1
 
-    # ── M2: priorización ──────────────────────────────────────────────────────
-    filtered = [
-        m for m in raw_mutations
-        if m.get("hugo_symbol") in key_genes
-        and "missense" in (m.get("variant_classification") or "").lower()
-        and m.get("protein_change")
-    ]
+        # Filtro de priorización al vuelo: solo missense de genes clave con cambio.
+        if (gene in key_genes
+                and "missense" in classification.lower()
+                and protein_change):
+            meta = counts[(gene, protein_change)]
+            meta["frequency"] += 1
+            if chrom:
+                meta["chromosome"] = chrom
+            if start:
+                meta["start_position"] = start
 
-    counts: dict[tuple, dict] = defaultdict(
-        lambda: {"frequency": 0, "chromosome": "?", "start_position": 0})
-    for m in filtered:
-        key = (m["hugo_symbol"], m["protein_change"])
-        counts[key]["frequency"]    += 1
-        if m.get("chromosome"):
-            counts[key]["chromosome"]     = m["chromosome"]
-        if m.get("start_position"):
-            counts[key]["start_position"] = m["start_position"]
+    total_samples = len(samples)
 
     top_variants: list[dict] = []
     for rank, ((gene, pc), meta) in enumerate(
@@ -278,29 +288,24 @@ def main() -> int:
             "dataset":           args.dataset,
         })
 
-    # ── Estadísticas ──────────────────────────────────────────────────────────
-    gene_dist = dict(
-        Counter(m["hugo_symbol"] for m in raw_mutations if m.get("hugo_symbol"))
-        .most_common(20))
-    type_dist = dict(
-        Counter(m["variant_classification"] for m in raw_mutations
-                if m.get("variant_classification"))
-        .most_common())
+    # ── Estadísticas (contadores acumulados en la pasada anterior) ────────────
     stats = {
-        "gene_distribution":  gene_dist,
-        "type_distribution":  type_dist,
+        "gene_distribution":  dict(gene_counts.most_common(20)),
+        "type_distribution":  dict(type_counts.most_common()),
         "total_samples":      total_samples,
         "total_mutations":    len(raw_mutations),
         "dataset":            args.dataset,
     }
 
-    # ── Escritura ─────────────────────────────────────────────────────────────
-    (outdir / "raw_mutations.json").write_text(
-        json.dumps(raw_mutations, indent=2, ensure_ascii=False), encoding="utf-8")
-    (outdir / "top_variants.json").write_text(
-        json.dumps(top_variants, indent=2, ensure_ascii=False), encoding="utf-8")
-    (outdir / "mutation_stats.json").write_text(
-        json.dumps(stats, indent=2, ensure_ascii=False), encoding="utf-8")
+    # ── Escritura (JSON compacto: mismo contenido, ~20 % menos bytes) ─────────
+    def write_compact(name: str, payload: object) -> None:
+        (outdir / name).write_text(
+            json.dumps(payload, ensure_ascii=False, separators=(",", ":")),
+            encoding="utf-8")
+
+    write_compact("raw_mutations.json", raw_mutations)
+    write_compact("top_variants.json", top_variants)
+    write_compact("mutation_stats.json", stats)
 
     print(f"OK ingestión Romero: {len(raw_mutations)} mutaciones, "
           f"cohorte {total_samples} muestras, "

@@ -112,25 +112,25 @@ def classify(cohort_pct: float) -> str:
 
 def build_ranking(rows: list[dict], genes: set[str], max_variants: int,
                   total_samples: int) -> list[dict]:
-    missense = [
-        r for r in rows
-        if r["hugo_symbol"] in genes
-        and "missense" in (r["variant_classification"] or "").lower()
-        and r["protein_change"]
-    ]
-    if not missense:
-        die("no hay variantes missense en los genes solicitados")
-
-    counts = Counter((r["hugo_symbol"], r["protein_change"]) for r in missense)
+    # Filtro, conteo y coordenadas en una sola pasada sobre las mutaciones.
+    counts: Counter = Counter()
     coords: dict[tuple[str, str], tuple[str, int]] = {}
-    for r in missense:
+    for r in rows:
+        if not (r["hugo_symbol"] in genes
+                and "missense" in (r["variant_classification"] or "").lower()
+                and r["protein_change"]):
+            continue
         key = (r["hugo_symbol"], r["protein_change"])
+        counts[key] += 1
         chrom, pos = coords.get(key, ("?", 0))
         if chrom in (None, "", "?") and r["chromosome"] not in (None, ""):
             chrom = str(r["chromosome"])
         if (pos in (None, 0)) and r["start_position"]:
             pos = int(r["start_position"])
         coords[key] = (chrom, pos)
+
+    if not counts:
+        die("no hay variantes missense en los genes solicitados")
 
     ranking = []
     for (gene, change), frequency in counts.items():
@@ -198,8 +198,8 @@ def main() -> int:
     ranking = build_ranking(rows, genes, args.max_variants, total_samples)
 
     outdir = Path(args.outdir)
-    write_json(outdir / "raw_mutations.json", rows)
-    write_json(outdir / "top_variants.json", ranking)
+    write_json(outdir / "raw_mutations.json", rows, indent=None)
+    write_json(outdir / "top_variants.json", ranking, indent=None)
 
     print(f"OK ingesta: {len(rows)} mutaciones, cohorte {total_samples}, "
           f"{len(ranking)} variantes priorizadas ({source})")
