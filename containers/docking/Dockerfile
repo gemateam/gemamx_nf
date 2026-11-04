@@ -1,17 +1,15 @@
 # Imagen derivada para PREP_LIGAND — gemamx-nf-docking:1.0.0
 #
-# Motivo (ver docs/PROPUESTAS_PLATAFORMA.md, propuesta P1):
-#   La imagen de la plataforma `gemamx-cpu:1.0.0` incluye meeko 0.5.0, que
-#   importa `rdkit.six`; RDKit 2026.03.1 ya no expone ese módulo, por lo que
-#   `import meeko` falla y PREP_LIGAND no puede ejecutarse.
-#
-#   Meeko 0.8.0 (+ gemmi 0.7.5) funciona con el RDKit de la imagen base.
-#   Verificado: preparación de ligando desde SMILES → PDBQT con Meeko 0.8.0.
+# La imagen base `gemamx-cpu:1.0.0` ya incluye RDKit 2026.03.1 y Meeko 0.8.0
+# (ver containers/cpu/environment.yml). Esta capa fija explícitamente Meeko
+# 0.8.0 + gemmi 0.7.5 para que PREP_LIGAND no dependa de lo que resuelva pip
+# en el futuro.
 #
 # No se duplica el Dockerfile de la plataforma: esta imagen parte de la imagen
-# publicada por nombre y tag fijo y solo añade la capa mínima necesaria.
+# construida por `containers/cpu/Dockerfile` y solo añade la capa mínima.
 #
-# Construcción:
+# Construcción (primero la base):
+#   docker build -t gemamx-cpu:1.0.0 containers/cpu
 #   docker build -t gemamx-nf-docking:1.0.0 containers/docking
 
 FROM gemamx-cpu:1.0.0

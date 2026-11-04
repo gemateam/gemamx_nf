@@ -90,6 +90,28 @@ services:
     networks:
       - gemamx_net
 
+  # ── Imágenes para los procesos Nextflow (no se levantan como servicios) ──
+  # Uso (la base primero, porque docking hace FROM gemamx-cpu):
+  #   docker compose --profile images build cpu-base
+  #   docker compose --profile images build docking
+  cpu-base:
+    build:
+      context: .
+      dockerfile: containers/cpu/Dockerfile
+    image: gemamx-cpu:1.0.0
+    profiles: ["images"]
+    command: ["true"]
+
+  docking:
+    build:
+      context: ./containers/docking
+      dockerfile: Dockerfile
+    image: gemamx-nf-docking:1.0.0
+    profiles: ["images"]
+    depends_on:
+      - cpu-base
+    command: ["true"]
+
 volumes:
   gemamx_pgdata:
     name: gemamx_pgdata

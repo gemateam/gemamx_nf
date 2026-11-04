@@ -100,6 +100,10 @@ cd gemamx_nf
 # 2. Levantar el stack completo (Postgres, MLflow y WebApp)
 docker compose up -d
 
+# 2b. (Opcional) Construir las imágenes de los procesos Nextflow
+docker compose --profile images build cpu-base
+docker compose --profile images build docking
+
 # 3. Verificar estado de los servicios
 docker compose ps
 # gemamx_postgres -> localhost:5432 (healthy)
@@ -243,7 +247,7 @@ services:
 ```
 
 - **Interfaz [MLflow](https://mlflow.org/)**: Accede a `http://localhost:5000` para comparar corridas, inspeccionar curvas de afinidad, descargar artefactos PDBQT o auditar el rendimiento entre `GEMAMX-V1-NF` y `GEMAMX-V2-ROMERO`.
-- **Construcción de imágenes**: `gemamx-mlflow:1.0.0` se construye desde `containers/mlflow/Dockerfile` (MLflow 2.19.0 + driver PostgreSQL + parche de la UI) y `gemamx-webapp:1.0.0` desde `webapp/Dockerfile`. Para reconstruirlas: `docker compose build mlflow webapp`; para levantar el stack usando lo recién construido: `docker compose up -d --build`. El contexto de MLflow se limita con `containers/mlflow/Dockerfile.dockerignore`.
+- **Construcción de imágenes**: `gemamx-mlflow:1.0.0` se construye desde `containers/mlflow/Dockerfile` (MLflow 2.19.0 + driver PostgreSQL + parche de la UI) y `gemamx-webapp:1.0.0` desde `webapp/Dockerfile`. Las imágenes de los procesos Nextflow se construyen desde `containers/cpu/Dockerfile` (`gemamx-cpu:1.0.0`: Biopython, RDKit, Meeko, Open Babel, Vina y MLflow) y `containers/docking/Dockerfile` (`gemamx-nf-docking:1.0.0`). Para reconstruirlas: `docker compose build mlflow webapp` y `docker compose --profile images build cpu-base docking`; para levantar el stack usando lo recién construido: `docker compose up -d --build`. La imagen GPU (`gemamx-gpu:1.0.0`) queda fuera de este flujo porque requiere una base CUDA/ROCm que no se construye en CPU.
 - **Reportes Nextflow automáticos**: `nextflow.config` genera `report.html`, `timeline.html`, `trace.tsv` y `dag.html` en `<outdir>/pipeline_info/`, y `workflow.onComplete` lanza `bin/nf_reports_hook.sh` para adjuntarlos al run padre de MLflow. No hacen falta flags ni wrappers; el log de la subida queda en `<outdir>/pipeline_info/upload.log`. Los `-stub-run` se omiten.
 - **Independencia de Entorno**: El stack no depende de contenedores externos ni servicios en la nube de pago para la persistencia.
 

@@ -1,0 +1,3 @@
+# Contexto mínimo para la imagen CPU: solo el entorno y su Dockerfile.
+**
+!containers/cpu/

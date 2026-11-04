@@ -8,7 +8,7 @@ Estado de cada propuesta: `PENDIENTE` · `APROBADA` · `APLICADA`.
 
 ---
 
-## P1 — Meeko compatible en la imagen CPU — `PENDIENTE`
+## P1 — Meeko compatible en la imagen CPU — `APLICADA` en `gemamx_nf`
 
 **Problema.** `gemamx-cpu:1.0.0` incluye `meeko==0.5.0`, que hace
 `from rdkit.six import StringIO`. RDKit 2026.03.1 ya no expone `rdkit.six`:
@@ -21,17 +21,21 @@ Cualquier proceso que importe Meeko dentro de esa imagen falla.
 
 **Impacto.** Bloquea la preparación de ligandos con Meeko en `PREP_LIGAND`.
 
-**Opción A (aplicada localmente, temporal).** Imagen derivada en
-`containers/docking/Dockerfile`: `FROM gemamx-cpu:1.0.0` +
-`meeko==0.8.0` + `gemmi==0.7.5`. Verificado con el RDKit de la imagen base.
-Cuesta ~40 MB y una capa.
+**Solución aplicada en `gemamx_nf`.** El repositorio ya construye su propia
+imagen base con `containers/cpu/Dockerfile` y
+`containers/cpu/environment.yml`: RDKit 2026.03.1 + `meeko==0.8.0` +
+`gemmi==0.7.5`, Open Babel 3.2.1, Vina 1.2.7 y MLflow 2.19.0. La imagen
+derivada `containers/docking/Dockerfile` (`gemamx-nf-docking:1.0.0`) se
+mantiene para fijar explícitamente Meeko/gemmi en la capa de docking.
 
-**Opción B (recomendada a medio plazo).** Actualizar `env/cpu-lock.yml` a
-`meeko>=0.8.0` y añadir `gemmi`, reconstruir `gemamx-cpu:1.1.0` y publicarla.
-Cuando exista, `gemamx_nf` puede dejar de construir su imagen derivada
-(`--image_docking gemamx-cpu:1.1.0`).
+```bash
+docker compose --profile images build cpu-base
+docker compose --profile images build docking
+```
 
-**Decisión solicitada.** ¿Se aprueba B para la próxima reconstrucción?
+**Pendiente en `Gemacont`.** Actualizar su `env/cpu-lock.yml` a
+`meeko>=0.8.0` y añadir `gemmi` si se quiere que la imagen de la plataforma
+deje de necesitar la capa derivada.
 
 ---
 
