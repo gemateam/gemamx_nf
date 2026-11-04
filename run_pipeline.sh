@@ -9,9 +9,8 @@
 #   bash run_pipeline.sh [opciones de nextflow]
 #
 # Ejemplos:
-#   bash run_pipeline.sh -profile docker,test
-#   bash run_pipeline.sh -profile docker,platform-net
-#   bash run_pipeline.sh -profile docker,test -resume
+#   bash run_pipeline.sh -profile docker,gemamx-net,test
+#   bash run_pipeline.sh -profile docker,gemamx-net,test -resume
 #
 # Variables de entorno opcionales:
 #   MLFLOW_URI      URI del servidor MLflow  (default: http://localhost:5000)
@@ -90,12 +89,12 @@ if [ -z "${RUN_NAME}" ]; then
     echo "    --run-name     <run_name> \\"
     echo "    --pipeline-info ${PIPELINE_INFO}"
     echo ""
-    echo "  # Si no (usar Docker con red gemacont_default):"
-    echo "  docker run --rm --network gemacont_default \\"
+    echo "  # Si no (usar Docker con la red de este proyecto):"
+    echo "  docker run --rm --network gemamx_net \\"
     echo "    -v \$(realpath ${PIPELINE_INFO}):/nf_reports:ro \\"
     echo "    -v \$(realpath bin):/workspace/bin:ro \\"
     echo "    gemamx-cpu:1.0.0 python3 /workspace/bin/upload_nf_reports.py \\"
-    echo "    --tracking-uri http://mlflow:5000 \\"
+    echo "    --tracking-uri http://gemamx_mlflow:5000 \\"
     echo "    --experiment   ${NF_EXPERIMENT} \\"
     echo "    --run-name     <run_name> \\"
     echo "    --pipeline-info /nf_reports"
@@ -193,14 +192,14 @@ if python3 -c "import mlflow" 2>/dev/null; then
 else
     echo "  (mlflow no disponible en host — usando gemamx-cpu:1.0.0 vía Docker)"
 
-    # Detectar red Docker según perfil
-    if echo "$*" | grep -q "gemamx-net"; then
-        DOCKER_NET="gemamx_net"
-        DOCKER_URI="http://gemamx_mlflow:5000"
-    else
-        # platform-net o default → gemacont_default
+    # Red por defecto: docker-compose de este repo (gemamx_net).
+    # Solo con -profile docker,platform-net se usa la red legacy gemacont_default.
+    if echo "$*" | grep -q "platform-net"; then
         DOCKER_NET="gemacont_default"
         DOCKER_URI="http://mlflow:5000"
+    else
+        DOCKER_NET="gemamx_net"
+        DOCKER_URI="http://gemamx_mlflow:5000"
     fi
 
     ABS_PIPELINE_INFO="$(realpath "${PIPELINE_INFO}")"
