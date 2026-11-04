@@ -76,3 +76,20 @@ docking/vina_affinities.json
 ```
 
 y falla sin tocar `data/` si falta alguno.
+
+## 4. Parser XLSX (celdas vacías)
+
+```bash
+python3 tests/test_xlsx_parser.py
+```
+
+Sin Docker ni red. Construye un XLSX mínimo y comprueba que el lector de
+`INGEST_ROMERO`:
+
+- coloca cada celda por su referencia `r`, de modo que una celda omitida en
+  medio de la fila no desplaza el resto de columnas;
+- lee cadenas en línea (`t="inlineStr"`);
+- descarta filas compuestas solo por marcadores de vacío;
+- normaliza `-`, `.`, `NA`, `N/A` y `—` a celda vacía al extraer campos
+  textuales, conservando el `-` de las columnas de alelos MAF (deleción o
+  inserción).

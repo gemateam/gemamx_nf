@@ -13,6 +13,12 @@ Salidas en --outdir:
   top_variants.json     — variantes priorizadas (missense en KEY_GENES)
   mutation_stats.json   — distribución por gen/tipo
 
+Celdas vacías: Excel puede representarlas como `<c>` ausente, `<c/>` sin valor
+o el marcador textual "-" (también ".", "NA", "N/A"). El lector se guía por la
+referencia `r` de cada celda para no desplazar columnas y `cell_text()` convierte
+esos marcadores en "" en los campos textuales. En las columnas de alelos el "-"
+se conserva: en el formato MAF significa deleción o inserción, no celda vacía.
+
 Derivado del script original v2/scripts/ingest_romero.py; refactorizado para
 aceptar rutas por argumento (portable dentro de cualquier contenedor Docker).
 """
@@ -51,7 +57,37 @@ AA3_TO_1 = {
 
 # ── Parser XLSX nativo (sin pandas/openpyxl) ──────────────────────────────────
 
+# Marcadores de celda vacía en los XLSX del artículo: el guión es el habitual,
+# pero también aparecen ".", "NA" y "N/A" en otras hojas del mismo suplemento.
+NULL_TOKENS = {"", "-", "—", "–", "na", "n/a", "nan", "null", "none", "."}
+
+
+def cell_text(value: object) -> str:
+    """Texto de una celda, con los marcadores de vacío normalizados a ""."""
+    text = str(value if value is not None else "").strip()
+    return "" if text.lower() in NULL_TOKENS else text
+
+
+def col_index(ref: str) -> int:
+    """Índice 0-based de la columna de una referencia de celda ("A1", "AB12")."""
+    index = 0
+    for ch in ref:
+        if not ch.isalpha():
+            break
+        index = index * 26 + (ord(ch.upper()) - 64)
+    return index - 1
+
+
 def load_xlsx_sheet_rows(path: Path, sheet_name: str) -> list[list[str]]:
+    """Lee una hoja como filas de texto respetando la referencia de cada celda.
+
+    Excel omite las celdas vacías del XML: si los valores se concatenan en orden
+    de aparición, un hueco desplaza el resto de la fila. Por eso cada valor se
+    coloca en el índice de su atributo `r` y los huecos quedan como "".
+
+    Valores posibles: cadena compartida (`t="s"`), cadena en línea
+    (`t="inlineStr"`) o número/fórmula (`<v>` sin `t`).
+    """
     with zipfile.ZipFile(path) as zf:
         shared: list[str] = []
         if "xl/sharedStrings.xml" in zf.namelist():
@@ -81,12 +117,24 @@ def load_xlsx_sheet_rows(path: Path, sheet_name: str) -> list[list[str]]:
             values: list[str] = []
             for cell in row.findall("main:c", NS):
                 ctype = cell.attrib.get("t")
-                v_el  = cell.find("main:v", NS)
-                value = "" if (v_el is None or v_el.text is None) else v_el.text
+                if ctype == "inlineStr":
+                    value = "".join(t.text or ""
+                                    for t in cell.findall(".//main:t", NS))
+                else:
+                    v_el  = cell.find("main:v", NS)
+                    value = "" if (v_el is None or v_el.text is None) else v_el.text
                 if ctype == "s" and value.isdigit():
                     idx   = int(value)
                     value = shared[idx] if idx < len(shared) else value
-                values.append(value)
+
+                ref = cell.attrib.get("r")
+                if not ref:
+                    values.append(value)
+                    continue
+                idx = col_index(ref)
+                if idx >= len(values):
+                    values.extend([""] * (idx + 1 - len(values)))
+                values[idx] = value
             rows.append(values)
         return rows
 
@@ -98,7 +146,8 @@ def sheet_to_dicts(path: Path, sheet_name: str,
     width  = len(header)
     result = []
     for row in rows[header_row_idx + 1:]:
-        if not any(str(v).strip() for v in row):
+        # Una fila con solo marcadores de vacío ("-", "NA") no es un dato.
+        if not any(cell_text(v) for v in row):
             continue
         padded = row + [""] * (width - len(row))
         result.append({str(header[i]).strip(): padded[i] for i in range(width)})
@@ -108,6 +157,7 @@ def sheet_to_dicts(path: Path, sheet_name: str,
 # ── Utilidades ────────────────────────────────────────────────────────────────
 
 def parse_int(value: object, default: int = 0) -> int:
+    """Entero de una celda; vacía o con marcador de vacío ("-") → `default`."""
     try:
         return int(float(str(value).strip()))
     except Exception:
@@ -162,16 +212,16 @@ def build_driver_lookup(driver_rows: list[dict]) -> dict:
         parsed = parse_gdna(row.get("gdna", ""))
         if not parsed:
             continue
-        gene = str(row.get("Gene", "")).strip()
+        gene = cell_text(row.get("Gene"))
         key  = (gene, parsed["chromosome"], parsed["start_position"],
                 parsed["reference_allele"], parsed["tumor_seq_allele2"])
         lookup[key] = {
             "protein_change":         normalize_protein_change(
                 row.get("Protein", ""), row.get("Protein change", "")),
-            "driver":                 str(row.get("Driver", "")).strip(),
-            "consequence":            str(row.get("Consequence", "")).strip(),
-            "gene_role_mutation":     str(row.get("Gene role mutation", "")).strip(),
-            "known_variant_reference": str(row.get("Known variant reference", "")).strip(),
+            "driver":                 cell_text(row.get("Driver")),
+            "consequence":            cell_text(row.get("Consequence")),
+            "gene_role_mutation":     cell_text(row.get("Gene role mutation")),
+            "known_variant_reference": cell_text(row.get("Known variant reference")),
         }
     return lookup
 
@@ -217,22 +267,24 @@ def main() -> int:
         lambda: {"frequency": 0, "chromosome": "?", "start_position": 0})
 
     for row in hm_maf_rows:
-        gene  = str(row.get("Hugo Symbol", "")).strip()
-        chrom = str(row.get("Chromosome", "")).strip()
+        # Las columnas de alelos conservan el "-": en MAF significa deleción o
+        # inserción, no celda vacía. El resto de campos sí normaliza vacíos.
+        gene  = cell_text(row.get("Hugo Symbol"))
+        chrom = cell_text(row.get("Chromosome"))
         start = parse_int(row.get("Start Position", 0))
         ref   = str(row.get("Reference Allele", "")).strip()
         alt   = (str(row.get("Tumor Seq Allele2", "")).strip()
                  or str(row.get("Tumor Seq Allele1", "")).strip())
         driver = driver_lookup.get((gene, chrom, start, ref, alt), {})
 
-        classification = str(row.get("Variant Classification", "")).strip()
-        sample_id      = str(row.get("Tumor Sample Barcode", "")).strip()
+        classification = cell_text(row.get("Variant Classification"))
+        sample_id      = cell_text(row.get("Tumor Sample Barcode"))
         protein_change = driver.get("protein_change")
 
         raw_mutations.append({
             "hugo_symbol":            gene,
             "variant_classification": classification,
-            "variant_type":           str(row.get("Variant Type", "")).strip(),
+            "variant_type":           cell_text(row.get("Variant Type")),
             "protein_change":         protein_change,
             "sample_id":              sample_id,
             "chromosome":             chrom,
@@ -240,7 +292,7 @@ def main() -> int:
             "end_position":           parse_int(row.get("End Position", 0)),
             "reference_allele":       ref,
             "tumor_seq_allele2":      alt,
-            "source_center":          str(row.get("Center", "")).strip(),
+            "source_center":          cell_text(row.get("Center")),
             "driver_status":          driver.get("driver"),
             "consequence":            driver.get("consequence"),
             "gene_role_mutation":     driver.get("gene_role_mutation"),
