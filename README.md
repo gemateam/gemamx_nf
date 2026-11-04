@@ -163,7 +163,7 @@ gemamx_nf/
 ├── main.nf                     # Pipeline V1 (TCGA-BRCA) en Nextflow DSL2
 ├── main_v2.nf                  # Pipeline V2 (Romero-Córdoba HM) en Nextflow DSL2
 ├── main_v2_1.nf                # Pipeline V2.1 (un WT por variante, solo CPU)
-├── nextflow.config             # Configuración central (perfiles: cpu, gpu, test, romero-v2)
+├── nextflow.config             # Configuración central (perfiles: docker, test, gpu, romero-v2, v2_1, smoke…)
 ├── docker-compose.yml          # Stack de infraestructura: Postgres, MLflow, WebApp
 ├── assets/
 │   └── drug_catalog.csv        # Catálogo curado de 11 fármacos oncológicos
@@ -172,10 +172,10 @@ gemamx_nf/
 │   ├── extract_clinical_romero.py # Extractor de metadatos clínicos FUCAM
 │   ├── build_clinical_summary.py  # Generador de resúmenes variantes × clínica
 │   └── ingest_romero.py        # Ingestor WES para cohorte mexicana
-├── conf/                       # Perfiles de recursos y ejecución
-│   ├── base.config
-│   ├── cpu.config
-│   └── gpu.config
+├── conf/                       # Esbozos de perfiles (no incluidos por nextflow.config)
+│   ├── gpu.config
+│   ├── local.config
+│   └── test.config
 ├── containers/                 # Dockerfiles de los entornos del pipeline
 │   ├── cpu/                    # gemamx-cpu:1.0.0
 │   ├── gpu/                    # gemamx-gpu:1.0.0
