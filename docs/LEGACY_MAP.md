@@ -95,3 +95,22 @@ Motivos: dependencia de MongoDB, rutas Windows, artefactos fabricados (PDBs
     escriben como `H` y los unidos a carbono como `HD`.
 12. **pLDDT sin escala**: la API de ESMFold escribe pLDDT en 0..1; el legado lo
     trataba como 0..100. `PREDICT_STRUCTURE` detecta el rango y escala ×100.
+
+## 5. Auditoría de rutas absolutas (2026-11-03)
+
+Código, configuración, contenedores y documentación no contienen rutas hacia
+otros proyectos. La auditoría sobre los archivos versionados encontró:
+
+- **0** referencias a otros proyectos o carpetas ajenas (nombres de proyecto,
+  unidades de red o rutas de usuario).
+- Rutas absolutas de Windows únicamente como **metadatos históricos inertes**
+  dentro de `tests/reference/` (logs de Vina y cabeceras `COMPND` de PDB) y de
+  `infra/mlflow/` (artefactos de corridas ya ejecutadas). Apuntan a la ubicación
+  anterior de este mismo proyecto, no se leen ni se resuelven en ejecución y no
+  afectan a ninguna tarea del pipeline.
+- `tests/reference/**` y `infra/mlflow/**` son registros de provenance: se
+  conservan tal como se generaron para poder reproducir y comparar resultados.
+
+Las rutas que sí se resuelven en ejecución (`params.*`, `nextflow.config`,
+`docker-compose.yml`) son relativas al workspace o al interior de los
+contenedores (`/workspace`, `/data`).
