@@ -14,10 +14,14 @@ Salidas en --outdir:
   mutation_stats.json   — distribución por gen/tipo
 
 Celdas vacías: Excel puede representarlas como `<c>` ausente, `<c/>` sin valor
-o el marcador textual "-" (también ".", "NA", "N/A"). El lector se guía por la
-referencia `r` de cada celda para no desplazar columnas y `cell_text()` convierte
-esos marcadores en "" en los campos textuales. En las columnas de alelos el "-"
+o el marcador textual "-" (también ".", "NA", "N/A" y el error `#N/A`). El lector
+se guía por la referencia `r` de cada celda para no desplazar columnas y
+`cell_text()` convierte esos marcadores en "" en los campos textuales. En las
+columnas de alelos el "-"
 se conserva: en el formato MAF significa deleción o inserción, no celda vacía.
+La cabecera se localiza por su número de fila de Excel (2 en el MAF, 3 en los
+drivers) y `sheet_to_dicts(..., required=...)` falla si el fichero cambia de
+forma, en vez de producir columnas vacías.
 
 Derivado del script original v2/scripts/ingest_romero.py; refactorizado para
 aceptar rutas por argumento (portable dentro de cualquier contenedor Docker).
@@ -31,6 +35,7 @@ import re
 import sys
 import zipfile
 from collections import Counter, defaultdict
+from collections.abc import Sequence
 from pathlib import Path
 import xml.etree.ElementTree as ET
 
@@ -59,7 +64,9 @@ AA3_TO_1 = {
 
 # Marcadores de celda vacía en los XLSX del artículo: el guión es el habitual,
 # pero también aparecen ".", "NA" y "N/A" en otras hojas del mismo suplemento.
-NULL_TOKENS = {"", "-", "—", "–", "na", "n/a", "nan", "null", "none", "."}
+# "#n/a" cubre las celdas de error de Excel (`t="e"`, que el lector entrega como
+# texto): sin él, un `#N/A` acabaría siendo el nombre de un gen.
+NULL_TOKENS = {"", "-", "—", "–", "na", "n/a", "nan", "null", "none", ".", "#n/a"}
 
 
 def cell_text(value: object) -> str:
@@ -78,12 +85,16 @@ def col_index(ref: str) -> int:
     return index - 1
 
 
-def load_xlsx_sheet_rows(path: Path, sheet_name: str) -> list[list[str]]:
-    """Lee una hoja como filas de texto respetando la referencia de cada celda.
+def load_xlsx_sheet(path: Path, sheet_name: str) -> tuple[list[int], list[list[str]]]:
+    """Lee una hoja como (números de fila, filas de texto).
 
     Excel omite las celdas vacías del XML: si los valores se concatenan en orden
     de aparición, un hueco desplaza el resto de la fila. Por eso cada valor se
     coloca en el índice de su atributo `r` y los huecos quedan como "".
+
+    Se conserva además el número de fila de Excel (`r` de `<row>`) para que la
+    cabecera se localice por su fila real y no por su posición entre las filas
+    presentes: una fila vacía intercalada ya no la desplaza.
 
     Valores posibles: cadena compartida (`t="s"`), cadena en línea
     (`t="inlineStr"`) o número/fórmula (`<v>` sin `t`).
@@ -112,8 +123,12 @@ def load_xlsx_sheet_rows(path: Path, sheet_name: str) -> list[list[str]]:
             raise ValueError(f"Hoja no encontrada: {sheet_name!r} en {path.name}")
 
         sheet_xml = ET.fromstring(zf.read(target))
+        numbers: list[int] = []
         rows: list[list[str]] = []
         for row in sheet_xml.findall(".//main:sheetData/main:row", NS):
+            raw_number = row.attrib.get("r")
+            numbers.append(int(raw_number) if raw_number and raw_number.isdigit()
+                           else (numbers[-1] + 1 if numbers else 1))
             values: list[str] = []
             for cell in row.findall("main:c", NS):
                 ctype = cell.attrib.get("t")
@@ -136,21 +151,62 @@ def load_xlsx_sheet_rows(path: Path, sheet_name: str) -> list[list[str]]:
                     values.extend([""] * (idx + 1 - len(values)))
                 values[idx] = value
             rows.append(values)
-        return rows
+        return numbers, rows
 
 
-def sheet_to_dicts(path: Path, sheet_name: str,
-                   header_row_idx: int = 1) -> list[dict[str, str]]:
-    rows   = load_xlsx_sheet_rows(path, sheet_name)
-    header = rows[header_row_idx]
+def load_xlsx_sheet_rows(path: Path, sheet_name: str) -> list[list[str]]:
+    """Compatibilidad: las filas, sin sus números de fila de Excel."""
+    return load_xlsx_sheet(path, sheet_name)[1]
+
+
+def sheet_to_dicts(path: Path, sheet_name: str, header_row: int,
+                   required: Sequence[str] = ()) -> list[dict[str, str]]:
+    """Filas de datos como diccionarios, con la cabecera de `header_row`.
+
+    `header_row` es el número de fila de Excel (1-based), no la posición entre
+    las filas presentes: así una fila vacía intercalada no desplaza la cabecera.
+    `required` son etiquetas que deben existir; si el fichero cambia de forma se
+    falla con un mensaje explícito en lugar de producir columnas vacías.
+
+    Las columnas sin nombre reciben una clave posicional (`_col_<n>`) para no
+    colapsar varias en la clave "" y perder datos en silencio; dos columnas con
+    el mismo nombre son un error.
+    """
+    numbers, rows = load_xlsx_sheet(path, sheet_name)
+    by_number = dict(zip(numbers, rows))
+    header = by_number.get(header_row)
+    if header is None or not any(cell_text(v) for v in header):
+        raise ValueError(
+            f"cabecera vacía o inexistente en la fila {header_row} de "
+            f"{path.name!r} hoja {sheet_name!r} "
+            f"(filas presentes: {numbers[:6]}{'…' if len(numbers) > 6 else ''})")
+
+    names: list[str] = []
+    seen: set[str] = set()
+    for i, raw_name in enumerate(header):
+        name = cell_text(raw_name) or f"_col_{i + 1}"
+        if name in seen:
+            raise ValueError(
+                f"cabecera duplicada {name!r} en {path.name!r} hoja {sheet_name!r}")
+        seen.add(name)
+        names.append(name)
+
+    faltan = [label for label in required if label not in seen]
+    if faltan:
+        raise ValueError(
+            f"faltan columnas {faltan} en {path.name!r} hoja {sheet_name!r}: "
+            f"¿cambió la fila de cabecera? encontradas: {names[:8]}…")
+
     width  = len(header)
     result = []
-    for row in rows[header_row_idx + 1:]:
+    for number, row in zip(numbers, rows):
+        if number <= header_row:
+            continue
         # Una fila con solo marcadores de vacío ("-", "NA") no es un dato.
         if not any(cell_text(v) for v in row):
             continue
         padded = row + [""] * (width - len(row))
-        result.append({str(header[i]).strip(): padded[i] for i in range(width)})
+        result.append({names[i]: padded[i] for i in range(width)})
     return result
 
 
@@ -252,11 +308,18 @@ def main() -> int:
     key_genes = {g.strip().upper() for g in args.genes.split(",") if g.strip()}
 
     print(f"Leyendo MAF: {maf_path.name}")
-    hm_maf_rows = sheet_to_dicts(maf_path, "HM maf", header_row_idx=1)
+    hm_maf_rows = sheet_to_dicts(
+        maf_path, "HM maf", header_row=2,
+        required=("Hugo Symbol", "Chromosome", "Start Position",
+                  "Reference Allele", "Tumor Seq Allele2", "Variant Classification"))
     print(f"Leyendo drivers: {drivers_path.name}")
-    driver_rows  = sheet_to_dicts(drivers_path, "Driver mutation in HM", header_row_idx=1)
+    driver_rows  = sheet_to_dicts(
+        drivers_path, "Driver mutation in HM", header_row=3,
+        required=("Gene", "gdna", "Protein", "Protein change", "Driver"))
 
     driver_lookup = build_driver_lookup(driver_rows)
+    # Variantes driver que nunca encuentran su fila en el MAF: se avisa al final.
+    driver_keys_usadas: set[tuple] = set()
 
     # ── M1+M2: normalización, priorización y estadísticas en una sola pasada ──
     raw_mutations: list[dict] = []
@@ -275,7 +338,10 @@ def main() -> int:
         ref   = str(row.get("Reference Allele", "")).strip()
         alt   = (str(row.get("Tumor Seq Allele2", "")).strip()
                  or str(row.get("Tumor Seq Allele1", "")).strip())
-        driver = driver_lookup.get((gene, chrom, start, ref, alt), {})
+        driver_key = (gene, chrom, start, ref, alt)
+        driver = driver_lookup.get(driver_key, {})
+        if driver:
+            driver_keys_usadas.add(driver_key)
 
         classification = cell_text(row.get("Variant Classification"))
         sample_id      = cell_text(row.get("Tumor Sample Barcode"))
@@ -319,6 +385,14 @@ def main() -> int:
                 meta["start_position"] = start
 
     total_samples = len(samples)
+
+    # Trazabilidad del cruce: los drivers sin fila MAF no se anotan y antes
+    # desaparecían en silencio. La causa habitual es que el llamador del MAF no
+    # reportó esa variante (no un problema del lector).
+    sin_par = [key for key in driver_lookup if key not in driver_keys_usadas]
+    if sin_par:
+        print(f"AVISO: {len(sin_par)} de {len(driver_lookup)} variantes driver no "
+              f"encuentran fila en el MAF y no se anotan: {sin_par[:5]}")
 
     top_variants: list[dict] = []
     for rank, ((gene, pc), meta) in enumerate(

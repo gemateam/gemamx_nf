@@ -83,13 +83,25 @@ y falla sin tocar `data/` si falta alguno.
 python3 tests/test_xlsx_parser.py
 ```
 
-Sin Docker ni red. Construye un XLSX mínimo y comprueba que el lector de
-`INGEST_ROMERO`:
+Sin Docker ni red. Construye un XLSX mínimo y comprueba que el lector
+compartido por `INGEST_ROMERO` y `EXTRACT_CLINICAL`:
 
 - coloca cada celda por su referencia `r`, de modo que una celda omitida en
   medio de la fila no desplaza el resto de columnas;
 - lee cadenas en línea (`t="inlineStr"`);
 - descarta filas compuestas solo por marcadores de vacío;
-- normaliza `-`, `.`, `NA`, `N/A` y `—` a celda vacía al extraer campos
+- normaliza `-`, `.`, `NA`, `N/A`, `#N/A` y `—` a celda vacía al extraer campos
   textuales, conservando el `-` de las columnas de alelos MAF (deleción o
-  inserción).
+  inserción);
+- da el mismo resultado en las dos rutas de lectura (un solo lector, sin copias);
+- elige la cabecera por su **número de fila de Excel** (2 en el MAF, 3 en drivers
+  y clínico), así que una fila vacía intercalada no la desplaza, y `required`
+  falla con un mensaje explícito si el fichero cambia de forma;
+- da clave posicional (`_col_<n>`) a las columnas sin nombre —el clínico tiene
+  tres— y rechaza dos columnas con el mismo nombre;
+- en la capa clínica (`clean`), convierte los marcadores en `None` pero
+  **conserva el cero**: `0` embarazos es un dato, no un valor ausente.
+
+El directorio temporal se crea con los permisos por defecto del padre, no con
+`tempfile.mkdtemp()` (modo `0700`): en Windows ese modo puede dejar el directorio
+sin permisos heredados e inaccesible incluso para quien lo creó.

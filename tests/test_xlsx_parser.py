@@ -7,7 +7,14 @@ temporal y comprueba que
   - una celda omitida en medio de la fila no desplaza las columnas;
   - las cadenas en línea (`t="inlineStr"`) se leen;
   - las filas de solo marcadores de vacío se descartan;
-  - la capa de campos (`cell_text`) convierte "-", ".", "NA", "N/A" y "—" en "".
+  - la capa de campos (`cell_text`) convierte "-", ".", "NA", "N/A", "#N/A" y
+    "—" en "";
+  - la cabecera se elige por su número de fila, así que una fila vacía presente
+    no la desplaza, y `required` avisa si el fichero cambia de forma;
+  - una columna sin nombre recibe clave posicional y dos nombres iguales fallan;
+  - el extractor clínico (`extract_clinical_romero`) usa ese mismo lector;
+  - la capa clínica (`clean`) convierte los marcadores en `None` pero conserva
+    el cero (0 embarazos es un dato, no un ausente).
 
 El lector de hojas conserva el texto tal cual (el "-" de los alelos MAF es
 notación de deleción/inserción); la normalización ocurre al extraer campos.
@@ -18,6 +25,7 @@ Uso: python3 tests/test_xlsx_parser.py
 from __future__ import annotations
 
 import sys
+import shutil
 import tempfile
 import zipfile
 from pathlib import Path
@@ -26,6 +34,7 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "bin"))
 
 from ingest_romero import cell_text, sheet_to_dicts  # noqa: E402
+import extract_clinical_romero as ecr                # noqa: E402
 
 MAIN_NS = "http://schemas.openxmlformats.org/spreadsheetml/2006/main"
 REL_NS  = "http://schemas.openxmlformats.org/officeDocument/2006/relationships"
@@ -68,26 +77,67 @@ def sheet_xml() -> str:
     rows = [
         # fila 1: título de la hoja (no es cabecera)
         [c("A1", "título")],
-        # fila 2: cabecera
-        [c(f"{col}2", name) for col, name in
+        # fila 2: presente pero vacía. Antes desplazaba la cabecera una posición;
+        # ahora la cabecera se elige por su número de fila (3) y eso no importa.
+        [],
+        # fila 3: cabecera
+        [c(f"{col}3", name) for col, name in
          zip("ABCDE", ("Gen", "G1", "G2", "Alelo", "Nota"))],
-        # fila 3: fila densa con marcadores explícitos
-        [c("A3", "AKT1"), c("B3", "v1"), c("C3", "v2"),
-         c("D3", "-"), c("E3", "NA")],
-        # fila 4: sin celda B (hueco en medio) y con celda en línea
-        [c("A4", "PIK3CA"), c("C4", "z", inline=True),
-         c("D4", "1", numeric=True), c("E4", "—")],
-        # fila 5: cadena en línea, número y marcadores
-        [c("A5", "TP53"), c("B5", "inline", inline=True),
-         c("C5", "2.5", numeric=True), c("D5", "-"), c("E5", ".")],
-        # fila 6: solo marcadores de vacío → se descarta
-        [c("A6", "-"), c("B6", "NA"), c("C6", "N/A"),
-         c("D6", "."), c("E6", "—")],
+        # fila 4: fila densa con marcadores explícitos
+        [c("A4", "AKT1"), c("B4", "v1"), c("C4", "v2"),
+         c("D4", "-"), c("E4", "NA")],
+        # fila 5: sin celda B (hueco en medio) y con celda en línea
+        [c("A5", "PIK3CA"), c("C5", "z", inline=True),
+         c("D5", "1", numeric=True), c("E5", "—")],
+        # fila 6: cadena en línea, número y marcadores
+        [c("A6", "TP53"), c("B6", "inline", inline=True),
+         c("C6", "2.5", numeric=True), c("D6", "-"), c("E6", ".")],
+        # fila 7: solo marcadores de vacío → se descarta
+        [c("A7", "-"), c("B7", "NA"), c("C7", "N/A"),
+         c("D7", "."), c("E7", "—")],
     ]
     body = "".join(
-        f'<row r="{i}">{"".join(cells)}</row>' for i, cells in enumerate(rows, 1))
+        (f'<row r="{i}">{"".join(cells)}</row>' if cells else f'<row r="{i}"/>')
+        for i, cells in enumerate(rows, 1))
     return (f'<?xml version="1.0" encoding="UTF-8"?>'
             f'<worksheet xmlns="{MAIN_NS}"><sheetData>{body}</sheetData></worksheet>')
+
+
+def col_letters(index: int) -> str:
+    letters = ""
+    index += 1
+    while index:
+        index, rem = divmod(index - 1, 26)
+        letters = chr(65 + rem) + letters
+    return letters
+
+
+def build_minimal_xlsx(path: Path, header: list[str], data: list[list[str]]) -> None:
+    """XLSX mínimo con la cabecera en la fila 1 y celdas de texto."""
+    values: list[str] = []
+
+    def shared_id(text: str) -> int:
+        if text not in values:
+            values.append(text)
+        return values.index(text)
+
+    grid = [header] + data
+    body = "".join(
+        f'<row r="{r}">' + "".join(
+            f'<c r="{col_letters(i)}{r}" t="s"><v>{shared_id(v)}</v></c>'
+            for i, v in enumerate(row)) + "</row>"
+        for r, row in enumerate(grid, 1))
+    sst = (f'<?xml version="1.0" encoding="UTF-8"?>'
+           f'<sst xmlns="{MAIN_NS}" count="{len(values)}" '
+           f'uniqueCount="{len(values)}">'
+           + "".join(f"<si><t>{v}</t></si>" for v in values) + "</sst>")
+    sheet = (f'<?xml version="1.0" encoding="UTF-8"?>'
+             f'<worksheet xmlns="{MAIN_NS}"><sheetData>{body}</sheetData></worksheet>')
+    with zipfile.ZipFile(path, "w") as zf:
+        zf.writestr("xl/workbook.xml", WORKBOOK)
+        zf.writestr("xl/_rels/workbook.xml.rels", RELS)
+        zf.writestr("xl/sharedStrings.xml", sst)
+        zf.writestr("xl/worksheets/sheet1.xml", sheet)
 
 
 def build_xlsx(path: Path) -> None:
@@ -104,20 +154,80 @@ def check(condition: bool, message: str) -> None:
     print(f"  OK  {message}")
 
 
+def check_raises(fn, fragment: str, message: str) -> None:
+    """Comprueba que `fn` lanza ValueError y que el mensaje contiene `fragment`."""
+    try:
+        fn()
+    except ValueError as exc:
+        check(fragment in str(exc), message)
+        return
+    raise AssertionError(f"{message}: no lanzó ValueError")
+
+
+def make_tmpdir() -> Path:
+    """Directorio de trabajo escribible.
+
+    `tempfile.mkdtemp` crea el directorio con modo 0700; en Windows eso puede
+    dejarlo sin permisos heredados e inaccesible incluso para quien lo creó.
+    Se usa un directorio con los permisos por defecto (heredados del padre),
+    primero en el temporal del sistema y, si no se puede, junto al repositorio.
+    """
+    candidates = [Path(tempfile.gettempdir()) / "gemamx-xlsx-test",
+                  Path(__file__).resolve().parent.parent / ".tmp_xlsx_test"]
+    for directory in candidates:
+        try:
+            shutil.rmtree(directory, ignore_errors=True)
+            directory.mkdir(parents=True, exist_ok=True)
+            (directory / ".probe").write_text("x", encoding="utf-8")
+            (directory / ".probe").unlink()
+            return directory
+        except OSError:
+            continue
+    raise RuntimeError("no hay ningún directorio temporal escribible")
+
+
 def main() -> int:
     print("> Marcadores de vacío (cell_text)")
-    for raw in ("-", "—", "–", ".", "NA", "n/a", "None", "  "):
+    for raw in ("-", "—", "–", ".", "NA", "n/a", "None", "  ", "#N/A", "#n/a"):
         check(cell_text(raw) == "", f"cell_text({raw!r}) == ''")
     for raw in ("A", "T", "Missense_Mutation", "0", "SNP"):
         check(cell_text(raw) == raw, f"cell_text({raw!r}) se conserva")
 
-    with tempfile.TemporaryDirectory() as tmp:
-        xlsx = Path(tmp) / "mini.xlsx"
+    tmpdir = make_tmpdir()
+    try:
+        xlsx = tmpdir / "mini.xlsx"
         build_xlsx(xlsx)
-        rows = sheet_to_dicts(xlsx, "Hoja", header_row_idx=1)
+        rows = sheet_to_dicts(xlsx, "Hoja", header_row=3,
+                              required=("Gen", "G1", "Alelo"))
+        # El extractor clínico debe usar el mismo lector, no una copia propia.
+        clinical_rows = ecr.sheet_to_dicts(xlsx, "Hoja", header_row=3)
+
+        print("> Cabecera por número de fila y nombres de columna")
+        check_raises(lambda: sheet_to_dicts(xlsx, "Hoja", header_row=2),
+                     "cabecera", "una fila vacía presente no se toma como cabecera")
+        check_raises(lambda: sheet_to_dicts(xlsx, "Hoja", header_row=3,
+                                            required=("NoExiste",)),
+                     "faltan columnas", "`required` detecta un cambio de cabecera")
+
+        dup = tmpdir / "dup.xlsx"
+        build_minimal_xlsx(dup, ["Gen", "Gen", "Nota"], [["A", "B", "C"]])
+        check_raises(lambda: sheet_to_dicts(dup, "Hoja", header_row=1),
+                     "duplicada", "dos columnas con el mismo nombre son un error")
+
+        unnamed = tmpdir / "unnamed.xlsx"
+        build_minimal_xlsx(unnamed, ["Gen", "", "Nota"], [["A", "B", "C"]])
+        sin_nombre = sheet_to_dicts(unnamed, "Hoja", header_row=1)[0]
+        check(list(sin_nombre) == ["Gen", "_col_2", "Nota"],
+              "una columna sin nombre recibe clave posicional y no se pierde")
+        check(sin_nombre["_col_2"] == "B",
+              "el dato de la columna sin nombre se conserva")
+    finally:
+        shutil.rmtree(tmpdir, ignore_errors=True)
 
     print("> Lectura de la hoja")
     check(len(rows) == 3, "la fila de solo marcadores de vacío se descarta")
+    check(clinical_rows == rows,
+          "el extractor clínico usa el lector por referencia (mismo resultado)")
     first, second, third = rows
 
     check(first["Gen"] == "AKT1" and first["G1"] == "v1" and first["G2"] == "v2",
@@ -131,6 +241,24 @@ def main() -> int:
 
     check(third["G1"] == "inline", "cadena en línea (t=inlineStr) se lee")
     check(third["G2"] == "2.5", "celda numérica sin t se lee como texto")
+
+    print("> Capa clínica: marcadores de vacío y cero")
+    for raw in (None, "", "  ", "-", "—", "–", ".", "NA", "n/a", "N/A", "None", "#N/A"):
+        check(ecr.clean(raw) is None, f"clean({raw!r}) es ausente")
+    for raw in ("I", "IDC", "Negative", "T3N1M0", "Basal"):
+        check(ecr.clean(raw) == raw, f"clean({raw!r}) se conserva")
+    check(ecr.clean(0) == "0", "clean(0) conserva el cero (no lo confunde con vacío)")
+    check(ecr.parse_int(0) == 0, "parse_int(0) == 0")
+    check(ecr.parse_int("-") is None, "parse_int('-') es ausente")
+    check(ecr.parse_int("55.0") == 55, "parse_int acepta el formato numérico de Excel")
+
+    rec = ecr.normalize_row({"Tumor Sample Barcode": "S1", "Age": "55",
+                             "Number of pregnancies": 0,
+                             "Age at menopuse": "NA"})
+    check(rec["age"] == 55, "normalize_row: edad entera")
+    check(rec["number_of_pregnancies"] == 0, "normalize_row: 0 embarazos no se pierde")
+    check(rec["age_at_menopause"] is None, "normalize_row: 'NA' es ausente")
+    check(rec["sample_id"] == "S1", "normalize_row: identificador de muestra")
 
     print("OK Parser XLSX")
     return 0

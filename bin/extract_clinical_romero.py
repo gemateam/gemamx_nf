@@ -10,6 +10,13 @@ Entrada:
 Salida en --outdir:
   clinical_metadata.json
 
+El lector de hojas es el de INGEST_ROMERO (bin/ingest_romero.py), no una copia:
+coloca cada celda por su referencia `r`, de modo que una celda omitida no
+desplaza el resto de la fila, y acepta cadenas en línea. Los marcadores de celda
+vacía ("-", ".", "NA", "N/A", "—") se normalizan con `cell_text()` y aquí se
+convierten además en `null` de JSON. El cero se conserva: `0` embarazos es un
+dato, no un valor ausente.
+
 Derivado del script original v2/scripts/extract_clinical_romero.py;
 refactorizado para aceptar rutas por argumento.
 """
@@ -18,74 +25,27 @@ from __future__ import annotations
 
 import argparse
 import json
-import zipfile
+import sys
 from pathlib import Path
-import xml.etree.ElementTree as ET
 
-NS = {
-    "main": "http://schemas.openxmlformats.org/spreadsheetml/2006/main",
-    "rel":  "http://schemas.openxmlformats.org/officeDocument/2006/relationships",
-    "pkg":  "http://schemas.openxmlformats.org/package/2006/relationships",
-}
+sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-
-def load_xlsx_sheet_rows(path: Path, sheet_name: str) -> list[list[str]]:
-    with zipfile.ZipFile(path) as zf:
-        shared: list[str] = []
-        if "xl/sharedStrings.xml" in zf.namelist():
-            root = ET.fromstring(zf.read("xl/sharedStrings.xml"))
-            for si in root.findall("main:si", NS):
-                text = "".join(t.text or "" for t in si.findall(".//main:t", NS))
-                shared.append(text)
-
-        wb  = ET.fromstring(zf.read("xl/workbook.xml"))
-        rel = ET.fromstring(zf.read("xl/_rels/workbook.xml.rels"))
-        rel_map = {r.attrib["Id"]: r.attrib["Target"]
-                   for r in rel.findall("pkg:Relationship", NS)}
-
-        target = None
-        for sheet in wb.find("main:sheets", NS):
-            if sheet.attrib.get("name") == sheet_name:
-                rid = sheet.attrib.get(
-                    "{http://schemas.openxmlformats.org/officeDocument/2006/relationships}id")
-                target = "xl/" + rel_map[rid]
-                break
-        if not target:
-            raise ValueError(f"Hoja no encontrada: {sheet_name!r}")
-
-        sheet_xml = ET.fromstring(zf.read(target))
-        rows: list[list[str]] = []
-        for row in sheet_xml.findall(".//main:sheetData/main:row", NS):
-            values: list[str] = []
-            for cell in row.findall("main:c", NS):
-                ctype = cell.attrib.get("t")
-                v_el  = cell.find("main:v", NS)
-                value = "" if (v_el is None or v_el.text is None) else v_el.text
-                if ctype == "s" and value.isdigit():
-                    idx   = int(value)
-                    value = shared[idx] if idx < len(shared) else value
-                values.append(value)
-            rows.append(values)
-        return rows
-
-
-def sheet_to_dicts(path: Path, sheet_name: str,
-                   header_row_idx: int = 1) -> list[dict[str, str]]:
-    rows   = load_xlsx_sheet_rows(path, sheet_name)
-    header = rows[header_row_idx]
-    width  = len(header)
-    result = []
-    for row in rows[header_row_idx + 1:]:
-        if not any(str(v).strip() for v in row):
-            continue
-        padded = row + [""] * (width - len(row))
-        result.append({str(header[i]).strip(): padded[i] for i in range(width)})
-    return result
+# Una sola implementación de las reglas de vacíos y de alineación de columnas:
+# ver tests/test_xlsx_parser.py.
+from ingest_romero import (  # noqa: E402
+    cell_text,
+    load_xlsx_sheet_rows,  # noqa: F401  (reexportado: misma API que antes)
+    sheet_to_dicts,
+)
 
 
 def clean(v: object) -> str | None:
-    t = str(v or "").strip()
-    return None if not t or t.upper() == "NA" else t
+    """Texto limpio de una celda; `None` si está vacía o es marcador de vacío.
+
+    No se usa `v or ""`, que descartaría el cero: `Number of pregnancies = 0`
+    es un dato, no un valor ausente.
+    """
+    return cell_text(v) or None
 
 
 def parse_int(v: object) -> int | None:
@@ -136,8 +96,13 @@ def main() -> int:
     outdir = Path(args.outdir)
     outdir.mkdir(parents=True, exist_ok=True)
 
-    rows  = sheet_to_dicts(source, "Features", header_row_idx=1)
-    items = [normalize_row(r) for r in rows if normalize_row(r).get("sample_id")]
+    rows  = sheet_to_dicts(source, "Features", header_row=3,
+                           required=("Tumor Sample Barcode", "Age", "Pam50"))
+    items = []
+    for row in rows:
+        record = normalize_row(row)
+        if record["sample_id"]:
+            items.append(record)
 
     (outdir / "clinical_metadata.json").write_text(
         json.dumps(items, indent=2, ensure_ascii=False), encoding="utf-8")
