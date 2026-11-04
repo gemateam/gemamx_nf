@@ -25,7 +25,7 @@ NEW = """    experiment_ids = request_message.experiment_ids or []
             message="SearchDatasets request must specify at least one experiment_id.",
             error_code=INVALID_PARAMETER_VALUE,
         )
-    # GEMACONT: la UI puede enviar un placeholder ("...") antes de cargar el
+    # GEMA MX: la UI puede enviar un placeholder ("...") antes de cargar el
     # experimento. Postgres lo rechaza como entero; devolvemos vacío.
     experiment_ids = [eid for eid in experiment_ids if str(eid).isdigit()]
     if not experiment_ids:

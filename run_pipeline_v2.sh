@@ -132,14 +132,9 @@ if python3 -c "import mlflow" 2>/dev/null; then
 else
     echo "  (mlflow no disponible en host — usando gemamx-cpu:1.0.0 vía Docker)"
     ABS_PIPELINE_INFO="$(realpath "${PIPELINE_INFO}")"
-    # Red por defecto: stack de este repo. Solo con platform-net se usa la red legacy.
-    if echo "$*" | grep -q "platform-net"; then
-        DOCKER_NET="gemacont_default"
-        DOCKER_URI="http://mlflow:5000"
-    else
-        DOCKER_NET="gemamx_net"
-        DOCKER_URI="http://gemamx_mlflow:5000"
-    fi
+    # Red del stack de este repo (docker-compose up).
+    DOCKER_NET="gemamx_net"
+    DOCKER_URI="http://gemamx_mlflow:5000"
     docker run --rm \
         --network "${DOCKER_NET}" \
         -v "${ABS_PIPELINE_INFO}:/nf_reports:ro" \

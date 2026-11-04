@@ -162,8 +162,8 @@
         "mlflow_tracking_uri": {
           "type": "string",
           "default": "http://host.docker.internal:5000",
-          "description": "URI del servidor MLflow de la plataforma.",
-          "help_text": "Con --profile platform-net se usa http://mlflow:5000 (red Docker compartida)."
+          "description": "URI del servidor MLflow del stack de este repositorio.",
+          "help_text": "Desde el host: http://localhost:5000. Desde un contenedor en gemamx_net: http://gemamx_mlflow:5000."
         },
         "mlflow_experiment": {
           "type": "string",
@@ -181,13 +181,13 @@
           "type": "string",
           "default": "http://gemamx_mlflow:5000",
           "description": "URI de MLflow vista desde el contenedor CPU (fallback de subida de reportes).",
-          "help_text": "Se usa cuando el host no tiene el cliente mlflow; el hook corre upload_nf_reports.py dentro de params.image_cpu en la red mlflow_docker_network. Con --profile platform-net se usa http://mlflow:5000."
+          "help_text": "Se usa cuando el host no tiene el cliente mlflow; el hook corre upload_nf_reports.py dentro de params.image_cpu en la red mlflow_docker_network."
         },
         "mlflow_docker_network": {
           "type": "string",
           "default": "gemamx_net",
           "description": "Red Docker donde el contenedor CPU alcanza al servidor MLflow.",
-          "help_text": "Por defecto, la red del docker-compose de este repo; con --profile platform-net se usa gemacont_default."
+          "help_text": "Red del docker-compose.yml de este repositorio (gemamx_net)."
         }
       }
     },

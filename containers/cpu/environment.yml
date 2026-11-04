@@ -1,8 +1,8 @@
 # Entorno CPU de GEMA MX para los procesos Nextflow (M1-M5, solo CPU).
 #
-# Versiones fijadas a partir del lock validado del proyecto Gemacont
-# (env/cpu-lock.yml) para que las estructuras, el docking y las métricas
-# se calculen con las mismas herramientas.
+# Versiones fijadas para que las estructuras, el docking y las métricas se
+# calculen siempre con las mismas herramientas, sin depender de imágenes ni
+# entornos externos al repositorio.
 #
 # Se resuelve con micromamba/conda-forge. El dockeo usa Vina 1.2.7 y
 # Open Babel 3.2.1; RDKit 2026.03.1 + Meeko 0.8.0 preparan los ligandos.

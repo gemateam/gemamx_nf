@@ -128,4 +128,4 @@ Motivos para no habilitarlo:
 **Cuándo reconsiderarlo:** si la app deja de ser estática y necesita API con
 filtros o escrituras concurrentes sobre las 60,864 mutaciones. Eso sería un
 backend de plataforma alimentado *después* del pipeline desde los JSON, y se
-documentaría en `docs/PROPUESTAS_PLATAFORMA.md`, no aquí.
+documentaría como propuesta de arquitectura aparte, no aquí.

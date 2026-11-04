@@ -7,7 +7,7 @@ Las pruebas se ejecutan en WSL2 con Docker y las imágenes de la plataforma:
 | `gemamx-cpu:1.0.0` | Python 3.12, Biopython, Vina, OpenBabel, MLflow |
 | `gemamx-nf-docking:1.0.0` | `gemamx-cpu` + Meeko 0.8 + gemmi (ligandos) |
 
-Ninguna prueba lee `Gemacont/` ni `GEMXMXv1/`: solo usan `bin/`, `assets/` y
+Ninguna prueba lee rutas de otros proyectos: solo usan `bin/`, `assets/` y
 `tests/reference/`.
 
 ## 1. Ingesta, FASTA y estructuras
