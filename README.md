@@ -72,7 +72,7 @@ El sistema implementa una arquitectura desacoplada en cuatro capas principales:
 | **Metadatos Clínicos** | Parámetros estándar TCGA | IHC, PAM50, rangos de edad, WES (MOESM4) |
 | **Priorización de Variantes** | Frecuencia de cohorte + ClinVar/ACMG | Frecuencia en mujeres mexicanas + Hotspots |
 | **Modelado 3D** | Boltz-1 / AlphaFold / ESMFold | Boltz-1 / AlphaFold / PDB precomputados |
-| **Docking Molecular** | AutoDock Vina 1.2.3 (11 fármacos) | AutoDock Vina 1.2.3 (11 fármacos curados) |
+| **Docking Molecular** | AutoDock Vina 1.2.7 (11 fármacos) | AutoDock Vina 1.2.7 (11 fármacos curados) |
 | **Experimento [MLflow](https://mlflow.org/)** | `GEMAMX-V1-NF` | `GEMAMX-V2-ROMERO` |
 | **Módulo Clínico Web** | Oculto / No aplicable | Integrado directamente en la vista **Análisis** |
 
@@ -124,12 +124,18 @@ humo usa `site_on_missing=centroid` y registra `site_covered=false`. Detalle com
 
 | Herramienta | Versión mínima | Propósito | Referencia |
 |---|---|---|---|
-| **Nextflow** | 23.10+ | Orquestador de flujos bioinformáticos | [https://www.nextflow.io/](https://www.nextflow.io/) |
+| **Nextflow** | 26.10.5 | Orquestador de flujos bioinformáticos | [https://www.nextflow.io/](https://www.nextflow.io/) |
 | **MLflow** | 2.19+ | Registro de experimentos y métricas | [https://mlflow.org/](https://mlflow.org/) |
 | **Docker Engine** | 24+ | Ejecución aislada de módulos | [Docker Docs](https://docs.docker.com/) |
 | **Docker Compose** | 2.20+ | Orquestación de servicios (Web, MLflow, Postgres) | [Compose Docs](https://docs.docker.com/compose/) |
 | **Python** | 3.10+ | Scripts auxiliares y APIs bioinformáticas | [Python.org](https://www.python.org/) |
 | **NVIDIA GPU (Opcional)** | CUDA 12+ | Aceleración de predicción estructural (Boltz-1) | [NVIDIA CUDA](https://developer.nvidia.com/cuda-zone) |
+
+> **Nextflow 26+ es obligatorio.** `modules/docking/main.nf` usa sintaxis estricta que
+> Nextflow 24.10.5 rechaza al compilar (`Variable meta_json already defined in the process
+> scope`). La versión validada es **26.10.5**. Si el host no tiene Java ni Nextflow, el
+> orquestador puede ejecutarse con la imagen oficial `nextflow/nextflow:26.10.5` montando el
+> socket de Docker; ver [§6](#ejecución-sin-java-ni-nextflow-en-el-host).
 
 ---
 
@@ -143,16 +149,25 @@ cd gemamx_nf
 # 2. Levantar el stack completo (Postgres, MLflow y WebApp)
 docker compose up -d
 
-# 2b. (Opcional) Construir las imágenes de los procesos Nextflow
-docker compose --profile images build cpu-base
-docker compose --profile images build docking
+# 2b. Construir las imágenes de los procesos Nextflow (CPU y docking)
+docker compose --profile images build
+# También se pueden reconstruir los servicios del stack:
+# docker compose build mlflow webapp
 
-# 3. Verificar estado de los servicios
+# 3. Verificar estado de los servicios y las imágenes
 docker compose ps
 # gemamx_postgres -> localhost:5432 (healthy)
 # gemamx_mlflow   -> http://localhost:5000 (healthy)
 # gemamx_webapp   -> http://localhost:8080 (healthy)
+
+docker images --format "{{.Repository}}:{{.Tag}}" | grep gemamx
+# gemamx-cpu:1.0.0         (procesos CPU: FASTA, estructuras, métricas, MLflow)
+# gemamx-nf-docking:1.0.0  (preparación de ligandos/receptores y AutoDock Vina)
+# gemamx-mlflow:1.0.0      (servidor MLflow 2.19.0 + UI)
+# gemamx-webapp:1.0.0      (Nginx + SPA)
 ```
+
+Las versiones exactas de cada imagen están en [§7](#7-servicios-docker-y-mlflow).
 
 ---
 
@@ -201,6 +216,7 @@ gemamx_nf/
 ├── results/
 │   ├── data/                   # Contrato de datos vigente servido a la WebApp
 │   └── runs/                   # Histórico de corridas archivadas con index.json
+├── results_v1*/                # Salidas de corridas V1 de validación (ignoradas por git)
 ├── structures/
 │   └── external/               # Modelos AlphaFold DB para genes sin estructura en la corrida
 │       ├── <GEN>_AF.cif        # modelo mmCIF de la secuencia completa
@@ -232,16 +248,29 @@ Ambos pipelines están implementados bajo la especificación [Nextflow DSL2](htt
 Ejecuta el flujo para la cohorte internacional TCGA-BRCA utilizando los insumos incluidos en el repositorio (`tests/reference/`):
 
 ```bash
-# Modo de prueba con datos precalculados e insumos del repo (rápido, sin GPU)
-nextflow run main.nf -profile docker,test
+# Prueba de humo con 1 variante y datos precalculados (rápida, sin GPU).
+# --outdir results_v1 evita sobrescribir el contrato V2 de results/data.
+nextflow run main.nf -profile docker,test \
+  --outdir results_v1
+
+# Validación V1 con 3 variantes y exhaustiveness 2, 100 % offline:
+# FASTA y estructuras salen de tests/reference/romero_v2/ (sin consultar UniProt).
+nextflow run main.nf -profile docker,test \
+  --outdir results_v1_quick \
+  --max_variants 3 \
+  --exhaustiveness 2 \
+  --fasta_dir tests/reference/romero_v2/fasta \
+  --structures_dir tests/reference/romero_v2/structures \
+  --mlflow_tracking_uri http://gemamx_mlflow:5000
 
 # Modo producción con CPU usando el snapshot de mutaciones y catálogo de fármacos del repo
 nextflow run main.nf \
   --study_id brca_tcga \
   --mutations_json tests/reference/mutations_snapshot.json \
-  --structures_dir tests/reference/structures \
+  --fasta_dir tests/reference/romero_v2/fasta \
+  --structures_dir tests/reference/romero_v2/structures \
   --drug_catalog assets/drug_catalog.csv \
-  --genes "PIK3CA,TP53,AKT1,ERBB2" \
+  --genes "PIK3CA,TP53,AKT1" \
   --max_variants 3 \
   --structures_mode precomputed \
   --exhaustiveness 8 \
@@ -254,8 +283,15 @@ nextflow run main.nf -resume -profile docker
 > `-profile docker` es necesario en todas las invocaciones: los procesos declaran sus contenedores
 > (`gemamx-cpu:1.0.0`, `gemamx-nf-docking:1.0.0`) y sin ese perfil Nextflow los ejecutaría en el
 > host. El perfil `test` no activa Docker por sí solo, por eso va como `docker,test`.
-> Ambos perfiles escriben en `results/` (mismo `outdir` que producción); si solo quieres validar
-> sin tocar el contrato vigente, haz respaldo de `results/data` antes.
+>
+> **Contrato V2 intacto.** El perfil `test` escribe por defecto en `results/`, el mismo `outdir`
+> que producción. Para validar sin tocar `results/data`, pasa siempre `--outdir results_v1`
+> (o `results_v1_quick`): esos directorios están ignorados por git y la WebApp no los lee.
+>
+> **Red inestable.** `--fasta_dir` usa FASTA locales y evita la consulta a UniProt; las
+> estructuras de `tests/reference/romero_v2/structures` cubren PIK3CA, TP53 y AKT1 (WT y MUT).
+> Sin `--fasta_dir`, `FETCH_FASTA_WT` puede fallar con `SSLZeroReturnError` si UniProt cierra
+> la conexión.
 
 ### Pipeline V2 (Romero-Córdoba 2021 HM)
 
@@ -307,6 +343,34 @@ bash tests/run_smoke_v2_1.sh -stub-run
 
 Detalles, contrato y limitación de cobertura de los fragmentos: `docs/V2_1.md`.
 
+### Ejecución sin Java ni Nextflow en el host
+
+Si el host solo tiene Docker (Windows/macOS con Docker Desktop, o un servidor sin JDK), el
+orquestador puede correr dentro de la imagen oficial conectada al daemon:
+
+```bash
+docker run --rm \
+  -v /var/run/docker.sock:/var/run/docker.sock \
+  -v /run/desktop/mnt/host/d/ProyectosIA/gemamx_nf:/run/desktop/mnt/host/d/ProyectosIA/gemamx_nf \
+  -v /run/desktop/mnt/host/d/ProyectosIA/gemamx_work:/run/desktop/mnt/host/d/ProyectosIA/gemamx_work \
+  -v /run/desktop/mnt/host/d/ProyectosIA/nextflow_home:/nxf_home \
+  -e HOME=/root -e NXF_HOME=/nxf_home -e NXF_ANSI_LOG=false \
+  -w /run/desktop/mnt/host/d/ProyectosIA/gemamx_nf \
+  nextflow/nextflow:26.10.5 \
+  nextflow run main.nf -profile docker,test \
+    --outdir results_v1 --fasta_dir tests/reference/romero_v2/fasta
+```
+
+- Los bind mounts deben usar la ruta que ve el **daemon**. En Docker Desktop es
+  `/run/desktop/mnt/host/<unidad>/...`; en Linux coincide con la ruta del host.
+- `NXF_HOME` y el `workDir` (`-w`) deben ser persistentes para permitir `-resume` y caché.
+- Nextflow 26 exige **run names únicos** dentro del mismo `NXF_HOME`: usa `-name` distinto por
+  corrida (p. ej. `v1_smoke_20261104b`, `v1_quick_20261104b`) o limpia la caché.
+- El repositorio no tiene que estar dentro del contenedor de Nextflow si se monta con la
+  misma ruta que usa el daemon; los contenedores de proceso se lanzan por el socket.
+- `git_commit` queda como `unknown` si `git` no está disponible en el contenedor orquestador;
+  no afecta los resultados ni el contrato.
+
 ---
 
 ## 7. Servicios Docker y MLflow
@@ -321,7 +385,20 @@ services:
 ```
 
 - **Interfaz [MLflow](https://mlflow.org/)**: Accede a `http://localhost:5000` para comparar corridas, inspeccionar curvas de afinidad, descargar artefactos PDBQT o auditar el rendimiento entre `GEMAMX-V1-NF` y `GEMAMX-V2-ROMERO`.
-- **Construcción de imágenes**: `gemamx-mlflow:1.0.0` se construye desde `containers/mlflow/Dockerfile` (MLflow 2.19.0 + driver PostgreSQL + parche de la UI) y `gemamx-webapp:1.0.0` desde `webapp/Dockerfile`. Las imágenes de los procesos Nextflow se construyen desde `containers/cpu/Dockerfile` (`gemamx-cpu:1.0.0`: Biopython, RDKit, Meeko, Open Babel, Vina y MLflow) y `containers/docking/Dockerfile` (`gemamx-nf-docking:1.0.0`). Para reconstruirlas: `docker compose build mlflow webapp` y `docker compose --profile images build cpu-base docking`; para levantar el stack usando lo recién construido: `docker compose up -d --build`. La imagen GPU (`gemamx-gpu:1.0.0`) queda fuera de este flujo porque requiere una base CUDA/ROCm que no se construye en CPU.
+
+### Imágenes verificadas (corrida de validación 2026-11-04)
+
+| Imagen | Tamaño | Contenido validado | Uso |
+|---|---|---|---|
+| `gemamx-cpu:1.0.0` | 2.44 GB | Python 3.12.15, Biopython 1.88, NumPy 2.5.4, pandas 2.3.3, RDKit 2026.03.1, Meeko 0.8.0, gemmi 0.7.5, MLflow 2.19.0, Open Babel 3.2.1, AutoDock Vina 1.2.7 | FASTA, estructuras, alineamiento, métricas y registro MLflow |
+| `gemamx-nf-docking:1.0.0` | 2.44 GB | Python 3.12.15, RDKit 2026.03.1, Meeko 0.8.0, gemmi 0.7.5, AutoDock Vina 1.2.7 | `PREP_LIGAND`, `PREP_RECEPTOR`, `DOCK_CENTER`, `RUN_VINA` |
+| `gemamx-mlflow:1.0.0` | 1.26 GB | MLflow 2.19.0, driver PostgreSQL y parche de UI | Servidor de tracking (`:5000`) |
+| `gemamx-webapp:1.0.0` | 74 MB | Nginx + SPA (Vanilla JS, PDBe Molstar) | WebApp (`:8080`) |
+| `nextflow/nextflow:26.10.5` | 1.36 GB | Nextflow 26.10.5 | Orquestador cuando el host no tiene Java/Nextflow |
+| `postgres:16.4-bookworm` | 617 MB | PostgreSQL 16.4 | Backend de MLflow (`:5432`) |
+
+- **Construcción de imágenes**: `gemamx-mlflow:1.0.0` se construye desde `containers/mlflow/Dockerfile` y `gemamx-webapp:1.0.0` desde `webapp/Dockerfile`. Las imágenes de los procesos Nextflow se construyen desde `containers/cpu/Dockerfile` y `containers/docking/Dockerfile`. Para reconstruirlas: `docker compose build mlflow webapp` y `docker compose --profile images build`; para levantar el stack usando lo recién construido: `docker compose up -d --build`. La imagen GPU (`gemamx-gpu:1.0.0`) queda fuera de este flujo porque requiere una base CUDA/ROCm que no se construye en CPU.
+- **Mirror APT con reintentos**: `containers/cpu/Dockerfile` redirige `security.ubuntu.com` a `archive.ubuntu.com` y usa `Acquire::Retries=5` con timeouts de 30 s. Evita que un corte intermitente del CDN de seguridad aborte la construcción de la imagen.
 - **Reportes Nextflow automáticos**: `nextflow.config` genera `report.html`, `timeline.html`, `trace.tsv` y `dag.html` en `<outdir>/pipeline_info/`, y `workflow.onComplete` lanza `bin/nf_reports_hook.sh` para adjuntarlos al run padre de MLflow. No hacen falta flags ni wrappers; el log de la subida queda en `<outdir>/pipeline_info/upload.log`. Los `-stub-run` se omiten.
 - **Independencia de Entorno**: El stack no depende de contenedores externos ni servicios en la nube de pago para la persistencia.
 - **Red por defecto**: el perfil `docker` de Nextflow usa la red `gemamx_net` y resuelve MLflow como `gemamx_mlflow:5000`, igual que los wrappers `run_pipeline*.sh`. No hay perfiles ni redes de otros proyectos.

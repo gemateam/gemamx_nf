@@ -23,7 +23,16 @@ FROM mambaorg/micromamba:2.9.0-ubuntu24.04
 USER root
 ENV DEBIAN_FRONTEND=noninteractive
 
-RUN apt-get update \
+# El CDN security.ubuntu.com puede cerrar conexiones de forma intermitente en
+# esta red; los mismos paquetes de seguridad están espejados en
+# archive.ubuntu.com. Los reintentos evitan que un corte transitorio aborte
+# toda la imagen.
+RUN sed -i 's|http://security.ubuntu.com/ubuntu|http://archive.ubuntu.com/ubuntu|g' \
+        /etc/apt/sources.list.d/ubuntu.sources 2>/dev/null || true; \
+    apt-get -o Acquire::Retries=5 \
+            -o Acquire::http::Timeout=30 \
+            -o Acquire::https::Timeout=30 \
+            update \
     && apt-get install -y --no-install-recommends ca-certificates curl git tini \
     && rm -rf /var/lib/apt/lists/*
 

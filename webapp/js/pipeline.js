@@ -6,10 +6,10 @@
  *   top_variants.json  → variantes priorizadas
  *   structural_metrics.json → pLDDT, RMSD, scores Vina
  *   manifest_structures.json → qué estructuras existen
- *   docking/complex/* → HEAD cacheado para contar complejos
+ *   docking/vina_affinities.json → qué complejos se generaron
  */
 import {
-  DATA, loadJSON, fmt, BASE_PATH, contractUrl,
+  DATA, loadJSON, fmt, BASE_PATH,
   registerLoader, registerReloadFlag,
 } from './app.js';
 
@@ -122,22 +122,11 @@ function bestDrug(m) {
   return entries.sort((a, b) => a[1] - b[1])[0][0];
 }
 
-// Contar complejos disponibles vía HEAD cacheado
-const complexCache = new Map();
-async function countComplexes(variantId) {
-  const drugs = ['Abemaciclib','Alpelisib','Buparlisib','Capivasertib','Copanlisib',
-                 'Everolimus','Gedatolisib','Palbociclib','Pictilisib','Ribociclib','Taselisib'];
-  let count = 0;
-  await Promise.all(drugs.map(async drug => {
-    const url = `${BASE_PATH}/docking/complex/${variantId}_x_${drug}_complex.pdb`;
-    if (complexCache.has(url)) { if (complexCache.get(url)) count++; return; }
-    try {
-      const ok = (await fetch(url, { method: 'HEAD' })).ok;
-      complexCache.set(url, ok);
-      if (ok) count++;
-    } catch { complexCache.set(url, false); }
-  }));
-  return count;
+// Contar complejos disponibles a partir de las afinidades publicadas.
+// El contrato emite una afinidad por cada complejo realmente generado, así que
+// no hace falta sondear cada PDB con HEAD (evita 404 esperados en variantes sin docking).
+function countComplexes(variantId, affinities) {
+  return Object.keys(affinities?.[variantId] ?? {}).length;
 }
 
 // ── Loader principal ──────────────────────────────────────────────────────
@@ -145,11 +134,12 @@ async function loadPipeline() {
   if (state.loaded) return;
   state.loaded = true;
 
-  const [variants, metrics, manifest, runManifest] = await Promise.all([
+  const [variants, metrics, manifest, runManifest, affinities] = await Promise.all([
     loadJSON(DATA.topVariants()),
     loadJSON(DATA.structuralMetrics()),
     loadJSON(DATA.manifestStructures()),
     loadJSON(DATA.runManifest()),
+    loadJSON(DATA.vinaAffinities()),
   ]);
 
   // ── Run badge ────────────────────────────────────────────────────────────
@@ -398,14 +388,12 @@ async function loadPipeline() {
   // ── Tabla integrada Top Variants ──────────────────────────────────────────
   const tbody = document.getElementById('ps-tbody-metrics');
   if (tbody) {
-    // Contar complejos para cada variante (en paralelo)
+    // Contar complejos publicados para cada variante
     const complexCounts = {};
-    await Promise.all(
-      varList.map(async v => {
-        const id = `${v.hugo_symbol}_${v.protein_change}`;
-        complexCounts[id] = await countComplexes(id);
-      })
-    );
+    varList.forEach(v => {
+      const id = `${v.hugo_symbol}_${v.protein_change}`;
+      complexCounts[id] = countComplexes(id, affinities);
+    });
 
     const top5 = varList.slice(0, 5);
     tbody.innerHTML = top5.map((v, i) => {

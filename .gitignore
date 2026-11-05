@@ -6,6 +6,7 @@ work/
 
 # Resultados publicados (se regeneran con el pipeline)
 /results/
+/results_v1*/
 /data/
 infra/mlflow/mlartifacts/
 
