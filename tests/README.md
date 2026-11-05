@@ -57,14 +57,14 @@ Variables admitidas: `WORK`, `IMG`, `DOCK_IMG`, `SEED`, `DRUG`, `BOX_SIZE`,
 ## 3. Contratos y publicación
 
 El flujo completo (`BUILD_JSONS` + `PUBLISH`) se valida en la Fase 3 con
-Nextflow. Mientras tanto, los scripts se pueden probar a mano:
+Nextflow. La promoción y el archivo por corrida tienen su propia prueba:
 
 ```bash
 python3 bin/build_jsons.py --help
-python3 bin/publish_results.py --help
+python3 tests/test_publish_contract.py
 ```
 
-`PUBLISH` exige los seis contratos:
+`bin/publish_contract.py` exige los seis contratos:
 
 ```
 top_variants.json
@@ -75,7 +75,7 @@ mutation_stats.json
 docking/vina_affinities.json
 ```
 
-y falla sin tocar `data/` si falta alguno.
+y la promoción falla sin tocar `data/` si falta alguno.
 
 ## 4. Parser XLSX (celdas vacías)
 

@@ -2,8 +2,11 @@
 # =============================================================================
 # run_pipeline.sh — wrapper de ejecución de gemamx_nf
 #
-# Ejecuta el pipeline Nextflow y luego sube automáticamente los reportes HTML
-# (report, timeline, dag) al run padre en MLflow.
+# Ejecuta el pipeline Nextflow. La publicación (archivo en runs/<runName>/,
+# promoción atómica de data/ y reinicio de la webapp) la hace el propio
+# pipeline desde workflow.onComplete: ver docs/ALMACENAMIENTO.md §4.
+# Tras la corrida, el wrapper reintenta en primer plano la subida de los
+# reportes HTML (report, timeline, dag) al run padre en MLflow.
 #
 # Uso:
 #   bash run_pipeline.sh [opciones de nextflow]
@@ -23,8 +26,8 @@ MLFLOW_URI="${MLFLOW_URI:-http://localhost:5000}"
 NF_OUTDIR="${NF_OUTDIR:-results}"
 NF_EXPERIMENT="${NF_EXPERIMENT:-GEMAMX-V1-NF}"
 
-# -stub-run no ejecuta nada real: los JSON son placeholders. No debe archivarse
-# como corrida ni entrar en runs/index.json (PUBLISH tampoco publica en data/).
+# -stub-run no ejecuta nada real: los JSON son placeholders. El pipeline no
+# archiva la corrida, no entra en runs/index.json y no promueve data/.
 STUB_RUN=0
 for arg in "$@"; do
     if [[ "${arg}" == "-stub-run" || "${arg}" == "-stub" ]]; then
@@ -51,17 +54,13 @@ echo "▶ Reportes HTML en  : ${PIPELINE_INFO}"
 # 1. Ejecutar pipeline Nextflow
 # ---------------------------------------------------------------------------
 echo "▶ Iniciando pipeline..."
-nextflow run . \
+if ! nextflow run . \
     -with-report   "${PIPELINE_INFO}/report.html" \
     -with-timeline "${PIPELINE_INFO}/timeline.html" \
     -with-dag      "${PIPELINE_INFO}/dag.html" \
-    "$@"
-
-NF_EXIT=$?
-
-if [ $NF_EXIT -ne 0 ]; then
-    echo "✗ Pipeline terminó con error (código ${NF_EXIT}). No se suben reportes."
-    exit "${NF_EXIT}"
+    "$@"; then
+    echo "✗ Pipeline terminó con error. No se suben reportes."
+    exit 1
 fi
 
 echo "✓ Pipeline completado."
@@ -77,7 +76,7 @@ fi
 # ---------------------------------------------------------------------------
 # Nextflow escribe en .nextflow.log líneas como:
 #   [main] INFO nextflow.Session - Run name: friendly_swanson
-RUN_NAME=$(grep -o "Run name: [a-z_]*" .nextflow.log 2>/dev/null | tail -1 | awk '{print $NF}')
+RUN_NAME=$(sed -n 's/.*Run name: //p' .nextflow.log 2>/dev/null | tail -1)
 
 if [ -z "${RUN_NAME}" ]; then
     echo "WARN: no se pudo extraer el run name del log. Sube los reportes manualmente:"
@@ -102,75 +101,6 @@ if [ -z "${RUN_NAME}" ]; then
 fi
 
 echo "▶ Run name detectado: ${RUN_NAME}"
-
-# ---------------------------------------------------------------------------
-# 3. Archivar corrida y actualizar índice de corridas históricas
-# ---------------------------------------------------------------------------
-# Nextflow publica <outdir>/data/ y <outdir>/run_manifest.json via publishDir.
-# Aquí:
-#   a) Copiamos data/ → runs/<runName>/data/  (archive inmutable)
-#   b) Copiamos run_manifest.json → runs/<runName>/run_manifest.json
-#   c) Actualizamos runs/index.json con la entrada de esta corrida
-# ---------------------------------------------------------------------------
-DATA_DIR="${EFFECTIVE_OUTDIR}/data"
-MANIFEST_PATH="${EFFECTIVE_OUTDIR}/run_manifest.json"
-RUN_ARCHIVE="${EFFECTIVE_OUTDIR}/runs/${RUN_NAME}"
-INDEX_PATH="${EFFECTIVE_OUTDIR}/runs/index.json"
-
-echo "▶ Archivando corrida en runs/${RUN_NAME}..."
-if [ -d "${DATA_DIR}" ] && [ -f "${MANIFEST_PATH}" ]; then
-    mkdir -p "${RUN_ARCHIVE}"
-    # Copiar contrato de datos (solo si el archive no existe ya)
-    if [ ! -d "${RUN_ARCHIVE}/data" ]; then
-        cp -r "${DATA_DIR}" "${RUN_ARCHIVE}/data"
-    fi
-    cp "${MANIFEST_PATH}" "${RUN_ARCHIVE}/run_manifest.json"
-    # run_manifest también dentro de data/ para que la webapp lo encuentre
-    # cuando BASE_PATH = "runs/<name>/data"
-    cp "${MANIFEST_PATH}" "${RUN_ARCHIVE}/data/run_manifest.json"
-    echo "  ✓ ${RUN_ARCHIVE}"
-else
-    echo "  WARN: data/ o run_manifest.json no encontrados en ${EFFECTIVE_OUTDIR}"
-fi
-
-echo "▶ Actualizando índice de corridas..."
-if [ -f "${MANIFEST_PATH}" ]; then
-    export EFFECTIVE_OUTDIR RUN_NAME
-    python3 - << 'PYEOF'
-import json, os, pathlib
-
-outdir      = os.environ.get("EFFECTIVE_OUTDIR", "results")
-run_name    = os.environ.get("RUN_NAME", "")
-index_path  = pathlib.Path(outdir) / "runs" / "index.json"
-manifest_p  = pathlib.Path(outdir) / "run_manifest.json"
-
-try:
-    manifest = json.loads(manifest_p.read_text())
-except Exception:
-    manifest = {}
-
-index = []
-if index_path.is_file():
-    try:
-        index = json.loads(index_path.read_text()) or []
-    except Exception:
-        index = []
-
-entry = {
-    "run_name":     run_name,
-    "published_at": manifest.get("published_at", ""),
-    "git_commit":   manifest.get("git_commit", "")[:7],
-    "path":         f"runs/{run_name}/data",
-}
-index = [e for e in index if e.get("run_name") != run_name]
-index.insert(0, entry)
-index_path.parent.mkdir(parents=True, exist_ok=True)
-index_path.write_text(json.dumps(index, indent=2))
-print(f"  índice actualizado: {len(index)} corrida(s)")
-PYEOF
-else
-    echo "  WARN: manifest no encontrado en ${MANIFEST_PATH} — índice no actualizado"
-fi
 
 # ---------------------------------------------------------------------------
 # 3. Subir reportes HTML al run padre en MLflow
@@ -211,12 +141,18 @@ else
 fi
 
 # ---------------------------------------------------------------------------
-# 4. Levantar (o recargar) la webapp
+# 4. Asegurar que la webapp está levantada
 # ---------------------------------------------------------------------------
-echo "▶ Levantando webapp..."
+# El pipeline ya reinicia el contenedor al promover data/ (webapp_restart).
+# Aquí solo se comprueba que exista; si no, se levanta.
+echo "▶ Comprobando webapp..."
 if command -v docker &>/dev/null && [ -f docker-compose.yml ]; then
-    docker compose up -d webapp 2>&1
-    echo "✓ Web app disponible en: http://localhost:8080"
+    if [ -n "$(docker compose ps -q webapp 2>/dev/null)" ]; then
+        echo "✓ Webapp ya en ejecución. http://localhost:8080"
+    else
+        docker compose up -d webapp 2>&1
+        echo "✓ Webapp disponible en: http://localhost:8080"
+    fi
 else
     echo "INFO: Docker no disponible — levanta la webapp manualmente:"
     echo "  docker compose up -d webapp"

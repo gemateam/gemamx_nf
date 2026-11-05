@@ -305,8 +305,9 @@ que **no hace falta pasar rutas por CLI**:
 # Cohorte completa (49 variantes) — ejecución canónica
 nextflow run main_v2.nf -profile docker,romero-v2
 
-# Equivalente con el wrapper: añade -name, archiva en results/runs/<run>/,
-# actualiza runs/index.json, sube los reportes HTML a MLflow y levanta la webapp
+# Equivalente con el wrapper: añade -name y reintenta la subida de los
+# reportes HTML a MLflow. El archivo en results/runs/<run>/, el índice y la
+# promoción de results/data/ los hace el pipeline al terminar.
 bash run_pipeline_v2.sh
 
 # Prueba rápida aislada (2 variantes, outdir results/smoke, sin tocar results/data)
