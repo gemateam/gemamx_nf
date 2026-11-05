@@ -180,7 +180,8 @@ workflow {
         ALIGN_WT_MUT.out.rmsd_json.collect(),
         ch_vina_files,
         ch_complex_files,
-        []
+        [],
+        workflow.runName
     )
 
     // ── PUBLISH ───────────────────────────────────────────────────────────────
@@ -221,12 +222,44 @@ workflow {
      */
     workflow.onComplete = {
         if (workflow.stubRun) {
-            log.info 'stub-run: no se suben reportes a MLflow'
+            log.info 'stub-run: no se promueve el contrato ni se suben reportes'
         } else {
+            def outDir  = new File(params.outdir.toString()).absolutePath
+            def infoDir = new File(outDir, 'pipeline_info')
+            infoDir.mkdirs()
+
+            // 1. Contrato vigente: conserva runs/<run> y promueve data/ con un
+            //    reemplazo atómico. Corre en el host: un proceso en contenedor
+            //    no ve las rutas del outdir.
+            if (workflow.success) {
+                try {
+                    def pc = ['bash', "${projectDir}/bin/publish_contract_hook.sh".toString(),
+                              '--outdir', outDir,
+                              '--run-name', workflow.runName,
+                              '--archive', params.publish_run_archive.toString(),
+                              '--restart-container',
+                              params.webapp_restart ? params.webapp_container.toString() : '',
+                              '--bin', "${projectDir}/bin".toString()]
+                    def pb = new ProcessBuilder(pc)
+                    pb.redirectErrorStream(true)
+                    pb.redirectOutput(ProcessBuilder.Redirect.appendTo(new File(infoDir, 'publish.log')))
+                    def proc = pb.start()
+                    proc.waitFor()
+                    if (proc.exitValue() == 0) {
+                        log.info "Contrato vigente actualizado en ${outDir}/data (${workflow.runName})"
+                    } else {
+                        log.error "No se pudo promover el contrato (código ${proc.exitValue()}): " +
+                                  "data/ sigue con la corrida anterior. Ver ${infoDir}/publish.log"
+                    }
+                } catch (Exception e) {
+                    log.error "No se pudo lanzar la promoción del contrato: ${e.message}"
+                }
+            } else {
+                log.warn 'La corrida falló: no se toca data/ ni se archiva la corrida'
+            }
+
+            // 2. Reportes HTML (report, timeline, dag) → run padre de MLflow.
             try {
-                def outDir  = new File(params.outdir.toString()).absolutePath
-                def infoDir = new File(outDir, 'pipeline_info')
-                infoDir.mkdirs()
                 def cmd = ['bash', "${projectDir}/bin/nf_reports_hook.sh".toString(),
                            '--outdir', outDir,
                            '--run-name', workflow.runName,

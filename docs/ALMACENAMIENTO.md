@@ -31,12 +31,14 @@ resultado.
 | `PREP_RECEPTOR` | `<receptor>.pdbqt` | `data/docking/receptors/` | — |
 | `DOCK_CENTER` | `box.json` | — | params de la caja |
 | `RUN_VINA` | `<var>_<fármaco>_out.pdbqt`, `_log.txt` | `data/docking/results/`, `data/docking/complex/` | `vina/<fármaco>` (kcal/mol) |
-| `BUILD_JSONS` | — | `structural_metrics.json`, `vina_affinities.json`, `manifest_structures.json`, `mutation_stats.json` | artefactos JSON |
-| `PUBLISH` | — | `run_manifest.json` (params, commit, checksums) y promoción a `data/` | — |
+| `BUILD_JSONS` | — | `runs/<runName>/data/`: `structural_metrics.json`, `vina_affinities.json`, `manifest_structures.json`, `mutation_stats.json` | artefactos JSON |
+| `PUBLISH` | — | `runs/<runName>/run_manifest.json` (params, commit, checksums). No toca `data/` | — |
+| `publish_contract.py` (host) | — | promoción atómica de `runs/<runName>/data` a `data/`, `runs/index.json` y copia del manifiesto | — |
 | `LOG_MLFLOW` | — | — | run padre + hijas anidadas + artefactos |
 
-`PUBLISH` es el único proceso añadido a la lista original del proyecto: no
-calcula nada, solo sella la corrida y refresca el contrato vigente (ver §4).
+`PUBLISH` es el único proceso con `publishDir`: no calcula nada, solo sella la
+corrida en `runs/<runName>/` (ver §4). El resto de las rutas de la columna
+«Publicado» llegan al contrato a través de ese árbol, no directamente a `data/`.
 
 ### Qué NO se sube a MLflow
 
@@ -61,11 +63,14 @@ results/
 │       ├── results/
 │       └── complex/
 ├── runs/
+│   ├── index.json                    # una entrada por corrida archivada
 │   └── <runName>/                    # inmutable, una por corrida
 │       ├── data/…                    # misma estructura que data/
 │       └── run_manifest.json         # params + commit + checksums + fecha
+├── run_manifest.json                 # copia del manifiesto de la corrida vigente
 └── pipeline_info/
-    └── <runName>/{report.html,trace.tsv,timeline.html,dag.html}
+    ├── <runName>/{report.html,trace.tsv,timeline.html,dag.html}
+    └── publish.log                   # salida de la promoción (acumulativa)
 ```
 
 - `<runName>` es `workflow.runName` (por defecto Nextflow genera uno del tipo
@@ -76,16 +81,39 @@ results/
 
 ## 4. Promoción a `data/` (corrida vigente)
 
-Al terminar `BUILD_JSONS`, `PUBLISH`:
+El proceso `PUBLISH` **no escribe en `data/`**: `publishDir` copia el árbol de la
+corrida a `runs/<runName>/data` (y su `run_manifest.json` a
+`runs/<runName>/`). Esa copia es inmutable: cada corrida escribe la suya y nunca
+reescribe la de otra.
 
-1. compara el contenido de `runs/<runName>/data` con `data/`;
-2. copia a `data.tmp/` y renombra a `data/` (reemplazo atómico dentro del mismo
-   filesystem), de modo que la app nunca vea un árbol a medias;
-3. escribe `runs/<runName>/run_manifest.json` con parámetros, commit de git,
-   versión de las imágenes y checksums de los seis JSON.
+La promoción la hace `bin/publish_contract.py`, lanzado desde
+`workflow.onComplete` mediante `bin/publish_contract_hook.sh`. Corre en el
+**host** (no en un contenedor, que no vería las rutas del outdir) y solo si la
+corrida terminó bien:
 
-Si `PUBLISH` falla, la corrida se marca como fallida pero **no** se toca el
-contrato vigente: la app sigue sirviendo la corrida anterior.
+1. valida que `runs/<runName>/data` tenga los seis contratos; si falta alguno
+   sale con código 2 y **no toca nada**;
+2. copia el árbol completo a `data.tmp/`;
+3. lo sustituye con dos `rename` dentro del mismo filesystem
+   (`data/` → `data.old/`, `data.tmp/` → `data/`, y borra `data.old/`), de modo
+   que la app nunca vea un árbol a medias: o el anterior completo, o el nuevo
+   completo;
+4. copia `run_manifest.json` a `<outdir>/` y a `<outdir>/data/` (la app lo lee
+   de `data/`);
+5. con `publish_run_archive = true` conserva `runs/<runName>/` y añade o
+   reemplaza su entrada en `runs/index.json`; con `false` (perfiles de humo)
+   borra `runs/<runName>/` tras promover y no toca el índice;
+6. con `webapp_restart = true` ejecuta `docker restart <webapp_container>`: el
+   `rename` deja el bind mount de nginx apuntando al inodo anterior, así que sin
+   reinicio la webapp seguiría sirviendo el contrato viejo. Si el reinicio falla
+   solo se avisa; la promoción ya está hecha.
+
+Si la promoción falla, se restaura el árbol anterior y el script sale con
+código 3: la app sigue sirviendo la corrida anterior. Una corrida `-stub-run`
+no promueve nada.
+
+`webapp_restart` está desactivado en los perfiles `smoke` y `smoke-v2-1` porque
+publican en `results/smoke*`, no en el `data/` que sirve la webapp.
 
 ## 5. Retención
 

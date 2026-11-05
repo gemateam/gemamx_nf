@@ -26,7 +26,7 @@ hacia directorios externos.
 | `merge_poses.py` | `bin/merge_pose.py` | **Necesario**: la app pide `data/docking/complex/<var>_<drug>_complex.pdb` (comprobación `HEAD`). |
 | `scan_boltz.py` | `bin/build_manifest.py` | Indexado de estructuras para `structures_mode=precomputed`; ya no reescribe rutas absolutas. |
 | — (no existía) | `bin/align_wt_mut.py` | RMSD real WT/MUT con SVD sobre CA emparejados y radio de sitio activo. |
-| — (no existía) | `bin/publish_results.py` | Archivo inmutable por corrida + promoción atómica del contrato vigente. |
+| — (no existía) | `bin/publish_contract.py` | Archivo inmutable por corrida + promoción atómica del contrato vigente desde `workflow.onComplete` (sustituye a `publish_results.py`). |
 | `prepare_docking.py` → `DRUG_CATALOG` | `assets/drug_catalog.csv` | 11 fármacos con ChEMBL ID, target, estado y SMILES canónico. **Los IDs del legado estaban cruzados** (p. ej. `CHEMBL3301610` era Abemaciclib, no Alpelisib); el catálogo se reconstruyó y verificó 11/11 contra la API de ChEMBL (ID + `pref_name` + SMILES). |
 | `v2/scripts/gemamx/docking.py` | — (solo referencia) | Se descarta la lógica (caja en `0,0,0`, `prepare_receptor` inexistente, MLflow dentro del job). |
 

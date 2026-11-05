@@ -2,12 +2,14 @@ process BUILD_JSONS {
     tag "contract_jsons"
     container "${params.image_cpu}"
 
-    // publishDir copia el árbol data/ al outdir del host directamente.
-    // Nextflow ejecuta el copy desde el orquestador (fuera del contenedor),
-    // por lo que accede al filesystem del host sin restricciones.
+    // El árbol de la corrida se publica en runs/<runName>/data, nunca en data/:
+    // cada corrida escribe su propio directorio y no reescribe el de otra. La
+    // promoción a data/ (reemplazo atómico) y el índice los hace
+    // bin/publish_contract.py desde workflow.onComplete, porque es el único
+    // sitio con acceso al filesystem del host fuera de los contenedores.
     // En -stub-run no se publica nada: los JSON son placeholders ([]/{} y
-    // estructuras vacías) y sobrescribirían el contrato vigente de results/data.
-    publishDir "${params.outdir}", mode: 'copy', overwrite: true,
+    // estructuras vacías).
+    publishDir "${params.outdir}/runs/${workflow.runName}", mode: 'copy', overwrite: true,
                enabled: !workflow.stubRun, saveAs: { fn ->
         // stage/data/foo.json → data/foo.json
         fn.startsWith("stage/") ? fn.substring("stage/".length()) : fn
@@ -23,6 +25,7 @@ process BUILD_JSONS {
     path vina_files,     stageAs: "vina/*"
     path complex_files,  stageAs: "complex/*"
     path clinical_files, stageAs: "clinical/*"
+    val  run_name
 
     output:
     // Emitir los JSON del contrato como archivos individuales (no el directorio)
@@ -80,12 +83,10 @@ process PUBLISH {
     tag "${run_name}"
     container "${params.image_cpu}"
 
-    // Publica run_manifest.json tanto en la raíz del outdir como en data/
-    // para que la webapp lo encuentre en data/run_manifest.json.
+    // run_manifest.json vive con la corrida. Las copias a la raíz del outdir y a
+    // data/ las escribe bin/publish_contract.py al promover el contrato.
     // Igual que BUILD_JSONS: un -stub-run no debe tocar el contrato vigente.
-    publishDir "${params.outdir}",        mode: 'copy', overwrite: true,
-               pattern: "run_manifest.json", enabled: !workflow.stubRun
-    publishDir "${params.outdir}/data",   mode: 'copy', overwrite: true,
+    publishDir "${params.outdir}/runs/${workflow.runName}", mode: 'copy', overwrite: true,
                pattern: "run_manifest.json", enabled: !workflow.stubRun
 
     input:
