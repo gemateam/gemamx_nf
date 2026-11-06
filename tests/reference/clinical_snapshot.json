@@ -1,0 +1,51 @@
+[
+    {"studyId": "brca_tcga", "patientId": "TCGA-A1-A0SI", "clinicalAttributeId": "RACE", "value": "WHITE"},
+    {"studyId": "brca_tcga", "patientId": "TCGA-A1-A0SI", "clinicalAttributeId": "ETHNICITY", "value": "NOT HISPANIC OR LATINO"},
+    {"studyId": "brca_tcga", "patientId": "TCGA-A1-A0SI", "clinicalAttributeId": "AGE", "value": "54"},
+
+    {"studyId": "brca_tcga", "patientId": "TCGA-A2-A1FZ", "clinicalAttributeId": "RACE", "value": "WHITE"},
+    {"studyId": "brca_tcga", "patientId": "TCGA-A2-A1FZ", "clinicalAttributeId": "ETHNICITY", "value": "HISPANIC OR LATINO"},
+    {"studyId": "brca_tcga", "patientId": "TCGA-A2-A1FZ", "clinicalAttributeId": "AGE", "value": "41"},
+
+    {"studyId": "brca_tcga", "patientId": "TCGA-A2-A25C", "clinicalAttributeId": "RACE", "value": "BLACK OR AFRICAN AMERICAN"},
+    {"studyId": "brca_tcga", "patientId": "TCGA-A2-A25C", "clinicalAttributeId": "ETHNICITY", "value": "NOT HISPANIC OR LATINO"},
+    {"studyId": "brca_tcga", "patientId": "TCGA-A2-A25C", "clinicalAttributeId": "AGE", "value": "63"},
+
+    {"studyId": "brca_tcga", "patientId": "TCGA-A2-A3KC", "clinicalAttributeId": "RACE", "value": "ASIAN"},
+    {"studyId": "brca_tcga", "patientId": "TCGA-A2-A3KC", "clinicalAttributeId": "AGE", "value": "47"},
+
+    {"studyId": "brca_tcga", "patientId": "TCGA-A1-A0SN", "clinicalAttributeId": "RACE", "value": "WHITE"},
+    {"studyId": "brca_tcga", "patientId": "TCGA-A1-A0SN", "clinicalAttributeId": "ETHNICITY", "value": "NOT HISPANIC OR LATINO"},
+    {"studyId": "brca_tcga", "patientId": "TCGA-A1-A0SN", "clinicalAttributeId": "AGE", "value": "70"},
+
+    {"studyId": "brca_tcga", "patientId": "TCGA-A1-A0SQ", "clinicalAttributeId": "RACE", "value": "WHITE"},
+    {"studyId": "brca_tcga", "patientId": "TCGA-A1-A0SQ", "clinicalAttributeId": "ETHNICITY", "value": "Hispanic Or Latino"},
+    {"studyId": "brca_tcga", "patientId": "TCGA-A1-A0SQ", "clinicalAttributeId": "AGE", "value": "38"},
+
+    {"studyId": "brca_tcga", "patientId": "TCGA-A2-A0CK", "clinicalAttributeId": "RACE", "value": "WHITE"},
+    {"studyId": "brca_tcga", "patientId": "TCGA-A2-A0CK", "clinicalAttributeId": "ETHNICITY", "value": "NOT HISPANIC OR LATINO"},
+
+    {"studyId": "brca_tcga", "patientId": "TCGA-A2-A0CO", "clinicalAttributeId": "RACE", "value": "BLACK OR AFRICAN AMERICAN"},
+    {"studyId": "brca_tcga", "patientId": "TCGA-A2-A0CO", "clinicalAttributeId": "ETHNICITY", "value": "NOT HISPANIC OR LATINO"},
+    {"studyId": "brca_tcga", "patientId": "TCGA-A2-A0CO", "clinicalAttributeId": "AGE", "value": "55"},
+
+    {"studyId": "brca_tcga", "patientId": "TCGA-A2-A0CR", "clinicalAttributeId": "RACE", "value": "WHITE"},
+    {"studyId": "brca_tcga", "patientId": "TCGA-A2-A0CR", "clinicalAttributeId": "ETHNICITY", "value": "HISPANIC OR LATINO"},
+    {"studyId": "brca_tcga", "patientId": "TCGA-A2-A0CR", "clinicalAttributeId": "AGE", "value": "44"},
+
+    {"studyId": "brca_tcga", "patientId": "TCGA-A2-A0EP", "clinicalAttributeId": "RACE", "value": "WHITE"},
+    {"studyId": "brca_tcga", "patientId": "TCGA-A2-A0EP", "clinicalAttributeId": "ETHNICITY", "value": "NOT HISPANIC OR LATINO"},
+    {"studyId": "brca_tcga", "patientId": "TCGA-A2-A0EP", "clinicalAttributeId": "AGE", "value": "61"},
+
+    {"studyId": "brca_tcga", "patientId": "TCGA-A2-A1FV", "clinicalAttributeId": "RACE", "value": "ASIAN"},
+    {"studyId": "brca_tcga", "patientId": "TCGA-A2-A1FV", "clinicalAttributeId": "ETHNICITY", "value": "NOT HISPANIC OR LATINO"},
+    {"studyId": "brca_tcga", "patientId": "TCGA-A2-A1FV", "clinicalAttributeId": "AGE", "value": "49"},
+
+    {"studyId": "brca_tcga", "patientId": "TCGA-A2-A1FW", "clinicalAttributeId": "RACE", "value": "WHITE"},
+    {"studyId": "brca_tcga", "patientId": "TCGA-A2-A1FW", "clinicalAttributeId": "ETHNICITY", "value": "NOT HISPANIC OR LATINO"},
+    {"studyId": "brca_tcga", "patientId": "TCGA-A2-A1FW", "clinicalAttributeId": "AGE", "value": "58"},
+
+    {"studyId": "brca_tcga", "patientId": "TCGA-EXTRA", "sampleId": "TCGA-EXTRA-01", "clinicalAttributeId": "RACE", "value": "WHITE"},
+    {"studyId": "brca_tcga", "patientId": "TCGA-EXTRA", "sampleId": "TCGA-EXTRA-01", "clinicalAttributeId": "ETHNICITY", "value": "NA"},
+    {"studyId": "brca_tcga", "patientId": "TCGA-EXTRA", "sampleId": "TCGA-EXTRA-01", "clinicalAttributeId": "AGE", "value": "50"}
+]

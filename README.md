@@ -69,7 +69,7 @@ El sistema implementa una arquitectura desacoplada en cuatro capas principales:
 |---|---|---|
 | **Cohorte** | TCGA-BRCA (Internacional) | Romero-Córdoba 2021 (FUCAM · México) |
 | **Insumo Genómico** | API NCI GDC / MAF preprocesado | WES somático curado (MOESM8 / MOESM9) |
-| **Metadatos Clínicos** | Parámetros estándar TCGA | IHC, PAM50, rangos de edad, WES (MOESM4) |
+| **Metadatos Clínicos** | RACE/ETHNICITY/AGE autorreportados (opcional) | IHC, PAM50, rangos de edad, WES (MOESM4) |
 | **Priorización de Variantes** | Frecuencia de cohorte + ClinVar/ACMG | Frecuencia en mujeres mexicanas + Hotspots |
 | **Modelado 3D** | Boltz-1 / AlphaFold / ESMFold | Boltz-1 / AlphaFold / PDB precomputados |
 | **Docking Molecular** | AutoDock Vina 1.2.7 (11 fármacos) | AutoDock Vina 1.2.7 (11 fármacos curados) |
@@ -293,6 +293,34 @@ nextflow run main.nf -resume -profile docker
 > Sin `--fasta_dir`, `FETCH_FASTA_WT` puede fallar con `SSLZeroReturnError` si UniProt cierra
 > la conexión.
 
+### Ingesta clínica opcional (V1)
+
+`clinical_ingest` añade `clinical_metadata.json` (una fila por muestra) y
+`variant_clinical_summary.json` (agregados variante × etnia/raza) al contrato.
+Por defecto está **desactivada**.
+
+```bash
+# Online: RACE, ETHNICITY y AGE desde la API de cBioPortal
+nextflow run main.nf -profile docker \
+  --clinical_ingest true \
+  --clinical_attributes RACE,ETHNICITY,AGE
+
+# Offline y reproducible: mismo formato de la API, sin red
+nextflow run main.nf -profile docker \
+  --clinical_ingest true \
+  --clinical_json tests/reference/clinical_snapshot.json
+```
+
+- Los atributos se piden a nivel **paciente** y se cruzan por `sampleId`; la
+  cohorte clínica son las muestras del sample list `_sequenced`.
+- `RACE` y `ETHNICITY` son **autorreportados**: no son ancestría genética ni
+  país de origen. El contrato lo declara en `clinical_data_note`.
+- Los valores ausentes se normalizan a `Sin dato`. Las celdas con
+  `n < clinical_small_cell` (5 por defecto) se listan en `small_cells`; los
+  conteos no se eliminan, solo se marcan.
+- El perfil `test` usa `tests/reference/clinical_snapshot.json`, así que la
+  validación offline cubre INGEST y BUILD_JSONS.
+
 ### Pipeline V2 (Romero-Córdoba 2021 HM)
 
 Ejecuta el flujo para la cohorte de pacientes mexicanas con integración clínica, utilizando los insumos oficiales del estudio (*Nature Comms 2021*) incluidos en `tests/reference/romero_v2/`.
@@ -410,6 +438,19 @@ services:
 ## 8. WebApp Interactiva (6 Vistas Integradas)
 
 La WebApp está disponible en **`http://localhost:8080`**. Al cambiar de corrida en el selector superior (`#sel-run`), la aplicación conmuta reactivamente todas las vistas y actualiza los títulos y métricas en función del pipeline activo (TCGA-BRCA o Romero HM):
+
+### Selector de corridas
+
+- El selector consulta en vivo los runs padre de `GEMAMX-V1-NF` y
+  `GEMAMX-V2-ROMERO` a través del proxy `/mlflow-api/` de Nginx. Se actualiza al
+  volver a la pestaña y cada 60 segundos; si MLflow no responde, usa
+  `results/runs/index.json` como respaldo.
+- La primera opción carga el contrato vigente (`results/data/`). El historial
+  solo muestra como seleccionables las corridas con artefactos web archivados
+  en `results/runs/<run_name>/data/`; las corridas de MLflow sin esos datos no
+  se ofrecen en el selector.
+- Las fechas se muestran en la zona horaria local del navegador. El manifiesto
+  archivado se sirve desde `results/runs/<run_name>/run_manifest.json`.
 
 1. **Pipeline Status (Vista Principal)**: Trazabilidad completa del flujo Nextflow (M1-M5), resumen de parámetros, enlace directo a la corrida en [MLflow](https://mlflow.org/) local (`http://localhost:5000`) y **visor modal interactivo con el código fuente real ejecutado** en cada etapa.
 2. **Exploración de Datasets**: Tabla dinámica y filtrable de mutaciones somáticas (frecuencias, porcentajes de cohorte, clasificaciones ACMG/Hotspot y botones interactivos para inspeccionar estructuras WT y MUT). La columna **PROTEÍNA** muestra el nombre funcional del gen y el botón **Selección** abre una ficha en español con función, regulación, dominios y relevancia clínica; incluye la tabla de **inhibidores con afinidades WT/MUT, Δ y gráfica comparativa**, además de un **visor 3D grande** con la proteína coloreada N→C, el residuo mutado resaltado y el acoplamiento de cada fármaco (pose de AutoDock Vina). Si la corrida no trae estructura para el gen (p. ej. ERBB4), la ficha usa el modelo WT de AlphaFold DB de `structures/external/` y lo indica en el visor. Sincronizada dinámicamente con los insumos del pipeline seleccionado.

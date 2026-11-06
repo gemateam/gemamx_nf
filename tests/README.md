@@ -126,3 +126,22 @@ Sin navegador ni jsdom: `webapp/js/variant-filter.js` no toca el DOM. Comprueba:
 
 El interruptor `#exp-only-coding` está en la barra de filtros de la vista
 Exploración y el contador `MOSTRANDO: x / y` usa el denominador del ámbito activo.
+
+## 6. Ingesta clínica V1 (`clinical_ingest`)
+
+```bash
+python3 tests/test_clinical_ingest.py
+```
+
+Sin Docker ni red. Usa `tests/reference/mutations_snapshot.json` y
+`tests/reference/clinical_snapshot.json` y comprueba:
+
+- la normalización de `RACE`/`ETHNICITY` (mayúsculas, espacios, `NA`) y de `AGE`;
+- el cruce paciente → muestra y los atributos de nivel muestra;
+- `clinical_metadata.json`: una fila por muestra, `missing_attributes` explícito
+  y `mutation_wes = Yes` en la cohorte secuenciada;
+- `variant_clinical_summary.json`: `sample_count` cuenta muestras únicas (no
+  mutaciones), distribuciones con `Sin dato`, resumen de edad y `small_cells`
+  para las celdas con `n < clinical_small_cell`;
+- que sin los flags `--clinical`/`--clinical-json` no se escriban los dos JSON
+  clínicos.

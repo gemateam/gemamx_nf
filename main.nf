@@ -29,11 +29,17 @@ workflow {
         ? Channel.fromPath(params.mutations_json, checkIfExists: true)
         : Channel.value([])
 
+    // 2b. Snapshot clínico (opcional). Con clinical_ingest y sin snapshot, INGEST
+    // descarga RACE/ETHNICITY/AGE de cBioPortal; con clinical_json no hay red.
+    def ch_clinical_input = params.clinical_json
+        ? Channel.fromPath(params.clinical_json, checkIfExists: true)
+        : Channel.value([])
+
     // 3. Catálogo de fármacos
     def drug_catalog_file = file(params.drug_catalog, checkIfExists: true)
 
     // ── INGEST ────────────────────────────────────────────────────────────────
-    INGEST(ch_mutations_input)
+    INGEST(ch_mutations_input, ch_clinical_input)
 
     // Parsear variantes → [gene, protein_change]
     def ch_variants = INGEST.out.top_variants
@@ -171,6 +177,14 @@ workflow {
 
     def ch_complex_files = RUN_VINA.out.vina_complex_pdb.collect()
 
+    // Clínica opcional (RACE/ETHNICITY/AGE). Si clinical_ingest está apagado,
+    // las salidas opcionales de INGEST no existen y la lista queda vacía, que es
+    // el mismo valor que recibía BUILD_JSONS antes de este cambio.
+    def ch_clinical_files = INGEST.out.clinical_metadata
+        .mix(INGEST.out.clinical_summary)
+        .collect()
+        .ifEmpty([])
+
     BUILD_JSONS(
         INGEST.out.top_variants,
         INGEST.out.raw_mutations,
@@ -180,7 +194,7 @@ workflow {
         ALIGN_WT_MUT.out.rmsd_json.collect(),
         ch_vina_files,
         ch_complex_files,
-        [],
+        ch_clinical_files,
         workflow.runName
     )
 

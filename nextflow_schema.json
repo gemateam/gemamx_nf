@@ -39,6 +39,31 @@
           "minimum": 1,
           "maximum": 500,
           "description": "Número máximo de variantes priorizadas a procesar."
+        },
+        "clinical_ingest": {
+          "type": "boolean",
+          "default": false,
+          "description": "Ingerir datos clínicos de cBioPortal (RACE, ETHNICITY, AGE).",
+          "help_text": "RACE y ETHNICITY son autorreportados por el paciente: no son ancestría genética. Añade clinical_metadata.json y variant_clinical_summary.json al contrato."
+        },
+        "clinical_json": {
+          "type": "string",
+          "description": "Snapshot local de clinical data (JSON). Si se indica, INGEST no consulta cBioPortal y clinical_ingest queda implícito.",
+          "help_text": "Formato: lista de registros con studyId, patientId, sampleId (opcional), clinicalAttributeId y value."
+        },
+        "clinical_attributes": {
+          "type": "string",
+          "default": "RACE,ETHNICITY,AGE",
+          "pattern": "^[A-Z0-9_]+(,[A-Z0-9_]+)*$",
+          "description": "Atributos clínicos a ingerir, separados por coma.",
+          "help_text": "Se descartan los que el estudio no exponga y se avisa por consola."
+        },
+        "clinical_small_cell": {
+          "type": "integer",
+          "default": 5,
+          "minimum": 1,
+          "description": "Umbral para marcar celdas pequeñas en los agregados variante × clínica.",
+          "help_text": "Las celdas con n menor que el umbral se listan en small_cells; los conteos no se eliminan."
         }
       }
     },

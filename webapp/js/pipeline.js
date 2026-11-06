@@ -9,7 +9,7 @@
  *   docking/vina_affinities.json → qué complejos se generaron
  */
 import {
-  DATA, loadJSON, fmt, BASE_PATH,
+  DATA, loadJSON, fmt, formatLocalDate, BASE_PATH,
   registerLoader, registerReloadFlag,
 } from './app.js';
 
@@ -145,7 +145,7 @@ async function loadPipeline() {
   // ── Run badge ────────────────────────────────────────────────────────────
   const pipelineVersion = runManifest?.params?.mlflow_experiment ?? '—';
   const runName         = runManifest?.run_name ?? '—';
-  const publishedAt     = runManifest?.published_at?.slice(0, 10) ?? '';
+  const publishedAt     = formatLocalDate(runManifest?.published_at);
   setText('ps-run-chip', `${pipelineVersion} · ${runName}`);
   setText('ps-dataset-label', `Dataset: ${(runManifest?.params?.study_id ?? 'TCGA-BRCA').toUpperCase()} activo`);
 
@@ -371,7 +371,7 @@ async function loadPipeline() {
       </div>
       <div class="ps-mlflow-row">
         <span class="ps-mlflow-label">Published</span>
-        <span class="ps-mlflow-value">${runManifest?.published_at ?? '—'}</span>
+        <span class="ps-mlflow-value">${publishedAt || '—'}</span>
       </div>
       <div class="ps-mlflow-row">
         <span class="ps-mlflow-label">Images</span>

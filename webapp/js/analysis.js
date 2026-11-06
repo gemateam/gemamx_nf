@@ -15,6 +15,103 @@ function setText(id, val) {
   if (el) el.textContent = val ?? '—';
 }
 
+// ── Etiquetas legibles para las categorías autorreportadas (TCGA) ──────────
+const ETHNICITY_LABELS = {
+  'HISPANIC OR LATINO': 'Hispano/Latino',
+  'NOT HISPANIC OR LATINO': 'No hispano/Latino',
+  'SIN DATO': 'Sin dato',
+};
+const RACE_LABELS = {
+  'WHITE': 'Blanca',
+  'BLACK OR AFRICAN AMERICAN': 'Negra/Afroamericana',
+  'ASIAN': 'Asiática',
+  'AMERICAN INDIAN OR ALASKA NATIVE': 'Indígena americana',
+  'NATIVE HAWAIIAN OR OTHER PACIFIC ISLANDER': 'Isleña del Pacífico',
+  'OTHER': 'Otra',
+  'SIN DATO': 'Sin dato',
+};
+
+function esc(value) {
+  return String(value ?? '')
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+}
+
+function hasField(rows, field) {
+  return (rows ?? []).some(row => Object.prototype.hasOwnProperty.call(row, field));
+}
+
+function humanLabel(kind, raw) {
+  const key = String(raw ?? 'Sin dato').trim();
+  const dict = kind === 'ethnicity' ? ETHNICITY_LABELS : RACE_LABELS;
+  return dict[key.toUpperCase()] ?? key;
+}
+
+function distribution(rows, field) {
+  const counts = new Map();
+  (rows ?? []).forEach(row => {
+    const raw = row?.[field];
+    const label = raw == null || String(raw).trim() === '' ? 'Sin dato' : String(raw).trim();
+    counts.set(label, (counts.get(label) ?? 0) + 1);
+  });
+  return [...counts.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
+}
+
+function pct(n, total) {
+  return total ? `${((n / total) * 100).toFixed(1)}%` : '—';
+}
+
+// Celda con la distribución completa de una variante; las celdas pequeñas se
+// marcan con * y en ámbar, sin eliminar el conteo.
+function distributionCell(dist, kind, row) {
+  if (!dist || !Object.keys(dist).length) return '—';
+  const threshold = row.small_cell_threshold ?? 5;
+  const items = Object.entries(dist)
+    .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
+    .map(([label, count]) => {
+      const dimension = kind === 'ethnicity' ? 'ethnicity' : 'race';
+      const small = (row.small_cells ?? []).includes(`${dimension}:${label}`) || count < threshold;
+      const mark = small ? '*' : '';
+      return `<span class="dist-item${small ? ' dist-item--small' : ''}"
+          title="${esc(label)}: ${count} muestras${small ? ` (n < ${threshold})` : ''}">${esc(humanLabel(kind, label))} <span class="dist-n">${count}${mark}</span></span>`;
+    });
+  return `<div class="dist-cell">${items.join('')}</div>`;
+}
+
+// Barras horizontales de una distribución categórica; las celdas con n bajo
+// umbral se pintan en gris y con asterisco, sin eliminar el conteo.
+function renderCategoryChart(elementId, entries, kind, threshold) {
+  const el = document.getElementById(elementId);
+  if (!el) return;
+  if (!entries.length) {
+    el.innerHTML = '<p class="no-data">Sin datos.</p>';
+    return;
+  }
+  const total = entries.reduce((sum, [, value]) => sum + value, 0);
+  const ordered = [...entries].reverse(); // mayor arriba en barras horizontales
+  const values = ordered.map(([, value]) => value);
+  Plotly.newPlot(elementId, [{
+    type: 'bar',
+    orientation: 'h',
+    x: values,
+    y: ordered.map(([raw]) => humanLabel(kind, raw)),
+    marker: { color: values.map(value => value < threshold ? '#64748b' : '#14b8a6') },
+    text: values.map(value => `${value} (${((value / total) * 100).toFixed(1)}%)` +
+      (value < threshold ? ' *' : '')),
+    textposition: 'outside',
+    textfont: { color: '#94a3b8', size: 11 },
+    hovertemplate: '<b>%{y}</b><br>%{x:,} muestras<extra></extra>',
+    cliponaxis: false,
+  }], {
+    ...PLOTLY_LAYOUT,
+    height: 250,
+    margin: { l: 155, r: 75, t: 15, b: 40 },
+    xaxis: { title: 'Muestras', color: '#94a3b8', gridcolor: '#334155' },
+    yaxis: { color: '#94a3b8', tickfont: { size: 11 } },
+    showlegend: false,
+  }, { responsive: true, displayModeBar: false });
+}
+
 async function loadAnalysis() {
   if (state.loaded) return;
   state.loaded = true;
@@ -114,14 +211,34 @@ async function loadAnalysis() {
   // ── MÓDULO CLÍNICO INTEGRADO (si la corrida tiene datos clínicos) ────────
   const clinicalKpiGrid = document.getElementById('clinical-kpi-grid');
   const clinicalSection = document.getElementById('clinical-integrated-section');
+  const demographicsGrid = document.getElementById('clinical-demographics-grid');
 
   const hasClinical = Array.isArray(clinical) && clinical.length > 0;
+
+  const toggleBlock = (el, visible) => {
+    if (el) el.style.display = visible ? 'block' : 'none';
+  };
+  const toggleColumns = (selector, visible) => {
+    document.querySelectorAll(selector).forEach(el => {
+      el.style.display = visible ? '' : 'none';
+    });
+  };
 
   if (hasClinical) {
     if (clinicalKpiGrid) clinicalKpiGrid.style.display = 'grid';
     if (clinicalSection) clinicalSection.style.display = 'block';
 
-    // KPIs
+    // Qué perfiles trae realmente esta corrida (V1 TCGA vs V2 Romero).
+    const hasIHC = clinical.some(c => c.ihc_subtype && String(c.ihc_subtype).trim());
+    const hasPAM = clinical.some(c => c.pam50 && String(c.pam50).trim());
+    const hasHistology = (variantSummary ?? []).some(v =>
+      v.highlights?.top_histology ||
+      (v.histology_distribution && Object.keys(v.histology_distribution).length));
+    const hasEthnicity = hasField(clinical, 'ethnicity');
+    const hasRace = hasField(clinical, 'race');
+    const threshold = (variantSummary ?? [])
+      .find(v => Number.isFinite(v?.small_cell_threshold))?.small_cell_threshold ?? 5;
+
     const totalSamples = clinical.length;
     const withWES = clinical.filter(c => c.mutation_wes === 'Yes').length;
     const ages = clinical.map(c => c.age).filter(a => a != null && !isNaN(a));
@@ -131,54 +248,122 @@ async function loadAnalysis() {
       (c.pam50 ?? '').toLowerCase() === 'luma'
     ).length;
 
+    const ethnicityEntries = hasEthnicity ? distribution(clinical, 'ethnicity') : [];
+    const raceEntries = hasRace ? distribution(clinical, 'race') : [];
+    const knownEthnicity = ethnicityEntries
+      .filter(([label]) => label.toUpperCase() !== 'SIN DATO')
+      .reduce((sum, [, value]) => sum + value, 0);
+    const hispanicCount = ethnicityEntries
+      .find(([label]) => label.toUpperCase() === 'HISPANIC OR LATINO')?.[1] ?? 0;
+    const hasReportedEthnicity = knownEthnicity > 0;
+    const highlightEl = document.getElementById('cl-kpi-highlight');
+
     setText('cl-kpi-samples', totalSamples);
     setText('cl-kpi-wes',     withWES);
     setText('cl-kpi-age',     `${avgAge} años`);
-    setText('cl-kpi-luma',    totalSamples ? `${((lumaCnt / totalSamples) * 100).toFixed(0)}%` : '—');
 
-    // Gráfica IHC
-    const ihcDist = {};
-    clinical.forEach(c => {
-      const k = c.ihc_subtype ?? 'Desconocido';
-      ihcDist[k] = (ihcDist[k] ?? 0) + 1;
-    });
-    const ihcSorted = Object.entries(ihcDist).sort((a, b) => b[1] - a[1]);
-    Plotly.newPlot('chart-ihc-dist', [{
-      type: 'bar',
-      x: ihcSorted.map(([k]) => k),
-      y: ihcSorted.map(([, v]) => v),
-      marker: { color: '#14b8a6' },
-      hovertemplate: '<b>%{x}</b><br>%{y} muestras<extra></extra>',
-    }], {
-      ...PLOTLY_LAYOUT, height: 280,
-      xaxis: { tickangle: -25, color: '#94a3b8' },
-      yaxis: { title: 'Muestras', color: '#94a3b8', gridcolor: '#334155' },
-    }, { responsive: true, displayModeBar: false });
+    // Cuarto KPI adaptativo: etnia autorreportada si existe; si no, Luminal A.
+    if (hasReportedEthnicity) {
+      setText('cl-kpi-highlight', pct(hispanicCount, knownEthnicity));
+      setText('cl-kpi-highlight-label', 'Hispanos/Latinos (% conocido)');
+      if (highlightEl) {
+        highlightEl.title =
+          `${hispanicCount} de ${knownEthnicity} muestras con etnia reportada; ` +
+          `${totalSamples - knownEthnicity} sin dato`;
+      }
+    } else {
+      setText('cl-kpi-highlight', pct(lumaCnt, totalSamples));
+      setText('cl-kpi-highlight-label', hasIHC || hasPAM ? 'Luminal A (%)' : 'Sin subtipo');
+      if (highlightEl) {
+        highlightEl.title = hasIHC || hasPAM
+          ? 'Muestras Luminal A / LumA sobre el total clínico'
+          : 'Esta corrida no ingiere IHC ni PAM50';
+      }
+    }
 
-    // Gráfica PAM50
-    const pamDist = {};
-    clinical.forEach(c => {
-      const k = c.pam50 ?? 'N/D';
-      pamDist[k] = (pamDist[k] ?? 0) + 1;
-    });
-    const pamSorted = Object.entries(pamDist).sort((a, b) => b[1] - a[1]);
-    Plotly.newPlot('chart-pam50-dist', [{
-      type: 'pie',
-      labels: pamSorted.map(([k]) => k),
-      values: pamSorted.map(([, v]) => v),
-      hole: 0.42,
-      textinfo: 'label+percent',
-      hovertemplate: '<b>%{label}</b><br>%{value} muestras<extra></extra>',
-      marker: { colors: ['#14b8a6','#60a5fa','#f87171','#fbbf24','#a78bfa','#94a3b8'] },
-    }], {
-      ...PLOTLY_LAYOUT, height: 280, showlegend: false,
-    }, { responsive: true, displayModeBar: false });
+    // ── Etnia y raza autorreportadas (V1 TCGA) ───────────────────────────
+    const showDemographics = hasEthnicity || hasRace;
+    if (demographicsGrid) demographicsGrid.style.display = showDemographics ? 'grid' : 'none';
+    if (hasEthnicity) renderCategoryChart('chart-ethnicity-dist', ethnicityEntries,
+                                          'ethnicity', threshold);
+    if (hasRace) renderCategoryChart('chart-race-dist', raceEntries, 'race', threshold);
 
-    // Datasets GEO
+    // ── Procedencia y alcance ────────────────────────────────────────────
+    const summary = variantSummary ?? [];
+    const note = summary.find(v => v?.clinical_data_note)?.clinical_data_note;
+    const source = summary.find(v => v?.clinical_source)?.clinical_source ||
+                   clinical.find(c => c.clinical_source)?.clinical_source;
+    const provenanceCard = document.getElementById('clinical-provenance-card');
+    const smallCellNote = document.getElementById('clinical-small-cell-note');
+    if (note || source) {
+      toggleBlock(provenanceCard, true);
+      setText('clinical-data-note', note ?? 'Datos clínicos de la cohorte activa.');
+      setText('clinical-source-label', source ? `Fuente: ${source}` : '');
+      if (smallCellNote) {
+        smallCellNote.style.display = '';
+        smallCellNote.textContent =
+          `En la tabla por variante, las categorías con n < ${threshold} se marcan ` +
+          'con * y en ámbar. Los conteos no se eliminan; solo se señala que la celda es pequeña.';
+      }
+    } else {
+      toggleBlock(provenanceCard, false);
+    }
+
+    // ── Gráficas de subtipo: solo si la corrida trae IHC / PAM50 ─────────
+    const subtypeGrid = document.getElementById('clinical-subtype-grid');
+    const ihcCard = document.getElementById('card-ihc-dist');
+    const pamCard = document.getElementById('card-pam50-dist');
+    toggleBlock(ihcCard, hasIHC);
+    toggleBlock(pamCard, hasPAM);
+    toggleBlock(subtypeGrid, hasIHC || hasPAM);
+
+    if (hasIHC) {
+      const ihcDist = {};
+      clinical.forEach(c => {
+        const k = c.ihc_subtype ?? 'Desconocido';
+        ihcDist[k] = (ihcDist[k] ?? 0) + 1;
+      });
+      const ihcSorted = Object.entries(ihcDist).sort((a, b) => b[1] - a[1]);
+      Plotly.newPlot('chart-ihc-dist', [{
+        type: 'bar',
+        x: ihcSorted.map(([k]) => k),
+        y: ihcSorted.map(([, v]) => v),
+        marker: { color: '#14b8a6' },
+        hovertemplate: '<b>%{x}</b><br>%{y} muestras<extra></extra>',
+      }], {
+        ...PLOTLY_LAYOUT, height: 280,
+        xaxis: { tickangle: -25, color: '#94a3b8' },
+        yaxis: { title: 'Muestras', color: '#94a3b8', gridcolor: '#334155' },
+      }, { responsive: true, displayModeBar: false });
+    }
+
+    if (hasPAM) {
+      const pamDist = {};
+      clinical.forEach(c => {
+        const k = c.pam50 ?? 'N/D';
+        pamDist[k] = (pamDist[k] ?? 0) + 1;
+      });
+      const pamSorted = Object.entries(pamDist).sort((a, b) => b[1] - a[1]);
+      Plotly.newPlot('chart-pam50-dist', [{
+        type: 'pie',
+        labels: pamSorted.map(([k]) => k),
+        values: pamSorted.map(([, v]) => v),
+        hole: 0.42,
+        textinfo: 'label+percent',
+        hovertemplate: '<b>%{label}</b><br>%{value} muestras<extra></extra>',
+        marker: { colors: ['#14b8a6','#60a5fa','#f87171','#fbbf24','#a78bfa','#94a3b8'] },
+      }], {
+        ...PLOTLY_LAYOUT, height: 280, showlegend: false,
+      }, { responsive: true, displayModeBar: false });
+    }
+
+    // ── Datasets GEO (solo V2) ───────────────────────────────────────────
     const geoGrid = document.getElementById('geo-datasets-grid');
-    if (geoGrid && geoSummary?.datasets) {
-      const datasets = Object.values(geoSummary.datasets);
-      geoGrid.innerHTML = `<div class="geo-grid">` + datasets.map(ds => `
+    const geoCard = document.getElementById('geo-datasets-card');
+    const geoDatasets = geoSummary?.datasets ? Object.values(geoSummary.datasets) : [];
+    toggleBlock(geoCard, geoDatasets.length > 0);
+    if (geoGrid && geoDatasets.length) {
+      geoGrid.innerHTML = `<div class="geo-grid">` + geoDatasets.map(ds => `
         <div class="geo-card">
           <div class="geo-id">
             <a href="https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=${ds.dataset}"
@@ -202,7 +387,16 @@ async function loadAnalysis() {
         </div>`).join('') + `</div>`;
     }
 
-    // Tabla clínica
+    // ── Tabla clínica por variante ───────────────────────────────────────
+    setText('clinical-table-title', showDemographics
+      ? 'Perfil clínico autorreportado por variante (TCGA-BRCA)'
+      : 'Perfil Clínico por Variante (Romero-Córdoba HM)');
+    toggleColumns('.col-ethnicity', hasEthnicity);
+    toggleColumns('.col-race', hasRace);
+    toggleColumns('.col-ihc', hasIHC);
+    toggleColumns('.col-pam50', hasPAM);
+    toggleColumns('.col-histology', hasHistology);
+
     const tbody = document.getElementById('tbody-clinical');
     if (tbody) {
       const topMap = new Map((topVariants ?? []).map(v => [`${v.hugo_symbol}_${v.protein_change}`, v]));
@@ -212,32 +406,50 @@ async function loadAnalysis() {
       }));
 
       const renderRows = rows => {
-        tbody.innerHTML = rows.map(v => {
+        tbody.innerHTML = rows.length ? rows.map(v => {
           const badge = v.classification
             ? `<span class="badge ${badgeClass(v.classification)}">${v.classification}</span>`
             : '—';
           const ageStr = v.age?.mean != null
-            ? `${v.age.mean.toFixed(0)} (${v.age.min}–${v.age.max})`
+            ? `${Number(v.age.mean).toFixed(0)} (${v.age.min}–${v.age.max})`
             : '—';
+          const ethnicityCell = hasEthnicity
+            ? `<td class="col-ethnicity">${distributionCell(v.ethnicity_distribution, 'ethnicity', v)}</td>`
+            : '';
+          const raceCell = hasRace
+            ? `<td class="col-race">${distributionCell(v.race_distribution, 'race', v)}</td>`
+            : '';
+          const ihcCell = hasIHC
+            ? `<td class="col-ihc">${v.highlights?.top_ihc_subtype ?? '—'}</td>` : '';
+          const pamCell = hasPAM
+            ? `<td class="col-pam50">${v.highlights?.top_pam50 ?? '—'}</td>` : '';
+          const histologyCell = hasHistology
+            ? `<td class="col-histology">${v.highlights?.top_histology ??
+                (v.histology_distribution ? Object.keys(v.histology_distribution)[0] ?? '—' : '—')}</td>`
+            : '';
           return `
             <tr>
               <td><strong>${v.hugo_symbol}</strong> <span style="font-family:monospace;font-size:.82rem">${v.protein_change}</span></td>
               <td>${v.sample_count ?? '—'}</td>
               <td>${v.matched_clinical_count ?? '—'}</td>
               <td>${ageStr}</td>
-              <td>${v.highlights?.top_ihc_subtype ?? '—'}</td>
-              <td>${v.highlights?.top_pam50 ?? '—'}</td>
-              <td>${v.highlights?.top_histology ?? (v.histology_distribution ? Object.keys(v.histology_distribution)[0] ?? '—' : '—')}</td>
+              ${ethnicityCell}
+              ${raceCell}
+              ${ihcCell}
+              ${pamCell}
+              ${histologyCell}
               <td>${badge}</td>
             </tr>`;
-        }).join('');
+        }).join('') : `<tr><td colspan="10" class="no-data">Sin variantes para mostrar.</td></tr>`;
       };
 
       renderRows(allRows);
 
+      // oninput reemplaza el listener para que el filtro no conserve el
+      // conjunto de filas de la corrida anterior al cambiar de run.
       const filterEl = document.getElementById('filter-clinical-variant');
-      if (filterEl && !filterEl.dataset.listenerAttached) {
-        filterEl.addEventListener('input', e => {
+      if (filterEl) {
+        filterEl.oninput = e => {
           const q = e.target.value.toLowerCase().trim();
           renderRows(q
             ? allRows.filter(v =>
@@ -246,14 +458,15 @@ async function loadAnalysis() {
               )
             : allRows
           );
-        });
-        filterEl.dataset.listenerAttached = 'true';
+        };
       }
     }
   } else {
-    // Si la corrida no tiene clínica (ej. V1 TCGA), ocultar sección clínica
+    // Si la corrida no tiene clínica (ej. V1 TCGA sin clinical_ingest), ocultar
+    // el módulo clínico completo.
     if (clinicalKpiGrid) clinicalKpiGrid.style.display = 'none';
     if (clinicalSection) clinicalSection.style.display = 'none';
+    if (demographicsGrid) demographicsGrid.style.display = 'none';
   }
 }
 

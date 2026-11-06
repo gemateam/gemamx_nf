@@ -1470,6 +1470,64 @@ body.exp-modal-open { overflow: hidden; }
    VISTA CLÍNICO (v2 Romero)
    ══════════════════════════════════════════════════════════ */
 
+/* ── Notas metodológicas y celdas pequeñas ────────────────── */
+.chart-note {
+  font-size: .75rem;
+  color: var(--text-muted);
+  line-height: 1.45;
+  margin: -.35rem 0 .75rem;
+}
+.clinical-note {
+  font-size: .85rem;
+  color: var(--text);
+  line-height: 1.55;
+  margin-bottom: .5rem;
+}
+.clinical-note:empty { display: none; }
+.clinical-source {
+  font-size: .74rem;
+  color: var(--text-muted);
+  font-family: ui-monospace, 'Cascadia Code', monospace;
+  word-break: break-word;
+}
+.clinical-source:empty { display: none; }
+
+.dist-cell {
+  display: flex; flex-wrap: wrap; gap: .1rem .65rem;
+  max-width: 320px; line-height: 1.35;
+}
+.dist-item { font-size: .76rem; color: var(--text); white-space: nowrap; }
+.dist-item--small { color: var(--amber); }
+.dist-n { color: var(--text-muted); font-variant-numeric: tabular-nums; }
+.dist-item--small .dist-n { color: var(--amber); }
+
+/* ── Perfil clínico dentro del reporte por variante ───────── */
+.clinical-block { margin-top: .75rem; }
+.clinical-block-label {
+  font-size: .72rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  margin-bottom: .3rem;
+}
+.clinical-chips { display: flex; flex-wrap: wrap; gap: .35rem; }
+.clinical-chip {
+  font-size: .75rem;
+  background: rgba(20,184,166,.12);
+  border: 1px solid rgba(20,184,166,.35);
+  color: var(--text);
+  border-radius: 99px;
+  padding: .15rem .6rem;
+  white-space: nowrap;
+}
+.clinical-chip .chip-n { color: var(--teal-light); font-weight: 700; }
+.clinical-chip--small {
+  background: rgba(251,191,36,.10);
+  border-color: rgba(251,191,36,.40);
+  color: var(--amber);
+}
+.clinical-chip--small .chip-n { color: var(--amber); }
+
 /* ── GEO datasets ─────────────────────────────────────────── */
 .geo-grid {
   display: grid;

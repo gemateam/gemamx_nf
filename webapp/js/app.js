@@ -27,7 +27,9 @@ export const DATA = {
   manifestStructures:   () => dataUrl('manifest_structures.json'),
   vinaAffinities:       () => dataUrl('docking/vina_affinities.json'),
   mutationStats:        () => dataUrl('mutation_stats.json'),
-  runManifest:          () => dataUrl('run_manifest.json'),
+  runManifest:          () => BASE_PATH.startsWith('runs/')
+    ? BASE_PATH.replace(/\/data$/, '/run_manifest.json')
+    : dataUrl('run_manifest.json'),
   rawMutations:         () => dataUrl('raw_mutations.json'),
   clinicalMetadata:     () => dataUrl('clinical_metadata.json'),
   variantClinicalSummary: () => dataUrl('variant_clinical_summary.json'),
@@ -87,6 +89,15 @@ export function fmt(v, decimals = 2) {
   return isNaN(n) ? '—' : n.toFixed(decimals);
 }
 
+export function formatLocalDate(value) {
+  if (!value) return '';
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return '';
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${date.getFullYear()}-${month}-${day}`;
+}
+
 // ── Colores Plotly alineados con CSS vars ─────────────────────────────────
 export const PLOTLY_LAYOUT = {
   paper_bgcolor: 'transparent',
@@ -127,49 +138,124 @@ function activateView(name) {
 const reloadFlags = {};
 export function registerReloadFlag(view, flagObj) { reloadFlags[view] = flagObj; }
 
-async function loadRunIndex() {
-  const index = await loadJSON('runs/index.json');
-  return Array.isArray(index) ? index : [];
+const MLFLOW_EXPERIMENTS = new Set(['GEMAMX-V1-NF', 'GEMAMX-V2-ROMERO']);
+let runSelectorRefreshing = false;
+
+async function fetchFreshJson(url) {
+  const response = await fetch(`${url}?_=${Date.now()}`, { cache: 'no-store' });
+  if (!response.ok) throw new Error(`HTTP ${response.status}: ${url}`);
+  return response.json();
+}
+
+async function searchMlflow(resource, body, collectionKey) {
+  const items = [];
+  let pageToken;
+  do {
+    const response = await fetch(`/mlflow-api/${resource}`, {
+      method: 'POST',
+      cache: 'no-store',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ ...body, max_results: 1000, ...(pageToken ? { page_token: pageToken } : {}) }),
+    });
+    if (!response.ok) throw new Error(`MLflow HTTP ${response.status}: ${resource}`);
+    const page = await response.json();
+    items.push(...(page[collectionKey] ?? []));
+    pageToken = page.next_page_token;
+  } while (pageToken);
+  return items;
+}
+
+async function loadMlflowRuns() {
+  const experiments = await searchMlflow('experiments/search', {}, 'experiments');
+  const relevant = experiments.filter(experiment => MLFLOW_EXPERIMENTS.has(experiment.name));
+  const runsByExperiment = await Promise.all(relevant.map(async experiment => {
+    const runs = await searchMlflow('runs/search', { experiment_ids: [experiment.experiment_id] }, 'runs');
+    return runs.flatMap(run => {
+      const tags = Object.fromEntries((run.data?.tags ?? []).map(tag => [tag.key, tag.value]));
+      if (tags['mlflow.parentRunId']) return [];
+      const timestamp = Number(run.info?.end_time || run.info?.start_time);
+      return [{
+        run_name: run.info?.run_name || tags['gemamx.run_name'],
+        published_at: Number.isFinite(timestamp) && timestamp > 0
+          ? new Date(timestamp).toISOString() : '',
+        git_commit: tags['gemamx.git_commit'] ?? '',
+        pipeline_version: experiment.name,
+        start_time: Number(run.info?.start_time) || 0,
+      }];
+    });
+  }));
+  return runsByExperiment.flat().filter(run => run.run_name)
+    .sort((a, b) => b.start_time - a.start_time);
 }
 
 async function populateRunSelector() {
   const sel = document.getElementById('sel-run');
-  if (!sel) return;
+  if (!sel || runSelectorRefreshing) return;
+  runSelectorRefreshing = true;
+  const selectedValue = sel.value || 'data';
 
-  const runs = await loadRunIndex();
+  try {
+    const [index, manifest] = await Promise.all([
+      fetchFreshJson('runs/index.json').catch(() => []),
+      fetchFreshJson('data/run_manifest.json').catch(() => null),
+    ]);
+    const archivedRuns = Array.isArray(index) ? index : [];
+    const archivesByName = new Map(archivedRuns.map(run => [run.run_name, run]));
 
-  // Primera opción = contrato vigente (data/)
-  const liveOpt = document.createElement('option');
-  liveOpt.value = 'data';
-  liveOpt.textContent = '⬤ Corrida vigente';
-  liveOpt.selected = true;
-  sel.innerHTML = '';
-  sel.appendChild(liveOpt);
+    let runs;
+    try {
+      const mlflowRuns = await loadMlflowRuns();
+      const seen = new Set();
+      runs = mlflowRuns.map(run => {
+        seen.add(run.run_name);
+        const archived = archivesByName.get(run.run_name);
+        return {
+          ...archived,
+          ...run,
+          path: archived?.path ?? (manifest?.run_name === run.run_name ? 'data' : null),
+        };
+      }).filter(run => run.path);
+      runs.push(...archivedRuns.filter(run => !seen.has(run.run_name) && run.path));
+    } catch (error) {
+      console.warn('MLflow no disponible; se usa el índice local de corridas.', error);
+      runs = archivedRuns;
+    }
 
-  if (!runs.length) return;
-
-  // Agrupar por pipeline_version
-  const byVersion = {};
-  runs.forEach(r => {
-    const v = r.pipeline_version ?? 'Sin versión';
-    (byVersion[v] = byVersion[v] ?? []).push(r);
-  });
-
-  Object.entries(byVersion).forEach(([version, vRuns]) => {
-    const group = document.createElement('optgroup');
-    group.label = `📦 ${version}`;
-    vRuns.forEach(r => {
-      const opt = document.createElement('option');
-      opt.value = r.path;
-      const date = r.published_at?.slice(0, 10) ?? '';
-      const commit = r.git_commit ? ` · ${r.git_commit.slice(0, 7)}` : '';
-      opt.textContent = `${r.run_name} · ${date}${commit}`;
-      group.appendChild(opt);
+    const byVersion = {};
+    runs.forEach(run => {
+      const version = run.pipeline_version ?? 'Sin versión';
+      (byVersion[version] = byVersion[version] ?? []).push(run);
     });
-    sel.appendChild(group);
-  });
 
-  sel.addEventListener('change', () => switchRun(sel.value));
+    const liveOpt = document.createElement('option');
+    liveOpt.value = 'data';
+    liveOpt.textContent = manifest?.run_name
+      ? `⬤ Corrida vigente · ${manifest.run_name}`
+      : '⬤ Corrida vigente';
+    sel.replaceChildren(liveOpt);
+
+    Object.entries(byVersion).forEach(([version, versionRuns]) => {
+      const group = document.createElement('optgroup');
+      group.label = `📦 ${version}`;
+      versionRuns.forEach(run => {
+        const option = document.createElement('option');
+        const date = formatLocalDate(run.published_at);
+        const commit = run.git_commit ? ` · ${run.git_commit.slice(0, 7)}` : '';
+        option.value = run.path;
+        option.textContent = `${run.run_name} · ${date}${commit}`;
+        group.appendChild(option);
+      });
+      sel.appendChild(group);
+    });
+
+    sel.value = [...sel.options].some(option => option.value === selectedValue)
+      ? selectedValue : 'data';
+    sel.onchange = () => {
+      if (sel.value !== 'data') switchRun(sel.value);
+    };
+  } finally {
+    runSelectorRefreshing = false;
+  }
 }
 
 
@@ -250,7 +336,7 @@ function switchRun(path) {
     const footerEl = document.getElementById('footer-run');
     if (!footerEl) return;
     footerEl.textContent = m?.run_name
-      ? `Run: ${m.run_name}  ·  ${m.published_at?.slice(0,10) ?? ''}  ·  ${m.params?.mlflow_experiment ?? ''}`
+      ? `Run: ${m.run_name}  ·  ${formatLocalDate(m.published_at)}  ·  ${m.params?.mlflow_experiment ?? ''}`
       : '';
   });
 
@@ -272,12 +358,14 @@ document.addEventListener('DOMContentLoaded', () => {
   loadJSON(DATA.runManifest()).then(m => {
     if (m?.run_name) {
       document.getElementById('footer-run').textContent =
-        `Run: ${m.run_name}  ·  ${m.published_at?.slice(0,10) ?? ''}  ·  ${m.params?.mlflow_experiment ?? ''}`;
+        `Run: ${m.run_name}  ·  ${formatLocalDate(m.published_at)}  ·  ${m.params?.mlflow_experiment ?? ''}`;
     }
   });
 
   // Poblar selector de corridas
   populateRunSelector();
+  window.addEventListener('focus', populateRunSelector);
+  window.setInterval(populateRunSelector, 60_000);
 
   // Actualizar textos globales dinámicos de cohorte
   updateGlobalHeader();

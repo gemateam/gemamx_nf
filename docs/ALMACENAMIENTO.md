@@ -23,7 +23,7 @@ resultado.
 
 | Proceso | Intermedio (`work/`) | Publicado (`runs/<runName>/` y `data/`) | MLflow |
 |---|---|---|---|
-| `INGEST` | `raw_mutations.json`, `top_variants.json` | `data/raw_mutations.json`, `data/top_variants.json` | params + nº de variantes y muestras |
+| `INGEST` | `raw_mutations.json`, `top_variants.json` (+ `clinical_metadata.json`, `variant_clinical_summary.json` con `clinical_ingest`) | `data/raw_mutations.json`, `data/top_variants.json` (+ clínica opcional) | params + nº de variantes y muestras |
 | `FETCH_FASTA` | `<gen>_WT.fasta`, `<gen>_<cambio>.fasta` + sidecar | `data/fasta/` | — |
 | `PREDICT_STRUCTURE` | `<gen>_<cambio>.pdb` + `.json` (pLDDT, `start`, `end`, `offset`) | `data/structures/` | `plddt_mean` |
 | `ALIGN_WT_MUT` | `rmsd.json` | — | `rmsd_global`, `rmsd_active` |
@@ -57,6 +57,8 @@ results/
 │   ├── manifest_structures.json
 │   ├── raw_mutations.json
 │   ├── mutation_stats.json
+│   ├── clinical_metadata.json        # opcional (clinical_ingest)
+│   ├── variant_clinical_summary.json # opcional (clinical_ingest)
 │   ├── structures/
 │   └── docking/
 │       ├── vina_affinities.json

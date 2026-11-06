@@ -10,10 +10,11 @@ async function loadReport() {
   if (state.loaded) return;
   state.loaded = true;
 
-  const [variants, metrics, affinities] = await Promise.all([
+  const [variants, metrics, affinities, variantSummary] = await Promise.all([
     loadJSON(DATA.topVariants()),
     loadJSON(DATA.structuralMetrics()),
     loadJSON(DATA.vinaAffinities()),
+    loadJSON(DATA.variantClinicalSummary()),
   ]);
 
   if (!variants?.length) {
@@ -29,16 +30,89 @@ async function loadReport() {
     </option>`).join('');
 
   sel.addEventListener('change', () =>
-    renderReport(sel.value, variants, metrics, affinities));
-  renderReport(sel.value, variants, metrics, affinities);
+    renderReport(sel.value, variants, metrics, affinities, variantSummary));
+  renderReport(sel.value, variants, metrics, affinities, variantSummary);
 }
 
-function renderReport(variantId, variants, metrics, affinities) {
+// ── Perfil clínico agregado para la variante activa ────────────────────────
+const CLINICAL_LABELS = {
+  'HISPANIC OR LATINO': 'Hispano/Latino',
+  'NOT HISPANIC OR LATINO': 'No hispano/Latino',
+  'WHITE': 'Blanca',
+  'BLACK OR AFRICAN AMERICAN': 'Negra/Afroamericana',
+  'ASIAN': 'Asiática',
+  'AMERICAN INDIAN OR ALASKA NATIVE': 'Indígena americana',
+  'NATIVE HAWAIIAN OR OTHER PACIFIC ISLANDER': 'Isleña del Pacífico',
+  'OTHER': 'Otra',
+  'SIN DATO': 'Sin dato',
+};
+
+function clinicalLabel(raw) {
+  const key = String(raw ?? 'Sin dato').trim();
+  return CLINICAL_LABELS[key.toUpperCase()] ?? key;
+}
+
+function clinicalChips(dist, dimension, threshold, smallCells) {
+  return Object.entries(dist)
+    .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
+    .map(([label, count]) => {
+      const small = dimension
+        ? (smallCells ?? []).includes(`${dimension}:${label}`) || count < threshold
+        : false;
+      return `<span class="clinical-chip${small ? ' clinical-chip--small' : ''}"
+          title="${label}: ${count} muestras${small ? ` (n < ${threshold})` : ''}">${clinicalLabel(label)}
+          <span class="chip-n">${count}${small ? '*' : ''}</span></span>`;
+    }).join('');
+}
+
+function renderClinicalProfile(summary) {
+  if (!summary) return '';
+  const threshold = summary.small_cell_threshold ?? 5;
+  const blocks = [
+    ['Etnia autorreportada', summary.ethnicity_distribution, 'ethnicity'],
+    ['Raza autorreportada',  summary.race_distribution,     'race'],
+    ['Subtipo IHC',          summary.ihc_subtype_distribution, null],
+    ['Subtipo PAM50',        summary.pam50_distribution,    null],
+    ['Grado histológico',    summary.grade_distribution,    null],
+    ['Histología',           summary.histology_distribution, null],
+  ].filter(([, dist]) => dist && Object.keys(dist).length);
+
+  if (!blocks.length && summary.age?.mean == null) return '';
+
+  const age = summary.age;
+  return `
+    <div class="card report-section">
+      <h3>Perfil Clínico de las Portadoras</h3>
+      <div class="report-kpi-row">
+        <div class="report-kpi">
+          <div class="rk-label">Muestras con clínica</div>
+          <div class="rk-value">${summary.matched_clinical_count ?? '—'}</div>
+        </div>
+        ${age?.mean != null ? `
+        <div class="report-kpi">
+          <div class="rk-label">Edad media (rango)</div>
+          <div class="rk-value">${Number(age.mean).toFixed(1)} (${age.min}–${age.max})</div>
+        </div>` : ''}
+      </div>
+      ${blocks.map(([title, dist, dimension]) => `
+        <div class="clinical-block">
+          <div class="clinical-block-label">${title}</div>
+          <div class="clinical-chips">${clinicalChips(dist, dimension, threshold, summary.small_cells)}</div>
+        </div>`).join('')}
+      ${summary.clinical_data_note
+        ? `<p class="chart-note" style="margin-top:.75rem">${summary.clinical_data_note}</p>` : ''}
+      ${summary.clinical_source
+        ? `<p class="clinical-source">Fuente: ${summary.clinical_source}</p>` : ''}
+    </div>`;
+}
+
+function renderReport(variantId, variants, metrics, affinities, variantSummary) {
   const gene  = variantId.split('_')[0];
   const pc    = variantId.replace(`${gene}_`, '');
   const v     = variants.find(x => x.hugo_symbol === gene && x.protein_change === pc);
   const m     = metrics?.[variantId] ?? {};
   const scores= affinities?.[variantId] ?? m.vina_scores ?? {};
+  const clinical = (variantSummary ?? []).find(x => x.variant_id === variantId);
 
   const drugs = Object.entries(scores)
     .filter(([_, s]) => s !== null)
@@ -77,6 +151,8 @@ function renderReport(variantId, variants, metrics, affinities) {
         </div>
       </div>
     </div>
+
+    ${renderClinicalProfile(clinical)}
 
     <!-- ── Métricas estructurales ── -->
     <div class="card report-section">

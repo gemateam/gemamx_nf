@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>GEMA MX — Genomic Analysis of Mammary Cancer</title>
   <link rel="icon" type="image/svg+xml" href="favicon.svg" />
-  <link rel="stylesheet" href="css/style.css?v=20261103d" />
+  <link rel="stylesheet" href="css/style.css?v=20261105b" />
   <!-- PDBe Molstar JS Plugin (una sola carga; viewers en divs directos) -->
   <link rel="stylesheet" type="text/css"
     href="https://cdn.jsdelivr.net/npm/pdbe-molstar@3.2.0/build/pdbe-molstar.css" />
@@ -127,7 +127,7 @@
       <div class="kpi-card"><div class="kpi-value" id="cl-kpi-samples">—</div><div class="kpi-label">Muestras Clínicas</div></div>
       <div class="kpi-card"><div class="kpi-value" id="cl-kpi-wes">—</div><div class="kpi-label">Con WES</div></div>
       <div class="kpi-card"><div class="kpi-value" id="cl-kpi-age">—</div><div class="kpi-label">Edad Media</div></div>
-      <div class="kpi-card"><div class="kpi-value" id="cl-kpi-luma">—</div><div class="kpi-label">Luminal A (%)</div></div>
+      <div class="kpi-card"><div class="kpi-value" id="cl-kpi-highlight">—</div><div class="kpi-label" id="cl-kpi-highlight-label">Luminal A (%)</div></div>
     </div>
 
     <!-- Gráficas Mutacionales -->
@@ -147,14 +147,37 @@
       <div class="stats-grid" id="stats-cohort"></div>
     </div>
 
-    <!-- Sección Clínica integrada (se activa reactivamente en V2) -->
+    <!-- Sección Clínica integrada (se activa reactivamente si la corrida tiene clínica) -->
     <div id="clinical-integrated-section" style="display:none;margin-top:2rem;">
-      <div class="card-grid">
+
+      <!-- Distribuciones autorreportadas (V1 TCGA: RACE/ETHNICITY) -->
+      <div class="card-grid" id="clinical-demographics-grid" style="display:none;">
         <div class="card">
+          <h2>Etnia autorreportada</h2>
+          <p class="chart-note">Dato autorreportado por la paciente; no es ancestría genética ni país de origen.</p>
+          <div id="chart-ethnicity-dist"></div>
+        </div>
+        <div class="card">
+          <h2>Raza autorreportada</h2>
+          <p class="chart-note">Categorías del formulario TCGA, no agrupaciones genéticas.</p>
+          <div id="chart-race-dist"></div>
+        </div>
+      </div>
+
+      <!-- Procedencia y alcance de los datos clínicos -->
+      <div class="card full-width" id="clinical-provenance-card" style="display:none;">
+        <h2>Procedencia y alcance de los datos clínicos</h2>
+        <p class="clinical-note" id="clinical-data-note"></p>
+        <p class="clinical-source" id="clinical-source-label"></p>
+        <p class="chart-note" id="clinical-small-cell-note" style="display:none;"></p>
+      </div>
+
+      <div class="card-grid" id="clinical-subtype-grid">
+        <div class="card" id="card-ihc-dist">
           <h2>Subtipo IHC (FUCAM)</h2>
           <div id="chart-ihc-dist"></div>
         </div>
-        <div class="card">
+        <div class="card" id="card-pam50-dist">
           <h2>Subtipo PAM50</h2>
           <div id="chart-pam50-dist"></div>
         </div>
@@ -168,7 +191,7 @@
 
       <!-- Tabla variante × perfil clínico -->
       <div class="card full-width">
-        <h2>Perfil Clínico por Variante (Romero-Córdoba HM)</h2>
+        <h2 id="clinical-table-title">Perfil Clínico por Variante (Romero-Córdoba HM)</h2>
         <div class="table-controls">
           <input type="text" id="filter-clinical-variant" placeholder="Filtrar por gen o variante…" />
         </div>
@@ -180,9 +203,11 @@
                 <th>Frecuencia</th>
                 <th>Muestras clínicas</th>
                 <th>Edad media</th>
-                <th>Top IHC</th>
-                <th>Top PAM50</th>
-                <th>Top Histología</th>
+                <th class="col-ethnicity">Etnia</th>
+                <th class="col-race">Raza</th>
+                <th class="col-ihc">Top IHC</th>
+                <th class="col-pam50">Top PAM50</th>
+                <th class="col-histology">Top Histología</th>
                 <th>Clasificación</th>
               </tr>
             </thead>
@@ -532,13 +557,13 @@
   <span id="footer-run"></span>
 </footer>
 
-<script src="js/app.js?v=20261103d"    type="module"></script>
-<script src="js/analysis.js?v=20261103d"  type="module"></script>
-<script src="js/structural.js?v=20261103d" type="module"></script>
-<script src="js/docking.js?v=20261103d"   type="module"></script>
-<script src="js/report.js?v=20261103d"    type="module"></script>
-<script src="js/pipeline.js?v=20261103d"  type="module"></script>
-<script src="js/explore.js?v=20261103d"   type="module"></script>
-<script src="js/clinical.js?v=20261103d"  type="module"></script>
+<script src="js/app.js?v=20261105b"    type="module"></script>
+<script src="js/analysis.js?v=20261105b"  type="module"></script>
+<script src="js/structural.js?v=20261105b" type="module"></script>
+<script src="js/docking.js?v=20261105b"   type="module"></script>
+<script src="js/report.js?v=20261105c"    type="module"></script>
+<script src="js/pipeline.js?v=20261105b"  type="module"></script>
+<script src="js/explore.js?v=20261105b"   type="module"></script>
+<script src="js/clinical.js?v=20261105b"  type="module"></script>
 </body>
 </html>
