@@ -10,6 +10,7 @@ process LOG_MLFLOW {
     path run_manifest
     path run_params
     path key_files, stageAs: "contracts/*"
+    path source_snapshot
 
     output:
     path "mlflow_runs.json", emit: mlflow_ids
@@ -23,6 +24,7 @@ process LOG_MLFLOW {
         --params "${run_params}" \\
         --run-manifest "${run_manifest}" \\
         --data-dir contracts \\
+        --source-code-dir "${source_snapshot}" \\
         --structural-metrics contracts/structural_metrics.json \\
         --vina-affinities contracts/vina_affinities.json \\
         --git-commit "${commit_hash}" \\

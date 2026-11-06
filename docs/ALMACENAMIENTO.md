@@ -47,6 +47,28 @@ ya están en `outdir`; a MLflow van los JSON, los logs de Vina y un tag con la
 ruta y el checksum. Así el servidor de tracking no se convierte en un almacén
 de gigabytes.
 
+### Regla obligatoria: código y reportes en MLflow
+
+Todo entrypoint Nextflow del proyecto (`main*.nf`) **DEBE** cumplir ambos puntos:
+
+1. Antes de ejecutar tareas, generar el snapshot con
+   `bin/snapshot_mlflow_sources.py` para el workflow activo y pasarlo a
+   `LOG_MLFLOW`. Cada run hijo debe guardar en `Artifacts/source_code/` los
+   archivos fuente que controlan esa etapa y `source_manifest.json` con sus
+   rutas, workflow, commit y hashes SHA-256. Una URL o tag que apunte al código
+   **no sustituye** el artefacto. Los cambios al mapa de etapas deben actualizar
+   `bin/snapshot_mlflow_sources.py` y `tests/test_mlflow_source_snapshot.py`.
+2. Activar `report`, `timeline`, `trace` y `dag` en `nextflow.config` y, desde
+   `workflow.onComplete`, invocar `bin/nf_reports_hook.sh`. El hook debe adjuntar
+   `report.html`, `timeline.html` y `dag.html` al run padre bajo
+   `Artifacts/nextflow_reports/`; `trace.tsv` queda disponible junto a los
+   reportes locales de `pipeline_info/`.
+
+La prueba `python3 tests/test_mlflow_source_snapshot.py` es el guard de contrato:
+comprueba los tres entrypoints, los seis snapshots de etapa, el registro de los
+archivos en MLflow y la integración de reportes. Todo pipeline nuevo debe
+añadirse a esta verificación antes de considerarse integrado.
+
 ## 3. Layout de `--outdir`
 
 ```

@@ -24,6 +24,18 @@ workflow {
         if (proc.exitValue() == 0) commit_hash = proc.text.trim()
     } catch (Exception e) { /* sin git disponible */ }
 
+    def source_snapshot = file("${workDir}/mlflow-source-code/${workflow.runName}")
+    def snapshot_proc = [
+        'python3', "${projectDir}/bin/snapshot_mlflow_sources.py".toString(),
+        '--repo', projectDir.toString(), '--out', source_snapshot.toString(),
+        '--workflow', 'main.nf', '--git-commit', commit_hash
+    ].execute()
+    snapshot_proc.waitFor()
+    if (snapshot_proc.exitValue() != 0) {
+        error("No se pudo crear el snapshot de código para MLflow: ${snapshot_proc.text}")
+    }
+    def ch_source_snapshot = Channel.value(source_snapshot)
+
     // 2. Snapshot de mutaciones (opcional; Channel.empty() si no se pasa)
     def ch_mutations_input = params.mutations_json
         ? Channel.fromPath(params.mutations_json, checkIfExists: true)
@@ -221,7 +233,8 @@ workflow {
         BUILD_JSONS.out.top_variants_out
             .mix(BUILD_JSONS.out.structural_metrics)
             .mix(BUILD_JSONS.out.vina_affinities)
-            .collect()
+            .collect(),
+        ch_source_snapshot
     )
 
     /*

@@ -145,3 +145,15 @@ Sin Docker ni red. Usa `tests/reference/mutations_snapshot.json` y
   para las celdas con `n < clinical_small_cell`;
 - que sin los flags `--clinical`/`--clinical-json` no se escriban los dos JSON
   clínicos.
+
+## 7. Regla de código y reportes por corrida en MLflow
+
+```bash
+python3 tests/test_mlflow_source_snapshot.py
+```
+
+Este guard debe pasar para **cada** entrypoint `main*.nf`. Verifica que cada
+etapa guarde su snapshot real en `Artifacts/source_code/` con un manifiesto de
+hashes, y que los workflows mantengan activados los reportes de Nextflow y el
+hook que los publica en el run padre bajo `Artifacts/nextflow_reports/`. No se
+aceptan URLs a GitHub como sustituto del código fuente almacenado.

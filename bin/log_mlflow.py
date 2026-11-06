@@ -83,10 +83,12 @@ def find_run(client, experiment_id: str, run_name: str, stage: str | None):
     found = client.search_runs(
         experiment_ids=[experiment_id],
         filter_string=" and ".join(filters),
-        max_results=1,
+        max_results=100,
         order_by=["attributes.start_time DESC"],
     )
-    return found[0] if found else None
+    if stage:
+        return found[0] if found else None
+    return next((run for run in found if not run.data.tags.get("gemamx.stage")), None)
 
 
 def ensure_experiment(client, name: str) -> str:
@@ -97,32 +99,50 @@ def ensure_experiment(client, name: str) -> str:
     return client.create_experiment(name, artifact_location="mlflow-artifacts:/")
 
 
-STAGE_CODE_MAP = {
-    "ingest": "https://github.com/gemateam/gemamx_nf/blob/main/bin/ingest_romero.py",
-    "fasta": "https://github.com/gemateam/gemamx_nf/blob/main/bin/fetch_fasta.py",
-    "structures": "https://github.com/gemateam/gemamx_nf/blob/main/bin/predict_structure.py",
-    "docking": "https://github.com/gemateam/gemamx_nf/blob/main/bin/run_vina.py",
-    "metrics": "https://github.com/gemateam/gemamx_nf/blob/main/bin/align_wt_mut.py",
-    "publish": "https://github.com/gemateam/gemamx_nf/blob/main/bin/build_jsons.py",
-}
+LEGACY_SOURCE_TAGS = ("gemamx.source_code", "mlflow.source.name")
+
+
+def clear_legacy_source_tags(client, run_id: str) -> None:
+    for key in LEGACY_SOURCE_TAGS:
+        try:
+            client.delete_tag(run_id, key)
+        except Exception:
+            pass
+
+
+def stage_source_dir(source_code_dir: Path, stage: str) -> Path:
+    path = source_code_dir / stage
+    manifest = path / "source_manifest.json"
+    if not path.is_dir() or not manifest.is_file():
+        die(f"falta el snapshot de código para la etapa {stage}: {path}")
+    files = [item for item in path.rglob("*") if item.is_file() and item.name != "source_manifest.json"]
+    if not files:
+        die(f"el snapshot de código está vacío para la etapa {stage}: {path}")
+    return path
 
 def log_stage(mlflow, client, experiment_id: str, run_name: str,
               stage: str, params: dict[str, str], metrics: dict[str, float],
               artifacts: list[str], tags: dict[str, str],
-              dataset=None) -> tuple[str, bool]:
-    existing = find_run(client, experiment_id, run_name, stage)
-    if existing is not None:
-        return existing.info.run_id, False
-
-    source_url = STAGE_CODE_MAP.get(stage, "https://github.com/gemateam/gemamx_nf")
+              source_code_dir: Path, dataset=None) -> tuple[str, bool]:
+    source_dir = stage_source_dir(source_code_dir, stage)
+    source_artifact = "source_code"
+    source_file_count = sum(1 for path in source_dir.rglob("*") if path.is_file())
     stage_tags = {
         **tags,
         "gemamx.stage": stage,
         "gemamx.pipeline": "gemamx_nf",
         "gemamx.contract": "v1",
-        "gemamx.source_code": source_url,
-        "mlflow.source.name": source_url,
+        "gemamx.source_code_artifact": source_artifact,
+        "gemamx.source_code_files": str(source_file_count),
     }
+    existing = find_run(client, experiment_id, run_name, stage)
+    if existing is not None:
+        clear_legacy_source_tags(client, existing.info.run_id)
+        for key, value in stage_tags.items():
+            client.set_tag(existing.info.run_id, key, value)
+        client.log_artifacts(existing.info.run_id, str(source_dir), artifact_path=source_artifact)
+        return existing.info.run_id, False
+
     with mlflow.start_run(run_name=f"{run_name}-{stage}", experiment_id=experiment_id,
                           nested=True, tags=stage_tags) as child:
         if params:
@@ -140,6 +160,7 @@ def log_stage(mlflow, client, experiment_id: str, run_name: str,
                 mlflow.log_artifact(str(path))
             elif path.is_dir():
                 mlflow.log_artifacts(str(path), artifact_path=path.name)
+        mlflow.log_artifacts(str(source_dir), artifact_path=source_artifact)
         child_id = child.info.run_id
     return child_id, True
 
@@ -155,6 +176,8 @@ def main() -> int:
     parser.add_argument("--images", help="images.json (imágenes usadas)")
     parser.add_argument("--run-manifest", help="run_manifest.json de PUBLISH")
     parser.add_argument("--data-dir", help="directorio raíz data/ con todos los contratos")
+    parser.add_argument("--source-code-dir", required=True,
+                        help="snapshot de código por etapa generado por snapshot_mlflow_sources.py")
     parser.add_argument("--structural-metrics", help="structural_metrics.json")
     parser.add_argument("--vina-affinities", help="docking/vina_affinities.json")
     parser.add_argument("--artifact", action="append", default=[],
@@ -184,15 +207,19 @@ def main() -> int:
     structural = load_optional(args.structural_metrics)
     vina = load_optional(args.vina_affinities)
 
-    workflow_file = "main_v2.nf" if "romero" in run_name.lower() or "v2" in args.experiment.lower() else "main.nf"
+    if "v2_1" in args.experiment.lower():
+        workflow_file = "main_v2_1.nf"
+    elif "romero" in run_name.lower() or "v2" in args.experiment.lower():
+        workflow_file = "main_v2.nf"
+    else:
+        workflow_file = "main.nf"
     base_tags = {
         "gemamx.pipeline": "gemamx_nf",
         "gemamx.contract": "v1",
         "gemamx.run_name": run_name,
         "gemamx.git_commit": args.git_commit or "unknown",
         "gemamx.tracking_uri": args.tracking_uri,
-        "gemamx.source_code": f"https://github.com/gemateam/gemamx_nf/blob/main/{workflow_file}",
-        "mlflow.source.name": f"https://github.com/gemateam/gemamx_nf/blob/main/{workflow_file}",
+        "gemamx.workflow_file": workflow_file,
     }
 
     try:
@@ -212,6 +239,9 @@ def main() -> int:
                     mlflow.log_params(flat)
         else:
             parent_id = parent.info.run_id
+
+        clear_legacy_source_tags(client, parent_id)
+        client.set_tag(parent_id, "gemamx.workflow_file", workflow_file)
 
         # Métricas resumen en el padre (no dependen del detalle por etapa).
         summary: dict[str, float] = {}
@@ -273,6 +303,9 @@ def main() -> int:
                     min(float(v) for v in scores.values() if v is not None))
 
         data_dir = Path(args.data_dir) if args.data_dir else None
+        source_code_dir = Path(args.source_code_dir)
+        if not source_code_dir.is_dir():
+            die(f"no existe el snapshot de código: {source_code_dir}")
 
         stage_artifacts: dict[str, list[str]] = {
             "ingest": [],
@@ -334,6 +367,7 @@ def main() -> int:
                     mlflow, client, experiment_id, run_name, stage,
                     stage_params.get(stage, {}), stage_metrics.get(stage, {}),
                     stage_artifacts.get(stage, []), base_tags,
+                    source_code_dir=source_code_dir,
                     dataset=stage_datasets.get(stage),
                 )
                 registered[stage] = {"run_id": run_id, "created": created}
