@@ -69,6 +69,8 @@ def main() -> int:
     EXTRA_JSON_NAMES = {
         "variant_clinical_summary.json",
         "clinical_metadata.json",
+        "contract_provenance.json",
+        "data_ingest.json",
         "romero_geo_summary.json",
         "GSE86374_summary.json",
         "GSE87048_summary.json",
@@ -236,6 +238,8 @@ def main() -> int:
     EXTRA_JSON_NAMES = {
         "variant_clinical_summary.json",
         "clinical_metadata.json",
+        "contract_provenance.json",
+        "data_ingest.json",
         "romero_geo_summary.json",
         "GSE86374_summary.json",
         "GSE87048_summary.json",

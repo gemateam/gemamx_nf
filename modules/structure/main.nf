@@ -16,7 +16,12 @@ process PREDICT_STRUCTURE_WT {
               "Está implementado en modules/structure/boltz.nf pero NO cableado en main.nf: " +
               "ver docs/BOLTZ_HPC.md § 5. Activación."
     }
-    def precomp_arg = (mode == 'precomputed' && precomputed_pdb) ? "--structure ${precomputed_pdb}" : ""
+    def has_precomputed = precomputed_pdb && precomputed_pdb.toString() != 'null'
+    def backend = (mode == 'precomputed' && !has_precomputed) ? 'esmfold' : mode
+    def precomp_arg = (backend == 'precomputed') ? "--structure ${precomputed_pdb}" : ""
+    def model_window = (backend == 'esmfold' && mode == 'precomputed') ? Math.min(params.domain_window, 120) : params.domain_window
+    def fallback_args = backend != mode ? "--timeout 300 --retries 5" : ""
+    def backend_note = backend != mode ? "echo 'WARN: falta estructura WT precomputada para ${gene}; se usará ESMFold' >&2" : ""
     // WT no tiene mutación: con esmfold la ventana se centra en la posición
     // del evento que se compara (la primera mutación conocida del gen).
     def center_arg = (window_center && window_center > 0) ? "--window-center ${window_center}" : ""
@@ -26,10 +31,11 @@ process PREDICT_STRUCTURE_WT {
         --gene "${gene}" \\
         --protein-change "WT" \\
         --role "wt" \\
-        --backend "${mode}" \\
+        --backend "${backend}" \\
         ${precomp_arg} \\
         ${center_arg} \\
-        --window ${params.domain_window} \\
+        --window ${model_window} \\
+        ${fallback_args} \\
         --out "${gene}_WT.pdb" \\
         --out-cif "${gene}_WT.cif" \\
         --meta "${gene}_WT.json"
@@ -61,16 +67,23 @@ process PREDICT_STRUCTURE_MUT {
               "Está implementado en modules/structure/boltz.nf pero NO cableado en main.nf: " +
               "ver docs/BOLTZ_HPC.md § 5. Activación."
     }
-    def precomp_arg = (mode == 'precomputed' && precomputed_pdb) ? "--structure ${precomputed_pdb}" : ""
+    def has_precomputed = precomputed_pdb && precomputed_pdb.toString() != 'null'
+    def backend = (mode == 'precomputed' && !has_precomputed) ? 'esmfold' : mode
+    def precomp_arg = (backend == 'precomputed') ? "--structure ${precomputed_pdb}" : ""
+    def model_window = (backend == 'esmfold' && mode == 'precomputed') ? Math.min(params.domain_window, 120) : params.domain_window
+    def fallback_args = backend != mode ? "--timeout 300 --retries 5" : ""
+    def backend_note = backend != mode ? "echo 'WARN: falta estructura precomputada para ${gene}_${protein_change}; se usará ESMFold' >&2" : ""
     """
+    ${backend_note}
     predict_structure.py \\
         --fasta "${fasta}" \\
         --gene "${gene}" \\
         --protein-change "${protein_change}" \\
         --role "mut" \\
-        --backend "${mode}" \\
+        --backend "${backend}" \\
         ${precomp_arg} \\
-        --window ${params.domain_window} \\
+        --window ${model_window} \\
+        ${fallback_args} \\
         --out "${gene}_${protein_change}.pdb" \\
         --out-cif "${gene}_${protein_change}.cif" \\
         --meta "${gene}_${protein_change}.json"

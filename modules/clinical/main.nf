@@ -17,6 +17,7 @@ process INGEST_ROMERO {
     path "raw_mutations.json",   emit: raw_mutations
     path "top_variants.json",    emit: top_variants
     path "mutation_stats.json",  emit: mutation_stats
+    path "data_ingest.json",     emit: ingest_metadata
 
     script:
     """
@@ -33,6 +34,7 @@ process INGEST_ROMERO {
     echo '[{"hugo_symbol":"PIK3CA","protein_change":"H1047R","frequency":15,"cohort_percentage":11.19,"chromosome":"3","start_position":178952085,"classification":"Patogénica","rank":1,"dataset":"Romero-Cordoba 2021 HM"}]' > top_variants.json
     echo '[]' > raw_mutations.json
     echo '{"total_samples":134,"total_mutations":28114,"dataset":"Romero-Cordoba 2021 HM"}' > mutation_stats.json
+    echo '{"schema_version":1,"mode":"stub","query":{},"counts":{}}' > data_ingest.json
     """
 }
 

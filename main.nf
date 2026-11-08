@@ -51,7 +51,8 @@ workflow {
     def drug_catalog_file = file(params.drug_catalog, checkIfExists: true)
 
     // ── INGEST ────────────────────────────────────────────────────────────────
-    INGEST(ch_mutations_input, ch_clinical_input)
+    // V1 no usa contrato versionado: los dos últimos inputs quedan vacíos.
+    INGEST(ch_mutations_input, ch_clinical_input, Channel.value([]), Channel.value([]))
 
     // Parsear variantes → [gene, protein_change]
     def ch_variants = INGEST.out.top_variants
@@ -194,6 +195,7 @@ workflow {
     // el mismo valor que recibía BUILD_JSONS antes de este cambio.
     def ch_clinical_files = INGEST.out.clinical_metadata
         .mix(INGEST.out.clinical_summary)
+        .mix(INGEST.out.ingest_metadata)
         .collect()
         .ifEmpty([])
 
@@ -233,6 +235,7 @@ workflow {
         BUILD_JSONS.out.top_variants_out
             .mix(BUILD_JSONS.out.structural_metrics)
             .mix(BUILD_JSONS.out.vina_affinities)
+            .mix(BUILD_JSONS.out.data_ingest_out)
             .collect(),
         ch_source_snapshot
     )

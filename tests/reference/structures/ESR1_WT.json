@@ -1,0 +1,16 @@
+{
+  "gene": "ESR1",
+  "protein_change": "WT",
+  "role": "wt",
+  "backend": "precomputed",
+  "source": "https://alphafold.ebi.ac.uk/files/AF-P03372-F1-model_v6.cif",
+  "source_format": "cif",
+  "uniprot_id": "P03372",
+  "fasta_length": 595,
+  "model_start": 1,
+  "model_resseq_start": 1,
+  "model_resseq_end": 595,
+  "mean_plddt": 66.43,
+  "plddt_source": "AlphaFold DB v6",
+  "source_sha256": "d27e088a779d7a92799b7388eb328fddb4d63647c86c76c35c617dd51332c93a"
+}

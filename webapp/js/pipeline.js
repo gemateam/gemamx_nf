@@ -14,7 +14,7 @@ import {
 } from './app.js';
 
 const state = { loaded: false };
-registerReloadFlag('pipeline', state);
+registerReloadFlag('dashboard', state);
 
 // ── Etapas del pipeline ────────────────────────────────────────────────────
 const GITHUB_REPO = 'https://github.com/gemateam/gemamx_nf/blob/main';
@@ -260,7 +260,7 @@ async function loadPipeline() {
   const dockPct = totalPossible > 0 ? Math.round((variantsWithDocking / totalPossible) * 100) : 0;
   stageLabel.docking_partial = `${dockPct}%`;
 
-  const isRomero = (pipelineVersion === 'GEMAMX-V2-ROMERO') || runName.includes('romero');
+  const isRomero = pipelineVersion.includes('ROMERO') || runName.includes('romero');
   const activeStages = isRomero ? STAGES_V2 : STAGES_V1;
 
   const timelineEl = document.getElementById('ps-timeline');
@@ -320,12 +320,12 @@ async function loadPipeline() {
     const experiment  = params.mlflow_experiment ?? '—';
 
     // Resolver ID de experimento y URL de la corrida en MLflow UI
-    const expId = (experiment === 'GEMAMX-V2-ROMERO' || runName.includes('romero')) ? '5' : '4';
+    const expId = runManifest?.experiment_id ?? (experiment === 'GEMAMX-V2-ROMERO' || experiment === 'GEMAMX-V2_1-ROMERO' || runName.includes('romero') ? '5' : '4');
     const mlflowLocalUi = 'http://localhost:5000';
     const mlflowExpUrl = `${mlflowLocalUi}/#/experiments/${expId}`;
 
     // Obtener run_id padre si existe en manifiesto o mapeo
-    const parentRunId = runManifest?.parent_run_id || (runName === 'romero_v2_20261101_041237' ? '741bcd33b5544bed8278614c8fae7d6d' : (runName === 'distraught_celsius' ? 'ae00292c43e4433da43924b03882c395' : ''));
+    const parentRunId = runManifest?.parent_run_id || '';
     const mlflowRunUrl = parentRunId ? `${mlflowLocalUi}/#/experiments/${expId}/runs/${parentRunId}` : mlflowExpUrl;
 
     mlflowBlock.innerHTML = `
@@ -356,8 +356,8 @@ async function loadPipeline() {
       <div class="ps-mlflow-row">
         <span class="ps-mlflow-label">Workflow Code</span>
         <span class="ps-mlflow-value">
-          <button class="ps-code-view-btn" data-code-file="${isRomero ? 'main_v2.nf' : 'main.nf'}" data-code-label="${isRomero ? 'main_v2.nf (Workflow DSL2 Romero V2)' : 'main.nf (Workflow DSL2 TCGA V1)'}" style="background:rgba(20,184,166,0.15);border:1px solid var(--teal);color:var(--teal-light);font-size:.75rem;padding:2px 8px;border-radius:4px;cursor:pointer;">
-            📄 Ver ${isRomero ? 'main_v2.nf' : 'main.nf'} ejecutado
+          <button class="ps-code-view-btn" data-code-file="${pipelineVersion === 'GEMAMX-V3-TCGA-HISPANIC' ? 'main_v3.nf' : pipelineVersion === 'GEMAMX-V2_1-ROMERO' ? 'main_v2_1.nf' : isRomero ? 'main_v2.nf' : 'main.nf'}" data-code-label="Workflow ${pipelineVersion}" style="background:rgba(20,184,166,0.15);border:1px solid var(--teal);color:var(--teal-light);font-size:.75rem;padding:2px 8px;border-radius:4px;cursor:pointer;">
+            📄 Ver workflow ejecutado
           </button>
         </span>
       </div>
@@ -438,4 +438,4 @@ async function loadPipeline() {
   }
 }
 
-registerLoader('pipeline', loadPipeline);
+registerLoader('dashboard', loadPipeline);

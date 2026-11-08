@@ -1,0 +1,233 @@
+[
+  {
+    "hugo_symbol": "MAP3K1",
+    "variant_classification": "Missense_Mutation",
+    "protein_change": "A801T",
+    "sample_id": "TCGA-EW-A1IX-01A",
+    "patient_id": "TCGA-EW-A1IX",
+    "chromosome": "5",
+    "start_position": 56881601,
+    "genomic_dna_change": "chr5:g.56881601G>A",
+    "mutation_status": "Somatic"
+  },
+  {
+    "hugo_symbol": "PIK3CA",
+    "variant_classification": "Missense_Mutation",
+    "protein_change": "E542K",
+    "sample_id": "TCGA-5L-AAT1-10A",
+    "patient_id": "TCGA-5L-AAT1",
+    "chromosome": "3",
+    "start_position": 179218294,
+    "genomic_dna_change": "chr3:g.179218294G>A",
+    "mutation_status": "Somatic"
+  },
+  {
+    "hugo_symbol": "PIK3CA",
+    "variant_classification": "Missense_Mutation",
+    "protein_change": "E542K",
+    "sample_id": "TCGA-A2-A04N-01A",
+    "patient_id": "TCGA-A2-A04N",
+    "chromosome": "3",
+    "start_position": 179218294,
+    "genomic_dna_change": "chr3:g.179218294G>A",
+    "mutation_status": "Somatic"
+  },
+  {
+    "hugo_symbol": "PIK3CA",
+    "variant_classification": "Missense_Mutation",
+    "protein_change": "E81K",
+    "sample_id": "TCGA-EW-A1OV-01A",
+    "patient_id": "TCGA-EW-A1OV",
+    "chromosome": "3",
+    "start_position": 179199066,
+    "genomic_dna_change": "chr3:g.179199066G>A",
+    "mutation_status": "Somatic"
+  },
+  {
+    "hugo_symbol": "PIK3CA",
+    "variant_classification": "Missense_Mutation",
+    "protein_change": "R88Q",
+    "sample_id": "TCGA-5L-AAT1-10A",
+    "patient_id": "TCGA-5L-AAT1",
+    "chromosome": "3",
+    "start_position": 179199088,
+    "genomic_dna_change": "chr3:g.179199088G>A",
+    "mutation_status": "Somatic"
+  },
+  {
+    "hugo_symbol": "GATA3",
+    "variant_classification": "Missense_Mutation",
+    "protein_change": "M294K",
+    "sample_id": "TCGA-5L-AAT1-10A",
+    "patient_id": "TCGA-5L-AAT1",
+    "chromosome": "10",
+    "start_position": 8064095,
+    "genomic_dna_change": "chr10:g.8064095T>A",
+    "mutation_status": "Somatic"
+  },
+  {
+    "hugo_symbol": "PIK3CA",
+    "variant_classification": "Missense_Mutation",
+    "protein_change": "H1047L",
+    "sample_id": "TCGA-5L-AAT0-10A",
+    "patient_id": "TCGA-5L-AAT0",
+    "chromosome": "3",
+    "start_position": 179234297,
+    "genomic_dna_change": "chr3:g.179234297A>T",
+    "mutation_status": "Somatic"
+  },
+  {
+    "hugo_symbol": "MAP3K1",
+    "variant_classification": "Missense_Mutation",
+    "protein_change": "C1437F",
+    "sample_id": "TCGA-A2-A04N-01A",
+    "patient_id": "TCGA-A2-A04N",
+    "chromosome": "5",
+    "start_position": 56888278,
+    "genomic_dna_change": "chr5:g.56888278G>T",
+    "mutation_status": "Somatic"
+  },
+  {
+    "hugo_symbol": "PIK3CA",
+    "variant_classification": "Missense_Mutation",
+    "protein_change": "N1044Y",
+    "sample_id": "TCGA-EW-A1J1-01Z",
+    "patient_id": "TCGA-EW-A1J1",
+    "chromosome": "3",
+    "start_position": 179234287,
+    "genomic_dna_change": "chr3:g.179234287A>T",
+    "mutation_status": "Somatic"
+  },
+  {
+    "hugo_symbol": "TP53",
+    "variant_classification": "Missense_Mutation",
+    "protein_change": "R273H",
+    "sample_id": "TCGA-EW-A1P1-01Z",
+    "patient_id": "TCGA-EW-A1P1",
+    "chromosome": "17",
+    "start_position": 7673802,
+    "genomic_dna_change": "chr17:g.7673802C>T",
+    "mutation_status": "Somatic"
+  },
+  {
+    "hugo_symbol": "TP53",
+    "variant_classification": "Missense_Mutation",
+    "protein_change": "H179R",
+    "sample_id": "TCGA-EW-A1P4-10A",
+    "patient_id": "TCGA-EW-A1P4",
+    "chromosome": "17",
+    "start_position": 7675076,
+    "genomic_dna_change": "chr17:g.7675076T>C",
+    "mutation_status": "Somatic"
+  },
+  {
+    "hugo_symbol": "PIK3CA",
+    "variant_classification": "Missense_Mutation",
+    "protein_change": "T1025A",
+    "sample_id": "TCGA-EW-A1PE-01A",
+    "patient_id": "TCGA-EW-A1PE",
+    "chromosome": "3",
+    "start_position": 179234230,
+    "genomic_dna_change": "chr3:g.179234230A>G",
+    "mutation_status": "Somatic"
+  },
+  {
+    "hugo_symbol": "MAP3K1",
+    "variant_classification": "Missense_Mutation",
+    "protein_change": "E1419K",
+    "sample_id": "TCGA-EW-A1IX-01A",
+    "patient_id": "TCGA-EW-A1IX",
+    "chromosome": "5",
+    "start_position": 56887518,
+    "genomic_dna_change": "chr5:g.56887518G>A",
+    "mutation_status": "Somatic"
+  },
+  {
+    "hugo_symbol": "MAP3K1",
+    "variant_classification": "Missense_Mutation",
+    "protein_change": "N1374S",
+    "sample_id": "TCGA-A2-A04N-01A",
+    "patient_id": "TCGA-A2-A04N",
+    "chromosome": "5",
+    "start_position": 56887384,
+    "genomic_dna_change": "chr5:g.56887384A>G",
+    "mutation_status": "Somatic"
+  },
+  {
+    "hugo_symbol": "TP53",
+    "variant_classification": "Missense_Mutation",
+    "protein_change": "E286K",
+    "sample_id": "TCGA-EW-A6SD-10A",
+    "patient_id": "TCGA-EW-A6SD",
+    "chromosome": "17",
+    "start_position": 7673764,
+    "genomic_dna_change": "chr17:g.7673764C>T",
+    "mutation_status": "Somatic"
+  },
+  {
+    "hugo_symbol": "ERBB2",
+    "variant_classification": "Missense_Mutation",
+    "protein_change": "H470Q",
+    "sample_id": "TCGA-EW-A1PD-01Z",
+    "patient_id": "TCGA-EW-A1PD",
+    "chromosome": "17",
+    "start_position": 39715836,
+    "genomic_dna_change": "chr17:g.39715836T>G",
+    "mutation_status": "Somatic"
+  },
+  {
+    "hugo_symbol": "PIK3CA",
+    "variant_classification": "Missense_Mutation",
+    "protein_change": "H1047R",
+    "sample_id": "TCGA-AR-A1AV-01A",
+    "patient_id": "TCGA-AR-A1AV",
+    "chromosome": "3",
+    "start_position": 179234297,
+    "genomic_dna_change": "chr3:g.179234297A>G",
+    "mutation_status": "Somatic"
+  },
+  {
+    "hugo_symbol": "PIK3CA",
+    "variant_classification": "Missense_Mutation",
+    "protein_change": "H1047R",
+    "sample_id": "TCGA-EW-A1IX-01A",
+    "patient_id": "TCGA-EW-A1IX",
+    "chromosome": "3",
+    "start_position": 179234297,
+    "genomic_dna_change": "chr3:g.179234297A>G",
+    "mutation_status": "Somatic"
+  },
+  {
+    "hugo_symbol": "ESR1",
+    "variant_classification": "Missense_Mutation",
+    "protein_change": "Q17H",
+    "sample_id": "TCGA-5L-AAT1-10A",
+    "patient_id": "TCGA-5L-AAT1",
+    "chromosome": "6",
+    "start_position": 151807963,
+    "genomic_dna_change": "chr6:g.151807963G>C",
+    "mutation_status": "Somatic"
+  },
+  {
+    "hugo_symbol": "PIK3CA",
+    "variant_classification": "Missense_Mutation",
+    "protein_change": "Q546K",
+    "sample_id": "TCGA-EW-A1PE-01A",
+    "patient_id": "TCGA-EW-A1PE",
+    "chromosome": "3",
+    "start_position": 179218306,
+    "genomic_dna_change": "chr3:g.179218306C>A",
+    "mutation_status": "Somatic"
+  },
+  {
+    "hugo_symbol": "PIK3CA",
+    "variant_classification": "Missense_Mutation",
+    "protein_change": "Q546R",
+    "sample_id": "TCGA-EW-A1IW-01Z",
+    "patient_id": "TCGA-EW-A1IW",
+    "chromosome": "3",
+    "start_position": 179218307,
+    "genomic_dna_change": "chr3:g.179218307A>G",
+    "mutation_status": "Somatic"
+  }
+]

@@ -9,7 +9,7 @@ from pathlib import Path
 from types import SimpleNamespace
 
 ROOT = Path(__file__).resolve().parents[1]
-PIPELINE_WORKFLOWS = {"main.nf", "main_v2.nf", "main_v2_1.nf"}
+PIPELINE_WORKFLOWS = {"main.nf", "main_v2.nf", "main_v2_1.nf", "main_v3.nf"}
 import sys
 sys.path.insert(0, str(ROOT / "bin"))
 
@@ -81,7 +81,7 @@ def test_parent_lookup_skips_child_runs() -> None:
 
 
 def test_snapshots_cover_supported_workflows(tmp: Path) -> None:
-    for workflow in ("main.nf", "main_v2.nf", "main_v2_1.nf"):
+    for workflow in ("main.nf", "main_v2.nf", "main_v2_1.nf", "main_v3.nf"):
         output = tmp / workflow
         manifest = snapshot_sources(ROOT, output, workflow, "a" * 40)
         assert set(manifest["stages"]) == set(log_mlflow.STAGES)

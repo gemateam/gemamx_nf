@@ -1,11 +1,16 @@
 {
-    "gene": "PIK3CA",
-    "protein_change": "WT",
-    "model_start": 957,
-    "model_resseq_start": 1,
-    "model_resseq_end": 112,
-    "mutation_resseq_model": null,
-    "mean_plddt": 86.88,
-    "plddt_source": "alphafold",
-    "model_start_basis": "fragmento 957..1068 renumerado 1..112 por tests/normalize_pdbs.py"
+  "gene": "PIK3CA",
+  "protein_change": "WT",
+  "role": "wt",
+  "backend": "precomputed",
+  "source": "https://alphafold.ebi.ac.uk/files/AF-P42336-F1-model_v6.cif",
+  "source_format": "cif",
+  "uniprot_id": "P42336",
+  "fasta_length": 1068,
+  "model_start": 1,
+  "model_resseq_start": 1,
+  "model_resseq_end": 1068,
+  "mean_plddt": 92.36,
+  "plddt_source": "AlphaFold DB v6",
+  "source_sha256": "310d2c27cc1447d8a7bdb55941a2918ac286c5468f6b3a5d6f0c90dcbb9afc77"
 }

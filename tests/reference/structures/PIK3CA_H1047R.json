@@ -1,24 +1,16 @@
 {
-    "atoms": 3297,
-    "chains": [
-        "A"
-    ],
-    "deterministic_check": true,
-    "elements": {
-        "C": 1067,
-        "H": 1635,
-        "N": 289,
-        "O": 294,
-        "S": 12
-    },
-    "ob_random_seed": 42,
-    "obabel": "Open Babel 3.2.1 -- Aug 19 2026 -- 17:02:47",
-    "pdbqt_file": "test_rec.pdbqt",
-    "pdbqt_sha256": "63c9d368c1d6c250d77bb45de0addd0c3f92ba32e27c337b656c3ee441b94ac2",
-    "ph": 7.4,
-    "polar_hydrogens": 373,
-    "residues": 202,
-    "strip_hetatm": true,
-    "structure": "PIK3CA_H1047R.pdb",
-    "structure_sha256": "4f20e8c90cc5e00aa35cd02aa09af2409f489939028b61a77c187e8c6ed65192"
+  "gene": "PIK3CA",
+  "protein_change": "H1047R",
+  "role": "mut",
+  "backend": "precomputed",
+  "source": "https://alphafold.ebi.ac.uk/files/AF-P42336-F1-model_v6.cif",
+  "source_format": "cif",
+  "uniprot_id": "P42336",
+  "fasta_length": 1068,
+  "model_start": 1,
+  "model_resseq_start": 1,
+  "model_resseq_end": 1068,
+  "mean_plddt": 92.36,
+  "plddt_source": "AlphaFold DB v6",
+  "source_sha256": "310d2c27cc1447d8a7bdb55941a2918ac286c5468f6b3a5d6f0c90dcbb9afc77"
 }

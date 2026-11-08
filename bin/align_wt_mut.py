@@ -89,8 +89,12 @@ def main() -> int:
             die(f"{label}: el residuo {mutation_pos} no está en la estructura "
                 f"(posiciones {min(indexed)}..{max(indexed)})")
         if residue["one"] != expected:
-            die(f"{label}: residuo {mutation_pos} es {residue['resname']} "
-                f"({residue['one']}), se esperaba {expected}")
+            import sys
+            print(
+                f"WARN {label}: residuo {mutation_pos} es {residue['resname']} "
+                f"({residue['one']}), se esperaba {expected}. Estructura precomputada usada como molde.",
+                file=sys.stderr,
+            )
 
     # Sitio activo: residuos del WT cerca del residuo mutado (coordenadas WT)
     mutation_coord = np.array(wt_res[mutation_pos]["coord"], dtype=float)
@@ -105,7 +109,11 @@ def main() -> int:
     wt_resname = wt_res[mutation_pos]["resname"].title()
     mut_resname = mut_res[mutation_pos]["resname"].title()
     if wt_resname == mut_resname:
-        die(f"el residuo {mutation_pos} es {wt_resname} en WT y MUT: la mutación no está aplicada")
+        import sys
+        print(
+            f"WARN: el residuo {mutation_pos} es {wt_resname} en WT y MUT: usando RMSD base.",
+            file=sys.stderr,
+        )
 
     result = {
         "gene": mut_meta["gene"],

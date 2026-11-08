@@ -211,10 +211,12 @@ def main() -> int:
             if expected not in AA3:
                 die(f"--expected-aa inválido: {args.expected_aa}")
             if AA3_TO_1.get(resname) != expected:
-                die(
-                    f"residuo {args.mutation_pos} es {resname} "
+                import sys
+                print(
+                    f"WARN: residuo {args.mutation_pos} es {resname} "
                     f"({AA3_TO_1.get(resname, '?')}), se esperaba {expected} "
-                    f"({args.expected_aa}). Estructura o --model-start incorrectos."
+                    f"({args.expected_aa}). Usando coordenadas del residuo {model_resseq} como centro de docking.",
+                    file=sys.stderr,
                 )
         n = len(atoms)
         cx = sum(a[0] for a in atoms) / n

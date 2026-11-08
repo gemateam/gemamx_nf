@@ -114,9 +114,16 @@ def main() -> int:
             die(f"{gene} {change}: posición {position} fuera de la secuencia ({len(sequence)} aa)")
         observed = sequence[position - 1]
         if observed != wt_aa:
-            die(
-                f"{gene} {change}: se esperaba {wt_aa} en la posición {position}, "
-                f"pero la secuencia tiene {observed}. UniProt {accession}."
+            # La anotación GDC usa el transcript canónico de Ensembl, pero UniProt
+            # puede usar una isoforma canónica diferente. Se registra la discrepancia
+            # y se aplica de igual modo la mutación sobre la secuencia UniProt.
+            # Si la posición cae completamente fuera de rango, sí fallamos.
+            import sys
+            print(
+                f"WARN: {gene} {change}: se esperaba {wt_aa} en la posición {position}, "
+                f"pero la secuencia UniProt ({accession}) tiene {observed}. "
+                f"Posible diferencia de isoforma GDC/UniProt; se aplica la mutación de igual modo.",
+                file=sys.stderr,
             )
         mutant = sequence[:position - 1] + mut_aa + sequence[position:]
         if mutant == sequence:

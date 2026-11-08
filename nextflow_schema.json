@@ -176,6 +176,13 @@
           "default": 900,
           "minimum": 60,
           "description": "Timeout por docking (segundos)."
+        },
+        "max_parallel_vina": {
+          "type": "integer",
+          "default": 4,
+          "minimum": 1,
+          "maximum": 4,
+          "description": "Número máximo de tareas Vina simultáneas."
         }
       }
     },

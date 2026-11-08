@@ -211,8 +211,16 @@ def main() -> int:
         workflow_file = "main_v2_1.nf"
     elif "romero" in run_name.lower() or "v2" in args.experiment.lower():
         workflow_file = "main_v2.nf"
+    elif "v3" in args.experiment.lower() or "tcga" in run_name.lower():
+        workflow_file = "main_v3.nf"
     else:
         workflow_file = "main.nf"
+
+    # Procedencia del contrato V3, si INGEST la publicó en data/.
+    contract = None
+    if args.data_dir:
+        contract = load_optional(str(Path(args.data_dir) / "contract_provenance.json"))
+
     base_tags = {
         "gemamx.pipeline": "gemamx_nf",
         "gemamx.contract": "v1",
@@ -221,6 +229,20 @@ def main() -> int:
         "gemamx.tracking_uri": args.tracking_uri,
         "gemamx.workflow_file": workflow_file,
     }
+    if isinstance(contract, dict):
+        version = str(contract.get("contract_version") or "")
+        if version:
+            base_tags["gemamx.contract"] = f"v{version.split('.')[0]}"
+            base_tags["gemamx.contract_version"] = version
+        for tag, key in (
+            ("gemamx.bundle_id", "bundle_id"),
+            ("gemamx.gdc_data_release", "gdc_data_release"),
+            ("gemamx.mutation_scope", "mutation_scope"),
+            ("gemamx.data_origin", "data_origin"),
+            ("gemamx.curated", "curated"),
+        ):
+            if contract.get(key) is not None:
+                base_tags[tag] = str(contract[key])
 
     try:
         experiment_id = ensure_experiment(client, args.experiment)
@@ -317,10 +339,13 @@ def main() -> int:
         }
 
         if data_dir and data_dir.is_dir():
-            for name in ("top_variants.json", "raw_mutations.json", "mutation_stats.json"):
+            for name in ("top_variants.json", "raw_mutations.json", "mutation_stats.json",
+                         "contract_provenance.json", "data_ingest.json"):
                 p = data_dir / name
                 if p.is_file():
                     stage_artifacts["ingest"].append(str(p))
+                    if name == "contract_provenance.json":
+                        artifacts.append(str(p))
 
             p_struct = data_dir / "structures"
             if p_struct.is_dir():

@@ -1,0 +1,16 @@
+{
+  "gene": "MAP3K1",
+  "protein_change": "C1437F",
+  "role": "mut",
+  "backend": "precomputed",
+  "source": "https://alphafold.ebi.ac.uk/files/AF-Q13233-F1-model_v6.cif",
+  "source_format": "cif",
+  "uniprot_id": "Q13233",
+  "fasta_length": 1512,
+  "model_start": 1,
+  "model_resseq_start": 1,
+  "model_resseq_end": 1512,
+  "mean_plddt": 58.75,
+  "plddt_source": "AlphaFold DB v6",
+  "source_sha256": "de122c4c7e5db4f4b6f92e8bfb31210884b03c7c839d98c3ff6ca6f5421f237f"
+}

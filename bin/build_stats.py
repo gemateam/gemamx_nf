@@ -22,6 +22,8 @@ def main() -> int:
     parser.add_argument("--out", required=True)
     parser.add_argument("--total-samples", type=int,
                         help="tamaño de cohorte (por defecto, muestras únicas)")
+    parser.add_argument("--contract-dir",
+                        help="bundle del contrato; su manifiesto define el tamaño de cohorte")
     parser.add_argument("--top-genes", type=int, default=20)
     args = parser.parse_args()
 
@@ -37,7 +39,30 @@ def main() -> int:
     type_sorted = sorted(type_counts.items(), key=lambda kv: (-kv[1], kv[0]))
 
     samples = {r.get("sample_id") for r in rows if r.get("sample_id")}
-    total_samples = args.total_samples if args.total_samples else len(samples)
+    patient_ids = {r.get("patient_id") for r in rows if r.get("patient_id")}
+    if args.contract_dir:
+        manifest_path = Path(args.contract_dir) / "manifest.json"
+        manifest = read_json(manifest_path)
+        cohort = manifest.get("cohort") or {}
+        contract_counts = manifest.get("counts") or {}
+        total_samples = cohort.get("total_cases") or contract_counts.get("cohort_cases")
+        if not total_samples:
+            die(f"el manifiesto no declara el tamaño de la cohorte: {manifest_path}")
+        if args.total_samples and args.total_samples != total_samples:
+            print(f"AVISO: --total-samples {args.total_samples} difiere del "
+                  f"manifiesto ({total_samples}); se usa el manifiesto", file=sys.stderr)
+        cohort_unit = "patient"
+        mutation_carriers = contract_counts.get("mutation_patients")
+        non_mutated_units = cohort.get("cases_without_mutations")
+        if mutation_carriers is None:
+            mutation_carriers = len(patient_ids)
+        if non_mutated_units is None:
+            non_mutated_units = max(0, total_samples - mutation_carriers)
+    else:
+        total_samples = args.total_samples if args.total_samples else len(samples)
+        cohort_unit = "patient" if patient_ids else "sample"
+        mutation_carriers = len(patient_ids) if patient_ids else len(samples)
+        non_mutated_units = max(0, total_samples - mutation_carriers)
     if total_samples <= 0:
         die("no se pudo determinar el número de muestras")
 
@@ -45,6 +70,9 @@ def main() -> int:
         "gene_distribution": {gene: count for gene, count in gene_sorted[:args.top_genes]},
         "type_distribution": {variant_type: count for variant_type, count in type_sorted},
         "total_samples": total_samples,
+        "cohort_unit": cohort_unit,
+        "cohort_units_with_mutations": mutation_carriers,
+        "cohort_units_without_mutations": non_mutated_units,
         "total_mutations": len(rows),
     }
     write_json(args.out, stats)

@@ -446,6 +446,32 @@ def main() -> int:
     write_compact("raw_mutations.json", raw_mutations)
     write_compact("top_variants.json", top_variants)
     write_compact("mutation_stats.json", stats)
+    write_compact("data_ingest.json", {
+        "schema_version": 1,
+        "pipeline": "romero_fucam_hm",
+        "mode": "local_xlsx",
+        "query": {
+            "source": "Romero-Cordoba 2021 HM (MOESM8/9 XLSX)",
+            "description": "Extraccion local de filas XLSX; no se consulto una API o SQL.",
+            "inputs": [
+                {"file": maf_path.name, "sheet": "HM maf", "selection": "todas las filas con datos"},
+                {"file": drivers_path.name, "sheet": "Driver mutation in HM", "selection": "todas las filas driver"},
+            ],
+            "join": ["Gene/Hugo Symbol", "Chromosome", "Start Position/gdna", "Reference Allele", "Tumor Seq Allele2"],
+            "filters": {
+                "genes": sorted(key_genes),
+                "variant_classification_contains": "missense",
+                "protein_change_required": True,
+                "max_variants": args.max_variants,
+            },
+        },
+        "counts": {
+            "raw_mutation_records": len(raw_mutations),
+            "cohort_units": total_samples,
+            "prioritized_variants": len(top_variants),
+            "driver_rows": len(driver_rows),
+        },
+    })
 
     print(f"OK ingestión Romero: {len(raw_mutations)} mutaciones, "
           f"cohorte {total_samples} muestras, "

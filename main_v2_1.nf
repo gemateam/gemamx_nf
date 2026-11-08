@@ -292,6 +292,7 @@ workflow {
 
     def ch_clinical_files = BUILD_CLINICAL_SUMMARY.out.clinical_summary
         .mix(EXTRACT_CLINICAL.out.clinical_metadata)
+        .mix(INGEST_ROMERO.out.ingest_metadata)
         .collect()
 
     BUILD_JSONS(
@@ -330,6 +331,7 @@ workflow {
         BUILD_JSONS.out.top_variants_out
             .mix(BUILD_JSONS.out.structural_metrics)
             .mix(BUILD_JSONS.out.vina_affinities)
+            .mix(BUILD_JSONS.out.data_ingest_out)
             .collect(),
         ch_source_snapshot
     )

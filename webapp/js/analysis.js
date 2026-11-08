@@ -116,13 +116,14 @@ async function loadAnalysis() {
   if (state.loaded) return;
   state.loaded = true;
 
-  const [stats, clinical, variantSummary, geoSummary, topVariants, runManifest] = await Promise.all([
+  const [stats, clinical, variantSummary, geoSummary, topVariants, runManifest, contractProvenance] = await Promise.all([
     loadJSON(DATA.mutationStats()),
     loadJSON(DATA.clinicalMetadata()),
     loadJSON(DATA.variantClinicalSummary()),
     loadJSON(DATA.romeroGeoSummary()),
     loadJSON(DATA.topVariants()),
     loadJSON(DATA.runManifest()),
+    loadJSON(DATA.contractProvenance()),
   ]);
 
   const statsCohortEl = document.getElementById('stats-cohort');
@@ -189,8 +190,13 @@ async function loadAnalysis() {
   }, { responsive: true, displayModeBar: false });
 
   // ── Estadísticas del cohorte ──────────────────────────────────────────
+  const cohortUnit = stats?.cohort_unit === 'patient' ? 'pacientes' : 'muestras';
   const statsItems = [
-    { label: 'Total muestras',   value: (stats?.total_samples  ?? '—').toLocaleString() },
+    { label: `Total ${cohortUnit}`, value: (stats?.total_samples ?? '—').toLocaleString() },
+    ...(stats?.cohort_units_with_mutations != null ? [{
+      label: `${cohortUnit[0].toUpperCase()}${cohortUnit.slice(1)} con mutaciones`,
+      value: `${stats.cohort_units_with_mutations} / ${stats.total_samples}`,
+    }] : []),
     { label: 'Total mutaciones', value: (stats?.total_mutations ?? '—').toLocaleString() },
     { label: 'Genes analizados', value: Object.keys(geneDist).length },
     { label: 'Tipo predominante', value: typeLabels[typeEntries[0]?.[0]] ?? '—' },
@@ -295,10 +301,24 @@ async function loadAnalysis() {
                    clinical.find(c => c.clinical_source)?.clinical_source;
     const provenanceCard = document.getElementById('clinical-provenance-card');
     const smallCellNote = document.getElementById('clinical-small-cell-note');
-    if (note || source) {
+    const contractLabel = document.getElementById('clinical-contract-label');
+    if (note || source || contractProvenance) {
       toggleBlock(provenanceCard, true);
       setText('clinical-data-note', note ?? 'Datos clínicos de la cohorte activa.');
       setText('clinical-source-label', source ? `Fuente: ${source}` : '');
+      if (contractLabel) {
+        if (contractProvenance) {
+          contractLabel.style.display = '';
+          contractLabel.textContent =
+            `Contrato ${contractProvenance.contract_version ?? '—'} · ` +
+            `bundle ${contractProvenance.bundle_id ?? '—'} · ` +
+            `${contractProvenance.gdc_data_release ?? 'release desconocido'} · ` +
+            `alcance ${contractProvenance.mutation_scope ?? '—'} · ` +
+            `origen ${contractProvenance.data_origin ?? '—'}`;
+        } else {
+          contractLabel.style.display = 'none';
+        }
+      }
       if (smallCellNote) {
         smallCellNote.style.display = '';
         smallCellNote.textContent =

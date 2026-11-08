@@ -1,0 +1,37 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "contract_version": "1.2.0",
+  "project_id": "TCGA-BRCA",
+  "cohort_filters": {
+    "disease_type": {
+      "project_id": "TCGA-BRCA",
+      "primary_site": "Breast",
+      "description": "Exclusivamente casos de cáncer de mama (TCGA-BRCA)"
+    },
+    "ethnicity": {
+      "attribute": "ethnicity",
+      "values_included": [
+        "HISPANIC OR LATINO"
+      ],
+      "description": "Exclusivamente pacientes con etnicidad hispana o latina autorreportada"
+    }
+  },
+  "gdc_data_release": "Data Release 41.0 - GDC Open Access",
+  "exported_at": "2026-11-07T18:56:16.087596+00:00",
+  "total_cases": 39,
+  "total_mutations": 21,
+  "files": {
+    "somatic_mutations.json": {
+      "sha256": "0ed64024d22b065773842a88037e166524d86a397c02fe63e907abb41731c4bf",
+      "records": 21
+    },
+    "clinical_attributes.json": {
+      "sha256": "9aeb8ab6bb50648157d7e1129dc8eea9f787bde4c2e0425bb5eaa62e384b98e3",
+      "records": 234
+    },
+    "cohort_cases.json": {
+      "sha256": "c3035b502e29d6a7ce8c00daf4e85fbf8b7cc26185d0b8a3e49b222e524a886e",
+      "records": 39
+    }
+  }
+}

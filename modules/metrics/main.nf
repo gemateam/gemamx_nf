@@ -36,6 +36,7 @@ process BUILD_JSONS {
     path "stage/data/raw_mutations.json",      emit: raw_mutations_out
     path "stage/data/mutation_stats.json",     emit: mutation_stats_out
     path "stage/data/docking/vina_affinities.json", emit: vina_affinities
+    path "stage/data/data_ingest.json",         optional: true, emit: data_ingest_out
 
     // Artefactos que la webapp consume además de los seis JSON: estructuras
     // (manifest_structures.json apunta a ellas), poses y complejos de docking.
@@ -47,6 +48,7 @@ process BUILD_JSONS {
     // Archivos V2 extras (clínico, GEO summaries) — opcionales
     path "stage/data/variant_clinical_summary.json", optional: true, emit: clinical_summary_out
     path "stage/data/clinical_metadata.json",        optional: true, emit: clinical_metadata_out
+    path "stage/data/contract_provenance.json",      optional: true, emit: contract_provenance_out
 
     script:
     """
@@ -76,6 +78,7 @@ process BUILD_JSONS {
     echo '[]' > stage/data/raw_mutations.json
     echo '{}' > stage/data/mutation_stats.json
     echo '{}' > stage/data/docking/vina_affinities.json
+    echo '{}' > stage/data/data_ingest.json
     """
 }
 

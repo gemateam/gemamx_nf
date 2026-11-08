@@ -1,0 +1,16 @@
+{
+  "gene": "PIK3CA",
+  "protein_change": "E81K",
+  "role": "mut",
+  "backend": "precomputed",
+  "source": "https://alphafold.ebi.ac.uk/files/AF-P42336-F1-model_v6.cif",
+  "source_format": "cif",
+  "uniprot_id": "P42336",
+  "fasta_length": 1068,
+  "model_start": 1,
+  "model_resseq_start": 1,
+  "model_resseq_end": 1068,
+  "mean_plddt": 92.36,
+  "plddt_source": "AlphaFold DB v6",
+  "source_sha256": "310d2c27cc1447d8a7bdb55941a2918ac286c5468f6b3a5d6f0c90dcbb9afc77"
+}

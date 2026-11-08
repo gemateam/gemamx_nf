@@ -1,0 +1,16 @@
+{
+  "gene": "ERBB2",
+  "protein_change": "WT",
+  "role": "wt",
+  "backend": "precomputed",
+  "source": "https://alphafold.ebi.ac.uk/files/AF-P04626-F1-model_v6.cif",
+  "source_format": "cif",
+  "uniprot_id": "P04626",
+  "fasta_length": 1255,
+  "model_start": 1,
+  "model_resseq_start": 1,
+  "model_resseq_end": 1255,
+  "mean_plddt": 73.98,
+  "plddt_source": "AlphaFold DB v6",
+  "source_sha256": "ad8475cae9154a0d5bc3336d03a2ab97f8e13530671ec7d1f73d9a32da97b096"
+}

@@ -1,0 +1,95 @@
+{
+  "contract_version": "2.0.0",
+  "bundle_id": "TCGA-BRCA-HISPANIC__GDC-46.0__20261108T025940Z__de39c9eb",
+  "dataset_id": "tcga_brca_hispanic",
+  "project_id": "TCGA-BRCA",
+  "disease_type": "Breast Invasive Carcinoma",
+  "primary_site": "Breast",
+  "gdc_data_release": "Data Release 46.0 - August 10, 2026",
+  "gdc_api_tag": "8.5.0",
+  "exported_at": "2026-11-08T02:59:40Z",
+  "producer": {
+    "name": "etl_tcga",
+    "version": "2.0.0",
+    "git_commit": "2d59bab411e3ccbba3cdf18c7a64bec8fed8552f"
+  },
+  "source": {
+    "layer": "bronze.mutations",
+    "mutations_parquet": "D:\\ProyectosIA\\etl_tcga\\tcga-medallion\\data\\bronze\\mutations\\TCGA-BRCA\\mutations.parquet",
+    "maf_samples_parquet": "D:\\ProyectosIA\\etl_tcga\\tcga-medallion\\data\\bronze\\mutations\\TCGA-BRCA\\maf_samples.parquet",
+    "cases_parquet": "D:\\ProyectosIA\\etl_tcga\\tcga-medallion\\data\\bronze\\cases\\TCGA-BRCA\\cases.parquet",
+    "diagnoses_parquet": "D:\\ProyectosIA\\etl_tcga\\tcga-medallion\\data\\bronze\\cases\\TCGA-BRCA\\cases_diagnoses.parquet",
+    "samples_parquet": "D:\\ProyectosIA\\etl_tcga\\tcga-medallion\\data\\bronze\\cases\\TCGA-BRCA\\cases_samples.parquet"
+  },
+  "cohort": {
+    "filter": "project_id = TCGA-BRCA AND ethnicity = HISPANIC OR LATINO",
+    "ethnicity_values": [
+      "HISPANIC OR LATINO"
+    ],
+    "total_cases": 39,
+    "cases_with_mutations": 13,
+    "cases_without_mutations": 26
+  },
+  "mutation_scope": "target_panel",
+  "target_genes": [
+    "PIK3CA",
+    "TP53",
+    "AKT1",
+    "CDH1",
+    "PTEN",
+    "ESR1",
+    "GATA3",
+    "MAP3K1",
+    "ERBB2",
+    "BRCA1",
+    "BRCA2"
+  ],
+  "data_origin": "gdc_open_access",
+  "curated": false,
+  "counts": {
+    "cohort_cases": 39,
+    "mutation_records": 23,
+    "mutation_patients": 13,
+    "clinical_records": 234
+  },
+  "files": {
+    "cohort_cases.json": {
+      "sha256": "6efc81f628509b102253e6ecc016280455d509429872f9bc3da13c131d02a85c",
+      "records": 39,
+      "bytes": 19023
+    },
+    "somatic_mutations.json": {
+      "sha256": "c4722ba4d6e8f20485770ac7a5abb734e34fcfd7c5b82ac642df226bc0480b4f",
+      "records": 23,
+      "bytes": 19822
+    },
+    "clinical_attributes.json": {
+      "sha256": "12328fe13d0aabd4ca1ba639d28e5148f5b5c274ebfb4a60988b45569db66042",
+      "records": 234,
+      "bytes": 73448
+    }
+  },
+  "validation": {
+    "passed": true,
+    "checked_at": "2026-11-08T02:59:40Z",
+    "rules": [
+      "cohort_count",
+      "cohort_ethnicity",
+      "mutation_patient_fk",
+      "clinical_patient_fk",
+      "unique_clinical_key",
+      "unique_mutation_key",
+      "tumor_sample_only",
+      "protein_change_format",
+      "chromosome_format",
+      "release_from_source",
+      "sha256_match"
+    ],
+    "errors": []
+  },
+  "notes": [
+    "RACE/ETHNICITY son autorreportados; no son ancestría genética.",
+    "El bundle se genera desde el medallón TCGA; no se consulta /ssms.",
+    "mutation_scope=target_panel: no contiene todas las missense de la cohorte."
+  ]
+}

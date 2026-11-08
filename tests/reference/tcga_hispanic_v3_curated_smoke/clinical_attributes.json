@@ -1,0 +1,1406 @@
+[
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A1P7",
+    "clinicalAttributeId": "PRIMARY_SITE",
+    "value": "Breast"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A1P7",
+    "clinicalAttributeId": "ETHNICITY",
+    "value": "HISPANIC OR LATINO"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A1P7",
+    "clinicalAttributeId": "RACE",
+    "value": "WHITE"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A1P7",
+    "clinicalAttributeId": "AGE",
+    "value": "59"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A1P7",
+    "clinicalAttributeId": "HISTOLOGY",
+    "value": "Infiltrating duct carcinoma, NOS"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A1P7",
+    "clinicalAttributeId": "STAGE",
+    "value": "Stage IIA"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-5L-AAT1",
+    "clinicalAttributeId": "PRIMARY_SITE",
+    "value": "Breast"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-5L-AAT1",
+    "clinicalAttributeId": "ETHNICITY",
+    "value": "HISPANIC OR LATINO"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-5L-AAT1",
+    "clinicalAttributeId": "RACE",
+    "value": "WHITE"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-5L-AAT1",
+    "clinicalAttributeId": "AGE",
+    "value": "63"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-5L-AAT1",
+    "clinicalAttributeId": "HISTOLOGY",
+    "value": "Lobular carcinoma, NOS"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-5L-AAT1",
+    "clinicalAttributeId": "STAGE",
+    "value": "Stage IV"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-A2-A04N",
+    "clinicalAttributeId": "PRIMARY_SITE",
+    "value": "Breast"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-A2-A04N",
+    "clinicalAttributeId": "ETHNICITY",
+    "value": "HISPANIC OR LATINO"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-A2-A04N",
+    "clinicalAttributeId": "RACE",
+    "value": "WHITE"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-A2-A04N",
+    "clinicalAttributeId": "AGE",
+    "value": "66"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-A2-A04N",
+    "clinicalAttributeId": "HISTOLOGY",
+    "value": "Infiltrating duct carcinoma, NOS"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-A2-A04N",
+    "clinicalAttributeId": "STAGE",
+    "value": "Stage IA"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A6SD",
+    "clinicalAttributeId": "PRIMARY_SITE",
+    "value": "Breast"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A6SD",
+    "clinicalAttributeId": "ETHNICITY",
+    "value": "HISPANIC OR LATINO"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A6SD",
+    "clinicalAttributeId": "RACE",
+    "value": "BLACK OR AFRICAN AMERICAN"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A6SD",
+    "clinicalAttributeId": "AGE",
+    "value": "32"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A6SD",
+    "clinicalAttributeId": "HISTOLOGY",
+    "value": "Infiltrating duct carcinoma, NOS"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A6SD",
+    "clinicalAttributeId": "STAGE",
+    "value": "Stage IIB"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-AR-A1AN",
+    "clinicalAttributeId": "PRIMARY_SITE",
+    "value": "Breast"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-AR-A1AN",
+    "clinicalAttributeId": "ETHNICITY",
+    "value": "HISPANIC OR LATINO"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-AR-A1AN",
+    "clinicalAttributeId": "RACE",
+    "value": "WHITE"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-AR-A1AN",
+    "clinicalAttributeId": "AGE",
+    "value": "46"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-AR-A1AN",
+    "clinicalAttributeId": "HISTOLOGY",
+    "value": "Infiltrating duct carcinoma, NOS"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-AR-A1AN",
+    "clinicalAttributeId": "STAGE",
+    "value": "Stage IIA"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-AO-A0JM",
+    "clinicalAttributeId": "PRIMARY_SITE",
+    "value": "Breast"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-AO-A0JM",
+    "clinicalAttributeId": "ETHNICITY",
+    "value": "HISPANIC OR LATINO"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-AO-A0JM",
+    "clinicalAttributeId": "RACE",
+    "value": "UNKNOWN"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-AO-A0JM",
+    "clinicalAttributeId": "AGE",
+    "value": "40"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-AO-A0JM",
+    "clinicalAttributeId": "HISTOLOGY",
+    "value": "Infiltrating duct carcinoma, NOS"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-AO-A0JM",
+    "clinicalAttributeId": "STAGE",
+    "value": "Stage IIB"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A1PA",
+    "clinicalAttributeId": "PRIMARY_SITE",
+    "value": "Breast"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A1PA",
+    "clinicalAttributeId": "ETHNICITY",
+    "value": "HISPANIC OR LATINO"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A1PA",
+    "clinicalAttributeId": "RACE",
+    "value": "WHITE"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A1PA",
+    "clinicalAttributeId": "AGE",
+    "value": "59"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A1PA",
+    "clinicalAttributeId": "HISTOLOGY",
+    "value": "Infiltrating duct carcinoma, NOS"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A1PA",
+    "clinicalAttributeId": "STAGE",
+    "value": "Stage IIB"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A1PH",
+    "clinicalAttributeId": "PRIMARY_SITE",
+    "value": "Breast"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A1PH",
+    "clinicalAttributeId": "ETHNICITY",
+    "value": "HISPANIC OR LATINO"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A1PH",
+    "clinicalAttributeId": "RACE",
+    "value": "WHITE"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A1PH",
+    "clinicalAttributeId": "AGE",
+    "value": "52"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A1PH",
+    "clinicalAttributeId": "HISTOLOGY",
+    "value": "Infiltrating duct carcinoma, NOS"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A1PH",
+    "clinicalAttributeId": "STAGE",
+    "value": "Stage IIA"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A1PD",
+    "clinicalAttributeId": "PRIMARY_SITE",
+    "value": "Breast"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A1PD",
+    "clinicalAttributeId": "ETHNICITY",
+    "value": "HISPANIC OR LATINO"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A1PD",
+    "clinicalAttributeId": "RACE",
+    "value": "WHITE"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A1PD",
+    "clinicalAttributeId": "AGE",
+    "value": "61"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A1PD",
+    "clinicalAttributeId": "HISTOLOGY",
+    "value": "Infiltrating duct carcinoma, NOS"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A1PD",
+    "clinicalAttributeId": "STAGE",
+    "value": "Stage IIA"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A1P4",
+    "clinicalAttributeId": "PRIMARY_SITE",
+    "value": "Breast"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A1P4",
+    "clinicalAttributeId": "ETHNICITY",
+    "value": "HISPANIC OR LATINO"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A1P4",
+    "clinicalAttributeId": "RACE",
+    "value": "WHITE"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A1P4",
+    "clinicalAttributeId": "AGE",
+    "value": "43"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A1P4",
+    "clinicalAttributeId": "HISTOLOGY",
+    "value": "Medullary carcinoma, NOS"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A1P4",
+    "clinicalAttributeId": "STAGE",
+    "value": "Stage IIA"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A1OY",
+    "clinicalAttributeId": "PRIMARY_SITE",
+    "value": "Breast"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A1OY",
+    "clinicalAttributeId": "ETHNICITY",
+    "value": "HISPANIC OR LATINO"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A1OY",
+    "clinicalAttributeId": "RACE",
+    "value": "WHITE"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A1OY",
+    "clinicalAttributeId": "AGE",
+    "value": "63"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A1OY",
+    "clinicalAttributeId": "HISTOLOGY",
+    "value": "Infiltrating duct carcinoma, NOS"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A1OY",
+    "clinicalAttributeId": "STAGE",
+    "value": "Stage IIA"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-AQ-A54N",
+    "clinicalAttributeId": "PRIMARY_SITE",
+    "value": "Breast"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-AQ-A54N",
+    "clinicalAttributeId": "ETHNICITY",
+    "value": "HISPANIC OR LATINO"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-AQ-A54N",
+    "clinicalAttributeId": "RACE",
+    "value": "BLACK OR AFRICAN AMERICAN"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-AQ-A54N",
+    "clinicalAttributeId": "AGE",
+    "value": "51"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-AQ-A54N",
+    "clinicalAttributeId": "HISTOLOGY",
+    "value": "Infiltrating duct carcinoma, NOS"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-AQ-A54N",
+    "clinicalAttributeId": "STAGE",
+    "value": "Not Reported"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A1IW",
+    "clinicalAttributeId": "PRIMARY_SITE",
+    "value": "Breast"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A1IW",
+    "clinicalAttributeId": "ETHNICITY",
+    "value": "HISPANIC OR LATINO"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A1IW",
+    "clinicalAttributeId": "RACE",
+    "value": "WHITE"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A1IW",
+    "clinicalAttributeId": "AGE",
+    "value": "80"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A1IW",
+    "clinicalAttributeId": "HISTOLOGY",
+    "value": "Lobular carcinoma, NOS"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A1IW",
+    "clinicalAttributeId": "STAGE",
+    "value": "Stage IIB"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A1OX",
+    "clinicalAttributeId": "PRIMARY_SITE",
+    "value": "Breast"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A1OX",
+    "clinicalAttributeId": "ETHNICITY",
+    "value": "HISPANIC OR LATINO"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A1OX",
+    "clinicalAttributeId": "RACE",
+    "value": "WHITE"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A1OX",
+    "clinicalAttributeId": "AGE",
+    "value": "43"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A1OX",
+    "clinicalAttributeId": "HISTOLOGY",
+    "value": "Infiltrating duct mixed with other types of carcinoma"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A1OX",
+    "clinicalAttributeId": "STAGE",
+    "value": "Stage IIA"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-GM-A2DM",
+    "clinicalAttributeId": "PRIMARY_SITE",
+    "value": "Breast"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-GM-A2DM",
+    "clinicalAttributeId": "ETHNICITY",
+    "value": "HISPANIC OR LATINO"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-GM-A2DM",
+    "clinicalAttributeId": "RACE",
+    "value": "WHITE"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-GM-A2DM",
+    "clinicalAttributeId": "AGE",
+    "value": "57"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-GM-A2DM",
+    "clinicalAttributeId": "HISTOLOGY",
+    "value": "Infiltrating duct carcinoma, NOS"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-GM-A2DM",
+    "clinicalAttributeId": "STAGE",
+    "value": "Stage IIA"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-AC-A2FK",
+    "clinicalAttributeId": "PRIMARY_SITE",
+    "value": "Breast"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-AC-A2FK",
+    "clinicalAttributeId": "ETHNICITY",
+    "value": "HISPANIC OR LATINO"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-AC-A2FK",
+    "clinicalAttributeId": "RACE",
+    "value": "WHITE"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-AC-A2FK",
+    "clinicalAttributeId": "AGE",
+    "value": "45"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-AC-A2FK",
+    "clinicalAttributeId": "HISTOLOGY",
+    "value": "Lobular carcinoma, NOS"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-AC-A2FK",
+    "clinicalAttributeId": "STAGE",
+    "value": "Stage IIIC"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A1PF",
+    "clinicalAttributeId": "PRIMARY_SITE",
+    "value": "Breast"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A1PF",
+    "clinicalAttributeId": "ETHNICITY",
+    "value": "HISPANIC OR LATINO"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A1PF",
+    "clinicalAttributeId": "RACE",
+    "value": "WHITE"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A1PF",
+    "clinicalAttributeId": "AGE",
+    "value": "50"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A1PF",
+    "clinicalAttributeId": "HISTOLOGY",
+    "value": "Infiltrating duct carcinoma, NOS"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A1PF",
+    "clinicalAttributeId": "STAGE",
+    "value": "Stage IA"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-5L-AAT0",
+    "clinicalAttributeId": "PRIMARY_SITE",
+    "value": "Breast"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-5L-AAT0",
+    "clinicalAttributeId": "ETHNICITY",
+    "value": "HISPANIC OR LATINO"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-5L-AAT0",
+    "clinicalAttributeId": "RACE",
+    "value": "WHITE"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-5L-AAT0",
+    "clinicalAttributeId": "AGE",
+    "value": "42"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-5L-AAT0",
+    "clinicalAttributeId": "HISTOLOGY",
+    "value": "Adenocarcinoma, NOS"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-5L-AAT0",
+    "clinicalAttributeId": "STAGE",
+    "value": "Not Reported"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A1J6",
+    "clinicalAttributeId": "PRIMARY_SITE",
+    "value": "Breast"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A1J6",
+    "clinicalAttributeId": "ETHNICITY",
+    "value": "HISPANIC OR LATINO"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A1J6",
+    "clinicalAttributeId": "RACE",
+    "value": "WHITE"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A1J6",
+    "clinicalAttributeId": "AGE",
+    "value": "70"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A1J6",
+    "clinicalAttributeId": "HISTOLOGY",
+    "value": "Infiltrating duct carcinoma, NOS"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A1J6",
+    "clinicalAttributeId": "STAGE",
+    "value": "Stage I"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-E2-A1AZ",
+    "clinicalAttributeId": "PRIMARY_SITE",
+    "value": "Breast"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-E2-A1AZ",
+    "clinicalAttributeId": "ETHNICITY",
+    "value": "HISPANIC OR LATINO"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-E2-A1AZ",
+    "clinicalAttributeId": "RACE",
+    "value": "WHITE"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-E2-A1AZ",
+    "clinicalAttributeId": "AGE",
+    "value": "63"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-E2-A1AZ",
+    "clinicalAttributeId": "HISTOLOGY",
+    "value": "Infiltrating duct carcinoma, NOS"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-E2-A1AZ",
+    "clinicalAttributeId": "STAGE",
+    "value": "Stage IIB"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-B6-A2IU",
+    "clinicalAttributeId": "PRIMARY_SITE",
+    "value": "Breast"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-B6-A2IU",
+    "clinicalAttributeId": "ETHNICITY",
+    "value": "HISPANIC OR LATINO"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-B6-A2IU",
+    "clinicalAttributeId": "RACE",
+    "value": "WHITE"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-B6-A2IU",
+    "clinicalAttributeId": "AGE",
+    "value": "62"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-B6-A2IU",
+    "clinicalAttributeId": "HISTOLOGY",
+    "value": "Lobular carcinoma, NOS"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-B6-A2IU",
+    "clinicalAttributeId": "STAGE",
+    "value": "Stage IIA"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A424",
+    "clinicalAttributeId": "PRIMARY_SITE",
+    "value": "Breast"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A424",
+    "clinicalAttributeId": "ETHNICITY",
+    "value": "HISPANIC OR LATINO"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A424",
+    "clinicalAttributeId": "RACE",
+    "value": "WHITE"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A424",
+    "clinicalAttributeId": "AGE",
+    "value": "51"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A424",
+    "clinicalAttributeId": "HISTOLOGY",
+    "value": "Lobular carcinoma, NOS"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A424",
+    "clinicalAttributeId": "STAGE",
+    "value": "Stage IIIA"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A1OV",
+    "clinicalAttributeId": "PRIMARY_SITE",
+    "value": "Breast"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A1OV",
+    "clinicalAttributeId": "ETHNICITY",
+    "value": "HISPANIC OR LATINO"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A1OV",
+    "clinicalAttributeId": "RACE",
+    "value": "WHITE"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A1OV",
+    "clinicalAttributeId": "AGE",
+    "value": "56"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A1OV",
+    "clinicalAttributeId": "HISTOLOGY",
+    "value": "Infiltrating duct carcinoma, NOS"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A1OV",
+    "clinicalAttributeId": "STAGE",
+    "value": "Stage IIB"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A1J3",
+    "clinicalAttributeId": "PRIMARY_SITE",
+    "value": "Breast"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A1J3",
+    "clinicalAttributeId": "ETHNICITY",
+    "value": "HISPANIC OR LATINO"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A1J3",
+    "clinicalAttributeId": "RACE",
+    "value": "WHITE"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A1J3",
+    "clinicalAttributeId": "AGE",
+    "value": "61"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A1J3",
+    "clinicalAttributeId": "HISTOLOGY",
+    "value": "Lobular carcinoma, NOS"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A1J3",
+    "clinicalAttributeId": "STAGE",
+    "value": "Stage IA"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A423",
+    "clinicalAttributeId": "PRIMARY_SITE",
+    "value": "Breast"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A423",
+    "clinicalAttributeId": "ETHNICITY",
+    "value": "HISPANIC OR LATINO"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A423",
+    "clinicalAttributeId": "RACE",
+    "value": "WHITE"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A423",
+    "clinicalAttributeId": "AGE",
+    "value": "75"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A423",
+    "clinicalAttributeId": "HISTOLOGY",
+    "value": "Lobular carcinoma, NOS"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A423",
+    "clinicalAttributeId": "STAGE",
+    "value": "Stage IIA"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A3E8",
+    "clinicalAttributeId": "PRIMARY_SITE",
+    "value": "Breast"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A3E8",
+    "clinicalAttributeId": "ETHNICITY",
+    "value": "HISPANIC OR LATINO"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A3E8",
+    "clinicalAttributeId": "RACE",
+    "value": "WHITE"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A3E8",
+    "clinicalAttributeId": "AGE",
+    "value": "60"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A3E8",
+    "clinicalAttributeId": "HISTOLOGY",
+    "value": "Lobular carcinoma, NOS"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A3E8",
+    "clinicalAttributeId": "STAGE",
+    "value": "Stage IIB"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-AR-A0U3",
+    "clinicalAttributeId": "PRIMARY_SITE",
+    "value": "Breast"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-AR-A0U3",
+    "clinicalAttributeId": "ETHNICITY",
+    "value": "HISPANIC OR LATINO"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-AR-A0U3",
+    "clinicalAttributeId": "RACE",
+    "value": "WHITE"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-AR-A0U3",
+    "clinicalAttributeId": "AGE",
+    "value": "59"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-AR-A0U3",
+    "clinicalAttributeId": "HISTOLOGY",
+    "value": "Infiltrating duct carcinoma, NOS"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-AR-A0U3",
+    "clinicalAttributeId": "STAGE",
+    "value": "Stage IIB"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-AC-A2QJ",
+    "clinicalAttributeId": "PRIMARY_SITE",
+    "value": "Breast"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-AC-A2QJ",
+    "clinicalAttributeId": "ETHNICITY",
+    "value": "HISPANIC OR LATINO"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-AC-A2QJ",
+    "clinicalAttributeId": "RACE",
+    "value": "WHITE"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-AC-A2QJ",
+    "clinicalAttributeId": "AGE",
+    "value": "48"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-AC-A2QJ",
+    "clinicalAttributeId": "HISTOLOGY",
+    "value": "Metaplastic carcinoma, NOS"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-AC-A2QJ",
+    "clinicalAttributeId": "STAGE",
+    "value": "Not Reported"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A1PG",
+    "clinicalAttributeId": "PRIMARY_SITE",
+    "value": "Breast"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A1PG",
+    "clinicalAttributeId": "ETHNICITY",
+    "value": "HISPANIC OR LATINO"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A1PG",
+    "clinicalAttributeId": "RACE",
+    "value": "WHITE"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A1PG",
+    "clinicalAttributeId": "AGE",
+    "value": "53"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A1PG",
+    "clinicalAttributeId": "HISTOLOGY",
+    "value": "Lobular carcinoma, NOS"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A1PG",
+    "clinicalAttributeId": "STAGE",
+    "value": "Stage IIB"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-AR-A1AV",
+    "clinicalAttributeId": "PRIMARY_SITE",
+    "value": "Breast"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-AR-A1AV",
+    "clinicalAttributeId": "ETHNICITY",
+    "value": "HISPANIC OR LATINO"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-AR-A1AV",
+    "clinicalAttributeId": "RACE",
+    "value": "WHITE"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-AR-A1AV",
+    "clinicalAttributeId": "AGE",
+    "value": "68"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-AR-A1AV",
+    "clinicalAttributeId": "HISTOLOGY",
+    "value": "Infiltrating duct carcinoma, NOS"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-AR-A1AV",
+    "clinicalAttributeId": "STAGE",
+    "value": "Stage IIB"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A2FW",
+    "clinicalAttributeId": "PRIMARY_SITE",
+    "value": "Breast"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A2FW",
+    "clinicalAttributeId": "ETHNICITY",
+    "value": "HISPANIC OR LATINO"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A2FW",
+    "clinicalAttributeId": "RACE",
+    "value": "WHITE"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A2FW",
+    "clinicalAttributeId": "AGE",
+    "value": "52"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A2FW",
+    "clinicalAttributeId": "HISTOLOGY",
+    "value": "Intraductal papillary adenocarcinoma with invasion"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A2FW",
+    "clinicalAttributeId": "STAGE",
+    "value": "Stage IIA"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A1IX",
+    "clinicalAttributeId": "PRIMARY_SITE",
+    "value": "Breast"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A1IX",
+    "clinicalAttributeId": "ETHNICITY",
+    "value": "HISPANIC OR LATINO"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A1IX",
+    "clinicalAttributeId": "RACE",
+    "value": "ASIAN"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A1IX",
+    "clinicalAttributeId": "AGE",
+    "value": "48"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A1IX",
+    "clinicalAttributeId": "HISTOLOGY",
+    "value": "Infiltrating lobular mixed with other types of carcinoma"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A1IX",
+    "clinicalAttributeId": "STAGE",
+    "value": "Stage IIA"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A1J1",
+    "clinicalAttributeId": "PRIMARY_SITE",
+    "value": "Breast"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A1J1",
+    "clinicalAttributeId": "ETHNICITY",
+    "value": "HISPANIC OR LATINO"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A1J1",
+    "clinicalAttributeId": "RACE",
+    "value": "WHITE"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A1J1",
+    "clinicalAttributeId": "AGE",
+    "value": "38"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A1J1",
+    "clinicalAttributeId": "HISTOLOGY",
+    "value": "Infiltrating duct carcinoma, NOS"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A1J1",
+    "clinicalAttributeId": "STAGE",
+    "value": "Stage IIB"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A1P6",
+    "clinicalAttributeId": "PRIMARY_SITE",
+    "value": "Breast"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A1P6",
+    "clinicalAttributeId": "ETHNICITY",
+    "value": "HISPANIC OR LATINO"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A1P6",
+    "clinicalAttributeId": "RACE",
+    "value": "WHITE"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A1P6",
+    "clinicalAttributeId": "AGE",
+    "value": "64"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A1P6",
+    "clinicalAttributeId": "HISTOLOGY",
+    "value": "Infiltrating duct carcinoma, NOS"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A1P6",
+    "clinicalAttributeId": "STAGE",
+    "value": "Stage IIB"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A1P1",
+    "clinicalAttributeId": "PRIMARY_SITE",
+    "value": "Breast"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A1P1",
+    "clinicalAttributeId": "ETHNICITY",
+    "value": "HISPANIC OR LATINO"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A1P1",
+    "clinicalAttributeId": "RACE",
+    "value": "WHITE"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A1P1",
+    "clinicalAttributeId": "AGE",
+    "value": "68"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A1P1",
+    "clinicalAttributeId": "HISTOLOGY",
+    "value": "Infiltrating duct carcinoma, NOS"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A1P1",
+    "clinicalAttributeId": "STAGE",
+    "value": "Not Reported"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A1PE",
+    "clinicalAttributeId": "PRIMARY_SITE",
+    "value": "Breast"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A1PE",
+    "clinicalAttributeId": "ETHNICITY",
+    "value": "HISPANIC OR LATINO"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A1PE",
+    "clinicalAttributeId": "RACE",
+    "value": "WHITE"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A1PE",
+    "clinicalAttributeId": "AGE",
+    "value": "56"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A1PE",
+    "clinicalAttributeId": "HISTOLOGY",
+    "value": "Invasive micropapillary carcinoma"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A1PE",
+    "clinicalAttributeId": "STAGE",
+    "value": "Stage IIA"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A2FV",
+    "clinicalAttributeId": "PRIMARY_SITE",
+    "value": "Breast"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A2FV",
+    "clinicalAttributeId": "ETHNICITY",
+    "value": "HISPANIC OR LATINO"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A2FV",
+    "clinicalAttributeId": "RACE",
+    "value": "WHITE"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A2FV",
+    "clinicalAttributeId": "AGE",
+    "value": "39"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A2FV",
+    "clinicalAttributeId": "HISTOLOGY",
+    "value": "Invasive micropapillary carcinoma"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-EW-A2FV",
+    "clinicalAttributeId": "STAGE",
+    "value": "Stage IIIC"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-AO-A12B",
+    "clinicalAttributeId": "PRIMARY_SITE",
+    "value": "Breast"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-AO-A12B",
+    "clinicalAttributeId": "ETHNICITY",
+    "value": "HISPANIC OR LATINO"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-AO-A12B",
+    "clinicalAttributeId": "RACE",
+    "value": "WHITE"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-AO-A12B",
+    "clinicalAttributeId": "AGE",
+    "value": "63"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-AO-A12B",
+    "clinicalAttributeId": "HISTOLOGY",
+    "value": "Infiltrating duct carcinoma, NOS"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-AO-A12B",
+    "clinicalAttributeId": "STAGE",
+    "value": "Stage IIA"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-E2-A2P6",
+    "clinicalAttributeId": "PRIMARY_SITE",
+    "value": "Breast"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-E2-A2P6",
+    "clinicalAttributeId": "ETHNICITY",
+    "value": "HISPANIC OR LATINO"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-E2-A2P6",
+    "clinicalAttributeId": "RACE",
+    "value": "UNKNOWN"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-E2-A2P6",
+    "clinicalAttributeId": "AGE",
+    "value": "77"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-E2-A2P6",
+    "clinicalAttributeId": "HISTOLOGY",
+    "value": "Lobular carcinoma, NOS"
+  },
+  {
+    "studyId": "TCGA-BRCA-HISPANIC",
+    "patientId": "TCGA-E2-A2P6",
+    "clinicalAttributeId": "STAGE",
+    "value": "Stage IIB"
+  }
+]

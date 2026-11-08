@@ -1,0 +1,16 @@
+{
+  "gene": "TP53",
+  "protein_change": "E286K",
+  "role": "mut",
+  "backend": "precomputed",
+  "source": "https://alphafold.ebi.ac.uk/files/AF-P04637-F1-model_v6.cif",
+  "source_format": "cif",
+  "uniprot_id": "P04637",
+  "fasta_length": 393,
+  "model_start": 1,
+  "model_resseq_start": 1,
+  "model_resseq_end": 393,
+  "mean_plddt": 75.05,
+  "plddt_source": "AlphaFold DB v6",
+  "source_sha256": "55d63ef130bedffb0276dd9b8958df439669b2efeb30ca9f1b7bf30e39c088c9"
+}

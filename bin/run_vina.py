@@ -11,6 +11,8 @@ Requisitos del proyecto:
 from __future__ import annotations
 
 import argparse
+import os
+import signal
 import subprocess
 import sys
 import time
@@ -28,6 +30,46 @@ def vina_version(vina: str) -> str:
         return text.strip().splitlines()[0] if text.strip() else "desconocida"
     except Exception:  # noqa: BLE001
         return "desconocida"
+
+
+def run_with_timeout(command: list[str], timeout: int) -> subprocess.CompletedProcess:
+    process_options = (
+        {"start_new_session": True}
+        if os.name != "nt"
+        else {"creationflags": subprocess.CREATE_NEW_PROCESS_GROUP}
+    )
+    process = subprocess.Popen(
+        command,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        text=True,
+        **process_options,
+    )
+    try:
+        stdout, stderr = process.communicate(timeout=timeout)
+    except subprocess.TimeoutExpired as exc:
+        if os.name == "nt":
+            process.kill()
+        else:
+            try:
+                os.killpg(process.pid, signal.SIGTERM)
+            except ProcessLookupError:
+                pass
+        try:
+            stdout, stderr = process.communicate(timeout=10)
+        except subprocess.TimeoutExpired:
+            if os.name == "nt":
+                process.kill()
+            else:
+                try:
+                    os.killpg(process.pid, signal.SIGKILL)
+                except ProcessLookupError:
+                    pass
+            stdout, stderr = process.communicate()
+        raise subprocess.TimeoutExpired(
+            command, timeout, output=stdout or exc.output, stderr=stderr or exc.stderr,
+        ) from exc
+    return subprocess.CompletedProcess(command, process.returncode, stdout, stderr)
 
 
 def main() -> int:
@@ -81,10 +123,13 @@ def main() -> int:
 
     started = time.monotonic()
     try:
-        result = subprocess.run(cmd, capture_output=True, text=True, timeout=args.timeout)
+        result = run_with_timeout(cmd, args.timeout)
     except FileNotFoundError:
         die(f"no se encontró el ejecutable de Vina: {args.vina}")
-    except subprocess.TimeoutExpired:
+    except subprocess.TimeoutExpired as exc:
+        stdout = exc.output.decode("utf-8", errors="replace") if isinstance(exc.output, bytes) else (exc.output or "")
+        stderr = exc.stderr.decode("utf-8", errors="replace") if isinstance(exc.stderr, bytes) else (exc.stderr or "")
+        log.write_text(stdout + stderr, encoding="utf-8", newline="\n")
         die(f"Vina excedió {args.timeout} s para {Path(args.ligand).name} vs {Path(args.receptor).name}")
     elapsed = round(time.monotonic() - started, 1)
 

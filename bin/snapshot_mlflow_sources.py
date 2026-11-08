@@ -24,6 +24,10 @@ STAGE_FILES = {
             "primary": "bin/ingest_romero.py",
             "files": ["modules/clinical/main.nf", "bin/ingest_romero.py", "bin/extract_clinical_romero.py", "bin/build_clinical_summary.py"],
         },
+        "main_v3.nf": {
+            "primary": "bin/ingest_cbioportal.py",
+            "files": ["modules/ingest/main.nf", "bin/ingest_cbioportal.py", "bin/build_stats.py"],
+        },
     },
     "fasta": {
         "main.nf": {
@@ -35,6 +39,10 @@ STAGE_FILES = {
             "files": ["modules/fasta/main.nf", "bin/fetch_fasta.py"],
         },
         "main_v2_1.nf": {
+            "primary": "bin/fetch_fasta.py",
+            "files": ["modules/fasta/main.nf", "bin/fetch_fasta.py"],
+        },
+        "main_v3.nf": {
             "primary": "bin/fetch_fasta.py",
             "files": ["modules/fasta/main.nf", "bin/fetch_fasta.py"],
         },
@@ -52,27 +60,31 @@ STAGE_FILES = {
             "primary": "bin/predict_structure.py",
             "files": ["modules/structure/main.nf", "modules/structure/v2_1.nf", "bin/predict_structure.py"],
         },
+        "main_v3.nf": {
+            "primary": "bin/predict_structure.py",
+            "files": ["modules/structure/main.nf", "bin/predict_structure.py"],
+        },
     },
     "docking": {
         workflow: {
             "primary": "bin/run_vina.py",
             "files": ["modules/docking/main.nf", "bin/prep_ligand.py", "bin/prep_receptor.py", "bin/dock_center.py", "bin/run_vina.py", "bin/merge_pose.py"],
         }
-        for workflow in ("main.nf", "main_v2.nf", "main_v2_1.nf")
+        for workflow in ("main.nf", "main_v2.nf", "main_v2_1.nf", "main_v3.nf")
     },
     "metrics": {
         workflow: {
             "primary": "bin/build_jsons.py",
             "files": ["modules/metrics/main.nf", "bin/align_wt_mut.py", "bin/build_jsons.py", "bin/build_manifest.py"],
         }
-        for workflow in ("main.nf", "main_v2.nf", "main_v2_1.nf")
+        for workflow in ("main.nf", "main_v2.nf", "main_v2_1.nf", "main_v3.nf")
     },
     "publish": {
         workflow: {
             "primary": "bin/publish_results.py",
             "files": ["modules/metrics/main.nf", "modules/mlflow/main.nf", "bin/publish_results.py", "bin/log_mlflow.py"],
         }
-        for workflow in ("main.nf", "main_v2.nf", "main_v2_1.nf")
+        for workflow in ("main.nf", "main_v2.nf", "main_v2_1.nf", "main_v3.nf")
     },
 }
 
@@ -86,7 +98,7 @@ def sha256(path: Path) -> str:
 
 
 def snapshot_sources(repo_root: Path, output_dir: Path, workflow_file: str, commit: str) -> dict:
-    if workflow_file not in {"main.nf", "main_v2.nf", "main_v2_1.nf"}:
+    if workflow_file not in {"main.nf", "main_v2.nf", "main_v2_1.nf", "main_v3.nf"}:
         raise ValueError(f"workflow no soportado: {workflow_file}")
 
     repo_root = repo_root.resolve()

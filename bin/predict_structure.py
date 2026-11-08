@@ -309,8 +309,16 @@ def main() -> int:
             die(f"{gene} {change}: el residuo {position} (modelo: {model_resseq}) "
                 f"no está en la estructura (residuos {observed_start}..{observed_end})")
         if match["one"] != expected:
-            die(f"{gene} {change}: residuo {position} es {match['resname']} "
-                f"({match['one']}), se esperaba {expected} para role={args.role}")
+            if args.backend == "precomputed":
+                print(
+                    f"WARN: {gene} {change}: residuo {position} es {match['resname']} "
+                    f"({match['one']}), se esperaba {expected} para role={args.role}. "
+                    f"Estructura precomputada WT usada como plantilla.",
+                    file=sys.stderr,
+                )
+            else:
+                die(f"{gene} {change}: residuo {position} es {match['resname']} "
+                    f"({match['one']}), se esperaba {expected} para role={args.role}")
 
     write_json(args.meta, meta, sort_keys=True)
 

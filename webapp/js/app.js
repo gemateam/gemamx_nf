@@ -31,8 +31,10 @@ export const DATA = {
     ? BASE_PATH.replace(/\/data$/, '/run_manifest.json')
     : dataUrl('run_manifest.json'),
   rawMutations:         () => dataUrl('raw_mutations.json'),
+  dataIngest:           () => dataUrl('data_ingest.json'),
   clinicalMetadata:     () => dataUrl('clinical_metadata.json'),
   variantClinicalSummary: () => dataUrl('variant_clinical_summary.json'),
+  contractProvenance:   () => dataUrl('contract_provenance.json'),
   romeroGeoSummary:     () => dataUrl('romero_geo_summary.json'),
   // Modelos AlphaFold DB de genes sin estructura propia: independiente de la
   // corrida activa (no depende de BASE_PATH).
@@ -109,7 +111,7 @@ export const PLOTLY_LAYOUT = {
 };
 
 // ── Navegación SPA ─────────────────────────────────────────────────────────
-const VIEWS = ['pipeline','explore','analysis','structural','docking','report'];
+const VIEWS = ['import','pipeline','dashboard','explore','analysis','structural','docking','report'];
 
 // ── Detección de versión del pipeline ─────────────────────────────────────
 export function isV2() {
@@ -117,12 +119,17 @@ export function isV2() {
     document.getElementById('sel-run')?.value?.includes('romero');
 }
 
+export function isV3() {
+  return BASE_PATH.includes('tcga_brca_hispanic') ||
+    document.getElementById('sel-run')?.value?.includes('tcga_brca_hispanic');
+}
+
 // Dispatch de carga por vista (se registra desde cada módulo)
 const loaders = {};
 export function registerLoader(view, fn) { loaders[view] = fn; }
 
 // Vista activa actualmente
-let activeView = 'pipeline';
+let activeView = 'import';
 
 function activateView(name) {
   VIEWS.forEach(v => {
@@ -138,7 +145,12 @@ function activateView(name) {
 const reloadFlags = {};
 export function registerReloadFlag(view, flagObj) { reloadFlags[view] = flagObj; }
 
-const MLFLOW_EXPERIMENTS = new Set(['GEMAMX-V1-NF', 'GEMAMX-V2-ROMERO']);
+const MLFLOW_EXPERIMENTS = new Set([
+  'GEMAMX-V1-NF',
+  'GEMAMX-V2-ROMERO',
+  'GEMAMX-V2_1-ROMERO',
+  'GEMAMX-V3-TCGA-HISPANIC',
+]);
 let runSelectorRefreshing = false;
 
 async function fetchFreshJson(url) {
@@ -250,9 +262,7 @@ async function populateRunSelector() {
 
     sel.value = [...sel.options].some(option => option.value === selectedValue)
       ? selectedValue : 'data';
-    sel.onchange = () => {
-      if (sel.value !== 'data') switchRun(sel.value);
-    };
+    sel.onchange = () => switchRun(sel.value);
   } finally {
     runSelectorRefreshing = false;
   }
@@ -265,10 +275,12 @@ export async function updateGlobalHeader() {
     loadJSON(DATA.mutationStats())
   ]);
 
-  const isV2Run = isV2() || manifest?.params?.mlflow_experiment === 'GEMAMX-V2-ROMERO';
+  const experiment = manifest?.params?.mlflow_experiment ?? '';
+  const isV2Run = isV2() || experiment === 'GEMAMX-V2-ROMERO' || experiment === 'GEMAMX-V2_1-ROMERO';
+  const isV3Run = isV3() || experiment === 'GEMAMX-V3-TCGA-HISPANIC';
   const datasetName = isV2Run
     ? (stats?.dataset ?? 'Romero-Córdoba 2021 HM (FUCAM)')
-    : (manifest?.params?.study_id?.toUpperCase() ?? 'TCGA-BRCA');
+    : isV3Run ? 'TCGA-BRCA Hispano/Latino' : (manifest?.params?.study_id?.toUpperCase() ?? 'TCGA-BRCA');
 
   // Navbar brand sub
   const brandSub = document.getElementById('brand-sub');
@@ -303,7 +315,8 @@ export async function updateGlobalHeader() {
   // Footer brand
   const footerBrand = document.getElementById('footer-brand');
   if (footerBrand) {
-    footerBrand.textContent = 'GEMA MX · ' + (isV2Run ? 'Pipeline V2 · Romero HM' : 'Pipeline V1 · TCGA-BRCA') + ' · Universidad de Sonora';
+    const pipelineLabel = isV3Run ? 'Pipeline V3 · TCGA Hispano/Latino' : isV2Run ? 'Pipeline V2 · Romero HM' : 'Pipeline V1 · TCGA-BRCA';
+    footerBrand.textContent = `GEMA MX · ${pipelineLabel} · Universidad de Sonora`;
   }
 }
 
@@ -371,5 +384,5 @@ document.addEventListener('DOMContentLoaded', () => {
   updateGlobalHeader();
 
   // Vista inicial
-  activateView('pipeline');
+  activateView('import');
 });

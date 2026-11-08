@@ -1,0 +1,16 @@
+{
+  "gene": "GATA3",
+  "protein_change": "M294K",
+  "role": "mut",
+  "backend": "precomputed",
+  "source": "https://alphafold.ebi.ac.uk/files/AF-P23771-F1-model_v6.cif",
+  "source_format": "cif",
+  "uniprot_id": "P23771",
+  "fasta_length": 443,
+  "model_start": 1,
+  "model_resseq_start": 1,
+  "model_resseq_end": 443,
+  "mean_plddt": 58.13,
+  "plddt_source": "AlphaFold DB v6",
+  "source_sha256": "af43b679ce9764e388f2853947e463426624821cf55ddae9cb97ff02c2930b09"
+}

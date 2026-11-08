@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""INGEST — variantes y clínica de TCGA-BRCA (cBioPortal).
+"""INGEST — variantes y clínica de TCGA-BRCA (cBioPortal o Contrato V3).
 
 Salidas base:
   raw_mutations.json, top_variants.json (mutation_stats.json lo escribe
@@ -13,7 +13,9 @@ Con `--clinical` (o `--clinical-json`) añade:
 cBioPortal: no son ancestría genética ni país de origen. La ancestría estimada
 de TCGA no está en cBioPortal y no se ingiere aquí.
 
-Dos modos:
+Tres modos:
+  - `--contract-dir`   : bundle versionado del ETL (V3). Ingesta a nivel
+                         paciente, sin red, con validación previa del contrato.
   - `--mutations-json` : snapshot local de mutaciones (perfil `test`, sin red).
   - sin él            : descarga desde la API de cBioPortal.
 
@@ -35,6 +37,7 @@ import requests
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from gemamx_common import die, read_json, write_json  # noqa: E402
+from validate_contract import load_contract, validate_contract_dir  # noqa: E402
 
 BASE_URL = "https://www.cbioportal.org/api"
 CHUNK = 500
@@ -49,6 +52,7 @@ MISSING_VALUES = {
     "", "NA", "N/A", "NAN", "NONE", "NULL", "UNKNOWN", "NOT REPORTED",
     "NOT AVAILABLE", "NOT APPLICABLE", "<NA>", "N.D.", "ND", "SIN DATO",
 }
+REQUEST_LOG: list[dict] = []
 
 
 def http_json(method: str, url: str, payload=None, timeout: int = 120, retries: int = 4,
@@ -63,7 +67,14 @@ def http_json(method: str, url: str, payload=None, timeout: int = 120, retries: 
         try:
             response = requests.request(method, url, json=payload, timeout=timeout)
             if response.status_code == 200:
-                return response.json()
+                result = response.json()
+                REQUEST_LOG.append({
+                    "method": method,
+                    "url": url,
+                    "request": payload,
+                    "response_records": len(result) if isinstance(result, list) else None,
+                })
+                return result
             last_error = f"HTTP {response.status_code}: {response.text[:200]}"
             if response.status_code < 500:
                 break
@@ -130,6 +141,84 @@ def normalize(records: list[dict], mapping: dict[int, str] | None) -> list[dict]
     return normalized
 
 
+def normalize_contract(records: list[dict], manifest: dict) -> list[dict]:
+    """Normaliza el bundle 2.0.0 conservando paciente y variante.
+
+    A diferencia de cBioPortal, el contrato ya trae una fila por
+    `(patient_id, variant_id)` y la muestra tumoral resuelta. No se vuelve a
+    agrupar por muestra para no perder la unidad paciente.
+    """
+    bundle_id = manifest.get("bundle_id")
+    release = manifest.get("gdc_data_release")
+    rows = []
+    for row in records:
+        rows.append({
+            "variant_id": row.get("variant_id"),
+            "patient_id": row.get("patient_id"),
+            "sample_id": row.get("sample_id"),
+            "sample_ids": row.get("sample_ids") or [],
+            "hugo_symbol": row.get("hugo_symbol"),
+            "variant_classification": row.get("variant_classification"),
+            "protein_change": row.get("protein_change"),
+            "chromosome": row.get("chromosome"),
+            "start_position": row.get("start_position"),
+            "end_position": row.get("end_position"),
+            "reference_allele": row.get("reference_allele"),
+            "tumor_seq_allele2": row.get("tumor_seq_allele2"),
+            "genomic_dna_change": row.get("genomic_dna_change"),
+            "mutation_status": row.get("mutation_status"),
+            "filter_status": row.get("filter_status"),
+            "t_depth": row.get("t_depth"),
+            "t_ref_count": row.get("t_ref_count"),
+            "t_alt_count": row.get("t_alt_count"),
+            "hgvsc": row.get("hgvsc"),
+            "hgvsp_short": row.get("hgvsp_short"),
+            "transcript_id": row.get("transcript_id"),
+            "file_id": row.get("file_id"),
+            "n_samples": row.get("n_samples"),
+            "gdc_data_release": row.get("gdc_data_release") or release,
+            "bundle_id": bundle_id,
+            "contract_version": manifest.get("contract_version"),
+            "mutation_scope": manifest.get("mutation_scope"),
+            "data_origin": manifest.get("data_origin"),
+        })
+    return rows
+
+
+def contract_source(manifest: dict) -> str:
+    """Etiqueta de procedencia que se propaga a los JSON y a la webapp."""
+    return (
+        f"Contrato {manifest.get('contract_version')} · "
+        f"{manifest.get('bundle_id')} · "
+        f"GDC {manifest.get('gdc_data_release')} · "
+        f"alcance {manifest.get('mutation_scope')}"
+    )
+
+
+def build_contract_provenance(manifest: dict) -> dict:
+    """Resumen de procedencia para webapp/MLflow (sin payloads clínicos)."""
+    counts = manifest.get("counts") or {}
+    cohort = manifest.get("cohort") or {}
+    return {
+        "contract_version": manifest.get("contract_version"),
+        "bundle_id": manifest.get("bundle_id"),
+        "dataset_id": manifest.get("dataset_id"),
+        "project_id": manifest.get("project_id"),
+        "gdc_data_release": manifest.get("gdc_data_release"),
+        "gdc_api_tag": manifest.get("gdc_api_tag"),
+        "mutation_scope": manifest.get("mutation_scope"),
+        "data_origin": manifest.get("data_origin"),
+        "curated": manifest.get("curated"),
+        "cohort_total_cases": cohort.get("total_cases", counts.get("cohort_cases")),
+        "cohort_cases_with_mutations": cohort.get("cases_with_mutations"),
+        "mutation_records": counts.get("mutation_records"),
+        "mutation_patients": counts.get("mutation_patients"),
+        "clinical_records": counts.get("clinical_records"),
+        "exported_at": manifest.get("exported_at"),
+        "validation_passed": (manifest.get("validation") or {}).get("passed"),
+    }
+
+
 def classify(cohort_pct: float) -> str:
     if cohort_pct >= 5.0:
         return "Patogénica"
@@ -141,9 +230,11 @@ def classify(cohort_pct: float) -> str:
 
 
 def build_ranking(rows: list[dict], genes: set[str], max_variants: int,
-                  total_samples: int) -> list[dict]:
+                  total_samples: int, carrier_key: str = "sample_id") -> list[dict]:
     # Filtro, conteo y coordenadas en una sola pasada sobre las mutaciones.
-    counts: Counter = Counter()
+    # `carrier_key` permite contar pacientes (contrato V3) o muestras (cBioPortal)
+    # sin duplicar una variante presente en varias filas del mismo portador.
+    carriers: dict[tuple[str, str], set[str]] = defaultdict(set)
     coords: dict[tuple[str, str], tuple[str, int]] = {}
     for r in rows:
         if not (r["hugo_symbol"] in genes
@@ -151,7 +242,9 @@ def build_ranking(rows: list[dict], genes: set[str], max_variants: int,
                 and r["protein_change"]):
             continue
         key = (r["hugo_symbol"], r["protein_change"])
-        counts[key] += 1
+        carrier = r.get(carrier_key) or r.get("sample_id")
+        if carrier:
+            carriers[key].add(str(carrier))
         chrom, pos = coords.get(key, ("?", 0))
         if chrom in (None, "", "?") and r["chromosome"] not in (None, ""):
             chrom = str(r["chromosome"])
@@ -159,11 +252,12 @@ def build_ranking(rows: list[dict], genes: set[str], max_variants: int,
             pos = int(r["start_position"])
         coords[key] = (chrom, pos)
 
-    if not counts:
+    if not carriers:
         die("no hay variantes missense en los genes solicitados")
 
     ranking = []
-    for (gene, change), frequency in counts.items():
+    for (gene, change), carrier_set in carriers.items():
+        frequency = len(carrier_set)
         chrom, pos = coords[(gene, change)]
         pct = frequency / total_samples * 100
         ranking.append({
@@ -320,14 +414,19 @@ def build_clinical_metadata(samples: list[str], sample_to_patient: dict[str, str
         values.update(sample_attributes.get(sample_id, {}))
         race = normalize_label(values.get("RACE"))
         ethnicity = normalize_label(values.get("ETHNICITY"))
+        histology = normalize_label(values.get("HISTOLOGY"))
+        pam50 = normalize_label(values.get("SUBTYPE_PAM50") or values.get("PAM50"))
         metadata.append({
             "sample_id": sample_id,
             "patient_id": patient_id,
             "age": parse_age(values.get("AGE")),
             "race": race,
             "ethnicity": ethnicity,
+            "histology": histology,
+            "pam50": pam50,
             "race_source": "cBioPortal:RACE" if race else None,
             "ethnicity_source": "cBioPortal:ETHNICITY" if ethnicity else None,
+            "histology_source": "GDC:HISTOLOGY" if histology else None,
             # La cohorte clínica se construye sobre muestras secuenciadas.
             "mutation_wes": "Yes",
             "missing_attributes": [attribute for attribute in attributes
@@ -336,6 +435,73 @@ def build_clinical_metadata(samples: list[str], sample_to_patient: dict[str, str
             "attributes": {attribute: values.get(attribute)
                            for attribute in attributes},
             "clinical_source": source,
+        })
+    return metadata
+
+
+def build_contract_clinical(cohort: list[dict], records: list[dict],
+                            manifest: dict) -> list[dict]:
+    """Un registro por paciente a partir de clinical_attributes.json.
+
+    El contrato V3 une por `patient_id`, no por muestra. Se mantiene
+    `sample_id = patient_id` para que la webapp trate al paciente como unidad
+    de cohorte, y se expone `patient_id` de forma explícita.
+    """
+    by_patient: dict[str, dict[str, str | None]] = defaultdict(dict)
+    attributes: set[str] = set()
+    for row in records:
+        patient = row.get("patientId")
+        attribute = row.get("clinicalAttributeId")
+        if not patient or not attribute:
+            continue
+        attribute = str(attribute).upper()
+        attributes.add(attribute)
+        by_patient[patient][attribute] = row.get("value")
+
+    ordered_attributes = sorted(attributes)
+    source = contract_source(manifest)
+    provenance = {
+        "contract_version": manifest.get("contract_version"),
+        "bundle_id": manifest.get("bundle_id"),
+        "gdc_data_release": manifest.get("gdc_data_release"),
+        "mutation_scope": manifest.get("mutation_scope"),
+        "data_origin": manifest.get("data_origin"),
+    }
+
+    metadata = []
+    for case in cohort:
+        patient = case.get("case_code")
+        if not patient:
+            continue
+        values = by_patient.get(patient, {})
+        race = normalize_label(values.get("RACE"))
+        ethnicity = normalize_label(values.get("ETHNICITY"))
+        histology = normalize_label(values.get("HISTOLOGY"))
+        pam50 = normalize_label(values.get("SUBTYPE_PAM50") or values.get("PAM50"))
+        metadata.append({
+            "sample_id": patient,
+            "patient_id": patient,
+            "cohort_unit": "patient",
+            "age": parse_age(values.get("AGE")),
+            "race": race,
+            "ethnicity": ethnicity,
+            "histology": histology,
+            "stage": normalize_label(values.get("STAGE")),
+            "vital_status": normalize_label(values.get("VITAL_STATUS")),
+            "primary_site": normalize_label(values.get("PRIMARY_SITE")),
+            "pam50": pam50,
+            "ihc_subtype": None,
+            "race_source": "GDC:demographics" if race else None,
+            "ethnicity_source": "GDC:demographics" if ethnicity else None,
+            "histology_source": "GDC:diagnoses" if histology else None,
+            "mutation_wes": "Yes",
+            "missing_attributes": [attribute for attribute in ordered_attributes
+                                   if normalize_label(values.get(attribute)) is None],
+            "attributes": {attribute: values.get(attribute)
+                           for attribute in ordered_attributes},
+            "clinical_source": source,
+            "clinical_data_note": CLINICAL_NOTE,
+            **provenance,
         })
     return metadata
 
@@ -349,23 +515,29 @@ def build_variant_clinical_summary(top: list[dict], rows: list[dict],
                                    clinical: list[dict], min_cell: int = 5,
                                    source: str = "cBioPortal") -> list[dict]:
     """Agregados variante x clínica; marca celdas con n < min_cell."""
-    clinical_by_sample = {row["sample_id"]: row for row in clinical
-                          if row.get("sample_id")}
+    # El contrato V3 trae clínica por paciente; cBioPortal, por muestra. Se
+    # indexa por ambas claves para no perder ninguna de las dos convenciones.
+    clinical_by_key: dict[str, dict] = {}
+    for row in clinical:
+        for key in (row.get("patient_id"), row.get("sample_id")):
+            if key and key not in clinical_by_key:
+                clinical_by_key[key] = row
+
     carriers: dict[tuple[str, str], set[str]] = defaultdict(set)
     for row in rows:
-        sample_id = row.get("sample_id")
+        carrier = row.get("patient_id") or row.get("sample_id")
         gene = row.get("hugo_symbol")
         change = row.get("protein_change")
-        if sample_id and gene and change:
-            carriers[(gene, change)].add(sample_id)
+        if carrier and gene and change:
+            carriers[(gene, change)].add(str(carrier))
 
     summary = []
     for variant in top:
         gene = variant.get("hugo_symbol")
         change = variant.get("protein_change")
-        sample_ids = sorted(carriers.get((gene, change), set()))
-        matched = [clinical_by_sample[sample_id] for sample_id in sample_ids
-                   if sample_id in clinical_by_sample]
+        carrier_ids = sorted(carriers.get((gene, change), set()))
+        matched = [clinical_by_key[carrier] for carrier in carrier_ids
+                   if carrier in clinical_by_key]
         ages = [row["age"] for row in matched if row.get("age") is not None]
         ethnicity = _distribution(row.get("ethnicity") or NO_DATA_LABEL
                                   for row in matched)
@@ -375,11 +547,16 @@ def build_variant_clinical_summary(top: list[dict], rows: list[dict],
             small_cells.extend(f"{dimension}:{label}"
                                for label, count in counts.items()
                                if count < min_cell)
+        histology_dist = _distribution(row.get("histology") for row in matched if row.get("histology"))
+        pam50_dist = _distribution(row.get("pam50") for row in matched if row.get("pam50"))
+        top_hist = max(histology_dist.items(), key=lambda x: x[1])[0] if histology_dist else None
+        top_p50 = max(pam50_dist.items(), key=lambda x: x[1])[0] if pam50_dist else None
+
         summary.append({
             "variant_id": f"{gene}_{change}",
             "hugo_symbol": gene,
             "protein_change": change,
-            "sample_count": len(sample_ids),
+            "sample_count": len(carrier_ids),
             "matched_clinical_count": len(matched),
             "age": ({
                 "n": len(ages),
@@ -389,14 +566,30 @@ def build_variant_clinical_summary(top: list[dict], rows: list[dict],
             } if ages else None),
             "ethnicity_distribution": ethnicity,
             "race_distribution": race,
+            "histology_distribution": histology_dist,
+            "pam50_distribution": pam50_dist,
             "small_cells": sorted(small_cells),
             "small_cell_threshold": min_cell,
             "clinical_source": source,
             "clinical_data_note": CLINICAL_NOTE,
+            "contract_version": next(
+                (row.get("contract_version") for row in matched
+                 if row.get("contract_version")), None),
+            "bundle_id": next(
+                (row.get("bundle_id") for row in matched if row.get("bundle_id")), None),
+            "gdc_data_release": next(
+                (row.get("gdc_data_release") for row in matched
+                 if row.get("gdc_data_release")), None),
+            "mutation_scope": next(
+                (row.get("mutation_scope") for row in matched
+                 if row.get("mutation_scope")), None),
+            "data_origin": next(
+                (row.get("data_origin") for row in matched
+                 if row.get("data_origin")), None),
             "highlights": {
                 "top_ihc_subtype": None,
-                "top_pam50": None,
-                "top_histology": None,
+                "top_pam50": top_p50,
+                "top_histology": top_hist,
             },
         })
     return summary
@@ -409,6 +602,10 @@ def main() -> int:
     parser.add_argument("--genes", required=True, help="símbolos HUGO separados por coma")
     parser.add_argument("--max-variants", type=int, default=20)
     parser.add_argument("--mutations-json", help="snapshot local (sin red)")
+    parser.add_argument("--contract-dir",
+                        help="bundle del Contrato V3 (sin red; ingesta por paciente)")
+    parser.add_argument("--allow-curated", action="store_true",
+                        help="permite bundles curados (solo smoke tests)")
     parser.add_argument("--total-samples", type=int,
                         help="tamaño de cohorte (por defecto, muestras únicas de los datos)")
     parser.add_argument("--clinical", action="store_true",
@@ -421,15 +618,43 @@ def main() -> int:
     parser.add_argument("--clinical-small-cell", type=int, default=5,
                         help="umbral para marcar celdas pequeñas (no las elimina)")
     args = parser.parse_args()
+    REQUEST_LOG.clear()
 
     genes = {g.strip().upper() for g in args.genes.split(",") if g.strip()}
     if not genes:
         die("--genes está vacío")
+    if args.clinical_small_cell < 1:
+        die("--clinical-small-cell debe ser >= 1")
 
-    if args.mutations_json:
+    contract = None
+    contract_manifest: dict = {}
+    if args.contract_dir:
+        errors = validate_contract_dir(Path(args.contract_dir),
+                                       allow_curated=args.allow_curated)
+        if errors:
+            die("contrato inválido en {}:\n  - {}".format(
+                args.contract_dir, "\n  - ".join(errors)))
+        contract = load_contract(Path(args.contract_dir))
+        contract_manifest = contract["manifest"]
+        rows = normalize_contract(contract["somatic_mutations.json"],
+                                  contract_manifest)
+        source = contract_source(contract_manifest)
+        ingestion_mode = "etl_contract"
+        query_filter = (contract_manifest.get("cohort") or {}).get("filter")
+        cohort = contract_manifest.get("cohort") or {}
+        counts = contract_manifest.get("counts") or {}
+        total_samples = cohort.get("total_cases") or counts.get("cohort_cases")
+        if not total_samples:
+            die("el manifiesto del contrato no declara el tamaño de la cohorte")
+        if args.total_samples and args.total_samples != total_samples:
+            print(f"AVISO: --total-samples {args.total_samples} difiere del "
+                  f"manifiesto ({total_samples}); se usa el manifiesto")
+    elif args.mutations_json:
         records = load_snapshot(args.mutations_json)
         rows = normalize(records, None)
         source = Path(args.mutations_json).name
+        ingestion_mode = "local_snapshot"
+        query_filter = None
         if args.total_samples:
             total_samples = args.total_samples
         else:
@@ -442,6 +667,8 @@ def main() -> int:
         rows = normalize(records, mapping)
         total_samples = len(samples)
         source = f"cBioPortal:{args.study}"
+        ingestion_mode = "cbioportal_rest"
+        query_filter = f"study={args.study}; sample-list selected by sampleListId containing 'all' (fallback first available)"
 
     if not rows:
         die("la ingesta no devolvió mutaciones")
@@ -449,19 +676,37 @@ def main() -> int:
         die("no se pudo determinar el tamaño de la cohorte (usa --total-samples)")
 
     rows.sort(key=lambda r: (
-        r["hugo_symbol"] or "", r["sample_id"] or "",
+        r["hugo_symbol"] or "", r.get("patient_id") or r["sample_id"] or "",
         r["protein_change"] or "", r["start_position"] or 0,
     ))
 
-    ranking = build_ranking(rows, genes, args.max_variants, total_samples)
+    ranking = build_ranking(
+        rows, genes, args.max_variants, total_samples,
+        carrier_key="patient_id" if contract else "sample_id",
+    )
 
     outdir = Path(args.outdir)
     write_json(outdir / "raw_mutations.json", rows, indent=None)
     write_json(outdir / "top_variants.json", ranking, indent=None)
 
-    if args.clinical or args.clinical_json:
-        if args.clinical_small_cell < 1:
-            die("--clinical-small-cell debe ser >= 1")
+    if contract is not None:
+        metadata = build_contract_clinical(
+            contract["cohort_cases.json"],
+            contract["clinical_attributes.json"],
+            contract_manifest,
+        )
+        clinical_source = contract_source(contract_manifest)
+        summary = build_variant_clinical_summary(
+            ranking, rows, metadata,
+            min_cell=args.clinical_small_cell, source=clinical_source,
+        )
+        write_json(outdir / "clinical_metadata.json", metadata, indent=None)
+        write_json(outdir / "variant_clinical_summary.json", summary, indent=None)
+        write_json(outdir / "contract_provenance.json",
+                   build_contract_provenance(contract_manifest), indent=2)
+        print(f"OK clínico: {len(metadata)} pacientes, {len(summary)} variantes "
+              f"({clinical_source})")
+    elif args.clinical or args.clinical_json:
         attributes = parse_attributes(args.clinical_attributes)
         if not attributes:
             die("--clinical-attributes está vacío")
@@ -494,6 +739,42 @@ def main() -> int:
         write_json(outdir / "variant_clinical_summary.json", summary, indent=None)
         print(f"OK clínico: {len(metadata)} muestras, {len(summary)} variantes "
               f"({clinical_source})")
+
+    query = {
+        "mode": ingestion_mode,
+        "source": source,
+        "cohort_filter": query_filter,
+        "requests": REQUEST_LOG,
+        "mutation_selection": {
+            "genes": sorted(genes),
+            "variant_classification_contains": "missense",
+            "protein_change_required": True,
+            "max_variants": args.max_variants,
+            "carrier_unit": "patient" if contract else "sample",
+        },
+    }
+    if contract is not None:
+        query["bundle"] = {
+            "bundle_id": contract_manifest.get("bundle_id"),
+            "gdc_data_release": contract_manifest.get("gdc_data_release"),
+            "mutation_scope": contract_manifest.get("mutation_scope"),
+            "data_origin": contract_manifest.get("data_origin"),
+            "files": contract_manifest.get("files", {}),
+        }
+    elif args.mutations_json:
+        query["input_file"] = Path(args.mutations_json).name
+    write_json(outdir / "data_ingest.json", {
+        "schema_version": 1,
+        "pipeline": args.study,
+        "mode": ingestion_mode,
+        "query": query,
+        "counts": {
+            "raw_mutation_records": len(rows),
+            "cohort_units": total_samples,
+            "prioritized_variants": len(ranking),
+            "clinical_records": len(metadata) if (contract is not None or args.clinical or args.clinical_json) else 0,
+        },
+    }, sort_keys=True)
 
     print(f"OK ingesta: {len(rows)} mutaciones, cohorte {total_samples}, "
           f"{len(ranking)} variantes priorizadas ({source})")

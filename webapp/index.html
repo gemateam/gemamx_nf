@@ -23,8 +23,9 @@
     <span class="brand-sub" id="brand-sub">Genomic Analysis of Mammary Cancer</span>
   </div>
   <ul class="nav-links">
-    
-    <li><a href="#" data-view="pipeline"   class="nav-link active">Pipeline Status</a></li>
+    <li><a href="#" data-view="import" class="nav-link active">Importación</a></li>
+    <li><a href="#" data-view="dashboard" class="nav-link">Dashboard</a></li>
+    <li><a href="#" data-view="pipeline" class="nav-link">Pipeline Status</a></li>
     <li><a href="#" data-view="explore"    class="nav-link">Exploración de Datasets</a></li>
     <li><a href="#" data-view="analysis"   class="nav-link">Análisis</a></li>
     <li><a href="#" data-view="structural" class="nav-link">Estructuras 3D</a></li>
@@ -42,6 +43,141 @@
 
 <!-- ═══════════════════════════ MAIN ═══════════════════════════ -->
 <main id="app">
+
+  <section id="view-import" class="view active">
+    <div class="section-header">
+      <h1>Importación de datos</h1>
+      <p class="subtitle" id="import-subtitle">Procedencia, consulta y registros crudos de la corrida seleccionada.</p>
+    </div>
+    <div class="import-summary" id="import-summary"></div>
+    <section class="card import-query-card">
+      <div class="import-card-heading">
+        <h2>Consulta y procedencia</h2>
+        <span id="import-query-kind" class="import-query-kind">—</span>
+      </div>
+      <div id="import-query-summary" class="import-query-summary"></div>
+      <div id="import-query-details" class="import-query-details"></div>
+    </section>
+    <section class="card import-raw-card">
+      <div class="import-card-heading">
+        <div>
+          <h2>Datos crudos importados</h2>
+          <p id="import-raw-count">—</p>
+        </div>
+        <input id="import-search" class="import-search" type="search" placeholder="Buscar en registros crudos…" aria-label="Buscar en registros crudos" />
+      </div>
+      <div class="table-wrapper import-table-wrapper">
+        <table class="import-table">
+          <thead id="import-table-head"></thead>
+          <tbody id="import-table-body"></tbody>
+        </table>
+      </div>
+      <div class="import-pagination">
+        <button id="import-prev" type="button" title="Página anterior">Anterior</button>
+        <span id="import-page-label">—</span>
+        <button id="import-next" type="button" title="Página siguiente">Siguiente</button>
+      </div>
+    </section>
+  </section>
+
+  <section id="view-pipeline" class="view">
+    <div class="section-header">
+      <h1>Pipeline Status</h1>
+      <p class="subtitle">Configura, estima y sigue una ejecución de Nextflow.</p>
+    </div>
+
+    <div class="pipeline-console-grid">
+      <form class="card pipeline-config-form" id="exec-form">
+        <div class="section-header section-header--compact">
+          <h2>Configuración de ejecución</h2>
+        </div>
+        <label class="exec-field">
+          <span>Pipeline</span>
+          <select id="exec-pipeline" name="pipeline" required></select>
+        </label>
+        <fieldset class="exec-field">
+          <legend>Genes a analizar</legend>
+          <div class="exec-gene-list" id="exec-gene-list"></div>
+        </fieldset>
+        <div class="exec-fields-row">
+          <label class="exec-field">
+            <span>Máximo de variantes</span>
+            <input id="exec-max-variants" name="max_variants" type="number" min="1" max="20" value="20" required />
+          </label>
+          <label class="exec-field">
+            <span>Exhaustividad Vina</span>
+            <input id="exec-exhaustiveness" name="exhaustiveness" type="number" min="1" max="8" value="1" required />
+          </label>
+          <label class="exec-field">
+            <span>Modos por docking</span>
+            <input id="exec-num-modes" name="num_modes" type="number" min="1" max="5" value="5" required />
+          </label>
+        </div>
+        <div class="exec-fields-row">
+          <label class="exec-field">
+            <span>Timeout Vina (segundos)</span>
+            <input id="exec-timeout" name="vina_timeout_sec" type="number" min="60" max="14400" step="60" value="1800" required />
+          </label>
+          <label class="exec-field">
+            <span>Dockings simultáneos</span>
+            <input id="exec-parallel" name="max_parallel_vina" type="number" min="1" max="4" value="4" required />
+          </label>
+          <label class="exec-field">
+            <span>Tamaño de caja (Å)</span>
+            <input id="exec-box-size" name="box_size" type="number" min="10" max="40" step="1" value="25" required />
+          </label>
+        </div>
+        <label class="exec-field">
+          <span>Semilla Vina</span>
+          <input id="exec-seed" name="vina_seed" type="number" min="0" value="42" required />
+        </label>
+        <label class="exec-check">
+          <input id="exec-resume" name="resume" type="checkbox" checked />
+          <span>Reutilizar tareas completadas (resume)</span>
+        </label>
+        <div class="exec-estimate" id="exec-estimate" aria-live="polite">
+          <strong>Estimación</strong>
+          <span id="exec-estimate-value">Calculando…</span>
+          <small id="exec-estimate-note"></small>
+        </div>
+        <div class="exec-error" id="exec-error" role="alert" hidden></div>
+        <button class="exec-start-button" id="exec-start" type="submit">Iniciar pipeline</button>
+      </form>
+
+      <section class="card exec-effective-config">
+        <div class="section-header section-header--compact">
+          <h2>Configuración efectiva</h2>
+          <span id="exec-profile-label" class="exec-profile-label">Selecciona un pipeline</span>
+        </div>
+        <p id="exec-config-summary" class="exec-config-summary"></p>
+        <pre id="exec-config-json" class="exec-config-json">{}</pre>
+        <a id="exec-mlflow-link" class="exec-mlflow-link" hidden target="_blank" rel="noopener">Abrir run en MLflow</a>
+      </section>
+    </div>
+
+    <section class="card exec-live-card" aria-live="polite">
+      <div class="exec-live-heading">
+        <div>
+          <h2>Progreso</h2>
+          <p id="exec-live-summary">Sin ejecución activa</p>
+        </div>
+        <span class="exec-live-state" id="exec-live-state" data-status="idle">Sin ejecución</span>
+      </div>
+      <div class="exec-live-meta" id="exec-live-meta"></div>
+      <div class="exec-stage-list" id="exec-stage-list"></div>
+    </section>
+
+    <section class="card exec-log-card">
+      <div class="exec-live-heading">
+        <div>
+          <h2>Log de Nextflow</h2>
+          <p id="exec-log-meta">Se actualizará al iniciar una ejecución.</p>
+        </div>
+        <button id="exec-log-bottom" type="button" title="Ir al final del log">Ir al final</button>
+      </div>
+      <pre id="exec-log" class="exec-log" aria-live="polite"></pre>
+    </section>
+  </section>
 
   <!-- ── EXPLORACIÓN ── -->
   <section id="view-explore" class="view">
@@ -169,6 +305,7 @@
         <h2>Procedencia y alcance de los datos clínicos</h2>
         <p class="clinical-note" id="clinical-data-note"></p>
         <p class="clinical-source" id="clinical-source-label"></p>
+        <p class="clinical-source" id="clinical-contract-label" style="display:none;"></p>
         <p class="chart-note" id="clinical-small-cell-note" style="display:none;"></p>
       </div>
 
@@ -359,13 +496,13 @@
     <div id="report-content"></div>
   </section>
 
-  <!-- ── PIPELINE STATUS ──────────────────────────────────────── -->
-  <section id="view-pipeline" class="view active">
+  <!-- ── DASHBOARD ─────────────────────────────────────────────── -->
+  <section id="view-dashboard" class="view">
 
-    <!-- Header con run activo -->
+    <!-- Resumen de resultados publicados -->
     <div class="ps-header">
       <div class="ps-title-block">
-        <h1>Pipeline Status</h1>
+        <h1>Dashboard</h1>
         <p class="subtitle" id="pipeline-subtitle">Resumen ejecutivo del proyecto GEMA MX sobre la cohorte activa.</p>
       </div>
       <div class="ps-run-badge">
@@ -557,12 +694,14 @@
   <span id="footer-run"></span>
 </footer>
 
-<script src="js/app.js?v=20261105b"    type="module"></script>
+<script src="js/app.js"              type="module"></script>
+<script src="js/import.js?v=20261108a" type="module"></script>
 <script src="js/analysis.js?v=20261105b"  type="module"></script>
 <script src="js/structural.js?v=20261105b" type="module"></script>
 <script src="js/docking.js?v=20261105b"   type="module"></script>
 <script src="js/report.js?v=20261105c"    type="module"></script>
 <script src="js/pipeline.js?v=20261105b"  type="module"></script>
+<script src="js/execution.js?v=20261108a" type="module"></script>
 <script src="js/explore.js?v=20261105b"   type="module"></script>
 <script src="js/clinical.js?v=20261105b"  type="module"></script>
 </body>
