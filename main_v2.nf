@@ -60,7 +60,7 @@ workflow {
     def drug_catalog_file = file(params.drug_catalog, checkIfExists: true)
 
     // ── M1/M2 — Ingestión desde XLSX nativos de Romero ────────────────────
-    INGEST_ROMERO(maf_xlsx, drivers_xlsx)
+    INGEST_ROMERO(maf_xlsx, drivers_xlsx, clinical_xlsx)
 
     // ── M5a/M5b — Metadatos y resumen clínico por variante ─────────────────
     EXTRACT_CLINICAL(clinical_xlsx)
@@ -224,6 +224,7 @@ workflow {
         BUILD_JSONS.out.raw_mutations_out,
         BUILD_JSONS.out.mutation_stats_out,
         BUILD_JSONS.out.vina_affinities,
+        BUILD_JSONS.out.data_ingest_out,
         workflow.runName,
         commit_hash
     )

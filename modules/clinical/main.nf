@@ -12,6 +12,7 @@ process INGEST_ROMERO {
     input:
     path maf_xlsx            // 41467_2021_22478_MOESM8_ESM.xlsx
     path drivers_xlsx        // 41467_2021_22478_MOESM9_ESM.xlsx
+    path clinical_xlsx       // 41467_2021_22478_MOESM4_ESM.xlsx (hash de procedencia)
 
     output:
     path "raw_mutations.json",   emit: raw_mutations
@@ -24,6 +25,7 @@ process INGEST_ROMERO {
     ingest_romero.py \\
         --maf     "${maf_xlsx}" \\
         --drivers "${drivers_xlsx}" \\
+        --clinical "${clinical_xlsx}" \\
         --genes   "${params.genes}" \\
         --max-variants ${params.max_variants} \\
         --outdir  .

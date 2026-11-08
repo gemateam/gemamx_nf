@@ -8,6 +8,7 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "bin"))
 
 import ingest_cbioportal  # noqa: E402
+import ingest_romero  # noqa: E402
 
 
 def test_cbioportal_http_query_is_recorded(monkeypatch):
@@ -40,6 +41,8 @@ def test_ingestion_metadata_reaches_each_pipeline_contract():
     for workflow in ("main.nf", "main_v2.nf", "main_v2_1.nf", "main_v3.nf"):
         text = (ROOT / workflow).read_text(encoding="utf-8")
         assert "BUILD_JSONS.out.data_ingest_out" in text
+        publish_call = text.split("PUBLISH(", 1)[1].split(")", 1)[0]
+        assert "BUILD_JSONS.out.data_ingest_out" in publish_call
         if workflow in ("main.nf", "main_v3.nf"):
             assert "INGEST.out.ingest_metadata" in text
         else:
@@ -49,3 +52,18 @@ def test_ingestion_metadata_reaches_each_pipeline_contract():
     assert 'path "stage/data/data_ingest.json"' in metrics_module
     build_jsons = (ROOT / "bin" / "build_jsons.py").read_text(encoding="utf-8")
     assert build_jsons.count('"data_ingest.json"') >= 2
+    assert '"data_ingest.json"' in metrics_module
+
+
+def test_romero_source_file_hash_is_sha256(tmp_path):
+    source = tmp_path / "source.xlsx"
+    source.write_bytes(b"abc")
+
+    record = ingest_romero.input_record(source, "Features", "all rows")
+
+    assert record == {
+        "file": "source.xlsx",
+        "sheet": "Features",
+        "selection": "all rows",
+        "sha256": "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad",
+    }

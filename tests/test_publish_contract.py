@@ -35,6 +35,7 @@ CONTRACTS = (
     "raw_mutations.json",
     "mutation_stats.json",
     "docking/vina_affinities.json",
+    "data_ingest.json",
 )
 
 ok = 0
@@ -92,7 +93,8 @@ def run_script(outdir: Path, run_name: str, archive: str = "true",
            "--run-name", run_name, "--archive", archive]
     if restart is not None:
         cmd += ["--restart-container", restart]
-    return subprocess.run(cmd, capture_output=True, text=True, encoding="utf-8")
+    return subprocess.run(cmd, capture_output=True, text=True, encoding="utf-8",
+                          errors="replace")
 
 
 def digest(path: Path) -> str:

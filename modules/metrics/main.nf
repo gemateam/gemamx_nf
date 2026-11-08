@@ -100,6 +100,7 @@ process PUBLISH {
     path raw_mutations
     path mutation_stats
     path vina_affinities
+    path data_ingest
     val  run_name
     val  commit_hash
 
@@ -143,6 +144,7 @@ contracts = [
     "raw_mutations.json",
     "mutation_stats.json",
     "vina_affinities.json",
+    "data_ingest.json",
 ]
 
 files = {}
@@ -153,6 +155,12 @@ for name in contracts:
 
 params = json.loads(pathlib.Path("params.json").read_text())
 images = json.loads(pathlib.Path("images.json").read_text())
+ingest = json.loads(pathlib.Path("data_ingest.json").read_text())
+source_files = [
+    {"file": item["file"], "sheet": item.get("sheet"), "sha256": item["sha256"]}
+    for item in ingest.get("query", {}).get("inputs", [])
+    if item.get("file") and item.get("sha256")
+]
 
 manifest = {
     "run_name":     "${run_name}",
@@ -161,6 +169,7 @@ manifest = {
     "params":       params,
     "images":       images,
     "files":        files,
+    "source_files": source_files,
     "contracts":    contracts,
 }
 pathlib.Path("run_manifest.json").write_text(json.dumps(manifest, indent=4, sort_keys=True))

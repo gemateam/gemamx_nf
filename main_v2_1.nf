@@ -316,6 +316,7 @@ workflow {
         BUILD_JSONS.out.raw_mutations_out,
         BUILD_JSONS.out.mutation_stats_out,
         BUILD_JSONS.out.vina_affinities,
+        BUILD_JSONS.out.data_ingest_out,
         workflow.runName,
         commit_hash
     )

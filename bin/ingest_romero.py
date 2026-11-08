@@ -30,6 +30,7 @@ aceptar rutas por argumento (portable dentro de cualquier contenedor Docker).
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import re
 import sys
@@ -265,6 +266,23 @@ def classify_variant(cohort_pct: float) -> str:
     return "Baja Frecuencia"
 
 
+def sha256_file(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
+def input_record(path: Path, sheet: str, selection: str) -> dict:
+    return {
+        "file": path.name,
+        "sheet": sheet,
+        "selection": selection,
+        "sha256": sha256_file(path),
+    }
+
+
 def build_driver_lookup(driver_rows: list[dict]) -> dict:
     lookup: dict = {}
     for row in driver_rows:
@@ -293,6 +311,8 @@ def main() -> int:
                     help="MOESM8_ESM.xlsx — hoja 'HM maf'")
     ap.add_argument("--drivers", required=True,
                     help="MOESM9_ESM.xlsx — hoja 'Driver mutation in HM'")
+    ap.add_argument("--clinical",
+                    help="MOESM4_ESM.xlsx — hoja 'Features' (solo trazabilidad)")
     ap.add_argument("--outdir",  required=True,
                     help="directorio de salida")
     ap.add_argument("--genes",   default=",".join(KEY_GENES),
@@ -305,6 +325,7 @@ def main() -> int:
 
     maf_path     = Path(args.maf)
     drivers_path = Path(args.drivers)
+    clinical_path = Path(args.clinical) if args.clinical else None
     outdir       = Path(args.outdir)
     outdir.mkdir(parents=True, exist_ok=True)
 
@@ -446,6 +467,14 @@ def main() -> int:
     write_compact("raw_mutations.json", raw_mutations)
     write_compact("top_variants.json", top_variants)
     write_compact("mutation_stats.json", stats)
+    inputs = [
+        input_record(maf_path, "HM maf", "todas las filas con datos"),
+        input_record(drivers_path, "Driver mutation in HM", "todas las filas driver"),
+    ]
+    if clinical_path is not None:
+        inputs.append(input_record(
+            clinical_path, "Features", "todas las filas con sample barcode"))
+
     write_compact("data_ingest.json", {
         "schema_version": 1,
         "pipeline": "romero_fucam_hm",
@@ -453,10 +482,7 @@ def main() -> int:
         "query": {
             "source": "Romero-Cordoba 2021 HM (MOESM8/9 XLSX)",
             "description": "Extraccion local de filas XLSX; no se consulto una API o SQL.",
-            "inputs": [
-                {"file": maf_path.name, "sheet": "HM maf", "selection": "todas las filas con datos"},
-                {"file": drivers_path.name, "sheet": "Driver mutation in HM", "selection": "todas las filas driver"},
-            ],
+            "inputs": inputs,
             "join": ["Gene/Hugo Symbol", "Chromosome", "Start Position/gdna", "Reference Allele", "Tumor Seq Allele2"],
             "filters": {
                 "genes": sorted(key_genes),

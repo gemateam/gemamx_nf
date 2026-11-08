@@ -48,6 +48,7 @@ CONTRACTS = (
     "raw_mutations.json",
     "mutation_stats.json",
     "docking/vina_affinities.json",
+    "data_ingest.json",
 )
 
 

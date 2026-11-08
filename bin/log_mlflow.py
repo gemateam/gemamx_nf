@@ -219,7 +219,9 @@ def main() -> int:
     # Procedencia del contrato V3, si INGEST la publicó en data/.
     contract = None
     if args.data_dir:
-        contract = load_optional(str(Path(args.data_dir) / "contract_provenance.json"))
+        contract_path = Path(args.data_dir) / "contract_provenance.json"
+        if contract_path.is_file():
+            contract = read_json(contract_path)
 
     base_tags = {
         "gemamx.pipeline": "gemamx_nf",
