@@ -163,7 +163,7 @@ process RUN_VINA {
         --seed ${params.vina_seed} \\
         --exhaustiveness ${params.exhaustiveness} \\
         --num-modes ${params.num_modes} \\
-        --cpu 1 \\
+        --cpu ${task.cpus} \\
         --timeout ${params.vina_timeout_sec} \\
         --variant "${target_id}" \\
         --drug "${drug}" \\

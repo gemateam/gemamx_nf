@@ -1256,7 +1256,8 @@ fieldset.exec-field { border: 0; padding: 0; margin: 0; }
 .exec-config-json { max-height: 540px; }
 .exec-mlflow-link { display: inline-block; margin-top: .75rem; color: var(--teal-light); font-size: .82rem; }
 .exec-live-card,
-.exec-log-card { margin-bottom: 1rem; }
+.exec-log-card,
+.exec-results-card { margin-bottom: 1rem; }
 .exec-live-heading { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; }
 .exec-live-heading h2 { margin: 0; font-size: 1.05rem; }
 .exec-live-heading p { margin: .35rem 0 0; color: var(--text-muted); font-size: .78rem; }
@@ -1271,6 +1272,20 @@ fieldset.exec-field { border: 0; padding: 0; margin: 0; }
 .exec-stage--failed span:last-child { color: #f87171; }
 .exec-log { height: 360px; margin-top: .75rem; overflow-wrap: normal; }
 .exec-log-card button { border: 1px solid var(--border); border-radius: 5px; padding: .35rem .6rem; color: var(--text); background: transparent; cursor: pointer; }
+.exec-results-table-wrapper { margin-top: .75rem; }
+.exec-results-table { width: 100%; min-width: 680px; border-collapse: collapse; }
+.exec-results-table th,
+.exec-results-table td { padding: .65rem .75rem; border-bottom: 1px solid var(--border); text-align: left; vertical-align: middle; }
+.exec-results-table th { color: var(--text-muted); font-size: .72rem; font-weight: 650; }
+.exec-results-run { min-width: 220px; }
+.exec-results-run strong,
+.exec-results-run small { display: block; }
+.exec-results-run strong { overflow-wrap: anywhere; font-size: .8rem; }
+.exec-results-run small { margin-top: .2rem; color: var(--text-muted); font-size: .72rem; }
+.exec-results-drug { color: var(--teal-light); font-weight: 700; }
+.exec-results-score { font-variant-numeric: tabular-nums; white-space: nowrap; }
+.exec-results-select { border: 1px solid var(--border); border-radius: 5px; padding: .35rem .55rem; color: var(--text); background: transparent; cursor: pointer; }
+.exec-results-select:disabled { color: var(--text-muted); cursor: default; opacity: .7; }
 
 /* ── Page header ──────────────────────────────────────────── */
 .ps-header {

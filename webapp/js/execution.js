@@ -1,3 +1,5 @@
+import { formatLocalDate, registerLoader, registerReloadFlag } from './app.js';
+
 const API_BASE = 'http://localhost:8765/api/v1';
 const STAGES = [
   { match: /^VALIDATE_CONTRACT/, label: 'Validación del contrato' },
@@ -20,11 +22,130 @@ const startButton = document.getElementById('exec-start');
 const errorEl = document.getElementById('exec-error');
 const configEl = document.getElementById('exec-config-json');
 const logEl = document.getElementById('exec-log');
+const resultsBody = document.getElementById('exec-results-body');
+const resultsStatus = document.getElementById('exec-results-status');
+const resultsSummary = document.getElementById('exec-results-summary');
+const resultsCount = document.getElementById('exec-results-count');
+const resultsState = { loaded: false, loading: false };
 let pipelineOptions = {};
 let pollTimer = null;
 let estimateTimer = null;
 let estimateRequestId = 0;
 let optionsLoaded = false;
+let lastCompletedResultsRun = '';
+
+registerReloadFlag('pipeline', resultsState);
+
+function bestDockingResult(metrics) {
+  let best = null;
+  for (const [variant, metric] of Object.entries(metrics ?? {})) {
+    if (!metric || variant.endsWith('_WT')) continue;
+    const scores = Object.entries(metric.vina_scores ?? {})
+      .map(([drug, value]) => [drug, Number(value)])
+      .filter(([, score]) => Number.isFinite(score));
+    const candidates = scores.length
+      ? scores
+      : Number.isFinite(Number(metric.best_vina_score)) && metric.best_vina_drug
+        ? [[metric.best_vina_drug, Number(metric.best_vina_score)]]
+        : [];
+    for (const [drug, score] of candidates) {
+      if (!best || score < best.score) best = { variant, drug, score };
+    }
+  }
+  return best;
+}
+
+async function fetchFreshJson(url) {
+  const response = await fetch(`${url}?_=${Date.now()}`, { cache: 'no-store' });
+  if (!response.ok) throw new Error(`HTTP ${response.status}: ${url}`);
+  return response.json();
+}
+
+function appendResultCell(row, value, className = '') {
+  const cell = document.createElement('td');
+  if (className) cell.className = className;
+  cell.textContent = value;
+  row.appendChild(cell);
+}
+
+function renderRunResults(results) {
+  if (!resultsBody) return;
+  const selectedRun = document.getElementById('sel-run')?.value;
+  resultsBody.replaceChildren();
+
+  for (const { run, best, error } of results) {
+    const row = document.createElement('tr');
+    const runCell = document.createElement('td');
+    runCell.className = 'exec-results-run';
+    const name = document.createElement('strong');
+    name.textContent = run.run_name;
+    const date = document.createElement('small');
+    date.textContent = formatLocalDate(run.published_at) || 'Fecha no disponible';
+    runCell.append(name, date);
+    row.appendChild(runCell);
+
+    appendResultCell(row, best ? best.variant.replace('_', ' ') : error ? 'No disponible' : 'Sin docking');
+    appendResultCell(row, best?.drug ?? '—', best ? 'exec-results-drug' : '');
+    appendResultCell(row, best ? `${best.score.toFixed(3)} kcal/mol` : '—', best ? 'exec-results-score' : '');
+
+    const actionCell = document.createElement('td');
+    const selectButton = document.createElement('button');
+    selectButton.type = 'button';
+    selectButton.className = 'exec-results-select';
+    selectButton.textContent = selectedRun === run.path ? 'Seleccionada' : 'Ver corrida';
+    selectButton.disabled = selectedRun === run.path;
+    selectButton.addEventListener('click', () => {
+      const selector = document.getElementById('sel-run');
+      if (!selector || ![...selector.options].some(option => option.value === run.path)) return;
+      selector.value = run.path;
+      selector.dispatchEvent(new Event('change', { bubbles: true }));
+    });
+    actionCell.appendChild(selectButton);
+    row.appendChild(actionCell);
+    resultsBody.appendChild(row);
+  }
+}
+
+async function loadRunResults() {
+  if (!resultsBody || resultsState.loaded || resultsState.loading) return;
+  resultsState.loading = true;
+  resultsStatus.textContent = 'Cargando resultados archivados…';
+  try {
+    const index = await fetchFreshJson('runs/index.json');
+    const runs = (Array.isArray(index) ? index : []).filter(run =>
+      run.run_name && /^runs\/[^/]+\/data$/.test(run.path ?? ''),
+    );
+    let nextRun = 0;
+    const results = new Array(runs.length);
+    const workers = Array.from({ length: Math.min(6, runs.length) }, async () => {
+      while (nextRun < runs.length) {
+        const index = nextRun++;
+        const run = runs[index];
+        try {
+          const metrics = await fetchFreshJson(`${run.path}/structural_metrics.json`);
+          results[index] = { run, best: bestDockingResult(metrics) };
+        } catch (error) {
+          results[index] = { run, best: null, error };
+        }
+      }
+    });
+    await Promise.all(workers);
+    renderRunResults(results);
+    resultsCount.textContent = String(results.length);
+    resultsSummary.textContent = results.length
+      ? 'Mejor score de docking por corrida archivada; el score más negativo ocupa el primer lugar.'
+      : 'No hay corridas archivadas.';
+    resultsStatus.textContent = results.length ? '' : 'Las corridas nuevas aparecerán después de publicarse.';
+    resultsState.loaded = true;
+  } catch (error) {
+    resultsStatus.textContent = `No se pudieron cargar los resultados: ${error.message}`;
+    resultsCount.textContent = '—';
+  } finally {
+    resultsState.loading = false;
+  }
+}
+
+registerLoader('pipeline', loadRunResults);
 
 async function api(path, options = {}) {
   const response = await fetch(`${API_BASE}${path}`, {
@@ -219,6 +340,11 @@ async function refreshStatus() {
   try {
     const status = await api('/status');
     renderStatus(status);
+    if (status.status === 'completed' && status.run_name && lastCompletedResultsRun !== status.run_name) {
+      lastCompletedResultsRun = status.run_name;
+      resultsState.loaded = false;
+      loadRunResults();
+    }
   } catch (error) {
     startButton.disabled = true;
     showError(`API local no disponible: ${error.message}`);

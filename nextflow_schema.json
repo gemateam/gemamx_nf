@@ -191,6 +191,12 @@
       "type": "object",
       "fa_icon": "fas fa-chart-line",
       "properties": {
+        "mlflow_enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Registrar runs, métricas, artefactos y reportes en MLflow.",
+          "help_text": "Desactívalo en entornos sin un servidor MLflow accesible; la publicación local de resultados no depende de este parámetro."
+        },
         "mlflow_tracking_uri": {
           "type": "string",
           "default": "http://host.docker.internal:5000",

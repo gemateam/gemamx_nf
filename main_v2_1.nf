@@ -118,7 +118,7 @@ workflow {
     }
 
     // ── M1/M2 — Ingestión desde XLSX nativos de Romero ────────────────────
-    INGEST_ROMERO(maf_xlsx, drivers_xlsx)
+    INGEST_ROMERO(maf_xlsx, drivers_xlsx, clinical_xlsx)
 
     // ── M5a/M5b — Metadatos y resumen clínico por variante ─────────────────
     EXTRACT_CLINICAL(clinical_xlsx)
@@ -322,20 +322,24 @@ workflow {
     )
 
     // ── LOG MLFLOW ────────────────────────────────────────────────────────
-    LOG_MLFLOW(
-        workflow.runName,
-        params.mlflow_tracking_uri,
-        params.mlflow_experiment,
-        commit_hash,
-        PUBLISH.out.run_manifest,
-        PUBLISH.out.run_params,
-        BUILD_JSONS.out.top_variants_out
-            .mix(BUILD_JSONS.out.structural_metrics)
-            .mix(BUILD_JSONS.out.vina_affinities)
-            .mix(BUILD_JSONS.out.data_ingest_out)
-            .collect(),
-        ch_source_snapshot
-    )
+    if (params.mlflow_enabled.toString().toBoolean()) {
+        LOG_MLFLOW(
+            workflow.runName,
+            params.mlflow_tracking_uri,
+            params.mlflow_experiment,
+            commit_hash,
+            PUBLISH.out.run_manifest,
+            PUBLISH.out.run_params,
+            BUILD_JSONS.out.top_variants_out
+                .mix(BUILD_JSONS.out.structural_metrics)
+                .mix(BUILD_JSONS.out.vina_affinities)
+                .mix(BUILD_JSONS.out.data_ingest_out)
+                .collect(),
+            ch_source_snapshot
+        )
+    } else {
+        log.info 'MLflow disabled; skipping run registration'
+    }
 
     /*
      * Subida automática de los reportes HTML (report, timeline, dag) al run padre
@@ -386,23 +390,27 @@ workflow {
             }
 
             // 2. Reportes HTML (report, timeline, dag) → run padre de MLflow.
-            try {
-                def cmd = ['bash', "${projectDir}/bin/nf_reports_hook.sh".toString(),
-                           '--outdir', outDir,
-                           '--run-name', workflow.runName,
-                           '--experiment', params.mlflow_experiment,
-                           '--host-uri', params.mlflow_host_uri,
-                           '--docker-uri', params.mlflow_docker_uri,
-                           '--docker-network', params.mlflow_docker_network,
-                           '--image', params.image_cpu,
-                           '--bin', "${projectDir}/bin".toString()]
-                def pb = new ProcessBuilder(cmd)
-                pb.redirectErrorStream(true)
-                pb.redirectOutput(ProcessBuilder.Redirect.appendTo(new File(infoDir, 'upload.log')))
-                pb.start()
-                log.info "Reportes HTML -> MLflow: subida en segundo plano (${workflow.runName})"
-            } catch (Exception e) {
-                log.warn "No se pudo lanzar la subida de reportes a MLflow: ${e.message}"
+            if (params.mlflow_enabled.toString().toBoolean()) {
+                try {
+                    def cmd = ['bash', "${projectDir}/bin/nf_reports_hook.sh".toString(),
+                               '--outdir', outDir,
+                               '--run-name', workflow.runName,
+                               '--experiment', params.mlflow_experiment,
+                               '--host-uri', params.mlflow_host_uri,
+                               '--docker-uri', params.mlflow_docker_uri,
+                               '--docker-network', params.mlflow_docker_network,
+                               '--image', params.image_cpu,
+                               '--bin', "${projectDir}/bin".toString()]
+                    def pb = new ProcessBuilder(cmd)
+                    pb.redirectErrorStream(true)
+                    pb.redirectOutput(ProcessBuilder.Redirect.appendTo(new File(infoDir, 'upload.log')))
+                    pb.start()
+                    log.info "Reportes HTML -> MLflow: subida en segundo plano (${workflow.runName})"
+                } catch (Exception e) {
+                    log.warn "No se pudo lanzar la subida de reportes a MLflow: ${e.message}"
+                }
+            } else {
+                log.info 'MLflow disabled; skipping report upload'
             }
         }
     }

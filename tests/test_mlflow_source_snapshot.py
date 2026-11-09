@@ -4,6 +4,8 @@
 from __future__ import annotations
 
 import tempfile
+import json
+import re
 from contextlib import contextmanager
 from pathlib import Path
 from types import SimpleNamespace
@@ -101,10 +103,17 @@ def test_workflows_enforce_mlflow_code_and_report_contract() -> None:
         assert "snapshot_mlflow_sources.py" in text
         assert f"'--workflow', '{workflow}'" in text
         assert "def ch_source_snapshot = Channel.value(source_snapshot)" in text
+        log_position = text.index("LOG_MLFLOW(")
+        guard = "if (params.mlflow_enabled.toString().toBoolean())"
+        log_guard_position = text.rfind(guard, 0, log_position)
+        assert 0 <= text.index("PUBLISH(") < log_guard_position < log_position
         log_call = text.split("LOG_MLFLOW(", 1)[1].split("\n    )", 1)[0]
         assert "ch_source_snapshot" in log_call
         completion = text.split("workflow.onComplete", 1)[1]
         assert "nf_reports_hook.sh" in completion
+        report_guard_position = completion.find(guard)
+        report_hook_position = completion.find("nf_reports_hook.sh")
+        assert 0 <= report_guard_position < report_hook_position
         assert "--run-name" in completion
         assert "--experiment" in completion
 
@@ -117,6 +126,24 @@ def test_workflows_enforce_mlflow_code_and_report_contract() -> None:
     assert "upload_nf_reports.py" in upload_hook
     assert 'NF_REPORT_FILES = ["report.html", "timeline.html", "dag.html"]' in uploader
     assert 'artifact_path="nextflow_reports"' in uploader
+
+
+def test_mlflow_defaults_on_and_yuca_smoke_opts_out() -> None:
+    config = (ROOT / "nextflow.config").read_text(encoding="utf-8")
+    schema = json.loads((ROOT / "nextflow_schema.json").read_text(encoding="utf-8"))
+    parameter = schema["$defs"]["mlflow_options"]["properties"]["mlflow_enabled"]
+    assert parameter["type"] == "boolean"
+    assert parameter["default"] is True
+    assert re.search(r"(?m)^\s*mlflow_enabled\s*=\s*true\s*$", config)
+
+    yuca_profile = config.split("'yuca' {", 1)[1].split(
+        "\n    }\n\n    // Sin contenedores", 1)[0]
+    assert re.search(r"(?m)^\s*mlflow_enabled\s*=\s*false\s*$", yuca_profile)
+
+    runner = (ROOT / "deploy" / "yuca" / "run-smoke-v2-1.sh").read_text(encoding="utf-8")
+    assert 'MLFLOW_ENABLED="${YUCA_MLFLOW_ENABLED:-false}"' in runner
+    assert 'if [[ "${stub_run}" -eq 0 && "${MLFLOW_ENABLED}" == "true" ]]' in runner
+    assert '--mlflow_enabled "${MLFLOW_ENABLED}"' in runner
 
 
 def test_new_stage_logs_code_as_artifact(tmp: Path) -> None:

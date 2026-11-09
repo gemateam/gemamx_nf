@@ -167,6 +167,31 @@
       <div class="exec-stage-list" id="exec-stage-list"></div>
     </section>
 
+    <section class="card exec-results-card" aria-live="polite">
+      <div class="exec-live-heading">
+        <div>
+          <h2>Resultados por corrida</h2>
+          <p id="exec-results-summary">Mejor score de docking por corrida archivada.</p>
+        </div>
+        <span id="exec-results-count" class="exec-live-state">—</span>
+      </div>
+      <div id="exec-results-status" class="exec-live-meta" role="status">Cargando resultados…</div>
+      <div class="table-wrapper exec-results-table-wrapper">
+        <table class="exec-results-table">
+          <thead>
+            <tr>
+              <th>Corrida</th>
+              <th>Variante</th>
+              <th>Fármaco mejor puntuado</th>
+              <th>Mejor score Vina</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="exec-results-body"></tbody>
+        </table>
+      </div>
+    </section>
+
     <section class="card exec-log-card">
       <div class="exec-live-heading">
         <div>
